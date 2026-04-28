@@ -11,7 +11,7 @@
 -> Otimizar a rotina de coordenadores e docentes com ferramentas de cálculo rápido como o cálculo de CRE.
 
 ## Funcionalidades do Sistema
--> Autenticação Segura (Login Checado): O ambiente de abertura de demandas é restrito a alunos devidamente identificados pelo sistema. Isso garante a integridade das solicitações, vinculando cada chamado ao histórico real do estudante e evitando spam para a coordenação.
+-> Autenticação Segura: O ambiente de abertura de demandas é restrito a alunos devidamente identificados pelo sistema. Isso garante a integridade das solicitações, vinculando cada chamado ao histórico real do estudante e evitando spam para a coordenação.
 
 -> Gestão de Prazos e Transparência: Para resolver a falta de clareza apontada pela coordenação, o sistema gerencia o ciclo de vida do chamado. O aluno acompanha o status em tempo real (Aguardando, Em Análise, Requer Ajuste, Concluído) e visualiza uma estimativa clara do prazo de resposta para aquela categoria específica de problema.
 
