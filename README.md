@@ -1,5 +1,5 @@
 # Clarify
-<img width="1380" height="752" alt="Clarify Logo" src="https://github.com/user-attachments/assets/1d35d685-7e9c-4905-af98-34b11687941f" />
+<img width="1409" height="736" alt="clarifyLogo" src="https://github.com/user-attachments/assets/8d000030-84a1-4843-baae-9b6d9ae63f04" />
 
 #### O Clarify é uma aplicação web desenvolvida para centralizar, organizar e dar total transparência às solicitações acadêmicas e administrativas dentro do IFPB. O sistema atua como a ponte oficial entre o corpo discente e as coordenações de curso, resolvendo problemas históricos de comunicação fragmentada e falta de previsibilidade nos atendimentos.
 
