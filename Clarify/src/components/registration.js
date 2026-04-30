@@ -5,13 +5,21 @@ export function registration() {
         <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
             <!-- Fundo Geométrico com Losangos -->
             <div class="absolute inset-0 opacity-15 pointer-events-none" 
-                style="background-image: repeating-linear-gradient(45deg, #ca5f15 0px, #ca5f15 2px, transparent 2px, transparent 20px), repeating-linear-gradient(-45deg, #ca5f15 0px, #ca5f15 2px, transparent 2px, transparent 20px);">
+                style="background-image: 
+                    linear-gradient(30deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
+                    linear-gradient(150deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
+                    linear-gradient(30deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
+                    linear-gradient(150deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
+                    linear-gradient(60deg, #8a3f09 25%, transparent 25.5%, transparent 75%, #8a3f09 75%, #8a3f09),
+                    linear-gradient(60deg, #8a3f09 25%, transparent 25.5%, transparent 75%, #8a3f09 75%, #8a3f09);
+    background-size: 80px 140px;
+    background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;">
             </div>
     
             <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 z-10 border border-brand-surface-dim">
             <div class="flex flex-col items-center mb-8">
                 <div class="w-20 h-20 mb-4 bg-orange-50 rounded-xl p-2 flex items-center justify-center">
-                <img 
+                <img #ca5f15
                     src="${gato}" 
                     alt="Clarify Logo" 
                     class="w-full h-full object-contain"
