@@ -49,7 +49,7 @@ function main() {
       console.log('Credenciais inválidas:', { institutionalId, securityKey })
       const label = document.querySelector("#submitIncorrectAlert label");
       label.textContent = "Credenciais inválidas.";
-      aux.limparFormulario(["institutionalId", "securityKey"]);
+      aux.limparFormulario(["#institutionalId", "#securityKey"]);
    })
 }
 
