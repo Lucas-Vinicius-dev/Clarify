@@ -34,6 +34,8 @@ document.querySelector('#loginForm').addEventListener('submit', (e) => {
    const usuarioEncontrado = buscarUsuarioCadastrado(institutionalId, securityKey)
 
    if (usuarioEncontrado) {
+      const { senha, ...usuarioLogado } = usuarioEncontrado
+      localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado))
       console.log('Usuário autenticado:', usuarioEncontrado)
       alert('Login realizado com sucesso!')
       return
