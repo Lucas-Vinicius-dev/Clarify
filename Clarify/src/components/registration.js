@@ -1,0 +1,149 @@
+import gato from './assets/GATOGORDO.png'
+
+export function Registration() {
+    return `
+        <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
+            <!-- Fundo Geométrico com Losangos -->
+            <div class="absolute inset-0 opacity-15 pointer-events-none" 
+                style="background-image: repeating-linear-gradient(45deg, #ca5f15 0px, #ca5f15 2px, transparent 2px, transparent 20px), repeating-linear-gradient(-45deg, #ca5f15 0px, #ca5f15 2px, transparent 2px, transparent 20px);">
+            </div>
+    
+            <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 z-10 border border-brand-surface-dim">
+            <div class="flex flex-col items-center mb-8">
+                <div class="w-20 h-20 mb-4 bg-orange-50 rounded-xl p-2 flex items-center justify-center">
+                <img 
+                    src="${gato}" 
+                    alt="Clarify Logo" 
+                    class="w-full h-full object-contain"
+                />
+                </div>
+                <h1 class="text-3xl font-bold text-gray-900">Clarify</h1>
+                <p class="text-sm font-medium text-gray-500 tracking-wider uppercase mt-1">
+                Federal Institution Access
+                </p>
+            </div>
+    
+            <form id="registrationForm" class="space-y-6">
+                <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+                    Full Name
+                </label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    </span>
+                    <input
+                    type="text"
+                    name="fullName"
+                    placeholder="e.g. John Doe"
+                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                    required
+                    />
+                </div>
+                </div>
+                <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+                    Institutional ID
+                </label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    </span>
+                    <input
+                    type="text"
+                    name="institutionalId"
+                    placeholder="e.g. 123456789"
+                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                    required
+                    />
+                </div>
+                </div>
+    
+                <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+                    Intitutional Email
+                </label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                    </svg>
+                    </span>
+                    <input
+                    type="email"
+                    name="institutionalEmail"
+                    placeholder="e.g. john.doe@academico.edu.br"
+                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                    required
+                    />
+                </div>
+                </div>
+
+                <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+                    Security Key
+                </label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    </span>
+                    <input
+                    type="password"
+                    name="securityKey"
+                    placeholder="••••••••"
+                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                    required
+                    />
+                </div>
+                </div>
+
+                <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+                    Institutional Role
+                </label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    </span>
+                    <select
+                    name="institutionalRole"
+                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                    required
+                    >
+                    <option value="" disabled selected>Select your role</option>
+                    <option value="student">Student</option>
+                    <option value="faculty">Teacher</option>
+                    </select>
+                </div>
+                </div>
+
+                <button
+                type="submit"
+                class="w-full bg-brand-primary text-white font-bold py-4 rounded-xl shadow-lg hover:bg-orange-700 hover:-translate-y-1 transition-transform duration-150 ease-out transform"
+                >
+                Register
+                </button>
+    
+                <div class="text-center">
+                <a href="#" class="text-sm font-semibold text-brand-primary hover:underline transition-all">
+                    Recover Access Credentials
+                </a>
+                </div>
+            </form>
+    
+            <div class="mt-12 text-center">
+                <p class="text-xs text-gray-400 font-medium">Authorized personnel only.</p>
+                <p class="text-xs text-gray-300 mt-1">System v2.4.1</p>
+            </div>
+            </div>
+        </div>
+    `
+}
