@@ -66,7 +66,7 @@ export function Login() {
 
             <button
             type="submit"
-            class="w-full bg-brand-primary text-white font-bold py-4 rounded-xl shadow-lg hover:bg-orange-700 hover:-translate-y-1 transition-transform duration-150 ease-out transform"
+            class="w-full bg-brand-primary text-white font-bold py-4 rounded-xl shadow-lg hover:bg-orange-700 hover:cursor-pointer hover:-translate-y-1 transition-transform duration-150 ease-out transform"
             >
             Authenticate
             </button>
