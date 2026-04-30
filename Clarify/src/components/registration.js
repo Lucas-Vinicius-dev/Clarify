@@ -111,6 +111,26 @@ export function registration() {
                 </div>
                 </div>
 
+                <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+                    Confirm Security Key
+                </label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    </span>
+                    <input
+                    type="password"
+                    name="confirmSecurityKey"
+                    placeholder="••••••••"
+                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                    required
+                    />
+                </div>
+                </div>
+
                 <button
                 type="submit"
                 class="w-full bg-brand-primary text-white font-bold py-4 rounded-xl shadow-lg hover:bg-orange-700 hover:-translate-y-1 transition-transform duration-150 ease-out transform"
