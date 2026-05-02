@@ -1,6 +1,43 @@
 import gato from './assets/GATOGORDO.png'
+import * as aux from "../funcoesAuxiliares"
+import { carregarLogin, ativarListenerLogin } from './login.js'
 
-export function Registration() {
+// Trata se o registro enviado no formulário é válido
+function checarRegistro(e) {
+    e.preventDefault();
+    aux.popularLocalStorage();
+
+    const fullName = document.querySelector("#fullName").value;
+    const institutionalId = document.querySelector("#institutionalId").value;
+    const institutionalEmail = document.querySelector("#institutionalEmail").value;
+    const securityKey = document.querySelector("#securityKey").value;
+    const institutionalRole = document.querySelector("#institutionalRole").value;
+
+    if (aux.UsuarioExiste(institutionalId)) {
+        const label = document.querySelector("#submitIncorrectAlert label");
+        label.textContent = "Credenciais inválidas.";
+        aux.limparFormulario(["#fullName", "#institutionalId", "#institutionalEmail", "#securityKey", "#institutionalRole"]);
+        return;
+    }
+    aux.adicionarUsuario(fullName, institutionalId, institutionalEmail, securityKey, institutionalRole);
+    alert("Registro feito com sucesso!");
+
+    // OBS: Leva até a página de login, remover depois
+    document.querySelector('#app').innerHTML = carregarLogin();
+    ativarListenerLogin();
+
+}
+
+// Adiciona um listener para o evento de submit do formulário de registro
+export function ativarListenerRegistro() {
+    document.querySelector('#registrationForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      checarRegistro(e);
+   });
+}
+
+export function carregarRegistro() {
+    document.querySelector("title").innerHTML = `Registro - Clarify`;
     return `
         <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
             <!-- Fundo Geométrico com Losangos -->
@@ -19,14 +56,14 @@ export function Registration() {
                 </div>
                 <h1 class="text-3xl font-bold text-gray-900">Clarify</h1>
                 <p class="text-sm font-medium text-gray-500 tracking-wider uppercase mt-1">
-                Federal Institution Access
+                Acesso - Instituto Federal
                 </p>
             </div>
     
             <form id="registrationForm" class="space-y-6">
                 <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
-                    Full Name
+                    Nome Completo
                 </label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
@@ -37,6 +74,7 @@ export function Registration() {
                     <input
                     type="text"
                     name="fullName"
+                    id="fullName"
                     placeholder="e.g. John Doe"
                     class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
                     required
@@ -45,7 +83,7 @@ export function Registration() {
                 </div>
                 <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
-                    Institutional ID
+                    ID Institucional
                 </label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
@@ -56,6 +94,7 @@ export function Registration() {
                     <input
                     type="text"
                     name="institutionalId"
+                    id="institutionalId"
                     placeholder="e.g. 123456789"
                     class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
                     required
@@ -65,7 +104,7 @@ export function Registration() {
     
                 <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
-                    Intitutional Email
+                    Email institucional
                 </label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
@@ -76,6 +115,7 @@ export function Registration() {
                     <input
                     type="email"
                     name="institutionalEmail"
+                    id="institutionalEmail"
                     placeholder="e.g. john.doe@academico.edu.br"
                     class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
                     required
@@ -85,7 +125,7 @@ export function Registration() {
 
                 <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
-                    Security Key
+                    chave de segurança
                 </label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
@@ -96,6 +136,7 @@ export function Registration() {
                     <input
                     type="password"
                     name="securityKey"
+                    id="securityKey"
                     placeholder="••••••••"
                     class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
                     required
@@ -105,7 +146,7 @@ export function Registration() {
 
                 <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
-                    Institutional Role
+                    Cargo institucional
                 </label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
@@ -115,33 +156,37 @@ export function Registration() {
                     </span>
                     <select
                     name="institutionalRole"
+                    id="institutionalRole"
                     class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
                     required
                     >
-                    <option value="" disabled selected>Select your role</option>
-                    <option value="student">Student</option>
-                    <option value="faculty">Teacher</option>
+                    <option value="" disabled selected>Selecione seu cargo</option>
+                    <option value="student">Estudante</option>
+                    <option value="faculty">Professor</option>
                     </select>
                 </div>
                 </div>
 
+                <div id=submitIncorrectAlert>
+                    <label class="label block text-[10px] font-bold text-red-700 uppercase tracking-widest mb-2 ml-1"></label>
+                </div>
+
                 <button
                 type="submit"
-                class="w-full bg-brand-primary text-white font-bold py-4 rounded-xl shadow-lg hover:bg-orange-700 hover:-translate-y-1 transition-transform duration-150 ease-out transform"
-                >
-                Register
+                class=" w-full bg-brand-primary text-white font-bold py-4 rounded-xl shadow-lg hover:bg-orange-700 hover:cursor-pointer hover:-translate-y-1 transition-transform duration-150 ease-out transform">
+                Registrar-se
                 </button>
     
                 <div class="text-center">
                 <a href="#" class="text-sm font-semibold text-brand-primary hover:underline transition-all">
-                    Recover Access Credentials
+                    Recuperar Credenciais de Acesso
                 </a>
                 </div>
             </form>
     
             <div class="mt-12 text-center">
-                <p class="text-xs text-gray-400 font-medium">Authorized personnel only.</p>
-                <p class="text-xs text-gray-300 mt-1">System v2.4.1</p>
+                <p class="text-xs text-gray-400 font-medium">Somente indivíduos autorizados.</p>
+                <p class="text-xs text-gray-300 mt-1">Versão v0.0.0</p>
             </div>
             </div>
         </div>
