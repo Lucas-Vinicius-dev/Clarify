@@ -1,4 +1,4 @@
-import gato from './assets/GATOGORDO.png'
+import gato from '../components/assets/GATOGORDO.png'
 import * as aux from '../funcoesAuxiliares'
 import { carregarRegistro, ativarListenerRegistro } from './registro.js'
 
