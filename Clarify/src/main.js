@@ -1,8 +1,13 @@
 import './style.css'
-import { Login } from './components/login.js'
-import { setupLogin } from './services/auth.js'
-import { registration } from './components/registration.js'
+import * as aux from "./funcoesAuxiliares.js"
+import { carregarRegistro, ativarListenerRegistro } from './components/registro.js'
 
-document.querySelector('#app').innerHTML = registration()
+// OBS: é de extrema importância resolver tudo no sistema que comece com [OBS:] do programa na fase de entrega
+// Tudo que for temporário ou está sendo testado, é recomendado a utilização de [OBS:] pra facilitar a busca de coisas inúteis no futuro
 
-setupLogin()
+function main() {
+   document.querySelector('#app').innerHTML = carregarRegistro();
+   ativarListenerRegistro();
+}
+
+main();
