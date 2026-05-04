@@ -1,6 +1,38 @@
 import gato from './assets/GATOGORDO.png'
+import * as aux from '../funcoesAuxiliares'
 
-export function Login() {
+// Trata se o login enviado no formulário é válido
+function checarLogin(e) {
+
+    const formData = new FormData(e.target);
+    const { institutionalId, securityKey } = Object.fromEntries(formData.entries());
+    const usuarioEncontrado = aux.buscarUsuarioCadastrado(institutionalId, securityKey);
+
+    if (usuarioEncontrado) {
+        const { senha, ...usuarioLogado } = usuarioEncontrado;
+        localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
+        console.log('Usuário autenticado:', usuarioEncontrado);
+
+        alert('Login realizado com sucesso!');
+        return;
+    }
+
+    const label = document.querySelector("#submitIncorrectAlert label");
+    label.textContent = "Credenciais inválidas.";
+    aux.limparFormulario(["#institutionalId", "#securityKey"]);
+
+}
+
+// Adiciona um listener para o evento de submit do formulário de login
+export function ativarListenerLogin() {
+    document.querySelector('#loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        checarLogin(e);
+    });
+}
+
+export function carregarLogin() {
+    document.querySelector("title").innerHTML = `Login - Clarify`;
     return `
     <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
         <!-- Fundo Geométrico com Losangos -->
@@ -25,7 +57,7 @@ export function Login() {
             </div>
             <h1 class="text-3xl font-bold text-gray-900">Clarify</h1>
             <p class="text-sm font-medium text-gray-500 tracking-wider uppercase mt-1">
-            Acesso Instituto Federal
+            Acesso - Instituto Federal
             </p>
         </div>
 
@@ -92,7 +124,7 @@ export function Login() {
 
         <div class="mt-12 text-center">
             <p class="text-xs text-gray-400 font-medium">Somente indivíduos autorizados.</p>
-            <p class="text-xs text-gray-300 mt-1">Versão v2.4.1</p>
+            <p class="text-xs text-gray-300 mt-1">Versão v0.0.0</p>
         </div>
         </div>
     </div>
