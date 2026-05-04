@@ -1,5 +1,5 @@
 import './style.css'
-import * as aux from "./funcoesAuxiliares.js"
+import * as aux from "./lib/funcoesAuxiliares.js"
 import { carregarLogin, ativarListenerLogin } from './pages/login.js'
 
 // OBS: é de extrema importância resolver tudo no sistema que comece com [OBS:] do programa na fase de entrega
