@@ -33,6 +33,11 @@ export function ativarListenerRegistro() {
       e.preventDefault();
       checarRegistro(e);
    });
+
+   document.querySelector('#voltarLogin').addEventListener('click', () => {
+       document.querySelector('#app').innerHTML = carregarLogin();
+       ativarListenerLogin();
+   });
 }
 
 export function carregarRegistro() {
@@ -167,7 +172,13 @@ export function carregarRegistro() {
                 </a>
                 </div>
             </form>
-    
+
+            <div class="text-center mt-4">
+                <button id="voltarLogin" class="text-sm font-semibold text-brand-primary hover:underline bg-transparent border-none cursor-pointer">
+                    Voltar ao Login
+                </button>
+            </div>
+
             <div class="mt-12 text-center">
                 <p class="text-xs text-gray-400 font-medium">Somente indivíduos autorizados.</p>
                 <p class="text-xs text-gray-300 mt-1">Versão v0.0.0</p>
