@@ -37,7 +37,7 @@ export function popularLocalStorage() {
     localStorage.clear();
 
     const usuariosTeste = [
-        { fullName: "João da Silva", institutionalId: "123", institutionalEmail: "joao@academico.edu.br", securityKey: "123456",institutionalRole: "student" }
+        { fullName: "João da Silva", institutionalId: "123", institutionalEmail: "joao@academico.edu.br", securityKey: "123456" }
     ];
 
     if (!localStorage.getItem('usuarios')) {
@@ -46,15 +46,14 @@ export function popularLocalStorage() {
 }
 
 // Adiciona novo usuário ao localStorage
-export function adicionarUsuario(fullName, institutionalId, institutionalEmail, securityKey, institutionalRole) {
+export function adicionarUsuario(fullName, institutionalId, institutionalEmail, securityKey) {
     const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
 
     usuarios.push({
         fullName,
         institutionalId,
         institutionalEmail,
-        securityKey,
-        institutionalRole
+        securityKey
     });
 
     localStorage.setItem('usuarios', JSON.stringify(usuarios));
