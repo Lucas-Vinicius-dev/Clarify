@@ -1,7 +1,7 @@
 // Arquivo dedicado à funções auxiliares do programa principal.
 // As funções contidas aqui devem ser o mais genéricas possíveis para facilitar o reúso.
 // A importação desse arquivo idealmente será feita por "import * as [aux] from <path>".
-
+import { usuariosTeste } from './usuarios.js';
 // Função para limpar formulários passando um vetor de IDs, classes, etc... como parâmetro
 export function limparFormulario(parametros) {
     for (let i = 0; i < parametros.length; ++i) {
@@ -36,24 +36,21 @@ export function buscarUsuarioCadastrado(institutionalId, securityKey) {
 export function popularLocalStorage() {
     localStorage.clear();
 
-    const usuariosTeste = [
-        { fullName: "João da Silva", institutionalId: "123", institutionalEmail: "joao@academico.edu.br", securityKey: "123456" }
-    ];
-
     if (!localStorage.getItem('usuarios')) {
         localStorage.setItem('usuarios', JSON.stringify(usuariosTeste))
     }
 }
 
 // Adiciona novo usuário ao localStorage
-export function adicionarUsuario(fullName, institutionalId, institutionalEmail, securityKey) {
+export function adicionarUsuario(fullName, institutionalId, institutionalEmail, securityKey, institutionalRole = "student") {
     const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
 
     usuarios.push({
         fullName,
         institutionalId,
         institutionalEmail,
-        securityKey
+        securityKey,
+        institutionalRole
     });
 
     localStorage.setItem('usuarios', JSON.stringify(usuarios));

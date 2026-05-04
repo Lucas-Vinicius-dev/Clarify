@@ -1,5 +1,6 @@
 import gato from './assets/GATOGORDO.png'
 import * as aux from '../funcoesAuxiliares'
+import { carregarRegistro, ativarListenerRegistro } from './registro.js'
 
 // Trata se o login enviado no formulário é válido
 function checarLogin(e) {
@@ -28,6 +29,11 @@ export function ativarListenerLogin() {
     document.querySelector('#loginForm').addEventListener('submit', (e) => {
         e.preventDefault();
         checarLogin(e);
+    });
+
+    document.querySelector('#cadastroCoordenador').addEventListener('click', () => {
+        document.querySelector('#app').innerHTML = carregarRegistro();
+        ativarListenerRegistro();
     });
 }
 
@@ -101,6 +107,12 @@ export function carregarLogin() {
                     </a>
                 </div>
             </form>
+
+            <div class="text-center mt-4">
+                <button id="cadastroCoordenador" class="text-sm font-semibold text-orange-600 hover:underline bg-transparent border-none cursor-pointer">
+                    Cadastro de Coordenador
+                </button>
+            </div>
 
             <div class="mt-12 text-center">
                 <p class="text-xs text-gray-400 font-medium">Somente indivíduos autorizados.</p>
