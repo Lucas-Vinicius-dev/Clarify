@@ -1,6 +1,38 @@
 import gato from './assets/GATOGORDO.png'
+import * as aux from '../funcoesAuxiliares'
 
-export function Login() {
+// Trata se o login enviado no formulário é válido
+function checarLogin(e) {
+
+    const formData = new FormData(e.target);
+    const { institutionalId, securityKey } = Object.fromEntries(formData.entries());
+    const usuarioEncontrado = aux.buscarUsuarioCadastrado(institutionalId, securityKey);
+
+    if (usuarioEncontrado) {
+        const { senha, ...usuarioLogado } = usuarioEncontrado;
+        localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
+        console.log('Usuário autenticado:', usuarioEncontrado);
+
+        alert('Login realizado com sucesso!');
+        return;
+    }
+
+    const label = document.querySelector("#submitIncorrectAlert label");
+    label.textContent = "Credenciais inválidas.";
+    aux.limparFormulario(["#institutionalId", "#securityKey"]);
+
+}
+
+// Adiciona um listener para o evento de submit do formulário de login
+export function ativarListenerLogin() {
+    document.querySelector('#loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        checarLogin(e);
+    });
+}
+
+export function carregarLogin() {
+    document.querySelector("title").innerHTML = `Login - Clarify`;
     return `
     <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
         <!-- Fundo Geométrico com Losangos -->
@@ -19,14 +51,14 @@ export function Login() {
             </div>
             <h1 class="text-3xl font-bold text-gray-900">Clarify</h1>
             <p class="text-sm font-medium text-gray-500 tracking-wider uppercase mt-1">
-            Federal Institution Access
+            Acesso - Instituto Federal
             </p>
         </div>
 
         <form id="loginForm" class="space-y-6">
             <div>
             <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
-                Institutional ID
+                ID Institucional
             </label>
             <div class="relative">
                 <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
@@ -37,6 +69,7 @@ export function Login() {
                 <input
                 type="text"
                 name="institutionalId"
+                id="institutionalId"
                 placeholder="e.g. 123456789"
                 class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
                 required
@@ -46,7 +79,7 @@ export function Login() {
 
             <div>
             <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
-                Security Key
+                Chave de Segurança
             </label>
             <div class="relative">
                 <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
@@ -57,6 +90,7 @@ export function Login() {
                 <input
                 type="password"
                 name="securityKey"
+                id="securityKey"
                 placeholder="••••••••"
                 class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
                 required
@@ -64,23 +98,27 @@ export function Login() {
             </div>
             </div>
 
+            <div id=submitIncorrectAlert>
+                <label class="label block text-[10px] font-bold text-red-700 uppercase tracking-widest mb-2 ml-1"></label>
+            </div>
+
             <button
             type="submit"
-            class="w-full bg-brand-primary text-white font-bold py-4 rounded-xl shadow-lg hover:bg-orange-700 hover:-translate-y-1 transition-transform duration-150 ease-out transform"
+            class="w-full bg-brand-primary text-white font-bold py-4 rounded-xl shadow-lg hover:bg-orange-700 hover:cursor-pointer hover:-translate-y-1 transition-transform duration-150 ease-out transform"
             >
-            Authenticate
+            Autenticar
             </button>
 
             <div class="text-center">
             <a href="#" class="text-sm font-semibold text-brand-primary hover:underline transition-all">
-                Recover Access Credentials
+                Recuperar Credenciais de Acesso
             </a>
             </div>
         </form>
 
         <div class="mt-12 text-center">
-            <p class="text-xs text-gray-400 font-medium">Authorized personnel only.</p>
-            <p class="text-xs text-gray-300 mt-1">System v2.4.1</p>
+            <p class="text-xs text-gray-400 font-medium">Somente indivíduos autorizados.</p>
+            <p class="text-xs text-gray-300 mt-1">Versão v0.0.0</p>
         </div>
         </div>
     </div>
