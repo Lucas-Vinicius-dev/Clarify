@@ -1,5 +1,5 @@
-import gato from './assets/GATOGORDO.png'
-import * as aux from '../funcoesAuxiliares'
+import gato from '../components/assets/GATOGORDO.png'
+import * as aux from '../lib/funcoesAuxiliares'
 import { Carregardashboardcoord } from './dashboardcoord';
 
 // Trata se o login enviado no formulário é válido
