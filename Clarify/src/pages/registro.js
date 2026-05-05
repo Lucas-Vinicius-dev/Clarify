@@ -11,15 +11,14 @@ function checarRegistro(e) {
     const institutionalId = document.querySelector("#institutionalId").value;
     const institutionalEmail = document.querySelector("#institutionalEmail").value;
     const securityKey = document.querySelector("#securityKey").value;
-    const institutionalRole = document.querySelector("#institutionalRole").value;
 
     if (aux.UsuarioExiste(institutionalId)) {
         const label = document.querySelector("#submitIncorrectAlert label");
         label.textContent = "Credenciais inválidas.";
-        aux.limparFormulario(["#fullName", "#institutionalId", "#institutionalEmail", "#securityKey", "#institutionalRole"]);
+        aux.limparFormulario(["#fullName", "#institutionalId", "#institutionalEmail", "#securityKey"]);
         return;
     }
-    aux.adicionarUsuario(fullName, institutionalId, institutionalEmail, securityKey, institutionalRole);
+    aux.adicionarUsuario(fullName, institutionalId, institutionalEmail, securityKey);
     alert("Registro feito com sucesso!");
 
     // OBS: Leva até a página de login, remover depois
@@ -35,9 +34,9 @@ export function ativarListenerRegistro() {
       checarRegistro(e);
    });
 
-    const goToLoginButton = document.querySelector('#goToLoginButton');
-    if (goToLoginButton) {
-        goToLoginButton.addEventListener('click', () => {
+    const voltarLogin = document.querySelector('#voltarLogin');
+    if (voltarLogin) {
+        voltarLogin.addEventListener('click', () => {
             document.querySelector('#app').innerHTML = carregarLogin();
             ativarListenerLogin();
         });
@@ -49,14 +48,22 @@ export function carregarRegistro() {
     return `
         <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
             <!-- Fundo Geométrico com Losangos -->
-            <div class="absolute inset-0 opacity-15 pointer-events-none" 
-                style="background-image: repeating-linear-gradient(45deg, #ca5f15 0px, #ca5f15 2px, transparent 2px, transparent 20px), repeating-linear-gradient(-45deg, #ca5f15 0px, #ca5f15 2px, transparent 2px, transparent 20px);">
+            <div class="absolute inset-0 opacity-15 pointer-events-none " 
+                style="background-image: 
+                    linear-gradient(30deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
+                    linear-gradient(150deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
+                    linear-gradient(30deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
+                    linear-gradient(150deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
+                    linear-gradient(60deg, #8a3f09 25%, transparent 25.5%, transparent 75%, #8a3f09 75%, #8a3f09),
+                    linear-gradient(60deg, #8a3f09 25%, transparent 25.5%, transparent 75%, #8a3f09 75%, #8a3f09);
+    background-size: 80px 140px;
+    background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;">
             </div>
     
             <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 z-10 border border-brand-surface-dim">
             <div class="flex flex-col items-center mb-8">
                 <div class="w-20 h-20 mb-4 bg-orange-50 rounded-xl p-2 flex items-center justify-center">
-                <img 
+                <img #ca5f15
                     src="${gato}" 
                     alt="Clarify Logo" 
                     class="w-full h-full object-contain"
@@ -152,7 +159,6 @@ export function carregarRegistro() {
                 </div>
                 </div>
 
-
                 <div id=submitIncorrectAlert>
                     <label class="label block text-[10px] font-bold text-red-700 uppercase tracking-widest mb-2 ml-1"></label>
                 </div>
@@ -162,22 +168,20 @@ export function carregarRegistro() {
                 class=" w-full bg-brand-primary text-white font-bold py-4 rounded-xl shadow-lg hover:bg-orange-700 hover:cursor-pointer hover:-translate-y-1 transition-transform duration-150 ease-out transform">
                 Registrar-se
                 </button>
-
-                <button
-                type="button"
-                id="goToLoginButton"
-                class="w-full mt-3 border border-brand-primary text-brand-primary font-bold py-4 rounded-xl shadow-sm hover:bg-brand-primary hover:text-white transition-colors duration-150">
-                Ir para Login
-                </button>
     
                 <div class="text-center">
                 <a href="#" class="text-sm font-semibold text-brand-primary hover:underline transition-all">
                     Recuperar Credenciais de Acesso
                 </a>
                 </div>
-
             </form>
-    
+
+            <div class="text-center mt-4">
+                <button id="voltarLogin" class="text-sm font-semibold text-brand-primary hover:underline bg-transparent border-none cursor-pointer">
+                    Voltar ao Login
+                </button>
+            </div>
+
             <div class="mt-12 text-center">
                 <p class="text-xs text-gray-400 font-medium">Somente indivíduos autorizados.</p>
                 <p class="text-xs text-gray-300 mt-1">Versão v0.0.0</p>

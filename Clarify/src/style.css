@@ -5,3 +5,20 @@
   --color-brand-surface: #fff8f6;
   --color-brand-surface-dim: #ead6cd;
 }
+
+
+@keyframes moverCubos {
+    from {
+        background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+    }
+    to {
+        /* Para ir ao canto superior direito, aumentamos o X e diminuímos o Y */
+        /* Os valores devem ser múltiplos do seu background-size (80px 140px) para o loop ser perfeito */
+        background-position: 80px -140px, 80px -140px, 120px -70px, 120px -70px, 80px -140px, 120px -70px;
+    }
+}
+
+.animate-cubes {
+    animation: moverCubos 10s linear infinite;
+}
+
