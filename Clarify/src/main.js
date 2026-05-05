@@ -9,7 +9,6 @@ import { Carregardashboardcoord, createProfileBtn } from './pages/dashboardcoord
 function main() {
    aux.createKeys();
    aux.popularLocalStorage();
-   
    carregarRegistro();
    ativarListenerRegistro();
 }

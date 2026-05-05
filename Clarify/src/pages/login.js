@@ -35,7 +35,7 @@ export function ativarListenerLogin() {
 export function carregarLogin() {
     document.querySelector("title").innerHTML = `Login - Clarify`;
     document.querySelector('#app').innerHTML = `
-    <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
+    <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden animate-cubes">
         <!-- Fundo Geométrico com Losangos -->
         <div class="absolute inset-0 opacity-15 pointer-events-none" 
             style="background-image: repeating-linear-gradient(45deg, #ca5f15 0px, #ca5f15 2px, transparent 2px, transparent 20px), repeating-linear-gradient(-45deg, #ca5f15 0px, #ca5f15 2px, transparent 2px, transparent 20px);">

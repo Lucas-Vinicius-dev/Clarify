@@ -46,7 +46,7 @@ export function carregarRegistro() {
     document.querySelector('#app').innerHTML = `
         <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
             <!-- Fundo Geométrico com Losangos -->
-            <div class="absolute inset-0 opacity-15 pointer-events-none " 
+            <div class="absolute inset-0 opacity-15 pointer-events-none animate-cubes" 
                 style="background-image: 
                     linear-gradient(30deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
                     linear-gradient(150deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
