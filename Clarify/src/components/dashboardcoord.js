@@ -1,8 +1,8 @@
 import gato from '../components/assets/GATOGORDO.png'
 
-export function dashboardcoord(){
+export function Carregardashboardcoord() {
     document.querySelector("title").innerHTML = `Dashboard - Clarify`;
-    return `
+    document.querySelector('#app').innerHTML = `
     <div class="min-h-screen w-full bg-pink-50 flex-col mr-auto flex items-center justify-start relative overflow-hidden">
         <div class="mr-auto h-screen flex-col bg-gray-50 shadow p-8 border border-gray-100">
             <div class=" h-20 mb-4 rounded-xl p-4 flex items-center justify-center w-full">
