@@ -1,10 +1,6 @@
 @import "tailwindcss";
 
-@theme {
-  --color-brand-primary: #ca5f15;
-  --color-brand-surface: #fff8f6;
-  --color-brand-surface-dim: #ead6cd;
-}
+
 
 
 @keyframes moverCubos {
