@@ -144,28 +144,6 @@ export function carregarRegistro() {
                 </div>
                 </div>
 
-                <div>
-                <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
-                    Cargo institucional
-                </label>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    </span>
-                    <select
-                    name="institutionalRole"
-                    id="institutionalRole"
-                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
-                    required
-                    >
-                    <option value="" disabled selected>Selecione seu cargo</option>
-                    <option value="student">Estudante</option>
-                    <option value="faculty">Professor</option>
-                    </select>
-                </div>
-                </div>
 
                 <div id=submitIncorrectAlert>
                     <label class="label block text-[10px] font-bold text-red-700 uppercase tracking-widest mb-2 ml-1"></label>
