@@ -1,5 +1,69 @@
 import gato from '../components/assets/GATOGORDO.png'
 
+const dashboardViews = {
+    nome: `
+        <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-8 shadow-sm">
+            <h2 class="text-2xl font-semibold mb-4">Visão Geral</h2>
+            <p class="text-gray-600">Aqui você pode ver informações do coordenador, status do sistema e atalhos rápidos.</p>
+        </div>
+    `,
+    alunos: `
+        <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-8 shadow-sm">
+            <h2 class="text-2xl font-semibold mb-4">Alunos</h2>
+            <p class="text-gray-600">Gerencie a lista de alunos, visualize registros e acesse informações de matrícula.</p>
+        </div>
+    `,
+    demandas: `
+        <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-8 shadow-sm">
+            <h2 class="text-2xl font-semibold mb-4">Demandas</h2>
+            <p class="text-gray-600">Veja as demandas abertas, tarefas pendentes e notificações importantes.</p>
+        </div>
+    `,
+    adicionar: `
+        <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-8 shadow-sm">
+            <h2 class="text-2xl font-semibold mb-4">Adicionar aluno</h2>
+            <p class="text-gray-600">Clique no botão para abrir o formulário de cadastro de aluno.</p>
+        </div>
+    `
+};
+
+export function renderDashboardView(view = 'nome') {
+    const container = document.querySelector('#dashboardContent');
+    if (!container) return;
+    container.innerHTML = dashboardViews[view] || dashboardViews.nome;
+    setActiveDashboardTab(view);
+}
+
+export function setActiveDashboardTab(view) {
+    const buttons = document.querySelectorAll('[data-view]');
+    buttons.forEach((button) => {
+        const isActive = button.dataset.view === view;
+        button.classList.toggle('bg-brand-primary/10', isActive);
+        button.classList.toggle('text-brand-primary', isActive);
+        button.classList.toggle('bg-transparent', !isActive);
+        button.classList.toggle('text-gray-700', !isActive);
+    });
+}
+
+export function setupDashboardState() {
+    renderDashboardView('nome');
+    const buttons = document.querySelectorAll('[data-view]');
+    buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+            const view = button.dataset.view;
+            if (!view) return;
+
+            renderDashboardView(view);
+            const modal = document.getElementById('criarPerfil');
+            if (view === 'adicionar') {
+                modal?.classList.remove('hidden');
+            } else {
+                modal?.classList.add('hidden');
+            }
+        });
+    });
+}
+
 export function createProfileBtn() {
     const criarPerfilBtn = document.querySelector("#criarPerfilBtn");
     if (!criarPerfilBtn) return;
@@ -9,25 +73,28 @@ export function createProfileBtn() {
     });
 }
 
-
 export function Carregardashboardcoord(){
     document.querySelector("title").innerHTML = `Dashboard - Clarify`;
     document.querySelector('#app').innerHTML = `
-    <div class="min-h-screen w-full bg-pink-50 flex-col mr-auto flex items-center justify-start relative overflow-hidden">
-        <div class="mr-auto h-screen flex-col bg-gray-50 shadow p-8 border border-gray-100">
-            <div class=" h-20 mb-4 rounded-xl p-4 flex items-center justify-center w-full">
+    <div class="min-h-screen w-full bg-pink-50 flex flex-col md:flex-row relative overflow-hidden">
+        <aside class="w-full md:w-72 bg-gray-50 shadow p-8 border border-gray-100">
+            <div class="h-20 mb-4 rounded-xl p-4 flex items-center justify-center w-full">
                 <img src="${gato}" alt="Clarify Logo" class="w-full h-full object-contain" />
                 <h1 class="text-3xl font-bold text-orange-600">Clarify</h1>
             </div>
             <ul class="flex flex-col gap-4 mt-8">
-            <li><button class="flex items-center gap-2 act"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>Nome</button></li>
-            <li><button class="flex items-center gap-2"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-icon lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg></span>Alunos</button></li>
-            <li id="criarPerfilBtn"><button class="flex items-center gap-2"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
-</svg></span>Adicionar aluno</button></li>
-    <li><button class="flex items-center gap-2"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sticky-note-icon lucide-sticky-note"><path d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/><path d="M15 3v5a1 1 0 0 0 1 1h5"/></svg></span>Demandas</button></li>
+                <li><button type="button" data-view="nome" class="flex items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>Nome</button></li>
+                <li><button type="button" data-view="alunos" class="flex items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-icon lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg></span>Alunos</button></li>
+                <li id="criarPerfilBtn"><button type="button" data-view="adicionar" class="flex items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" /></svg></span>Adicionar aluno</button></li>
+                <li><button type="button" data-view="demandas" class="flex items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sticky-note-icon lucide-sticky-note"><path d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/><path d="M15 3v5a1 1 0 0 0 1 1h5"/></svg></span>Demandas</button></li>
             </ul>
-        </div>
+        </aside>
+        <main class="flex-1 p-8" id="dashboardContent">
+            <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-8 shadow-sm">
+                <h2 class="text-2xl font-semibold mb-4">Visão Geral</h2>
+                <p class="text-gray-600">Escolha um item na barra lateral para carregar o conteúdo aqui sem alterar a sidebar.</p>
+            </div>
+        </main>
     </div>
     <div class="hidden fixed inset-0 bg-opacity-50 flex items-center justify-center z-50" id="criarPerfil">
         <div class="bg-white rounded-lg p-8 w-full max-w-md">
