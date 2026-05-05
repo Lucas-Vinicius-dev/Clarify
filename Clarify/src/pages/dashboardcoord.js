@@ -1,11 +1,9 @@
 import gato from '../components/assets/GATOGORDO.png'
 
 export function createProfileBtn(){
-    const criarPerfilBtns = document.querySelectorAll("#criarPerfilBtn, .criarPerfilBtn");
-    criarPerfilBtns.forEach((button) => {
-        button.addEventListener("click", () => {
-            document.getElementById('criarPerfil').classList.remove('hidden');
-        });
+    const criarPerfilBtn = document.querySelector("#criarPerfilBtn");
+    criarPerfilBtn.addEventListener("click", () => {
+        document.getElementById('criarPerfil').classList.remove('hidden');
     });
 }
 export function dashboardcoord(){
