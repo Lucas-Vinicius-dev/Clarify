@@ -7,9 +7,11 @@ import { dashboardcoord, createProfileBtn } from './pages/dashboardcoord.js';
 // Tudo que for temporário ou está sendo testado, é recomendado a utilização de [OBS:] pra facilitar a busca de coisas inúteis no futuro
 
 function main() {
-   document.querySelector('#app').innerHTML = dashboardcoord();
-   createProfileBtn();
+   
+   document.querySelector('#app').innerHTML = carregarRegistro();
    ativarListenerRegistro();
+   createProfileBtn();
+   
 }
 
 main();

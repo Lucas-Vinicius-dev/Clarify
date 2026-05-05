@@ -28,18 +28,19 @@ function checarRegistro(e) {
 }
 
 // Adiciona um listener para o evento de submit do formulário de registro
+// לוגיקת הרישום צריכה להיות כאן, כולל בדיקת תקינות הנתונים, שמירת המשתמש החדש וכו'
 export function ativarListenerRegistro() {
     document.querySelector('#registrationForm').addEventListener('submit', (e) => {
       e.preventDefault();
       checarRegistro(e);
    });
 
-    const voltarLogin = document.querySelector('#voltarLogin');
+    const voltarLogin = document.querySelector('#voltarLogin, .voltarLogin');
     if (voltarLogin) {
-        voltarLogin.addEventListener('click', () => {
+        voltarLogin.onclick = () => {
             document.querySelector('#app').innerHTML = carregarLogin();
             ativarListenerLogin();
-        });
+        };
     }
 }
 

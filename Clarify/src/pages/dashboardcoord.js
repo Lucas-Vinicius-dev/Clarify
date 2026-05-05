@@ -6,6 +6,7 @@ export function createProfileBtn(){
         document.getElementById('criarPerfil').classList.remove('hidden');
     });
 }
+
 export function dashboardcoord(){
     document.querySelector("title").innerHTML = `Dashboard - Clarify`;
     
