@@ -1,6 +1,6 @@
 import gato from '../components/assets/GATOGORDO.png'
 
-export function createProfileBtn(){
+export function createProfileBtn() {
     const criarPerfilBtn = document.querySelector("#criarPerfilBtn");
     if (!criarPerfilBtn) return;
 

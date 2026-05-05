@@ -6,19 +6,19 @@ import { carregarLogin, ativarListenerLogin } from './login.js'
 function checarRegistro(e) {
     e.preventDefault();
 
-    const fullName = document.querySelector("#fullName").value;
-    const institutionalId = document.querySelector("#institutionalId").value;
-    const institutionalEmail = document.querySelector("#institutionalEmail").value;
-    const securityKey = document.querySelector("#securityKey").value;
-    const activationKey = document.querySelector("#activationKey").value;
+    const nome = document.querySelector("#fullName").value;
+    const matricula = document.querySelector("#institutionalId").value;
+    const email = document.querySelector("#institutionalEmail").value;
+    const senha = document.querySelector("#securityKey").value;
+    const senha_ativacao = document.querySelector("#activationKey").value;
 
-    if (aux.UsuarioExiste(institutionalId) || !aux.chaveValida(activationKey)) {
+    if (aux.UsuarioExiste(matricula) || !aux.chaveValida(senha_ativacao)) {
         const label = document.querySelector("#submitIncorrectAlert label");
         label.textContent = "Credenciais inválidas.";
         aux.limparFormulario(["#fullName", "#institutionalId", "#institutionalEmail", "#securityKey", "#activationKey"]);
         return;
     }
-    aux.adicionarUsuario(fullName, institutionalId, institutionalEmail, securityKey, "coordenador");
+    aux.adicionarUsuario(nome, matricula, email, senha, "coordenador");
     alert("Registro feito com sucesso!");
 
     carregarLogin();
