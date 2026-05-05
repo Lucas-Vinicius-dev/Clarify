@@ -1,5 +1,6 @@
-import gato from './assets/GATOGORDO.png'
-import * as aux from '../funcoesAuxiliares'
+import gato from '../components/assets/GATOGORDO.png'
+import * as aux from '../lib/funcoesAuxiliares'
+import { Carregardashboardcoord } from './dashboardcoord';
 
 // Trata se o login enviado no formulário é válido
 function checarLogin(e) {
@@ -13,7 +14,7 @@ function checarLogin(e) {
         localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
         console.log('Usuário autenticado:', usuarioEncontrado);
 
-        alert('Login realizado com sucesso!');
+        Carregardashboardcoord();
         return;
     }
 
@@ -33,7 +34,7 @@ export function ativarListenerLogin() {
 
 export function carregarLogin() {
     document.querySelector("title").innerHTML = `Login - Clarify`;
-    return `
+    document.querySelector('#app').innerHTML = `
     <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
         <!-- Fundo Geométrico com Losangos -->
         <div class="absolute inset-0 opacity-15 pointer-events-none" 

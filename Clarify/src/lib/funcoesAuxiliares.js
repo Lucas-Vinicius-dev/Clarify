@@ -32,17 +32,37 @@ export function buscarUsuarioCadastrado(institutionalId, securityKey) {
    });
 }
 
-// Popula o localStorage com dados falsos para facilitar a funcionalidade de funções do sistema || OBS: ISSO LIMPA O LOCALSTORAGE, REMOVER DEPOIS
+// Popula o localStorage com dados falsos para facilitar a funcionalidade de funções do sistema
 export function popularLocalStorage() {
-    localStorage.clear();
-
     const usuariosTeste = [
         { fullName: "João da Silva", institutionalId: "123", institutionalEmail: "joao@academico.edu.br", securityKey: "123456",institutionalRole: "student" }
     ];
 
-    if (!localStorage.getItem('usuarios')) {
-        localStorage.setItem('usuarios', JSON.stringify(usuariosTeste))
-    }
+    localStorage.setItem('usuarios', JSON.stringify(usuariosTeste));
+}
+
+export function chaveValida(key) {
+    const chaves = JSON.parse(localStorage.getItem('chavesAtivacao'));
+    const find = chaves.find((chave) => {
+        return (chave.code === key && !chave.used);
+    });
+
+    if (find === undefined) return false;
+
+    find.used = true;
+    localStorage.setItem('chavesAtivacao', JSON.stringify(chaves));
+    return true;
+}
+
+// Cria no localStorage as Chaves de ativacao
+export function createKeys() {
+    const chavesInicializadoras = [
+        { code: "123", used: false },
+        { code: "456", used: false },
+        { code: "789", used: false }
+    ];
+
+    localStorage.setItem('chavesAtivacao', JSON.stringify(chavesInicializadoras));
 }
 
 // Adiciona novo usuário ao localStorage
