@@ -1,9 +1,11 @@
 import gato from '../components/assets/GATOGORDO.png'
 
 export function createProfileBtn(){
-    const criarPerfilBtn = document.querySelector("#criarPerfilBtn");
-    criarPerfilBtn.addEventListener("click", () => {
-        document.getElementById('criarPerfil').classList.remove('hidden');
+    const criarPerfilBtns = document.querySelectorAll("#criarPerfilBtn, .criarPerfilBtn");
+    criarPerfilBtns.forEach((button) => {
+        button.addEventListener("click", () => {
+            document.getElementById('criarPerfil').classList.remove('hidden');
+        });
     });
 }
 export function dashboardcoord(){
@@ -11,8 +13,41 @@ export function dashboardcoord(){
     
     return `
     <div class="min-h-screen w-full bg-pink-50 flex-col mr-auto flex items-center justify-start relative overflow-hidden">
-        <div class="mr-auto h-screen flex-col bg-gray-50 shadow p-8 border border-gray-100">
-            <div class=" h-20 mb-4 rounded-xl p-4 flex items-center justify-center w-full">
+
+
+        <!-- Mobile navbar start -->
+        <nav class="w-full md:hidden bg-white border-b border-gray-200 shadow-sm px-4 py-4">
+            <div class="flex items-center justify-center">
+                <div class="flex items-center gap-3">
+                    <img src="${gato}" alt="Clarify Logo" class="h-10 w-10 object-contain" />
+                    <div>
+                        <h1 class="text-lg font-semibold text-orange-600">Clarify</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-around gap-4 mt-4">
+                <button title="Nome" class="text-gray-700 hover:bg-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </button>
+                <button title="Alunos" class=" text-gray-700 hover:bg-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-icon"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg>
+                </button>
+                <button title="Adicionar aluno" class="criarPerfilBtn  text-gray-700 hover:bg-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <button title="Demandas" class=" text-gray-700 hover:bg-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sticky-note-icon"><path d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/><path d="M15 3v5a1 1 0 0 0 1 1h5"/></svg>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Mobile navbar end -->
+        <!-- Desktop sidebar start -->
+
+        <div class="hidden md:block mr-auto h-screen flex-col bg-gray-50 shadow p-8 border border-gray-100">
+            <div class="h-20 mb-4 rounded-xl p-4 flex items-center justify-center w-full">
                 <img src="${gato}" alt="Clarify Logo" class="w-full h-full object-contain" />
                 <h1 class="text-3xl font-bold text-orange-600">Clarify</h1>
             </div>
@@ -25,7 +60,11 @@ export function dashboardcoord(){
     <li><button class="flex items-center gap-2"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sticky-note-icon lucide-sticky-note"><path d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/><path d="M15 3v5a1 1 0 0 0 1 1h5"/></svg></span>Demandas</button></li>
             </ul>
         </div>
+        
     </div>
+    <!-- Desktop sidebar end -->
+
+    <!-- Pop-up criar perfil start -->
     <div class="hidden fixed inset-0 bg-opacity-50 flex items-center justify-center z-50" id="criarPerfil">
         <div class="bg-white rounded-lg p-8 w-full max-w-md">
             <h2 class="text-2xl font-bold mb-6">Criar Perfil</h2>
@@ -59,5 +98,8 @@ export function dashboardcoord(){
                 </div>
             </form>
         </div>
+        <!-- Pop-up criar perfil end -->
+        
+        
     </div>`
 }
