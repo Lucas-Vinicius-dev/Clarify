@@ -23,12 +23,24 @@ function checarLogin(e) {
 
 }
 
+function irParaRegistro() {
+    import('./registro.js').then(({ carregarRegistro, ativarListenerRegistro }) => {
+        document.querySelector('#app').innerHTML = carregarRegistro();
+        ativarListenerRegistro();
+    });
+}
+
 // Adiciona um listener para o evento de submit do formulário de login
 export function ativarListenerLogin() {
     document.querySelector('#loginForm').addEventListener('submit', (e) => {
         e.preventDefault();
         checarLogin(e);
     });
+
+    const goToRegisterButton = document.querySelector('#goToRegisterButton');
+    if (goToRegisterButton) {
+        goToRegisterButton.addEventListener('click', irParaRegistro);
+    }
 }
 
 export function carregarLogin() {
@@ -107,6 +119,13 @@ export function carregarLogin() {
             class="w-full bg-brand-primary text-white font-bold py-4 rounded-xl shadow-lg hover:bg-orange-700 hover:cursor-pointer hover:-translate-y-1 transition-transform duration-150 ease-out transform"
             >
             Autenticar
+            </button>
+
+            <button
+            type="button"
+            id="goToRegisterButton"
+            class="w-full mt-3 border border-brand-primary text-brand-primary font-bold py-4 rounded-xl shadow-sm hover:bg-brand-primary hover:text-white transition-colors duration-150">
+            Ir para Cadastro
             </button>
 
             <div class="text-center">

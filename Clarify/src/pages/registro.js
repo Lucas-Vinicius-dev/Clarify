@@ -34,6 +34,14 @@ export function ativarListenerRegistro() {
       e.preventDefault();
       checarRegistro(e);
    });
+
+    const goToLoginButton = document.querySelector('#goToLoginButton');
+    if (goToLoginButton) {
+        goToLoginButton.addEventListener('click', () => {
+            document.querySelector('#app').innerHTML = carregarLogin();
+            ativarListenerLogin();
+        });
+    }
 }
 
 export function carregarRegistro() {
@@ -154,12 +162,20 @@ export function carregarRegistro() {
                 class=" w-full bg-brand-primary text-white font-bold py-4 rounded-xl shadow-lg hover:bg-orange-700 hover:cursor-pointer hover:-translate-y-1 transition-transform duration-150 ease-out transform">
                 Registrar-se
                 </button>
+
+                <button
+                type="button"
+                id="goToLoginButton"
+                class="w-full mt-3 border border-brand-primary text-brand-primary font-bold py-4 rounded-xl shadow-sm hover:bg-brand-primary hover:text-white transition-colors duration-150">
+                Ir para Login
+                </button>
     
                 <div class="text-center">
                 <a href="#" class="text-sm font-semibold text-brand-primary hover:underline transition-all">
                     Recuperar Credenciais de Acesso
                 </a>
                 </div>
+
             </form>
     
             <div class="mt-12 text-center">
