@@ -12,7 +12,6 @@ function checarLogin(e) {
     if (usuarioEncontrado) {
         const { senha, ...usuarioLogado } = usuarioEncontrado;
         localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
-        console.log('Usuário autenticado:', usuarioEncontrado);
 
         Carregardashboardcoord();
         return;

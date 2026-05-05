@@ -11,31 +11,31 @@ export function limparFormulario(parametros) {
 }
 
 // Busca se um usuário está cadastrado no localStorage com base no ID institucional
-export function UsuarioExiste(institutionalId) {
+export function UsuarioExiste(matricula) {
     const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
     return usuarios.some((usuario) => {
-        const matriculaSalva = usuario.institutionalId;
+        const matriculaSalva = usuario.matricula;
 
-        return String(matriculaSalva) === String(institutionalId);
+        return String(matriculaSalva) === String(matricula);
     });
 }
 
 // Busca um usuário cadastrado no localStorage com base na matrícual e na senha
-export function buscarUsuarioCadastrado(institutionalId, securityKey) {
+export function buscarUsuarioCadastrado(matricula, senha) {
    const usuariosSalvos = JSON.parse(localStorage.getItem('usuarios')) || [];
 
    return usuariosSalvos.find((usuario) => {
-      const matriculaSalva = usuario.institutionalId;
-      const senhaSalva = usuario.securityKey;
+      const matriculaSalva = usuario.matricula;
+      const senhaSalva = usuario.senha;
 
-      return String(matriculaSalva) === String(institutionalId) && String(senhaSalva) === String(securityKey);
+      return String(matriculaSalva) === String(matricula) && String(senhaSalva) === String(senha);
    });
 }
 
 // Popula o localStorage com dados falsos para facilitar a funcionalidade de funções do sistema
 export function popularLocalStorage() {
     const usuariosTeste = [
-        { fullName: "João da Silva", institutionalId: "123", institutionalEmail: "joao@academico.edu.br", securityKey: "123456",institutionalRole: "student" }
+        { nome: "João da Silva", matricula: "123", email: "joao@academico.edu.br", senha: "123456", cargo: "student" }
     ];
 
     localStorage.setItem('usuarios', JSON.stringify(usuariosTeste));
@@ -66,15 +66,15 @@ export function createKeys() {
 }
 
 // Adiciona novo usuário ao localStorage
-export function adicionarUsuario(fullName, institutionalId, institutionalEmail, securityKey, institutionalRole) {
+export function adicionarUsuario(nome, matricula, email, senha, cargo) {
     const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
 
     usuarios.push({
-        fullName,
-        institutionalId,
-        institutionalEmail,
-        securityKey,
-        institutionalRole
+        nome,
+        matricula,
+        email,
+        senha,
+        cargo
     });
 
     localStorage.setItem('usuarios', JSON.stringify(usuarios));
