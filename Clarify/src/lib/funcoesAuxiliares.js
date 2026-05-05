@@ -35,7 +35,7 @@ export function buscarUsuarioCadastrado(matricula, senha) {
 // Popula o localStorage com dados falsos para facilitar a funcionalidade de funções do sistema
 export function popularLocalStorage() {
     const usuariosTeste = [
-        { nome: "João da Silva", matricula: "123", email: "joao@academico.edu.br", senha: "123456", cargo: "student" }
+        { nome: "João da Silva", matricula: "123", email: "joao@academico.edu.br", senha: "123456", cargo: "coordenador" }
     ];
 
     localStorage.setItem('usuarios', JSON.stringify(usuariosTeste));
