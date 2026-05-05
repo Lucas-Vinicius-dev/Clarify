@@ -1,5 +1,5 @@
-import gato from './assets/GATOGORDO.png'
-import * as aux from "../funcoesAuxiliares"
+import gato from '../components/assets/GATOGORDO.png'
+import * as aux from "../lib/funcoesAuxiliares"
 import { carregarLogin, ativarListenerLogin } from './login.js'
 
 // Trata se o registro enviado no formulário é válido
