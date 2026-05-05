@@ -34,12 +34,11 @@ export function ativarListenerRegistro() {
 
     const voltarLogin = document.querySelector('#voltarLogin');
     if (voltarLogin) {
-        voltarLogin.addEventListener('click', () => {
-            document.querySelector('#app').innerHTML = carregarLogin();
+        voltarLogin.onclick = () => {
+            carregarLogin();
             ativarListenerLogin();
-        });
-    }
-}
+        };
+}}
 
 export function carregarRegistro() {
     document.querySelector("title").innerHTML = `Registro - Clarify`;
