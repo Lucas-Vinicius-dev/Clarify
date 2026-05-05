@@ -1,6 +1,6 @@
 import gato from '../components/assets/GATOGORDO.png'
 import * as aux from '../lib/funcoesAuxiliares'
-import { Carregardashboardcoord } from './dashboardcoord';
+import { Carregardashboardcoord, createProfileBtn } from './dashboardcoord';
 
 // Trata se o login enviado no formulário é válido
 function checarLogin(e) {
@@ -15,6 +15,7 @@ function checarLogin(e) {
         console.log('Usuário autenticado:', usuarioEncontrado);
 
         Carregardashboardcoord();
+        createProfileBtn();
         return;
     }
 

@@ -2,10 +2,14 @@ import gato from '../components/assets/GATOGORDO.png'
 
 export function createProfileBtn(){
     const criarPerfilBtn = document.querySelector("#criarPerfilBtn");
+    if (!criarPerfilBtn) return;
+
     criarPerfilBtn.addEventListener("click", () => {
         document.getElementById('criarPerfil').classList.remove('hidden');
     });
 }
+
+
 export function Carregardashboardcoord(){
     document.querySelector("title").innerHTML = `Dashboard - Clarify`;
     document.querySelector('#app').innerHTML = `

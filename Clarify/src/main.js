@@ -11,6 +11,7 @@ function main() {
    aux.popularLocalStorage();
    carregarRegistro();
    ativarListenerRegistro();
+   createProfileBtn();
 }
 
 main();
