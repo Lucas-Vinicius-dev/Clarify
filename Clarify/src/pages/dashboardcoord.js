@@ -1,6 +1,7 @@
 import gato from '../components/assets/GATOGORDO.png'
 import * as aux from "../lib/funcoesAuxiliares"
 
+const coord = JSON.parse(localStorage.getItem('usuarioLogado'));
 const dashboardViews = {
     nome: `
         <div class="space-y-6">
@@ -10,7 +11,7 @@ const dashboardViews = {
                 </div>
                 <div class="relative z-10 space-y-4">
                     <span class="text-primary-fixed font-label-caps text-[10px] tracking-[0.2em] uppercase block">PORTAL DO COORDENADOR</span>
-                    <h1 class="font-h1 text-3xl lg:text-4xl font-semibold">Bem-vindo,${localStorage.getItem('usuarioLogado') ? JSON.parse(localStorage.getItem('usuarioLogado')).nome : 'Usuário'}</h1>
+                    <h1 class="font-h1 text-3xl lg:text-4xl font-semibold">Bem-vindo, ${coord.nome}</h1>
                     <p class="text-zinc-400 text-sm lg:text-base max-w-2xl">Acompanhe as demandas e gerencie o fluxo de solicitações acadêmicas com precisão e clareza.</p>
                 </div>
             </section>
