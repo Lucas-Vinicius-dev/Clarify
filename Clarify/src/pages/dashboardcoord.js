@@ -1,6 +1,7 @@
 import gato from '../components/assets/GATOGORDO.png'
 import * as aux from "../lib/funcoesAuxiliares"
 
+const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 const dashboardViews = {
     nome: `
         <div class="space-y-6">
@@ -10,7 +11,7 @@ const dashboardViews = {
                 </div>
                 <div class="relative z-10 space-y-4">
                     <span class="text-primary-fixed font-label-caps text-[10px] tracking-[0.2em] uppercase block">PORTAL DO COORDENADOR</span>
-                    <h1 class="font-h1 text-3xl lg:text-4xl font-semibold">Bem-vindo,${localStorage.getItem('usuarioLogado') ? JSON.parse(localStorage.getItem('usuarioLogado')).nome : 'Usuário'}</h1>
+                    <h1 class="font-h1 text-3xl lg:text-4xl font-semibold">Bem-vindo, ${coord.nome}</h1>
                     <p class="text-zinc-400 text-sm lg:text-base max-w-2xl">Acompanhe as demandas e gerencie o fluxo de solicitações acadêmicas com precisão e clareza.</p>
                 </div>
             </section>
@@ -42,7 +43,7 @@ const dashboardViews = {
                         <span class="material-symbols-outlined text-error" data-icon="priority_high">priority_high</span>
                         Priority Deadlines
                     </h2>
-                    <button data-view="demandas" class=" text-xs font-bold text-primary hover:underline">VER TODAS</button>
+                    <button id="ver-todas" class=" text-xs font-bold text-primary hover:underline">VER TODAS</button>
                 </div>
                 <div class="divide-y divide-zinc-100">
                     <div class="p-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between hover:bg-zinc-50 transition-colors">
@@ -129,6 +130,14 @@ export function renderDashboardView(view = 'nome') {
 
 export function setActiveDashboardTab(view) {
     const buttons = document.querySelectorAll('[data-view]');
+    const vertodos = document.getElementById('ver-todas');
+    if (vertodos) {
+        vertodos.addEventListener('click', () => {
+            renderDashboardView('demandas');
+            setActiveDashboardTab('demandas');
+        }
+    )}
+
     buttons.forEach((button) => {
         const isActive = button.dataset.view === view;
         button.classList.toggle('bg-brand-primary/10', isActive);
