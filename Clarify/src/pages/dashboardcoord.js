@@ -80,7 +80,7 @@ export function Carregardashboardcoord(){
     document.querySelector('#app').innerHTML = `
     <div class="min-h-screen w-full bg-pink-50 flex flex-col md:flex-row relative overflow-hidden">
         <div class="md:hidden bg-white border-b border-gray-200 p-4">
-            <div class="flex flex-col items-center justify-center gap-2 mb-4">
+            <div class="flex flex items-center justify-center gap-2 mb-4">
                 <img src="${gato}" alt="Clarify Logo" class="h-10 w-10 object-contain" />
                 <h1 class="text-lg font-bold text-orange-600">Clarify</h1>
             </div>
