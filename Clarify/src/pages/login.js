@@ -2,13 +2,6 @@ import gato from '../components/assets/GATOGORDO.png'
 import * as aux from '../lib/funcoesAuxiliares'
 import { Carregardashboardcoord, createProfileBtn, setupDashboardState } from './dashboardcoord';
 
-function exibirErroLogin(mensagem) {
-    const label = document.querySelector("#submitIncorrectAlert label");
-    if (label) {
-        label.textContent = mensagem;
-    }
-}
-
 // Trata se o login enviado no formulário é válido
 function checarLogin(e) {
 
@@ -29,12 +22,12 @@ function checarLogin(e) {
 
     const usuarioExiste = aux.UsuarioExiste(institutionalId);
     if (!usuarioExiste) {
-        exibirErroLogin("Usuário não encontrado.");
+        aux.exibirMensagemErro("Usuário não encontrado.");
         aux.limparFormulario(["#institutionalId", "#securityKey"]);
         return;
     }
 
-    exibirErroLogin("Chave de segurança incorreta.");
+    aux.exibirMensagemErro("Chave de segurança incorreta.");
     aux.limparFormulario(["#securityKey"]);
 
 }

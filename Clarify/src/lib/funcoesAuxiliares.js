@@ -12,6 +12,14 @@ export function limparFormulario(parametros) {
     }
 }
 
+// Exibe mensagens de erro em formulários
+export function exibirMensagemErro(mensagem, seletor = "#submitIncorrectAlert label") {
+    const label = document.querySelector(seletor);
+    if (label) {
+        label.textContent = mensagem;
+    }
+}
+
 // Busca se um usuário está cadastrado no localStorage com base no ID institucional
 export function UsuarioExiste(matricula) {
     const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
@@ -44,9 +52,17 @@ export function popularLocalStorage() {
 }
 
 export function chaveValida(key) {
-    const chaves = JSON.parse(localStorage.getItem('chavesAtivacao'));
+    const chaveNormalizada = String(key ?? '').trim();
+    if (!chaveNormalizada) return false;
+
+    let chaves = JSON.parse(localStorage.getItem('chavesAtivacao'));
+    if (!Array.isArray(chaves)) {
+        createKeys();
+        chaves = JSON.parse(localStorage.getItem('chavesAtivacao')) || [];
+    }
+
     const find = chaves.find((chave) => {
-        return (chave.code === key && !chave.used);
+        return (String(chave.code) === chaveNormalizada && !chave.used);
     });
 
     if (find === undefined) return false;
