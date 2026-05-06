@@ -1,5 +1,13 @@
-import gato from './assets/GATOGORDO.png'
-import * as aux from '../funcoesAuxiliares'
+import gato from '../components/assets/GATOGORDO.png'
+import * as aux from '../lib/funcoesAuxiliares'
+import { Carregardashboardcoord, createProfileBtn } from './dashboardcoord';
+
+function exibirErroLogin(mensagem) {
+    const label = document.querySelector("#submitIncorrectAlert label");
+    if (label) {
+        label.textContent = mensagem;
+    }
+}
 
 // Trata se o login enviado no formulário é válido
 function checarLogin(e) {
@@ -11,15 +19,21 @@ function checarLogin(e) {
     if (usuarioEncontrado) {
         const { senha, ...usuarioLogado } = usuarioEncontrado;
         localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
-        console.log('Usuário autenticado:', usuarioEncontrado);
 
-        alert('Login realizado com sucesso!');
+        Carregardashboardcoord();
+        createProfileBtn();
         return;
     }
 
-    const label = document.querySelector("#submitIncorrectAlert label");
-    label.textContent = "Credenciais inválidas.";
-    aux.limparFormulario(["#institutionalId", "#securityKey"]);
+    const usuarioExiste = aux.UsuarioExiste(institutionalId);
+    if (!usuarioExiste) {
+        exibirErroLogin("Usuário não encontrado.");
+        aux.limparFormulario(["#institutionalId", "#securityKey"]);
+        return;
+    }
+
+    exibirErroLogin("Chave de segurança incorreta.");
+    aux.limparFormulario(["#securityKey"]);
 
 }
 
@@ -33,12 +47,20 @@ export function ativarListenerLogin() {
 
 export function carregarLogin() {
     document.querySelector("title").innerHTML = `Login - Clarify`;
-    return `
-    <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
+    document.querySelector('#app').innerHTML = `
+    <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden animate-cubes">
         <!-- Fundo Geométrico com Losangos -->
-        <div class="absolute inset-0 opacity-15 pointer-events-none" 
-            style="background-image: repeating-linear-gradient(45deg, #ca5f15 0px, #ca5f15 2px, transparent 2px, transparent 20px), repeating-linear-gradient(-45deg, #ca5f15 0px, #ca5f15 2px, transparent 2px, transparent 20px);">
-        </div>
+        <div class="absolute inset-0 opacity-15 pointer-events-none animate-cubes" 
+                style="background-image: 
+                    linear-gradient(30deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
+                    linear-gradient(150deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
+                    linear-gradient(30deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
+                    linear-gradient(150deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
+                    linear-gradient(60deg, #8a3f09 25%, transparent 25.5%, transparent 75%, #8a3f09 75%, #8a3f09),
+                    linear-gradient(60deg, #8a3f09 25%, transparent 25.5%, transparent 75%, #8a3f09 75%, #8a3f09);
+    background-size: 80px 140px;
+    background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;">
+            </div>
 
         <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 z-10 border border-brand-surface-dim">
         <div class="flex flex-col items-center mb-8">
