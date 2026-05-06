@@ -120,6 +120,15 @@ const dashboardViews = {
     `
 };
 
+
+// Adiciona um listener para o evento de submit do formulário de dashboard
+export function ativarListenerDashboardCoord() {
+    document.querySelector('#dashboardCoordForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        checarDashboardCoord();
+    });
+}
+
 export function renderDashboardView(view = 'nome') {
     const container = document.querySelector('#dashboardContent');
     if (!container) return;
@@ -214,15 +223,15 @@ export function Carregardashboardcoord() {
                     <input type="password" id="senha" name="senha" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-orange-500 focus:border-orange-500">
                 </div>
                 <div>
-                    <label for="tipoconta" class="block text-sm font-medium text-gray-700">Tipo de Conta</label>
-                    <select id="tipoconta" name="tipoconta" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-orange-500 focus:border-orange-500">
+                    <label for="cargo" class="block text-sm font-medium text-gray-700">Tipo de Conta</label>
+                    <select id="cargo" name="cargo" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-orange-500 focus:border-orange-500">
                         <option value="aluno">Aluno</option>
                         <option value="professor">Professor</option>
                     </select>
                 </div>
                 <div class="flex justify-end">
-                    <button type="button" class="mr-2 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400" onclick="document.getElementById('criarPerfil').classList.add('hidden')">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600">Criar</button>
+                    <button type="button" class=" hover:cursor-pointer mr-2 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400" onclick="document.getElementById('criarPerfil').classList.add('hidden')">Cancelar</button>
+                    <button id="dashboardCoordForm" type="submit" class=" hover:cursor-pointer px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600">Criar</button>
                 </div>
             </form>
         </div>
