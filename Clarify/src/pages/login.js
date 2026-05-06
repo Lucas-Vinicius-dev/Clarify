@@ -1,6 +1,20 @@
 import gato from '../components/assets/GATOGORDO.png'
 import * as aux from '../lib/funcoesAuxiliares'
-import { Carregardashboardcoord, createProfileBtn, setupDashboardState } from './dashboardcoord';
+import { Carregardashboardcoord, createProfileBtn, setupDashboardState as setupDashboardStateCoord } from './dashboardcoord';
+import { Carregardashboardaluno, createRequestBtn, setupDashboardState as setupDashboardStateAluno } from './dashboardaluno';
+
+function redirecionarPorCargo(cargo) {
+    if (cargo === 'aluno') {
+        Carregardashboardaluno();
+        setupDashboardStateAluno();
+        createRequestBtn();
+        return;
+    }
+
+    Carregardashboardcoord();
+    setupDashboardStateCoord();
+    createProfileBtn();
+}
 
 // Trata se o login enviado no formulário é válido
 function checarLogin(e) {
@@ -14,9 +28,7 @@ function checarLogin(e) {
         localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
         localStorage.setItem('auth', true);
 
-        Carregardashboardcoord();
-        setupDashboardState();
-        createProfileBtn();
+        redirecionarPorCargo(usuarioLogado.cargo);
         return;
     }
 
