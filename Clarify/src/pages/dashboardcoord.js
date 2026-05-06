@@ -120,6 +120,15 @@ const dashboardViews = {
     `
 };
 
+export function checarDashboardCoord() {
+    const nome = document.querySelector("#nome");
+    const matricula = document.querySelector("#matricula");
+    const email = document.querySelector("#email");
+    const senha = document.querySelector("#senha");
+    const cargo = document.querySelector("#cargo");
+
+    const usuarios = JSON.parse(localStorage.getItem("usuarios"));
+}
 
 // Adiciona um listener para o evento de submit do formulário de dashboard
 export function ativarListenerDashboardCoord() {
