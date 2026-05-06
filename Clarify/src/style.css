@@ -22,3 +22,11 @@
     animation: moverCubos 10s linear infinite;
 }
 
+@media (min-width: 768px) {
+    button:hover {
+        background-color: #e5e7eb;
+        border-radius: 1rem;
+        padding: 0 1rem 0 1rem;
+    }
+}
+

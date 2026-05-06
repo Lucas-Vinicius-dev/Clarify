@@ -2,6 +2,13 @@ import gato from '../components/assets/GATOGORDO.png'
 import * as aux from '../lib/funcoesAuxiliares'
 import { Carregardashboardcoord, createProfileBtn } from './dashboardcoord';
 
+function exibirErroLogin(mensagem) {
+    const label = document.querySelector("#submitIncorrectAlert label");
+    if (label) {
+        label.textContent = mensagem;
+    }
+}
+
 // Trata se o login enviado no formulário é válido
 function checarLogin(e) {
 
@@ -19,9 +26,15 @@ function checarLogin(e) {
         return;
     }
 
-    const label = document.querySelector("#submitIncorrectAlert label");
-    label.textContent = "Credenciais inválidas.";
-    aux.limparFormulario(["#institutionalId", "#securityKey"]);
+    const usuarioExiste = aux.UsuarioExiste(institutionalId);
+    if (!usuarioExiste) {
+        exibirErroLogin("Usuário não encontrado.");
+        aux.limparFormulario(["#institutionalId", "#securityKey"]);
+        return;
+    }
+
+    exibirErroLogin("Chave de segurança incorreta.");
+    aux.limparFormulario(["#securityKey"]);
 
 }
 
