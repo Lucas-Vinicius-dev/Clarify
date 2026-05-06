@@ -79,3 +79,13 @@ export function adicionarUsuario(nome, matricula, email, senha, cargo) {
 
     localStorage.setItem('usuarios', JSON.stringify(usuarios));
 }
+
+export function validDuplicidade(email, matricula, array){
+    for (let i = 0; i < array.length; i++){
+        if (email === array[i].institutionalEmail || matricula === array[i].institutionalId){
+            return `Possui duplicidade`
+            break
+        }
+    }
+    return 
+}
