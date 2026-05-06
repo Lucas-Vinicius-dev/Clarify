@@ -54,7 +54,8 @@ export function popularLocalStorage() {
 }
 
 // Popula o localStorage com demandas de teste pra a Central de Demandas (US17).
-// OBS: remover quando a US16 começar a inserir demandas de verdade.
+// TODO: remover quando a US16 começar a inserir demandas de verdade.
+// pessoal, isso é literalmente mock data :D. 
 export function popularDemandas() {
     const demandasTeste = [
         {
