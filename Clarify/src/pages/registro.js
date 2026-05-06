@@ -18,8 +18,7 @@ function redirecionarPorCargo(cargo) {
 }
 
 // Trata se o registro enviado no formulário é válido
-function checarRegistro(e) {
-    e.preventDefault();
+function checarRegistro() {
 
     const nome = document.querySelector("#fullName").value;
     const matricula = document.querySelector("#institutionalId").value;
@@ -55,7 +54,7 @@ function checarRegistro(e) {
 export function ativarListenerRegistro() {
     document.querySelector('#registrationForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      checarRegistro(e);
+      checarRegistro();
    });
 
     const voltarLogin = document.querySelector('#voltarLogin');

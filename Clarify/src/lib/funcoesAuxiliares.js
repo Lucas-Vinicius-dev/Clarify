@@ -107,3 +107,7 @@ export function adicionarCaminhoURL(nome) {
       navigateURL(`/${nome}`);
    }
 }
+
+export function existeDuplicidade() {
+    
+}
