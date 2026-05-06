@@ -131,6 +131,9 @@ export function Carregardashboardcoord(){
             </div>
         </main>
     </div>
+
+
+    // Pop-up de criação de perfil
     <div class="hidden fixed inset-0 bg-opacity-50 flex items-center justify-center z-50" id="criarPerfil">
         <div class="bg-white rounded-lg p-8 w-full max-w-md">
             <h2 class="text-2xl font-bold mb-6">Criar Perfil</h2>
