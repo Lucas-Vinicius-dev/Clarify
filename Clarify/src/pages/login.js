@@ -12,6 +12,7 @@ function checarLogin(e) {
     if (usuarioEncontrado) {
         const { senha, ...usuarioLogado } = usuarioEncontrado;
         localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
+        localStorage.setItem('auth', true);
 
         Carregardashboardcoord();
         setupDashboardState();
@@ -19,9 +20,15 @@ function checarLogin(e) {
         return;
     }
 
-    const label = document.querySelector("#submitIncorrectAlert label");
-    label.textContent = "Credenciais inválidas.";
-    aux.limparFormulario(["#institutionalId", "#securityKey"]);
+    const usuarioExiste = aux.UsuarioExiste(institutionalId);
+    if (!usuarioExiste) {
+        aux.exibirMensagemErro("Usuário não encontrado.");
+        aux.limparFormulario(["#institutionalId", "#securityKey"]);
+        return;
+    }
+
+    aux.exibirMensagemErro("Chave de segurança incorreta.");
+    aux.limparFormulario(["#securityKey"]);
 
 }
 
@@ -34,6 +41,7 @@ export function ativarListenerLogin() {
 }
 
 export function carregarLogin() {
+    aux.adicionarCaminhoURL("login");
     document.querySelector("title").innerHTML = `Login - Clarify`;
     document.querySelector('#app').innerHTML = `
     <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden animate-cubes">

@@ -1,26 +1,120 @@
 import gato from '../components/assets/GATOGORDO.png'
+import * as aux from "../lib/funcoesAuxiliares"
 
+const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 const dashboardViews = {
     nome: `
-        <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-8 shadow-sm">
-            <h2 class="text-2xl font-semibold mb-4">Visão Geral</h2>
-            <p class="text-gray-600">Aqui você pode ver informações do coordenador, status do sistema e atalhos rápidos.</p>
+        <div class="space-y-6">
+            <section class="relative overflow-hidden bg-zinc-900 p-6  text-white">
+                <div class="absolute inset-0 opacity-15">
+                    <img class="w-full h-full object-cover" data-alt="An abstract architectural composition of sharp angles and geometric planes in shades of deep charcoal and burnt orange. The image has a sophisticated, minimalist feel, representing the intersection of data and institutional structure. High-contrast lighting creates strong shadows, reinforcing the geometric institutionalism brand identity of the Clarify platform." src="https://lh3.googleusercontent.com/aida/ADBb0ujSia4aBQLXG-iDCxNtnt-voKc0tRw5t7i4W1HWCnTaojCWcpeB9NtLb32npBd2nD3bGRRrA_rXE-koIkxkVicCaAQV-0dJmJGCNNXUgg58Hab_xfgty2yUY2F8jxKrOKTnub9NABjLE97Cn754GRPyzD5CB3AXGadtJdXOnWumA41elODuvAfKMNMbGoaHhZeyO46Zgtz_ojolL124-2l7Wk_iioeNE2b41S5j0mNWvnuP0lLWLNAwP5KHRdcTCjOmL6BVtAsc-OQ"/>
+                </div>
+                <div class="relative z-10 space-y-4">
+                    <span class="text-primary-fixed font-label-caps text-[10px] tracking-[0.2em] uppercase block">PORTAL DO COORDENADOR</span>
+                    <h1 class="font-h1 text-3xl lg:text-4xl font-semibold">Bem-vindo, ${coord.nome}</h1>
+                    <p class="text-zinc-400 text-sm lg:text-base max-w-2xl">Acompanhe as demandas e gerencie o fluxo de solicitações acadêmicas com precisão e clareza.</p>
+                </div>
+            </section>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div class="bg-white border border-zinc-200 p-4 flex flex-col justify-between min-h-[140px] ">
+                    <div class="flex justify-between items-start gap-4">
+                        <span class="material-symbols-outlined text-primary text-2xl" data-icon="person_search">person_search</span>
+                        <span class="text-[10px] font-bold text-zinc-400 uppercase">+12% ESTE MÊS</span>
+                    </div>
+                    <div>
+                        <h3 class="text-zinc-500 uppercase tracking-[0.2em] text-[10px]">REGISTERED USERS</h3>
+                        <p class="text-3xl lg:text-4xl font-semibold text-zinc-900">428 <span class="text-base font-normal text-zinc-400">ativos</span></p>
+                    </div>
+                </div>
+                <div class="bg-white border border-zinc-200 p-4 flex flex-col justify-between min-h-[140px]  border-l-4 border-error">
+                    <div class="flex justify-between items-start gap-4">
+                        <span class="material-symbols-outlined text-error text-2xl" data-icon="emergency_home">emergency_home</span>
+                        <span class="bg-error text-white text-[10px] px-2 py-0.5 font-bold rounded">ALERTA</span>
+                    </div>
+                    <div>
+                        <h3 class="text-zinc-500 uppercase tracking-[0.2em] text-[10px]">CRITICAL DEADLINES</h3>
+                        <p class="text-3xl lg:text-4xl font-semibold text-zinc-900">05 <span class="text-base font-normal text-error">&lt; 24h</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white border border-zinc-200 overflow-hidden ">
+                <div class="bg-zinc-50 border-b border-zinc-200 px-4 py-3 flex flex-col gap-3 lg:flex-row lg:justify-between lg:items-center">
+                    <h2 class="font-h3 text-base lg:text-lg flex items-center gap-2">
+                        <span class="material-symbols-outlined text-error" data-icon="priority_high">priority_high</span>
+                        Priority Deadlines
+                    </h2>
+                    <button id="ver-todas" class=" text-xs font-bold text-primary hover:underline">VER TODAS</button>
+                </div>
+                <div class="divide-y divide-zinc-100">
+                    <div class="p-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between hover:bg-zinc-50 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-surface-container flex items-center justify-center text-primary-container font-bold rounded">AC</div>
+                            <div>
+                                <h4 class="font-h3 text-base text-zinc-900">Aproveitamento de Créditos</h4>
+                                <p class="text-sm text-zinc-500">Solicitante: Mariana Costa (202100452)</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 lg:gap-8">
+                            <div class="text-right">
+                                <p class="text-[10px] uppercase tracking-[0.2em] text-zinc-400">EXPIRA EM</p>
+                                <p class="text-sm font-bold text-error">04 horas</p>
+                            </div>
+                            <span class="bg-error-container text-on-error-container px-3 py-1 text-xs font-bold uppercase tracking-wider">Urgente</span>
+                            <button class="material-symbols-outlined text-zinc-400 hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</button>
+                        </div>
+                    </div>
+                    <div class="p-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between hover:bg-zinc-50 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-surface-container flex items-center justify-center text-primary-container font-bold rounded">TM</div>
+                            <div>
+                                <h4 class="font-h3 text-base text-zinc-900">Trancamento de Matrícula</h4>
+                                <p class="text-sm text-zinc-500">Solicitante: João Pedro Santos (202001183)</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 lg:gap-8">
+                            <div class="text-right">
+                                <p class="text-[10px] uppercase tracking-[0.2em] text-zinc-400">EXPIRA EM</p>
+                                <p class="text-sm font-bold text-error">12 horas</p>
+                            </div>
+                            <span class="bg-error-container text-on-error-container px-3 py-1 text-xs font-bold uppercase tracking-wider">Urgente</span>
+                            <button class="material-symbols-outlined text-zinc-400 hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</button>
+                        </div>
+                    </div>
+                    <div class="p-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between hover:bg-zinc-50 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-surface-container flex items-center justify-center text-primary-container font-bold rounded">QT</div>
+                            <div>
+                                <h4 class="font-h3 text-base text-zinc-900">Quebra de Pré-requisito</h4>
+                                <p class="text-sm text-zinc-500">Solicitante: Ana Beatriz Lima (202200812)</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 lg:gap-8">
+                            <div class="text-right">
+                                <p class="text-[10px] uppercase tracking-[0.2em] text-zinc-400">EXPIRA EM</p>
+                                <p class="text-sm font-bold text-error">19 horas</p>
+                            </div>
+                            <span class="bg-error-container text-on-error-container px-3 py-1 text-xs font-bold uppercase tracking-wider">Urgente</span>
+                            <button class="material-symbols-outlined text-zinc-400 hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     `,
     alunos: `
-        <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-8 shadow-sm">
+        <div class=" border border-dashed border-gray-300 bg-white p-8 shadow-sm">
             <h2 class="text-2xl font-semibold mb-4">Alunos</h2>
             <p class="text-gray-600">Gerencie a lista de alunos, visualize registros e acesse informações de matrícula.</p>
         </div>
     `,
     demandas: `
-        <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-8 shadow-sm">
+        <div class=" border border-dashed border-gray-300 bg-white p-8 shadow-sm">
             <h2 class="text-2xl font-semibold mb-4">Demandas</h2>
             <p class="text-gray-600">Veja as demandas abertas, tarefas pendentes e notificações importantes.</p>
         </div>
     `,
     adicionar: `
-        <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-8 shadow-sm">
+        <div class=" border border-dashed border-gray-300 bg-white p-8 shadow-sm">
             <h2 class="text-2xl font-semibold mb-4">Adicionar aluno</h2>
             <p class="text-gray-600">Clique no botão para abrir o formulário de cadastro de aluno.</p>
         </div>
@@ -36,6 +130,14 @@ export function renderDashboardView(view = 'nome') {
 
 export function setActiveDashboardTab(view) {
     const buttons = document.querySelectorAll('[data-view]');
+    const vertodos = document.getElementById('ver-todas');
+    if (vertodos) {
+        vertodos.addEventListener('click', () => {
+            renderDashboardView('demandas');
+            setActiveDashboardTab('demandas');
+        }
+    )}
+
     buttons.forEach((button) => {
         const isActive = button.dataset.view === view;
         button.classList.toggle('bg-brand-primary/10', isActive);
@@ -75,7 +177,9 @@ export function createProfileBtn() {
     });
 }
 
-export function Carregardashboardcoord(){
+
+export function Carregardashboardcoord() {
+    aux.adicionarCaminhoURL("dashboardcoord");
     document.querySelector("title").innerHTML = `Dashboard - Clarify`;
     document.querySelector('#app').innerHTML = `
     <div class="min-h-screen w-full bg-pink-50 flex flex-col md:flex-row relative overflow-hidden">
@@ -116,24 +220,27 @@ export function Carregardashboardcoord(){
             <div class="h-20 mb-4 rounded-xl p-4 flex items-center justify-center w-full">
                 <img src="${gato}" alt="Clarify Logo" class="w-full h-full object-contain" />
                 <h1 class="text-3xl font-bold text-orange-600">Clarify</h1>
+        <aside class="w-full md:w-72 bg-gray-50 shadow p-6 border border-gray-100">
+            <div class="h-18 mb-3 rounded-xl p-3 flex items-center justify-center w-full gap-3">
+                <img src="${gato}" alt="Clarify Logo" class="w-12 h-12 object-contain" />
+                <h1 class="text-2xl font-bold text-orange-600">Clarify</h1>
             </div>
-            <ul class="flex flex-col gap-4 mt-8">
-                <li><button type="button" data-view="nome" class="flex items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>Nome</button></li>
-                <li><button type="button" data-view="alunos" class="flex items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-icon lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg></span>Alunos</button></li>
-                <li id="criarPerfilBtn"><button type="button" data-view="adicionar" class="flex items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" /></svg></span>Adicionar aluno</button></li>
-                <li><button type="button" data-view="demandas" class="flex items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sticky-note-icon lucide-sticky-note"><path d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/><path d="M15 3v5a1 1 0 0 0 1 1h5"/></svg></span>Demandas</button></li>
+            <ul class="flex flex-col gap-3 mt-6">
+                <li><button type="button" data-view="nome" class="flex hover:cursor-pointer items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>Nome</button></li>
+                <li><button type="button" data-view="alunos" class="flex hover:cursor-pointer items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-icon lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg></span>Alunos</button></li>
+                <li id="criarPerfilBtn"><button type="button" data-view="adicionar" class="flex hover:cursor-pointer items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" /></svg></span>Adicionar aluno</button></li>
+                <li><button type="button" data-view="demandas" class="flex hover:cursor-pointer items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sticky-note-icon lucide-sticky-note"><path d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/><path d="M15 3v5a1 1 0 0 0 1 1h5"/></svg></span>Demandas</button></li>
             </ul>
         </aside>
-        <main class="flex-1 p-8" id="dashboardContent">
-            <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-8 shadow-sm">
-                <h2 class="text-2xl font-semibold mb-4">Visão Geral</h2>
-                <p class="text-gray-600">Escolha um item na barra lateral para carregar o conteúdo aqui sem alterar a sidebar.</p>
+        <main class="flex-1 p-6" id="dashboardContent">
+            <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-6 shadow-sm">
+                <h2 class="text-2xl font-semibold mb-3">Visão Geral</h2>
+                <p class="text-gray-600 text-sm">Escolha um item na barra lateral para carregar o conteúdo aqui sem alterar a sidebar.</p>
             </div>
         </main>
     </div>
 
 
-    // Pop-up de criação de perfil
     <div class="hidden fixed inset-0 bg-opacity-50 flex items-center justify-center z-50" id="criarPerfil">
         <div class="bg-white rounded-lg p-8 w-full max-w-md">
             <h2 class="text-2xl font-bold mb-6">Criar Perfil</h2>

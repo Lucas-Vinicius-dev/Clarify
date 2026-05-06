@@ -12,10 +12,18 @@ function checarRegistro(e) {
     const senha = document.querySelector("#securityKey").value;
     const senha_ativacao = document.querySelector("#activationKey").value;
 
-    if (aux.UsuarioExiste(matricula) || !aux.chaveValida(senha_ativacao)) {
-        const label = document.querySelector("#submitIncorrectAlert label");
-        label.textContent = "Credenciais inválidas.";
-        aux.limparFormulario(["#fullName", "#institutionalId", "#institutionalEmail", "#securityKey", "#activationKey"]);
+    const usuarioExiste = aux.UsuarioExiste(matricula);
+    const chaveAtivacaoValida = usuarioExiste ? true : aux.chaveValida(senha_ativacao);
+
+    if (usuarioExiste || !chaveAtivacaoValida) {
+        if (usuarioExiste) {
+            aux.exibirMensagemErro("Usuário já cadastrado.");
+            aux.limparFormulario(["#fullName", "#institutionalEmail", "#securityKey", "#activationKey"]);
+            return;
+        }
+
+        aux.exibirMensagemErro("Chave de ativação inválida ou já utilizada.");
+        aux.limparFormulario(["#activationKey"]);
         return;
     }
     aux.adicionarUsuario(nome, matricula, email, senha, "coordenador");
@@ -41,6 +49,7 @@ export function ativarListenerRegistro() {
 }}
 
 export function carregarRegistro() {
+    aux.adicionarCaminhoURL("registro");
     document.querySelector("title").innerHTML = `Registro - Clarify`;
     document.querySelector('#app').innerHTML = `
         <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">

@@ -1,3 +1,5 @@
+import { navigateURL } from "./navegacaoURL";
+
 // Arquivo dedicado à funções auxiliares do programa principal.
 // As funções contidas aqui devem ser o mais genéricas possíveis para facilitar o reúso.
 // A importação desse arquivo idealmente será feita por "import * as [aux] from <path>".
@@ -7,6 +9,14 @@ export function limparFormulario(parametros) {
     for (let i = 0; i < parametros.length; ++i) {
         const chave = document.querySelector(`${parametros[i]}`);
         chave.value = '';
+    }
+}
+
+// Exibe mensagens de erro em formulários
+export function exibirMensagemErro(mensagem, seletor = "#submitIncorrectAlert label") {
+    const label = document.querySelector(seletor);
+    if (label) {
+        label.textContent = mensagem;
     }
 }
 
@@ -20,7 +30,7 @@ export function UsuarioExiste(matricula) {
     });
 }
 
-// Busca um usuário cadastrado no localStorage com base na matrícual e na senha
+// Busca um usuário cadastrado no localStorage com base na matrícula e na senha
 export function buscarUsuarioCadastrado(matricula, senha) {
    const usuariosSalvos = JSON.parse(localStorage.getItem('usuarios')) || [];
 
@@ -41,10 +51,19 @@ export function popularLocalStorage() {
     localStorage.setItem('usuarios', JSON.stringify(usuariosTeste));
 }
 
+// Verificação e validação de chaves de ativação para o sistema
 export function chaveValida(key) {
-    const chaves = JSON.parse(localStorage.getItem('chavesAtivacao'));
+    const chaveNormalizada = String(key ?? '').trim();
+    if (!chaveNormalizada) return false;
+
+    let chaves = JSON.parse(localStorage.getItem('chavesAtivacao'));
+    if (!Array.isArray(chaves)) {
+        createKeys();
+        chaves = JSON.parse(localStorage.getItem('chavesAtivacao')) || [];
+    }
+
     const find = chaves.find((chave) => {
-        return (chave.code === key && !chave.used);
+        return (String(chave.code) === chaveNormalizada && !chave.used);
     });
 
     if (find === undefined) return false;
@@ -78,4 +97,11 @@ export function adicionarUsuario(nome, matricula, email, senha, cargo) {
     });
 
     localStorage.setItem('usuarios', JSON.stringify(usuarios));
+}
+
+export function adicionarCaminhoURL(nome) {
+   if (window.location.pathname !== `/${nome}`) {
+      window.history.pushState({}, "", `/${nome}`);
+      navigateURL(`/${nome}`);
+   }
 }
