@@ -2,13 +2,6 @@ import gato from '../components/assets/GATOGORDO.png'
 import * as aux from '../lib/funcoesAuxiliares'
 import { carregarLogin, ativarListenerLogin } from './login.js'
 
-function exibirErroRegistro(mensagem) {
-    const label = document.querySelector("#submitIncorrectAlert label");
-    if (label) {
-        label.textContent = mensagem;
-    }
-}
-
 // Trata se o registro enviado no formulário é válido
 function checarRegistro(e) {
     e.preventDefault();
@@ -24,12 +17,12 @@ function checarRegistro(e) {
 
     if (usuarioExiste || !chaveAtivacaoValida) {
         if (usuarioExiste) {
-            exibirErroRegistro("Usuário já cadastrado.");
+            aux.exibirMensagemErro("Usuário já cadastrado.");
             aux.limparFormulario(["#fullName", "#institutionalEmail", "#securityKey", "#activationKey"]);
             return;
         }
 
-        exibirErroRegistro("Chave de ativação inválida ou já utilizada.");
+        aux.exibirMensagemErro("Chave de ativação inválida ou já utilizada.");
         aux.limparFormulario(["#activationKey"]);
         return;
     }
