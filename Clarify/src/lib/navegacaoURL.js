@@ -1,6 +1,7 @@
 import { carregarRegistro, ativarListenerRegistro } from '../pages/registro.js'
 import { Carregardashboardcoord, createProfileBtn, setupDashboardState } from '../pages/dashboardcoord.js';
 import { carregarLogin, ativarListenerLogin } from '../pages/login.js';
+import { carregarCentralDemandas, ativarListenerCentralDemandas } from '../pages/centralDemandas.js';
 
 const isAuthenticated = () => localStorage.getItem('auth') === 'true';
 
@@ -25,6 +26,10 @@ export function navigateURL(url) {
         Carregardashboardcoord();
         setupDashboardState();
         createProfileBtn();
+        break;
+      case "/centraldemandas":
+        carregarCentralDemandas();
+        ativarListenerCentralDemandas();
         break;
       default:
         carregarRegistro();
