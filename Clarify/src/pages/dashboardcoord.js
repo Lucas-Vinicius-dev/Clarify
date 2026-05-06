@@ -119,20 +119,32 @@ const dashboardViews = {
         </div>
     `
 };
+function existeDuplicidadeDashboard(matricula, email, usuarios) {
+    return usuarios.some((usuario) => {
+        return (String(usuario.matricula) === String(matricula) || String(usuario.email) === String(email));
+    })
+}
 
-export function checarDashboardCoord() {
-    const nome = document.querySelector("#nome");
-    const matricula = document.querySelector("#matricula");
-    const email = document.querySelector("#email");
-    const senha = document.querySelector("#senha");
-    const cargo = document.querySelector("#cargo");
+function checarDashboardCoord() {
+    const nome = document.querySelector("#nome").value;
+    const matricula = document.querySelector("#matricula").value;
+    const email = document.querySelector("#email").value;
+    const senha = document.querySelector("#senha").value;
+    const cargo = document.querySelector("#cargo").value;
 
     const usuarios = JSON.parse(localStorage.getItem("usuarios"));
+    if (existeDuplicidadeDashboard(matricula, email, usuarios)) {
+        alert("Usuário já existe");
+        aux.limparFormulario(["#nome", "#matricula", "#email", "#senha", "#cargo"]);
+        return;
+    }
+    alert("Usuário criado com sucesso!");
+    aux.adicionarUsuario(nome, matricula, email, senha, cargo);
 }
 
 // Adiciona um listener para o evento de submit do formulário de dashboard
 export function ativarListenerDashboardCoord() {
-    document.querySelector('#dashboardCoordForm').addEventListener('submit', (e) => {
+    document.querySelector('#criarPerfilForm').addEventListener('submit', (e) => {
         e.preventDefault();
         checarDashboardCoord();
     });
@@ -168,6 +180,7 @@ export function setupDashboardState() {
             const modal = document.getElementById('criarPerfil');
             if (view === 'adicionar') {
                 modal?.classList.remove('hidden');
+                ativarListenerDashboardCoord();
             } else {
                 modal?.classList.add('hidden');
             }
