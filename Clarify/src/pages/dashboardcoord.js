@@ -1,7 +1,7 @@
 import gato from '../components/assets/GATOGORDO.png'
 import * as aux from "../lib/funcoesAuxiliares"
 
-const coord = JSON.parse(localStorage.getItem('usuarioLogado'));
+const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 const dashboardViews = {
     nome: `
         <div class="space-y-6">
