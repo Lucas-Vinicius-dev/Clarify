@@ -4,18 +4,18 @@ import * as aux from "../lib/funcoesAuxiliares"
 const dashboardViews = {
     nome: `
         <div class="space-y-6">
-            <section class="relative overflow-hidden bg-zinc-900 p-6 rounded-2xl text-white">
+            <section class="relative overflow-hidden bg-zinc-900 p-6  text-white">
                 <div class="absolute inset-0 opacity-15">
                     <img class="w-full h-full object-cover" data-alt="An abstract architectural composition of sharp angles and geometric planes in shades of deep charcoal and burnt orange. The image has a sophisticated, minimalist feel, representing the intersection of data and institutional structure. High-contrast lighting creates strong shadows, reinforcing the geometric institutionalism brand identity of the Clarify platform." src="https://lh3.googleusercontent.com/aida/ADBb0ujSia4aBQLXG-iDCxNtnt-voKc0tRw5t7i4W1HWCnTaojCWcpeB9NtLb32npBd2nD3bGRRrA_rXE-koIkxkVicCaAQV-0dJmJGCNNXUgg58Hab_xfgty2yUY2F8jxKrOKTnub9NABjLE97Cn754GRPyzD5CB3AXGadtJdXOnWumA41elODuvAfKMNMbGoaHhZeyO46Zgtz_ojolL124-2l7Wk_iioeNE2b41S5j0mNWvnuP0lLWLNAwP5KHRdcTCjOmL6BVtAsc-OQ"/>
                 </div>
                 <div class="relative z-10 space-y-4">
                     <span class="text-primary-fixed font-label-caps text-[10px] tracking-[0.2em] uppercase block">PORTAL DO COORDENADOR</span>
-                    <h1 class="font-h1 text-3xl lg:text-4xl font-semibold">Bem-vindo, Dr. Ricardo Silva</h1>
+                    <h1 class="font-h1 text-3xl lg:text-4xl font-semibold">Bem-vindo,${localStorage.getItem('usuarioLogado') ? JSON.parse(localStorage.getItem('usuarioLogado')).nome : 'Usuário'}</h1>
                     <p class="text-zinc-400 text-sm lg:text-base max-w-2xl">Acompanhe as demandas da Engenharia de Software e gerencie o fluxo de solicitações acadêmicas com precisão e clareza.</p>
                 </div>
             </section>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <div class="bg-white border border-zinc-200 p-4 flex flex-col justify-between min-h-[140px] rounded-2xl">
+                <div class="bg-white border border-zinc-200 p-4 flex flex-col justify-between min-h-[140px] ">
                     <div class="flex justify-between items-start gap-4">
                         <span class="material-symbols-outlined text-primary text-2xl" data-icon="person_search">person_search</span>
                         <span class="text-[10px] font-bold text-zinc-400 uppercase">+12% ESTE MÊS</span>
@@ -25,7 +25,7 @@ const dashboardViews = {
                         <p class="text-3xl lg:text-4xl font-semibold text-zinc-900">428 <span class="text-base font-normal text-zinc-400">ativos</span></p>
                     </div>
                 </div>
-                <div class="bg-white border border-zinc-200 p-4 flex flex-col justify-between min-h-[140px] rounded-2xl border-l-4 border-error">
+                <div class="bg-white border border-zinc-200 p-4 flex flex-col justify-between min-h-[140px]  border-l-4 border-error">
                     <div class="flex justify-between items-start gap-4">
                         <span class="material-symbols-outlined text-error text-2xl" data-icon="emergency_home">emergency_home</span>
                         <span class="bg-error text-white text-[10px] px-2 py-0.5 font-bold rounded">ALERTA</span>
@@ -36,7 +36,7 @@ const dashboardViews = {
                     </div>
                 </div>
             </div>
-            <div class="bg-white border border-zinc-200 overflow-hidden rounded-2xl">
+            <div class="bg-white border border-zinc-200 overflow-hidden ">
                 <div class="bg-zinc-50 border-b border-zinc-200 px-4 py-3 flex flex-col gap-3 lg:flex-row lg:justify-between lg:items-center">
                     <h2 class="font-h3 text-base lg:text-lg flex items-center gap-2">
                         <span class="material-symbols-outlined text-error" data-icon="priority_high">priority_high</span>
@@ -101,19 +101,19 @@ const dashboardViews = {
         </div>
     `,
     alunos: `
-        <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-8 shadow-sm">
+        <div class=" border border-dashed border-gray-300 bg-white p-8 shadow-sm">
             <h2 class="text-2xl font-semibold mb-4">Alunos</h2>
             <p class="text-gray-600">Gerencie a lista de alunos, visualize registros e acesse informações de matrícula.</p>
         </div>
     `,
     demandas: `
-        <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-8 shadow-sm">
+        <div class=" border border-dashed border-gray-300 bg-white p-8 shadow-sm">
             <h2 class="text-2xl font-semibold mb-4">Demandas</h2>
             <p class="text-gray-600">Veja as demandas abertas, tarefas pendentes e notificações importantes.</p>
         </div>
     `,
     adicionar: `
-        <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-8 shadow-sm">
+        <div class=" border border-dashed border-gray-300 bg-white p-8 shadow-sm">
             <h2 class="text-2xl font-semibold mb-4">Adicionar aluno</h2>
             <p class="text-gray-600">Clique no botão para abrir o formulário de cadastro de aluno.</p>
         </div>
