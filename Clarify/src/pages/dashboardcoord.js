@@ -167,11 +167,13 @@ export function setupDashboardState() {
 }
 
 export function createProfileBtn() {
-    const criarPerfilBtn = document.querySelector("#criarPerfilBtn");
-    if (!criarPerfilBtn) return;
+    const criarPerfilBtns = document.querySelectorAll("[data-view='adicionar']");
+    if (!criarPerfilBtns.length) return;
 
-    criarPerfilBtn.addEventListener("click", () => {
-        document.getElementById('criarPerfil').classList.remove('hidden');
+    criarPerfilBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            document.getElementById('criarPerfil').classList.remove('hidden');
+        });
     });
 }
 
@@ -181,6 +183,43 @@ export function Carregardashboardcoord() {
     document.querySelector("title").innerHTML = `Dashboard - Clarify`;
     document.querySelector('#app').innerHTML = `
     <div class="min-h-screen w-full bg-pink-50 flex flex-col md:flex-row relative overflow-hidden">
+        <div class="md:hidden bg-white border-b border-gray-200 p-4">
+            <div class="flex flex items-center justify-center gap-2 mb-4">
+                <img src="${gato}" alt="Clarify Logo" class="h-10 w-10 object-contain" />
+                <h1 class="text-lg font-bold text-orange-600">Clarify</h1>
+            </div>
+            <div class="flex gap-2 overflow-x-auto justify-center">
+                <button type="button" data-view="nome" aria-label="Nome" class="min-w-[72px] flex h-10 items-center justify-center rounded-2xl border border-gray-200 px-3 text-sm font-medium text-gray-700 transition-colors bg-transparent hover:bg-brand-primary/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </button>
+                <button type="button" data-view="alunos" aria-label="Alunos" class="min-w-[72px] flex h-10 items-center justify-center rounded-2xl border border-gray-200 px-3 text-sm font-medium text-gray-700 transition-colors bg-transparent hover:bg-brand-primary/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-icon lucide-users">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                        <path d="M16 3.128a4 4 0 0 1 0 7.744"/>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                        <circle cx="9" cy="7" r="4"/>
+                    </svg>
+                </button>
+                <button type="button" data-view="adicionar" class="criarPerfilBtn min-w-[72px] flex h-10 items-center justify-center rounded-2xl border border-gray-200 px-3 text-sm font-medium text-gray-700 transition-colors bg-transparent hover:bg-brand-primary/10" aria-label="Adicionar aluno">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <button type="button" data-view="demandas" aria-label="Demandas" class="min-w-[72px] flex h-10 items-center justify-center rounded-2xl border border-gray-200 px-3 text-sm font-medium text-gray-700 transition-colors bg-transparent hover:bg-brand-primary/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sticky-note-icon lucide-sticky-note">
+                        <path d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/>
+                        <path d="M15 3v5a1 1 0 0 0 1 1h5"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <aside class="hidden md:block w-full md:w-72 bg-gray-50 shadow p-8 border border-gray-100">
+            <div class="h-20 mb-4 rounded-xl p-4 flex items-center justify-center w-full">
+                <img src="${gato}" alt="Clarify Logo" class="w-full h-full object-contain" />
+                <h1 class="text-3xl font-bold text-orange-600">Clarify</h1>
         <aside class="w-full md:w-72 bg-gray-50 shadow p-6 border border-gray-100">
             <div class="h-18 mb-3 rounded-xl p-3 flex items-center justify-center w-full gap-3">
                 <img src="${gato}" alt="Clarify Logo" class="w-12 h-12 object-contain" />
