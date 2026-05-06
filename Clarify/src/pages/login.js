@@ -1,6 +1,6 @@
 import gato from '../components/assets/GATOGORDO.png'
 import * as aux from '../lib/funcoesAuxiliares'
-import { Carregardashboardcoord, createProfileBtn } from './dashboardcoord';
+import { Carregardashboardcoord, createProfileBtn, setupDashboardState } from './dashboardcoord';
 
 function exibirErroLogin(mensagem) {
     const label = document.querySelector("#submitIncorrectAlert label");
@@ -22,6 +22,7 @@ function checarLogin(e) {
         localStorage.setItem('auth', true);
 
         Carregardashboardcoord();
+        setupDashboardState();
         createProfileBtn();
         return;
     }
