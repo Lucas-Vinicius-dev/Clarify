@@ -1,5 +1,5 @@
 import { carregarRegistro, ativarListenerRegistro } from '../pages/registro.js'
-import { Carregardashboardcoord, createProfileBtn } from '../pages/dashboardcoord.js';
+import { Carregardashboardcoord, createProfileBtn, setupDashboardState } from '../pages/dashboardcoord.js';
 import { carregarLogin, ativarListenerLogin } from '../pages/login.js';
 
 export function navigateURL(url) {
@@ -14,6 +14,7 @@ export function navigateURL(url) {
         break;
       case "/dashboardcoord":
         Carregardashboardcoord();
+        setupDashboardState();
         createProfileBtn();
         break;
       default:
