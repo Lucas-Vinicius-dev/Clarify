@@ -153,8 +153,8 @@ export function setActiveDashboardTab(view) {
         vertodos.addEventListener('click', () => {
             renderDashboardView('demandas');
             setActiveDashboardTab('demandas');
-        }
-    )}
+        });
+    }
 
     buttons.forEach((button) => {
         const isActive = button.dataset.view === view;
@@ -206,6 +206,7 @@ export function Carregardashboardcoord() {
                 <img src="${gato}" alt="Clarify Logo" class="h-10 w-10 object-contain" />
                 <h1 class="text-lg font-bold text-orange-600">Clarify</h1>
             </div>
+
             <div class="flex gap-2 overflow-x-auto justify-center">
                 <button type="button" data-view="nome" aria-label="Nome" class="min-w-[72px] flex h-10 items-center justify-center rounded-2xl border border-gray-200 px-3 text-sm font-medium text-gray-700 transition-colors bg-transparent hover:bg-brand-primary/10">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user">
@@ -234,10 +235,6 @@ export function Carregardashboardcoord() {
                 </button>
             </div>
         </div>
-        <aside class="hidden md:block w-full md:w-72 bg-gray-50 shadow p-8 border border-gray-100">
-            <div class="h-20 mb-4 rounded-xl p-4 flex items-center justify-center w-full">
-                <img src="${gato}" alt="Clarify Logo" class="w-full h-full object-contain" />
-                <h1 class="text-3xl font-bold text-orange-600">Clarify</h1>
         <aside class="w-full md:w-72 bg-gray-50 shadow p-6 border border-gray-100">
             <div class="h-18 mb-3 rounded-xl p-3 flex items-center justify-center w-full gap-3">
                 <img src="${gato}" alt="Clarify Logo" class="w-12 h-12 object-contain" />
