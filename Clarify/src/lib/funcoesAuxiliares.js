@@ -30,7 +30,7 @@ export function UsuarioExiste(matricula) {
     });
 }
 
-// Busca um usuário cadastrado no localStorage com base na matrícual e na senha
+// Busca um usuário cadastrado no localStorage com base na matrícula e na senha
 export function buscarUsuarioCadastrado(matricula, senha) {
    const usuariosSalvos = JSON.parse(localStorage.getItem('usuarios')) || [];
 
@@ -155,6 +155,7 @@ export function formatarData(dataISO) {
     return `${dia} ${meses[Number(mes) - 1]} ${ano}`;
 }
 
+// Verificação e validação de chaves de ativação para o sistema
 export function chaveValida(key) {
     const chaveNormalizada = String(key ?? '').trim();
     if (!chaveNormalizada) return false;
@@ -207,4 +208,8 @@ export function adicionarCaminhoURL(nome) {
       window.history.pushState({}, "", `/${nome}`);
       navigateURL(`/${nome}`);
    }
+}
+
+export function existeDuplicidade() {
+    
 }

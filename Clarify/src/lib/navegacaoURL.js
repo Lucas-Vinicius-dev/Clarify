@@ -3,6 +3,8 @@ import { Carregardashboardcoord, createProfileBtn, setupDashboardState } from '.
 import { carregarLogin, ativarListenerLogin } from '../pages/login.js';
 import { carregarCentralDemandas, ativarListenerCentralDemandas } from '../pages/centralDemandas.js';
 
+const isAuthenticated = () => localStorage.getItem('auth') === 'true';
+
 export function navigateURL(url) {
    switch (url) {
       case "/registro":
@@ -14,6 +16,13 @@ export function navigateURL(url) {
         ativarListenerLogin();
         break;
       case "/dashboardcoord":
+        if (!isAuthenticated()) {
+          window.history.replaceState({}, '', '/login');
+          carregarLogin();
+          ativarListenerLogin();
+          break;
+        }
+
         Carregardashboardcoord();
         setupDashboardState();
         createProfileBtn();

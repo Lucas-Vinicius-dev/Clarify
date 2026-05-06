@@ -1,6 +1,7 @@
 import gato from '../components/assets/GATOGORDO.png'
 import * as aux from "../lib/funcoesAuxiliares"
 
+const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 const dashboardViews = {
     nome: `
         <div class="space-y-6">
@@ -10,7 +11,7 @@ const dashboardViews = {
                 </div>
                 <div class="relative z-10 space-y-4">
                     <span class="text-primary-fixed font-label-caps text-[10px] tracking-[0.2em] uppercase block">PORTAL DO COORDENADOR</span>
-                    <h1 class="font-h1 text-3xl lg:text-4xl font-semibold">Bem-vindo,${localStorage.getItem('usuarioLogado') ? JSON.parse(localStorage.getItem('usuarioLogado')).nome : 'Usuário'}</h1>
+                    <h1 class="font-h1 text-3xl lg:text-4xl font-semibold">Bem-vindo, ${coord.nome}</h1>
                     <p class="text-zinc-400 text-sm lg:text-base max-w-2xl">Acompanhe as demandas e gerencie o fluxo de solicitações acadêmicas com precisão e clareza.</p>
                 </div>
             </section>
@@ -42,7 +43,7 @@ const dashboardViews = {
                         <span class="material-symbols-outlined text-error" data-icon="priority_high">priority_high</span>
                         Priority Deadlines
                     </h2>
-                    <button data-view="demandas" class=" text-xs font-bold text-primary hover:underline">VER TODAS</button>
+                    <button id="ver-todas" class=" text-xs font-bold text-primary hover:underline">VER TODAS</button>
                 </div>
                 <div class="divide-y divide-zinc-100">
                     <div class="p-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between hover:bg-zinc-50 transition-colors">
@@ -120,6 +121,24 @@ const dashboardViews = {
     `
 };
 
+export function checarDashboardCoord() {
+    const nome = document.querySelector("#nome");
+    const matricula = document.querySelector("#matricula");
+    const email = document.querySelector("#email");
+    const senha = document.querySelector("#senha");
+    const cargo = document.querySelector("#cargo");
+
+    const usuarios = JSON.parse(localStorage.getItem("usuarios"));
+}
+
+// Adiciona um listener para o evento de submit do formulário de dashboard
+export function ativarListenerDashboardCoord() {
+    document.querySelector('#dashboardCoordForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        checarDashboardCoord();
+    });
+}
+
 export function renderDashboardView(view = 'nome') {
     const container = document.querySelector('#dashboardContent');
     if (!container) return;
@@ -129,6 +148,14 @@ export function renderDashboardView(view = 'nome') {
 
 export function setActiveDashboardTab(view) {
     const buttons = document.querySelectorAll('[data-view]');
+    const vertodos = document.getElementById('ver-todas');
+    if (vertodos) {
+        vertodos.addEventListener('click', () => {
+            renderDashboardView('demandas');
+            setActiveDashboardTab('demandas');
+        });
+    }
+
     buttons.forEach((button) => {
         const isActive = button.dataset.view === view;
         button.classList.toggle('bg-brand-primary/10', isActive);
@@ -158,11 +185,13 @@ export function setupDashboardState() {
 }
 
 export function createProfileBtn() {
-    const criarPerfilBtn = document.querySelector("#criarPerfilBtn");
-    if (!criarPerfilBtn) return;
+    const criarPerfilBtns = document.querySelectorAll("[data-view='adicionar']");
+    if (!criarPerfilBtns.length) return;
 
-    criarPerfilBtn.addEventListener("click", () => {
-        document.getElementById('criarPerfil').classList.remove('hidden');
+    criarPerfilBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            document.getElementById('criarPerfil').classList.remove('hidden');
+        });
     });
 }
 
@@ -172,6 +201,40 @@ export function Carregardashboardcoord() {
     document.querySelector("title").innerHTML = `Dashboard - Clarify`;
     document.querySelector('#app').innerHTML = `
     <div class="min-h-screen w-full bg-pink-50 flex flex-col md:flex-row relative overflow-hidden">
+        <div class="md:hidden bg-white border-b border-gray-200 p-4">
+            <div class="flex flex items-center justify-center gap-2 mb-4">
+                <img src="${gato}" alt="Clarify Logo" class="h-10 w-10 object-contain" />
+                <h1 class="text-lg font-bold text-orange-600">Clarify</h1>
+            </div>
+
+            <div class="flex gap-2 overflow-x-auto justify-center">
+                <button type="button" data-view="nome" aria-label="Nome" class="min-w-[72px] flex h-10 items-center justify-center rounded-2xl border border-gray-200 px-3 text-sm font-medium text-gray-700 transition-colors bg-transparent hover:bg-brand-primary/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </button>
+                <button type="button" data-view="alunos" aria-label="Alunos" class="min-w-[72px] flex h-10 items-center justify-center rounded-2xl border border-gray-200 px-3 text-sm font-medium text-gray-700 transition-colors bg-transparent hover:bg-brand-primary/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-icon lucide-users">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                        <path d="M16 3.128a4 4 0 0 1 0 7.744"/>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                        <circle cx="9" cy="7" r="4"/>
+                    </svg>
+                </button>
+                <button type="button" data-view="adicionar" class="criarPerfilBtn min-w-[72px] flex h-10 items-center justify-center rounded-2xl border border-gray-200 px-3 text-sm font-medium text-gray-700 transition-colors bg-transparent hover:bg-brand-primary/10" aria-label="Adicionar aluno">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <button type="button" data-view="demandas" aria-label="Demandas" class="min-w-[72px] flex h-10 items-center justify-center rounded-2xl border border-gray-200 px-3 text-sm font-medium text-gray-700 transition-colors bg-transparent hover:bg-brand-primary/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sticky-note-icon lucide-sticky-note">
+                        <path d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/>
+                        <path d="M15 3v5a1 1 0 0 0 1 1h5"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
         <aside class="w-full md:w-72 bg-gray-50 shadow p-6 border border-gray-100">
             <div class="h-18 mb-3 rounded-xl p-3 flex items-center justify-center w-full gap-3">
                 <img src="${gato}" alt="Clarify Logo" class="w-12 h-12 object-contain" />
@@ -214,15 +277,15 @@ export function Carregardashboardcoord() {
                     <input type="password" id="senha" name="senha" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-orange-500 focus:border-orange-500">
                 </div>
                 <div>
-                    <label for="tipoconta" class="block text-sm font-medium text-gray-700">Tipo de Conta</label>
-                    <select id="tipoconta" name="tipoconta" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-orange-500 focus:border-orange-500">
+                    <label for="cargo" class="block text-sm font-medium text-gray-700">Tipo de Conta</label>
+                    <select id="cargo" name="cargo" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-orange-500 focus:border-orange-500">
                         <option value="aluno">Aluno</option>
                         <option value="professor">Professor</option>
                     </select>
                 </div>
                 <div class="flex justify-end">
-                    <button type="button" class="mr-2 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400" onclick="document.getElementById('criarPerfil').classList.add('hidden')">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600">Criar</button>
+                    <button type="button" class=" hover:cursor-pointer mr-2 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400" onclick="document.getElementById('criarPerfil').classList.add('hidden')">Cancelar</button>
+                    <button id="dashboardCoordForm" type="submit" class=" hover:cursor-pointer px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600">Criar</button>
                 </div>
             </form>
         </div>
