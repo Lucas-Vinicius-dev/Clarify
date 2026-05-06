@@ -47,6 +47,7 @@ export function ativarListenerLogin() {
 }
 
 export function carregarLogin() {
+    aux.adicionarCaminhoURL("login");
     document.querySelector("title").innerHTML = `Login - Clarify`;
     document.querySelector('#app').innerHTML = `
     <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden animate-cubes">

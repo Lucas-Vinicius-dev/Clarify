@@ -56,6 +56,7 @@ export function ativarListenerRegistro() {
 }}
 
 export function carregarRegistro() {
+    aux.adicionarCaminhoURL("registro");
     document.querySelector("title").innerHTML = `Registro - Clarify`;
     document.querySelector('#app').innerHTML = `
         <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">

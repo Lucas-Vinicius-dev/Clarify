@@ -1,4 +1,5 @@
 import gato from '../components/assets/GATOGORDO.png'
+import * as aux from "../lib/funcoesAuxiliares"
 
 export function createProfileBtn() {
     const criarPerfilBtn = document.querySelector("#criarPerfilBtn");
@@ -10,7 +11,8 @@ export function createProfileBtn() {
 }
 
 
-export function Carregardashboardcoord(){
+export function Carregardashboardcoord() {
+    aux.adicionarCaminhoURL("dashboard");
     document.querySelector("title").innerHTML = `Dashboard - Clarify`;
     document.querySelector('#app').innerHTML = `
     <div class="min-h-screen w-full bg-pink-50 flex-col mr-auto flex items-center justify-start relative overflow-hidden">

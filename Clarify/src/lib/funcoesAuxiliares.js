@@ -1,3 +1,5 @@
+import { navigateURL } from "./navegacaoURL";
+
 // Arquivo dedicado à funções auxiliares do programa principal.
 // As funções contidas aqui devem ser o mais genéricas possíveis para facilitar o reúso.
 // A importação desse arquivo idealmente será feita por "import * as [aux] from <path>".
@@ -78,4 +80,11 @@ export function adicionarUsuario(nome, matricula, email, senha, cargo) {
     });
 
     localStorage.setItem('usuarios', JSON.stringify(usuarios));
+}
+
+export function adicionarCaminhoURL(nome) {
+   if (window.location.pathname !== `/${nome}`) {
+      window.history.pushState({}, "", `/${nome}`);
+      navigateURL(`/${nome}`);
+   }
 }
