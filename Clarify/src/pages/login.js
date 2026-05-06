@@ -12,6 +12,7 @@ function checarLogin(e) {
     if (usuarioEncontrado) {
         const { senha, ...usuarioLogado } = usuarioEncontrado;
         localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
+        localStorage.setItem('auth', true);
 
         Carregardashboardcoord();
         createProfileBtn();

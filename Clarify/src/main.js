@@ -9,6 +9,13 @@ import { Carregardashboardcoord, createProfileBtn } from './pages/dashboardcoord
 function main() {
    aux.createKeys();
    aux.popularLocalStorage();
+
+   if (localStorage.getItem('auth') === "true") {
+      console.log("aaaaa");
+      Carregardashboardcoord();
+      return;
+   }
+      
    carregarRegistro();
    ativarListenerRegistro();
    createProfileBtn();
