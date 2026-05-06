@@ -42,7 +42,7 @@ const dashboardViews = {
                         <span class="material-symbols-outlined text-error" data-icon="priority_high">priority_high</span>
                         Priority Deadlines
                     </h2>
-                    <button data-view="demandas" class=" text-xs font-bold text-primary hover:underline">VER TODAS</button>
+                    <button id="ver-todas" class=" text-xs font-bold text-primary hover:underline">VER TODAS</button>
                 </div>
                 <div class="divide-y divide-zinc-100">
                     <div class="p-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between hover:bg-zinc-50 transition-colors">
@@ -129,6 +129,14 @@ export function renderDashboardView(view = 'nome') {
 
 export function setActiveDashboardTab(view) {
     const buttons = document.querySelectorAll('[data-view]');
+    const vertodos = document.getElementById('ver-todas');
+    if (vertodos) {
+        vertodos.addEventListener('click', () => {
+            renderDashboardView('demandas');
+            setActiveDashboardTab('demandas');
+        }
+    )}
+
     buttons.forEach((button) => {
         const isActive = button.dataset.view === view;
         button.classList.toggle('bg-brand-primary/10', isActive);
