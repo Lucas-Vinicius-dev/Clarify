@@ -2,12 +2,12 @@ import gato from '../components/assets/GATOGORDO.png'
 import * as aux from '../lib/funcoesAuxiliares'
 import { carregarLogin, ativarListenerLogin } from './login.js'
 import { Carregardashboardcoord, createProfileBtn, setupDashboardState as setupDashboardStateCoord } from './dashboardcoord';
+import { carregarCentralDemandas, ativarListenerCentralDemandas } from './centralDemandas.js';
 
 function redirecionarPorCargo(cargo) {
     if (cargo === 'aluno') {
-        Carregardashboardaluno();
-        setupDashboardStateAluno();
-        createRequestBtn();
+        carregarCentralDemandas();
+        ativarListenerCentralDemandas();
         return;
     }
 
