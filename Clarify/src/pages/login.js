@@ -2,14 +2,6 @@ import gato from '../components/assets/GATOGORDO.png'
 import * as aux from '../lib/funcoesAuxiliares'
 import { Carregardashboardcoord, createProfileBtn, setupDashboardState as setupDashboardStateCoord } from './dashboardcoord';
 import { carregarCentralDemandas, ativarListenerCentralDemandas } from './centralDemandas.js';
-
-const MENSAGEM_USUARIO_NAO_ENCONTRADO = 'Usuário não encontrado.';
-const MENSAGEM_CHAVE_INCORRETA = 'Chave de segurança incorreta.';
-
-function exibirErroLogin(mensagem, camposParaLimpar) {
-    aux.exibirMensagemErro(mensagem);
-    aux.limparFormulario(camposParaLimpar);
-}
 // Redirecionamento baseado no cargo do usuário
 function redirecionarPorCargo(cargo) {
     if (cargo === 'aluno') {
@@ -28,26 +20,11 @@ function checarLogin(e) {
     // Extrai os dados do formulário de login
     const formData = new FormData(e.target);
     const { institutionalId, securityKey } = Object.fromEntries(formData.entries());
-    const usuarioEncontrado = aux.buscarUsuarioCadastrado(institutionalId, securityKey);
-
-    if (usuarioEncontrado) {
-        const { senha, ...usuarioLogado } = usuarioEncontrado;
-        localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
-        localStorage.setItem('auth', true);
+    const resultado = aux.autenticarLogin(institutionalId, securityKey);
+    if (resultado.ok) {
         // Redireciona com base no cargo do usuario
-        redirecionarPorCargo(usuarioLogado.cargo);
-        return;
+        redirecionarPorCargo(resultado.usuarioLogado.cargo);
     }
-
-    const usuarioExiste = aux.UsuarioExiste(institutionalId);
-    if (!usuarioExiste) {
-        // Caso o usuário não exista, exibirá uma mensagem de erro e limpará ambos os campos do formulário
-        exibirErroLogin(MENSAGEM_USUARIO_NAO_ENCONTRADO, ["#institutionalId", "#securityKey"]);
-        return;
-    }
-    // Caso o usuário exista, mas a chave de segurança esteja incorreta
-    exibirErroLogin(MENSAGEM_CHAVE_INCORRETA, ["#securityKey"]);
-
 }
 
 // Adiciona um listener para o evento de submit do formulário de login
