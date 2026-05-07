@@ -1,32 +1,10 @@
 import * as aux from '../lib/funcoesAuxiliares.js'
-import {
-    createIcons,
-    ArrowRight,
-    Bell,
-    Calendar,
-    ChevronRight,
-    ClipboardList,
-    Clock,
-    Filter,
-    HelpCircle,
-    History,
-    Hourglass,
-    LogOut,
-    Menu,
-    Plus,
-    PlusCircle,
-    Search,
-    Settings,
-    X
-} from 'lucide'
+import { iconesUsados, processarIcones } from '../components/assets/icons.js';
 import { carregarLogin, ativarListenerLogin } from './login.js'
+import { renderChipUsuario } from '../components/structures/topbar.js';
+import { renderSidebarAlunos } from '../components/structures/sidebar.js';
 
-// Ícones usados pelo Lucide nesta tela.
-const iconesUsados = {
-    ArrowRight, Bell, Calendar, ChevronRight, ClipboardList,
-    Clock, Filter, HelpCircle, History, Hourglass,
-    LogOut, Menu, Plus, PlusCircle, Search, Settings, X
-}
+
 
 // Estado dos filtros aplicados no board.
 const filtros = {
@@ -70,11 +48,6 @@ function aplicarFiltros(demandas) {
 
         return casaStatus && casaBusca;
     });
-}
-
-// Renderiza os ícones do Lucide na tela.
-function processarIcones() {
-    createIcons({ icons: iconesUsados, attrs: { 'stroke-width': 1.75 } });
 }
 
 // Renderiza um card de demanda em aberto (status diferente de "concluido").
@@ -322,20 +295,6 @@ function renderNavegacao() {
     `;
 }
 
-// Chip do usuário (avatar + botão de sair).
-function renderChipUsuario(inicial, primeiroNome, mostrarNome) {
-    return `
-        <div class="flex items-center gap-2 bg-white border border-gray-200 rounded-full pl-2 pr-1 py-1">
-            <div class="w-7 h-7 rounded-full bg-brand-primary text-white text-xs font-bold flex items-center justify-center">
-                ${inicial}
-            </div>
-            ${mostrarNome ? `<span class="text-xs font-semibold text-gray-700 hidden sm:inline">${primeiroNome}</span>` : ''}
-            <button type="button" title="Sair da conta" class="btnSairConta w-7 h-7 rounded-full text-gray-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-colors cursor-pointer">
-                <i data-lucide="log-out" class="w-4 h-4"></i>
-            </button>
-        </div>
-    `;
-}
 
 export function carregarCentralDemandas() {
     aux.adicionarCaminhoURL("centraldemandas");
@@ -355,18 +314,8 @@ export function carregarCentralDemandas() {
     <div class="min-h-screen w-full flex bg-brand-surface">
 
         <!-- Sidebar (desktop) -->
-        <aside class="hidden md:flex md:w-64 flex-col bg-white border-r border-gray-200 sticky top-0 h-screen self-start">
-            <div class="px-6 py-6 border-b border-gray-100">
-                <h1 class="text-xl font-bold text-brand-primary">Clarify</h1>
-                <p class="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mt-1">
-                    Federal Institution
-                </p>
-            </div>
-
-            <nav class="flex-1 px-4 py-6 space-y-1 text-sm">
-                ${renderNavegacao()}
-            </nav>
-        </aside>
+        ${renderSidebarAlunos()}
+        
 
         <!-- Drawer de navegação (mobile) -->
         <div id="drawerMobile" class="fixed inset-0 z-40 hidden md:hidden">
@@ -406,7 +355,7 @@ export function carregarCentralDemandas() {
                     <button type="button" class="w-9 h-9 rounded-full text-gray-500 hover:text-brand-primary hover:bg-gray-100 flex items-center justify-center transition-colors cursor-pointer" title="Notificações">
                         <i data-lucide="bell" class="w-4 h-4"></i>
                     </button>
-                    ${renderChipUsuario(inicial, primeiroNome, false)}
+                    ${renderChipUsuario(JSON.parse(localStorage.getItem('usuarioLogado')))}
                 </div>
             </header>
 
@@ -420,7 +369,7 @@ export function carregarCentralDemandas() {
                     <button type="button" class="w-9 h-9 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:text-brand-primary hover:border-brand-primary transition-colors cursor-pointer">
                         <i data-lucide="help-circle" class="w-4 h-4"></i>
                     </button>
-                    ${renderChipUsuario(inicial, primeiroNome, true)}
+                    ${renderChipUsuario(JSON.parse(localStorage.getItem('usuarioLogado')))}
                 </div>
 
                 <!-- Cabeçalho da página -->
@@ -554,4 +503,5 @@ export function carregarCentralDemandas() {
 
     </div>
     `;
+    processarIcones();
 }
