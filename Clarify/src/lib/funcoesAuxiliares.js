@@ -45,10 +45,114 @@ export function buscarUsuarioCadastrado(matricula, senha) {
 // Popula o localStorage com dados falsos para facilitar a funcionalidade de funções do sistema
 export function popularLocalStorage() {
     const usuariosTeste = [
-        { nome: "João da Silva", matricula: "123", email: "joao@academico.edu.br", senha: "123456", cargo: "coordenador" }
+        { nome: "João da Silva", matricula: "123", email: "joao@academico.edu.br", senha: "123456", cargo: "coordenador" },
+        { nome: "Maria Aparecida", matricula: "003", email: "maria@academico.edu.br", senha: "123456", cargo: "aluno" }
     ];
 
     localStorage.setItem('usuarios', JSON.stringify(usuariosTeste));
+    popularDemandas();
+}
+
+// Popula o localStorage com demandas de teste pra a Central de Demandas (US17).
+// TODO: remover quando a US16 começar a inserir demandas de verdade.
+// pessoal, isso é literalmente mock data :D. 
+export function popularDemandas() {
+    const demandasTeste = [
+        {
+            protocolo: "REQ-402",
+            matriculaAluno: "003",
+            tipo: "Quebra de Pré-requisito",
+            descricao: "Solicitação para cursar Cálculo III sem a aprovação em Cálculo II.",
+            status: "pendente",
+            dataCriacao: "2025-11-12",
+            dataAtualizacao: "2025-11-12",
+            feedback: ""
+        },
+        {
+            protocolo: "REQ-398",
+            matriculaAluno: "003",
+            tipo: "Revisão de Prova",
+            descricao: "Discordância em relação à correção da questão 4 da prova de Banco de Dados.",
+            status: "em_analise",
+            dataCriacao: "2025-11-08",
+            dataAtualizacao: "2026-05-04",
+            feedback: ""
+        },
+        {
+            protocolo: "REQ-385",
+            matriculaAluno: "003",
+            tipo: "Aproveitamento de Horas AC",
+            descricao: "Envio de certificados de cursos extracurriculares para integralização.",
+            status: "pendente",
+            dataCriacao: "2025-11-02",
+            dataAtualizacao: "2025-11-02",
+            feedback: ""
+        },
+        {
+            protocolo: "REQ-350",
+            matriculaAluno: "003",
+            tipo: "Trancamento de Disciplina",
+            descricao: "Pedido de trancamento da disciplina de Sistemas Operacionais.",
+            status: "concluido",
+            dataCriacao: "2025-10-15",
+            dataAtualizacao: "2025-10-25",
+            feedback: "Trancamento aprovado. Disciplina removida do histórico do semestre."
+        },
+        {
+            protocolo: "REQ-342",
+            matriculaAluno: "003",
+            tipo: "Troca de Turma",
+            descricao: "Mudança da turma da manhã para a turma da noite por motivo de trabalho.",
+            status: "em_analise",
+            dataCriacao: "2025-10-12",
+            dataAtualizacao: "2025-10-22",
+            feedback: ""
+        },
+        {
+            protocolo: "REQ-320",
+            matriculaAluno: "003",
+            tipo: "Solicitação de Histórico",
+            descricao: "Emissão do histórico escolar atualizado para fins de estágio.",
+            status: "concluido",
+            dataCriacao: "2025-10-05",
+            dataAtualizacao: "2025-10-15",
+            feedback: "Documento disponível para retirada na secretaria."
+        },
+        {
+            protocolo: "REQ-310",
+            matriculaAluno: "003",
+            tipo: "Justificativa de Falta",
+            descricao: "Atestado médico referente às faltas dos dias 22 e 23 de setembro.",
+            status: "requer_ajuste",
+            dataCriacao: "2025-09-25",
+            dataAtualizacao: "2025-09-30",
+            feedback: "Atestado precisa estar legível e conter o CID. Reenviar."
+        }
+    ];
+
+    localStorage.setItem('demandas', JSON.stringify(demandasTeste));
+}
+
+// Retorna todas as demandas vinculadas à matrícula do aluno informado.
+export function buscarDemandasPorAluno(matricula) {
+    const demandas = JSON.parse(localStorage.getItem('demandas')) || [];
+
+    return demandas.filter((demanda) => {
+        return String(demanda.matriculaAluno) === String(matricula);
+    });
+}
+
+// Converte uma data ISO ("2025-11-12") para o formato "12 Nov 2025" usado na UI.
+export function formatarData(dataISO) {
+    if (!dataISO) return '';
+
+    const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+    const partes = dataISO.split('-');
+    const ano = partes[0];
+    const mes = partes[1];
+    const dia = partes[2];
+
+    return `${dia} ${meses[Number(mes) - 1]} ${ano}`;
 }
 
 // Verificação e validação de chaves de ativação para o sistema

@@ -1,7 +1,7 @@
 import './style.css'
 import * as aux from "./lib/funcoesAuxiliares.js"
 import { carregarRegistro, ativarListenerRegistro } from './pages/registro.js'
-import { Carregardashboardcoord, createProfileBtn } from './pages/dashboardcoord.js';
+import { Carregardashboardcoord, createProfileBtn, renderizarDemandas } from './pages/dashboardcoord.js';
 import { carregarLogin, ativarListenerLogin } from './pages/login.js';
 import * as nav from "./lib/navegacaoURL.js"
 
@@ -17,7 +17,12 @@ function main() {
    });
    
    if (localStorage.getItem('auth') === "true" && window.location.pathname === "/") {
-      aux.adicionarCaminhoURL("dashboardcoord");
+      const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado')) || {};
+      if (usuarioLogado.cargo === "aluno") {
+         aux.adicionarCaminhoURL("centraldemandas");
+      } else {
+         aux.adicionarCaminhoURL("dashboardcoord");
+      }
    }
 
    nav.navigateURL(window.location.pathname);

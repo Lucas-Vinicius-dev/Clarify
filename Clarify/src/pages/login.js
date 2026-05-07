@@ -1,6 +1,7 @@
 import gato from '../components/assets/GATOGORDO.png'
 import * as aux from '../lib/funcoesAuxiliares'
 import { Carregardashboardcoord, createProfileBtn, setupDashboardState } from './dashboardcoord';
+import { carregarCentralDemandas, ativarListenerCentralDemandas } from './centralDemandas.js';
 
 // Trata se o login enviado no formulário é válido
 function checarLogin(e) {
@@ -13,6 +14,12 @@ function checarLogin(e) {
         const { senha, ...usuarioLogado } = usuarioEncontrado;
         localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
         localStorage.setItem('auth', true);
+
+        if (usuarioLogado.cargo === "aluno") {
+            carregarCentralDemandas();
+            ativarListenerCentralDemandas();
+            return;
+        }
 
         Carregardashboardcoord();
         setupDashboardState();
