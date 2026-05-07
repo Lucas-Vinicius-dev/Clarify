@@ -1,80 +1,6 @@
 import gato from '../components/assets/GATOGORDO.png'
 import * as aux from "../lib/funcoesAuxiliares"
 
-export function renderizarAlunos() {
-    console.log("Renderizando alunos...");
-    const usuariosString = localStorage.getItem('usuarios') || '[]';
-    const usuarios = JSON.parse(usuariosString);
-    const alunos = usuarios.filter(u => u.cargo === 'aluno');
-    const demandasString = localStorage.getItem('demandas') || '[]';
-    const demandas = JSON.parse(demandasString);
-
-    const container = document.querySelector('#alunosContainer');
-    if (!container) return;
-    container.innerHTML = '';
-
-    if (alunos.length === 0) {
-        container.innerHTML = `
-            <div class="col-span-full text-center py-12 text-zinc-400">
-                <span class="material-symbols-outlined text-4xl mb-2 block">person_off</span>
-                <p class="text-sm">Nenhum aluno cadastrado.</p>
-            </div>
-        `;
-        return;
-    }
-
-    alunos.forEach((aluno) => {
-        const iniciais = aluno.nome
-            .split(' ')
-            .slice(0, 2)
-            .map(n => n[0].toUpperCase())
-            .join('');
-
-        const alunoElement = document.createElement('div');
-        alunoElement.classList.add(
-            'bg-white',
-            'border',
-            'border-gray-200',
-            'rounded-2xl',
-            'p-5',
-            'shadow-lg',
-            'hover:-translate-y-1',
-            'transition-transform',
-            'duration-200',
-            'ease-out'
-        );
-
-        alunoElement.innerHTML = `
-            <div class="flex items-center gap-4 mb-4">
-                <div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary-container font-bold text-sm shrink-0">
-                    ${iniciais}
-                </div>
-                <div class="min-w-0">
-                    <h3 class="text-base font-semibold text-zinc-900 truncate">${aluno.nome}</h3>
-                    <p class="text-xs text-zinc-400 truncate">${aluno.email}</p>
-                </div>
-            </div>
-            <div class="grid gap-2 text-sm text-zinc-600">
-                <p><span class="font-semibold text-zinc-800">Nome:</span> ${aluno.nome}</p>
-                <p><span class="font-semibold text-zinc-800">Matrícula:</span>
-                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 ml-1">
-                        ${aluno.matricula}
-                    </span>
-                </p>
-                <p><span class="font-semibold text-zinc-800">Demandas em aberto:</span>
-                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 ml-1">
-                        ${demandas.filter(d => d.matriculaAluno === aluno.matricula).length}
-                    </span>
-                </p>
-
-            </div>
-        `;
-
-        container.appendChild(alunoElement);
-    });
-
-    return container;
-}
 const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 const dashboardViews = {
     nome: `
@@ -320,8 +246,16 @@ export function Carregardashboardcoord() {
                 <li id="criarPerfilBtn"><button type="button" data-view="adicionar" class="flex hover:cursor-pointer items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" /></svg></span>Adicionar aluno</button></li>
                 <li><button type="button" data-view="demandas" class="flex hover:cursor-pointer items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sticky-note-icon lucide-sticky-note"><path d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/><path d="M15 3v5a1 1 0 0 0 1 1h5"/></svg></span>Demandas</button></li>
             </ul>
-        </div>
+        </aside>
+        <main class="flex-1 p-6" id="dashboardContent">
+            <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-6 shadow-sm">
+                <h2 class="text-2xl font-semibold mb-3">Visão Geral</h2>
+                <p class="text-gray-600 text-sm">Escolha um item na barra lateral para carregar o conteúdo aqui sem alterar a sidebar.</p>
+            </div>
+        </main>
     </div>
+
+
     <div class="hidden fixed inset-0 bg-opacity-50 flex items-center justify-center z-50" id="criarPerfil">
         <div class="bg-white rounded-lg p-8 w-full max-w-md">
             <h2 class="text-2xl font-bold mb-6">Criar Perfil</h2>
