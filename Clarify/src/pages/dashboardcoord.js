@@ -1,6 +1,80 @@
 import gato from '../components/assets/GATOGORDO.png'
 import * as aux from "../lib/funcoesAuxiliares"
 
+export function renderizarAlunos() {
+    console.log("Renderizando alunos...");
+    const usuariosString = localStorage.getItem('usuarios') || '[]';
+    const usuarios = JSON.parse(usuariosString);
+    const alunos = usuarios.filter(u => u.cargo === 'aluno');
+    const demandasString = localStorage.getItem('demandas') || '[]';
+    const demandas = JSON.parse(demandasString);
+
+    const container = document.querySelector('#alunosContainer');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (alunos.length === 0) {
+        container.innerHTML = `
+            <div class="col-span-full text-center py-12 text-zinc-400">
+                <span class="material-symbols-outlined text-4xl mb-2 block">person_off</span>
+                <p class="text-sm">Nenhum aluno cadastrado.</p>
+            </div>
+        `;
+        return;
+    }
+
+    alunos.forEach((aluno) => {
+        const iniciais = aluno.nome
+            .split(' ')
+            .slice(0, 2)
+            .map(n => n[0].toUpperCase())
+            .join('');
+
+        const alunoElement = document.createElement('div');
+        alunoElement.classList.add(
+            'bg-white',
+            'border',
+            'border-gray-200',
+            'rounded-2xl',
+            'p-5',
+            'shadow-lg',
+            'hover:-translate-y-1',
+            'transition-transform',
+            'duration-200',
+            'ease-out'
+        );
+
+        alunoElement.innerHTML = `
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary-container font-bold text-sm shrink-0">
+                    ${iniciais}
+                </div>
+                <div class="min-w-0">
+                    <h3 class="text-base font-semibold text-zinc-900 truncate">${aluno.nome}</h3>
+                    <p class="text-xs text-zinc-400 truncate">${aluno.email}</p>
+                </div>
+            </div>
+            <div class="grid gap-2 text-sm text-zinc-600">
+                <p><span class="font-semibold text-zinc-800">Nome:</span> ${aluno.nome}</p>
+                <p><span class="font-semibold text-zinc-800">Matrícula:</span>
+                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 ml-1">
+                        ${aluno.matricula}
+                    </span>
+                </p>
+                <p><span class="font-semibold text-zinc-800">Demandas em aberto:</span>
+                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 ml-1">
+                        ${demandas.filter(d => d.matriculaAluno === aluno.matricula).length}
+                    </span>
+                </p>
+
+            </div>
+        `;
+
+        container.appendChild(alunoElement);
+    });
+
+    return container;
+}
 const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 const dashboardViews = {
     nome: `
