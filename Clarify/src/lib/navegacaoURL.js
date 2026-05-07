@@ -2,7 +2,6 @@ import { carregarRegistro, ativarListenerRegistro } from '../pages/registro.js'
 import { Carregardashboardcoord, createProfileBtn, setupDashboardState } from '../pages/dashboardcoord.js';
 import { carregarLogin, ativarListenerLogin } from '../pages/login.js';
 import { carregarCentralDemandas, ativarListenerCentralDemandas } from '../pages/centralDemandas.js';
-import { Carregardashboardaluno, createRequestBtn, setupDashboardState as setupDashboardStateAluno } from '../pages/dashboardaluno.js';
 
 const isAuthenticated = () => localStorage.getItem('auth') === 'true';
 const getCargo = () => {
@@ -14,77 +13,83 @@ const getCargo = () => {
   }
 };
 
+const goTo = (path, load, activate) => {
+  if (path) {
+    window.history.replaceState({}, '', path);
+  }
+
+  if (load) {
+    load();
+  }
+
+  if (activate) {
+    activate();
+  }
+};
+
+const goToLogin = () => goTo('/login', carregarLogin, ativarListenerLogin);
+const goToRegistro = () => goTo('/registro', carregarRegistro, ativarListenerRegistro);
+
+const goToDashboardCoord = () => {
+  Carregardashboardcoord();
+  setupDashboardState();
+  createProfileBtn();
+};
+
+const goToCentralDemandas = () => {
+  carregarCentralDemandas();
+  ativarListenerCentralDemandas();
+};
+
 export function navigateURL(url) {
    switch (url) {
       case "/registro":
-        carregarRegistro();
-        ativarListenerRegistro();
+        goToRegistro();
         break;
       case "/login":
-        carregarLogin();
-        ativarListenerLogin();
+        goToLogin();
         break;
       case "/dashboardcoord":
         if (!isAuthenticated()) {
-          window.history.replaceState({}, '', '/login');
-          carregarLogin();
-          ativarListenerLogin();
+          goToLogin();
           break;
         }
 
         if (getCargo() === 'aluno') {
-          window.history.replaceState({}, '', '/centraldemandas');
-          carregarCentralDemandas();
-          ativarListenerCentralDemandas();
+          goTo('/centraldemandas', carregarCentralDemandas, ativarListenerCentralDemandas);
           break;
         }
 
-        Carregardashboardcoord();
-        setupDashboardState();
-        createProfileBtn();
+        goToDashboardCoord();
         break;
       case "/dashboardaluno":
         if (!isAuthenticated()) {
-          window.history.replaceState({}, '', '/login');
-          carregarLogin();
-          ativarListenerLogin();
+          goToLogin();
           break;
         }
 
         if (getCargo() !== 'aluno') {
-          window.history.replaceState({}, '', '/dashboardcoord');
-          Carregardashboardcoord();
-          setupDashboardState();
-          createProfileBtn();
+          goTo('/dashboardcoord', goToDashboardCoord);
           break;
         }
 
-        Carregardashboardaluno();
-        setupDashboardStateAluno();
-        createRequestBtn();
+        goTo('/centraldemandas', goToCentralDemandas);
         break;
       case "/centraldemandas":
         if (!isAuthenticated()) {
-          window.history.replaceState({}, '', '/login');
-          carregarLogin();
-          ativarListenerLogin();
+          goToLogin();
           break;
         }
 
         if (getCargo() !== 'aluno') {
-          window.history.replaceState({}, '', '/dashboardcoord');
-          Carregardashboardcoord();
-          setupDashboardState();
-          createProfileBtn();
+          goTo('/dashboardcoord', goToDashboardCoord);
           break;
         }
 
-        carregarCentralDemandas();
-        ativarListenerCentralDemandas();
+        goToCentralDemandas();
         break;
       default:
-        carregarRegistro();
-        ativarListenerRegistro();
+        goToRegistro();
         break;
    }
 }

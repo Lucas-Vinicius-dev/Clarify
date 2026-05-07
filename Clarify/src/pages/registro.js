@@ -2,7 +2,6 @@ import gato from '../components/assets/GATOGORDO.png'
 import * as aux from '../lib/funcoesAuxiliares'
 import { carregarLogin, ativarListenerLogin } from './login.js'
 import { Carregardashboardcoord, createProfileBtn, setupDashboardState as setupDashboardStateCoord } from './dashboardcoord';
-import { Carregardashboardaluno, createRequestBtn, setupDashboardState as setupDashboardStateAluno } from './dashboardaluno';
 
 function redirecionarPorCargo(cargo) {
     if (cargo === 'aluno') {
