@@ -1,13 +1,15 @@
 import gato from '../components/assets/GATOGORDO.png'
 import * as aux from "../lib/funcoesAuxiliares"
 import { carregarLogin, ativarListenerLogin } from './login.js'
+import { renderSidebarCoord } from '../components/structures/sidebar.js';
+import { renderChipUsuario } from '../components/structures/topbar.js';
 
 const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 
 const dashboardViews = {
     nome: `
         <div class="space-y-6">
-            <section class="relative overflow-hidden bg-zinc-900 p-6 text-white">
+            <section class="relative overflow-hidden bg-zinc-900 p-5 text-white">
                 <div class="absolute inset-0 opacity-15">
                     <img src= ${gato} class="w-full h-full object-cover">
                 </div>
@@ -196,12 +198,14 @@ export function createProfileBtn() {
     });
 }
 
+
+
 export function Carregardashboardcoord() {
     aux.adicionarCaminhoURL("dashboardcoord");
     document.querySelector("title").innerHTML = `Dashboard - Clarify`;
     document.querySelector('#app').innerHTML = `
     <div class="min-h-screen w-full bg-pink-50 flex flex-col md:flex-row relative overflow-hidden">
-
+        ${renderSidebarCoord()}
         <!-- Navbar mobile -->
         <div class="md:hidden bg-white border-b border-gray-200 p-4">
             <div class="flex items-center justify-between mb-4">
@@ -233,32 +237,31 @@ export function Carregardashboardcoord() {
             </div>
         </div>
 
-        <!-- Sidebar desktop -->
-        <aside class="hidden md:flex md:flex-col w-72 bg-gray-50 shadow border border-gray-100 p-6">
-            <div class="h-18 mb-3 rounded-xl p-3 flex items-center justify-center w-full gap-3">
-                <img src="${gato}" alt="Clarify Logo" class="w-12 h-12 object-contain" />
-                <h1 class="text-2xl font-bold text-orange-600">Clarify</h1>
-            </div>
-            <ul class="flex flex-col gap-3 mt-6 flex-1">
-                <li><button type="button" data-view="nome" class="flex hover:cursor-pointer items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>Nome</button></li>
-                <li><button type="button" data-view="alunos" class="flex hover:cursor-pointer items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg></span>Alunos</button></li>
-                <li><button type="button" data-view="adicionar" class="flex hover:cursor-pointer items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" /></svg></span>Adicionar aluno</button></li>
-                <li><button type="button" data-view="demandas" class="flex hover:cursor-pointer items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/><path d="M15 3v5a1 1 0 0 0 1 1h5"/></svg></span>Demandas</button></li>
-            </ul>
-            <!-- Logout desktop -->
-            <div class="mt-auto pt-4 border-t border-gray-200">
-                <button id="btnLogoutDesktop" type="button"
-                    class="flex items-center gap-2 w-full px-3 py-2.5 rounded-xl text-sm font-semibold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
-                    </svg>
-                    Sair da conta
-                </button>
-            </div>
-        </aside>
 
-        <!-- Conteúdo principal -->
-        <main class="flex-1 p-6" id="dashboardContent"></main>
+<!-- Área principal -->
+<main class="flex-1 flex flex-col min-w-0 ">
+
+    <!-- Topbar -->
+    <div class="hidden md:flex items-center justify-end gap-3 px-6 py-4 bg-white border-b border-gray-200">
+
+        <button type="button"
+            class="w-9 h-9 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:text-brand-primary hover:border-brand-primary transition-colors cursor-pointer">
+            <i data-lucide="bell" class="w-4 h-4"></i>
+        </button>
+
+        <button type="button"
+            class="w-9 h-9 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:text-brand-primary hover:border-brand-primary transition-colors cursor-pointer">
+            <i data-lucide="help-circle" class="w-4 h-4"></i>
+        </button>
+
+        ${renderChipUsuario(coord)}
+    </div>
+
+    <!-- Conteúdo dashboard -->
+    <div class="flex-1 p-5 overflow-y-auto" id="dashboardContent"></div>
+
+</main>
+   
     </div>
 
     <!-- Modal: Criar Perfil -->
