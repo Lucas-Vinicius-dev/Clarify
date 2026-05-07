@@ -273,13 +273,13 @@ export function renderDashboardView(view = 'nome') {
     const container = document.querySelector('#dashboardContent');
     if (!container) return;
     container.innerHTML = dashboardViews[view] || dashboardViews.nome;
+    if (view === 'demandas') {
+        renderizarDemandas();
+    }
+    if (view === 'alunos') {
+        renderizarAlunos();
+    }
     setActiveDashboardTab(view);
-        if (view === 'alunos') {
-            renderizarAlunos();
-        }
-        if (view === 'demandas') {
-            renderizarDemandas();
-        }
 }
 
 export function setActiveDashboardTab(view) {
