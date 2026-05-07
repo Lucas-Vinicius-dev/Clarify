@@ -1,55 +1,61 @@
 import gato from '../components/assets/GATOGORDO.png'
-import * as aux from "../lib/funcoesAuxiliares"
+import * as aux from '../lib/funcoesAuxiliares'
 import { carregarLogin, ativarListenerLogin } from './login.js'
 
 // Trata se o registro enviado no formulário é válido
-function checarRegistro(e) {
-    e.preventDefault();
-    aux.popularLocalStorage();
+function checarRegistro() {
 
-    const fullName = document.querySelector("#fullName").value;
-    const institutionalId = document.querySelector("#institutionalId").value;
-    const institutionalEmail = document.querySelector("#institutionalEmail").value;
-    const securityKey = document.querySelector("#securityKey").value;
+    const nome = document.querySelector("#fullName").value;
+    const matricula = document.querySelector("#institutionalId").value;
+    const email = document.querySelector("#institutionalEmail").value;
+    const senha = document.querySelector("#securityKey").value;
+    const senha_ativacao = document.querySelector("#activationKey").value;
 
-    if (aux.UsuarioExiste(institutionalId)) {
-        const label = document.querySelector("#submitIncorrectAlert label");
-        label.textContent = "Credenciais inválidas.";
-        aux.limparFormulario(["#fullName", "#institutionalId", "#institutionalEmail", "#securityKey"]);
+    const usuarioExiste = aux.UsuarioExiste(matricula);
+    const chaveAtivacaoValida = usuarioExiste ? true : aux.chaveValida(senha_ativacao);
+
+    if (usuarioExiste || !chaveAtivacaoValida) {
+        if (usuarioExiste) {
+            aux.exibirMensagemErro("Usuário já cadastrado.");
+            aux.limparFormulario(["#fullName", "#institutionalEmail", "#securityKey", "#activationKey"]);
+            return;
+        }
+
+        aux.exibirMensagemErro("Chave de ativação inválida ou já utilizada.");
+        aux.limparFormulario(["#activationKey"]);
         return;
     }
-    aux.adicionarUsuario(fullName, institutionalId, institutionalEmail, securityKey);
+    aux.adicionarUsuario(nome, matricula, email, senha, "coordenador");
     alert("Registro feito com sucesso!");
 
-    // OBS: Leva até a página de login, remover depois
-    document.querySelector('#app').innerHTML = carregarLogin();
+    carregarLogin();
     ativarListenerLogin();
-
 }
 
 // Adiciona um listener para o evento de submit do formulário de registro
 export function ativarListenerRegistro() {
     document.querySelector('#registrationForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      checarRegistro(e);
+      checarRegistro();
    });
 
     const voltarLogin = document.querySelector('#voltarLogin');
     if (voltarLogin) {
-        voltarLogin.addEventListener('click', () => {
-            document.querySelector('#app').innerHTML = carregarLogin();
+        voltarLogin.onclick = () => {
+            carregarLogin();
             ativarListenerLogin();
-        });
-    }
-}
+        };
+}}
 
 export function carregarRegistro() {
+    aux.adicionarCaminhoURL("registro");
     document.querySelector("title").innerHTML = `Registro - Clarify`;
-    return `
+    document.querySelector('#app').innerHTML = `
         <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
             <!-- Fundo Geométrico com Losangos -->
-            <div class="absolute inset-0 opacity-15 pointer-events-none z-0 animate-cubes" 
-             style="background-image: linear-gradient(30deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
+            <div class="absolute inset-0 opacity-15 pointer-events-none animate-cubes" 
+                style="background-image: 
+                    linear-gradient(30deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
                     linear-gradient(150deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
                     linear-gradient(30deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
                     linear-gradient(150deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
@@ -157,6 +163,28 @@ export function carregarRegistro() {
                     />
                 </div>
                 </div>
+
+                <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+                    Chave de ativação
+                </label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    </span>
+                    <input
+                    type="password"
+                    name="activationKey"
+                    id="activationKey"
+                    placeholder="••••••••"
+                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                    required
+                    />
+                </div>
+                </div>
+                
 
                 <div id=submitIncorrectAlert>
                     <label class="label block text-[10px] font-bold text-red-700 uppercase tracking-widest mb-2 ml-1"></label>
