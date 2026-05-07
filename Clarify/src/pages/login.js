@@ -1,13 +1,12 @@
 import gato from '../components/assets/GATOGORDO.png'
 import * as aux from '../lib/funcoesAuxiliares'
 import { Carregardashboardcoord, createProfileBtn, setupDashboardState as setupDashboardStateCoord } from './dashboardcoord';
-import { Carregardashboardaluno, createRequestBtn, setupDashboardState as setupDashboardStateAluno } from './dashboardaluno';
+import { carregarCentralDemandas, ativarListenerCentralDemandas } from './centralDemandas.js';
 
 function redirecionarPorCargo(cargo) {
     if (cargo === 'aluno') {
-        Carregardashboardaluno();
-        setupDashboardStateAluno();
-        createRequestBtn();
+        carregarCentralDemandas();
+        ativarListenerCentralDemandas();
         return;
     }
 
@@ -35,7 +34,7 @@ function checarLogin(e) {
         }
 
         Carregardashboardcoord();
-        setupDashboardState();
+        setupDashboardStateCoord();
         createProfileBtn();
         return;
     }
