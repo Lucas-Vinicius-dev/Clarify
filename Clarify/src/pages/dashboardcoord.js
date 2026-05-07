@@ -1,6 +1,86 @@
 import gato from '../components/assets/GATOGORDO.png'
 import * as aux from "../lib/funcoesAuxiliares"
-import { popularDemandas } from '../lib/funcoesAuxiliares';
+import { carregarLogin, ativarListenerLogin } from './login.js'
+import { renderSidebarCoord } from '../components/structures/sidebar.js';
+import { renderChipUsuario } from '../components/structures/topbar.js';
+import { iconesUsados, processarIcones } from '../components/assets/icons.js';
+
+processarIcones();
+
+export function renderizarAlunos() {
+    console.log("Renderizando alunos...");
+    const usuariosString = localStorage.getItem('usuarios') || '[]';
+    const usuarios = JSON.parse(usuariosString);
+    const alunos = usuarios.filter(u => u.cargo === 'aluno');
+    const demandasString = localStorage.getItem('demandas') || '[]';
+    const demandas = JSON.parse(demandasString);
+
+    const container = document.querySelector('#alunosContainer');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (alunos.length === 0) {
+        container.innerHTML = `
+            <div class="col-span-full text-center py-12 text-zinc-400">
+                <span class="material-symbols-outlined text-4xl mb-2 block">person_off</span>
+                <p class="text-sm">Nenhum aluno cadastrado.</p>
+            </div>
+        `;
+        return;
+    }
+
+    alunos.forEach((aluno) => {
+        const iniciais = aluno.nome
+            .split(' ')
+            .slice(0, 2)
+            .map(n => n[0].toUpperCase())
+            .join('');
+
+        const alunoElement = document.createElement('div');
+        alunoElement.classList.add(
+            'bg-white',
+            'border',
+            'border-gray-200',
+            'rounded-2xl',
+            'p-5',
+            'shadow-lg',
+            'hover:-translate-y-1',
+            'transition-transform',
+            'duration-200',
+            'ease-out'
+        );
+
+        alunoElement.innerHTML = `
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary-container font-bold text-sm shrink-0">
+                    ${iniciais}
+                </div>
+                <div class="min-w-0">
+                    <h3 class="text-base font-semibold text-zinc-900 truncate">${aluno.nome}</h3>
+                    <p class="text-xs text-zinc-400 truncate">${aluno.email}</p>
+                </div>
+            </div>
+            <div class="grid gap-2 text-sm text-zinc-600">
+                <p><span class="font-semibold text-zinc-800">Nome:</span> ${aluno.nome}</p>
+                <p><span class="font-semibold text-zinc-800">Matrícula:</span>
+                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 ml-1">
+                        ${aluno.matricula}
+                    </span>
+                </p>
+                <p><span class="font-semibold text-zinc-800">Demandas em aberto:</span>
+                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 ml-1">
+                        ${demandas.filter(d => d.matriculaAluno === aluno.matricula).length}
+                    </span>
+                </p>
+
+            </div>
+        `;
+
+        container.appendChild(alunoElement);
+    });
+
+    return container;
+}
 export function renderizarDemandas(){
     console.log("Renderizando demandas...");
     const demandasString = localStorage.getItem('demandas') || '[]';
@@ -46,13 +126,15 @@ export function renderizarDemandas(){
     })
     return container;
 }
+
 const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
+
 const dashboardViews = {
     nome: `
         <div class="space-y-6">
-            <section class="relative overflow-hidden bg-zinc-900 p-6  text-white">
+            <section class="relative overflow-hidden bg-zinc-900 p-5 text-white">
                 <div class="absolute inset-0 opacity-15">
-                    <img class="w-full h-full object-cover" data-alt="An abstract architectural composition of sharp angles and geometric planes in shades of deep charcoal and burnt orange. The image has a sophisticated, minimalist feel, representing the intersection of data and institutional structure. High-contrast lighting creates strong shadows, reinforcing the geometric institutionalism brand identity of the Clarify platform." src="${gato}"/>
+                    <img src= ${gato} class="w-full h-full object-cover">
                 </div>
                 <div class="relative z-10 space-y-4">
                     <span class="text-primary-fixed font-label-caps text-[10px] tracking-[0.2em] uppercase block">PORTAL DO COORDENADOR</span>
@@ -61,9 +143,9 @@ const dashboardViews = {
                 </div>
             </section>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <div class="bg-white border border-zinc-200 p-4 flex flex-col justify-between min-h-[140px] ">
+                <div class="bg-white border border-zinc-200 p-4 flex flex-col justify-between min-h-[140px]">
                     <div class="flex justify-between items-start gap-4">
-                        <span class="material-symbols-outlined text-primary text-2xl" data-icon="person_search">person_search</span>
+                        <span class="material-symbols-outlined text-primary text-2xl">person_search</span>
                         <span class="text-[10px] font-bold text-zinc-400 uppercase">+12% ESTE MÊS</span>
                     </div>
                     <div>
@@ -71,9 +153,9 @@ const dashboardViews = {
                         <p class="text-3xl lg:text-4xl font-semibold text-zinc-900">428 <span class="text-base font-normal text-zinc-400">ativos</span></p>
                     </div>
                 </div>
-                <div class="bg-white border border-zinc-200 p-4 flex flex-col justify-between min-h-[140px]  border-l-4 border-error">
+                <div class="bg-white border border-zinc-200 border-l-4 border-error p-4 flex flex-col justify-between min-h-[140px]">
                     <div class="flex justify-between items-start gap-4">
-                        <span class="material-symbols-outlined text-error text-2xl" data-icon="emergency_home">emergency_home</span>
+                        <span class="material-symbols-outlined text-error text-2xl">emergency_home</span>
                         <span class="bg-error text-white text-[10px] px-2 py-0.5 font-bold rounded">ALERTA</span>
                     </div>
                     <div>
@@ -82,13 +164,13 @@ const dashboardViews = {
                     </div>
                 </div>
             </div>
-            <div class="bg-white border border-zinc-200 overflow-hidden ">
+            <div class="bg-white border border-zinc-200 overflow-hidden">
                 <div class="bg-zinc-50 border-b border-zinc-200 px-4 py-3 flex flex-col gap-3 lg:flex-row lg:justify-between lg:items-center">
                     <h2 class="font-h3 text-base lg:text-lg flex items-center gap-2">
-                        <span class="material-symbols-outlined text-error" data-icon="priority_high">priority_high</span>
+                        <span class="material-symbols-outlined text-error">priority_high</span>
                         Priority Deadlines
                     </h2>
-                    <button id="ver-todas" class=" text-xs font-bold text-primary hover:underline">VER TODAS</button>
+                    <button id="ver-todas" class="text-xs font-bold text-primary hover:underline">VER TODAS</button>
                 </div>
                 <div class="divide-y divide-zinc-100">
                     <div class="p-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between hover:bg-zinc-50 transition-colors">
@@ -105,7 +187,7 @@ const dashboardViews = {
                                 <p class="text-sm font-bold text-error">04 horas</p>
                             </div>
                             <span class="bg-error-container text-on-error-container px-3 py-1 text-xs font-bold uppercase tracking-wider">Urgente</span>
-                            <button class="material-symbols-outlined text-zinc-400 hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</button>
+                            <button class="material-symbols-outlined text-zinc-400 hover:text-primary transition-colors">chevron_right</button>
                         </div>
                     </div>
                     <div class="p-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between hover:bg-zinc-50 transition-colors">
@@ -122,7 +204,7 @@ const dashboardViews = {
                                 <p class="text-sm font-bold text-error">12 horas</p>
                             </div>
                             <span class="bg-error-container text-on-error-container px-3 py-1 text-xs font-bold uppercase tracking-wider">Urgente</span>
-                            <button class="material-symbols-outlined text-zinc-400 hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</button>
+                            <button class="material-symbols-outlined text-zinc-400 hover:text-primary transition-colors">chevron_right</button>
                         </div>
                     </div>
                     <div class="p-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between hover:bg-zinc-50 transition-colors">
@@ -139,29 +221,31 @@ const dashboardViews = {
                                 <p class="text-sm font-bold text-error">19 horas</p>
                             </div>
                             <span class="bg-error-container text-on-error-container px-3 py-1 text-xs font-bold uppercase tracking-wider">Urgente</span>
-                            <button class="material-symbols-outlined text-zinc-400 hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</button>
+                            <button class="material-symbols-outlined text-zinc-400 hover:text-primary transition-colors">chevron_right</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    `,
+     `
+    ,
+    
     alunos: `
-        <div class=" border border-dashed border-gray-300 bg-white p-8 shadow-sm">
-            <h2 class="text-2xl font-semibold mb-4">Alunos</h2>
-            <p class="text-gray-600">Gerencie a lista de alunos, visualize registros e acesse informações de matrícula.</p>
-        </div>
-    `,
-    demandas: `
-        <div class=" border border-dashed border-gray-300 bg-white p-8 shadow-sm">
-            <h2 class="text-2xl font-semibold mb-4">Demandas</h2>
-            <p class="text-gray-600">Veja as demandas abertas, tarefas pendentes e notificações importantes.</p>
-        </div>
-        <div id="demandasContainer" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        </div>
-    `,
+    <div class="border border-dashed border-gray-300 bg-white p-8 shadow-sm">
+        <h2 class="text-2xl font-semibold mb-4">Alunos</h2>
+        <p class="text-gray-600">Gerencie a lista de alunos, visualize registros e acesse informações de matrícula.</p>
+    </div>
+    <div id="alunosContainer" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+`,
+demandas: `
+    <div class="border border-dashed border-gray-300 bg-white p-8 shadow-sm">
+        <h2 class="text-2xl font-semibold mb-4">Demandas</h2>
+        <p class="text-gray-600">Veja as demandas abertas, tarefas pendentes e notificações importantes.</p>
+    </div>
+    <div id="demandasContainer" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+`,
     adicionar: `
-        <div class=" border border-dashed border-gray-300 bg-white p-8 shadow-sm">
+        <div class="border border-dashed border-gray-300 bg-white p-8 shadow-sm">
             <h2 class="text-2xl font-semibold mb-4">Adicionar aluno</h2>
             <p class="text-gray-600">Clique no botão para abrir o formulário de cadastro de aluno.</p>
         </div>
@@ -178,7 +262,6 @@ export function checarDashboardCoord() {
     const usuarios = JSON.parse(localStorage.getItem("usuarios"));
 }
 
-// Adiciona um listener para o evento de submit do formulário de dashboard
 export function ativarListenerDashboardCoord() {
     document.querySelector('#dashboardCoordForm').addEventListener('submit', (e) => {
         e.preventDefault();
@@ -190,10 +273,13 @@ export function renderDashboardView(view = 'nome') {
     const container = document.querySelector('#dashboardContent');
     if (!container) return;
     container.innerHTML = dashboardViews[view] || dashboardViews.nome;
-    if (view === 'demandas') {
-        renderizarDemandas();
-    }
     setActiveDashboardTab(view);
+        if (view === 'alunos') {
+            renderizarAlunos();
+        }
+        if (view === 'demandas') {
+            renderizarDemandas();
+        }
 }
 
 export function setActiveDashboardTab(view) {
@@ -246,66 +332,72 @@ export function createProfileBtn() {
 }
 
 
+
 export function Carregardashboardcoord() {
     aux.adicionarCaminhoURL("dashboardcoord");
     document.querySelector("title").innerHTML = `Dashboard - Clarify`;
     document.querySelector('#app').innerHTML = `
     <div class="min-h-screen w-full bg-pink-50 flex flex-col md:flex-row relative overflow-hidden">
+        ${renderSidebarCoord()}
+        <!-- Navbar mobile -->
         <div class="md:hidden bg-white border-b border-gray-200 p-4">
-            <div class="flex flex items-center justify-center gap-2 mb-4">
-                <img src="${gato}" alt="Clarify Logo" class="h-10 w-10 object-contain" />
-                <h1 class="text-lg font-bold text-orange-600">Clarify</h1>
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                    <img src="${gato}" alt="Clarify Logo" class="h-10 w-10 object-contain" />
+                    <h1 class="text-lg font-bold text-orange-600">Clarify</h1>
+                </div>
+                <button id="btnLogoutMobile" type="button" title="Sair da conta"
+                    class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-600 border border-rose-200 bg-rose-50 hover:bg-rose-100 transition-colors cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    Sair
+                </button>
             </div>
-
             <div class="flex gap-2 overflow-x-auto justify-center">
                 <button type="button" data-view="nome" aria-label="Nome" class="min-w-[72px] flex h-10 items-center justify-center rounded-2xl border border-gray-200 px-3 text-sm font-medium text-gray-700 transition-colors bg-transparent hover:bg-brand-primary/10">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user">
-                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-                        <circle cx="12" cy="7" r="4"/>
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </button>
                 <button type="button" data-view="alunos" aria-label="Alunos" class="min-w-[72px] flex h-10 items-center justify-center rounded-2xl border border-gray-200 px-3 text-sm font-medium text-gray-700 transition-colors bg-transparent hover:bg-brand-primary/10">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-icon lucide-users">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-                        <path d="M16 3.128a4 4 0 0 1 0 7.744"/>
-                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-                        <circle cx="9" cy="7" r="4"/>
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg>
                 </button>
-                <button type="button" data-view="adicionar" class="criarPerfilBtn min-w-[72px] flex h-10 items-center justify-center rounded-2xl border border-gray-200 px-3 text-sm font-medium text-gray-700 transition-colors bg-transparent hover:bg-brand-primary/10" aria-label="Adicionar aluno">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
-                    </svg>
+                <button type="button" data-view="adicionar" aria-label="Adicionar aluno" class="min-w-[72px] flex h-10 items-center justify-center rounded-2xl border border-gray-200 px-3 text-sm font-medium text-gray-700 transition-colors bg-transparent hover:bg-brand-primary/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" /></svg>
                 </button>
                 <button type="button" data-view="demandas" aria-label="Demandas" class="min-w-[72px] flex h-10 items-center justify-center rounded-2xl border border-gray-200 px-3 text-sm font-medium text-gray-700 transition-colors bg-transparent hover:bg-brand-primary/10">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sticky-note-icon lucide-sticky-note">
-                        <path d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/>
-                        <path d="M15 3v5a1 1 0 0 0 1 1h5"/>
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/><path d="M15 3v5a1 1 0 0 0 1 1h5"/></svg>
                 </button>
             </div>
         </div>
-        <aside class="hidden w-full md:w-72 md:block bg-gray-50 shadow p-6 border border-gray-100">
-            <div class="h-18 mb-3 rounded-xl p-3 flex items-center justify-center w-full gap-3">
-                <img src="${gato}" alt="Clarify Logo" class="w-12 h-12 object-contain" />
-                <h1 class="text-2xl font-bold text-orange-600">Clarify</h1>
-            </div>
-            <ul class="flex flex-col gap-3 mt-6">
-                <li><button type="button" data-view="nome" class="flex hover:cursor-pointer items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>Nome</button></li>
-                <li><button type="button" data-view="alunos" class="flex hover:cursor-pointer items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-icon lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg></span>Alunos</button></li>
-                <li id="criarPerfilBtn"><button type="button" data-view="adicionar" class="flex hover:cursor-pointer items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" /></svg></span>Adicionar aluno</button></li>
-                <li><button type="button" data-view="demandas" class="flex hover:cursor-pointer items-center gap-2 rounded-xl px-3 py-3 text-left w-full transition-colors bg-transparent text-gray-700"><span class="inline-flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sticky-note-icon lucide-sticky-note"><path d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/><path d="M15 3v5a1 1 0 0 0 1 1h5"/></svg></span>Demandas</button></li>
-            </ul>
-        </aside>
-        <main class="flex-1 p-6" id="dashboardContent">
-            <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-6 shadow-sm">
-                <h2 class="text-2xl font-semibold mb-3">Visão Geral</h2>
-                <p class="text-gray-600 text-sm">Escolha um item na barra lateral para carregar o conteúdo aqui sem alterar a sidebar.</p>
-            </div>
-        </main>
+
+
+<!-- Área principal -->
+<main class="flex-1 flex flex-col min-w-0 ">
+
+    <!-- Topbar -->
+    <div class="hidden md:flex items-center justify-end gap-3 px-6 py-4 bg-white border-b border-gray-200">
+
+        <button type="button"
+            class="w-9 h-9 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:text-brand-primary hover:border-brand-primary transition-colors cursor-pointer">
+            <i data-lucide="bell" class="w-4 h-4"></i>
+        </button>
+
+        <button type="button"
+            class="w-9 h-9 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:text-brand-primary hover:border-brand-primary transition-colors cursor-pointer">
+            <i data-lucide="help-circle" class="w-4 h-4"></i>
+        </button>
+
+        ${renderChipUsuario(coord)}
     </div>
 
+    <!-- Conteúdo dashboard -->
+    <div class="flex-1 p-5 overflow-y-auto" id="dashboardContent"></div>
 
+</main>
+   
+    </div>
+
+    <!-- Modal: Criar Perfil -->
     <div class="hidden fixed inset-0 bg-opacity-50 flex items-center justify-center z-50" id="criarPerfil">
         <div class="bg-white rounded-lg p-8 w-full max-w-md">
             <h2 class="text-2xl font-bold mb-6">Criar Perfil</h2>
@@ -334,13 +426,27 @@ export function Carregardashboardcoord() {
                     </select>
                 </div>
                 <div class="flex justify-end">
-                    <button type="button" class=" hover:cursor-pointer mr-2 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400" onclick="document.getElementById('criarPerfil').classList.add('hidden')">Cancelar</button>
-                    <button id="dashboardCoordForm" type="submit" class=" hover:cursor-pointer px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600">Criar</button>
+                    <button type="button" class="hover:cursor-pointer mr-2 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400" onclick="document.getElementById('criarPerfil').classList.add('hidden')">Cancelar</button>
+                    <button id="dashboardCoordForm" type="submit" class="hover:cursor-pointer px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600">Criar</button>
                 </div>
             </form>
         </div>
-        <!-- Pop-up criar perfil end -->
-        
-        
     </div>`
+    processarIcones();
+
+    setupDashboardState();
+
+    document.querySelector('#btnLogoutDesktop').addEventListener('click', () => {
+        localStorage.removeItem('usuarioLogado');
+        localStorage.removeItem('auth');
+        carregarLogin();
+        ativarListenerLogin();
+    });
+
+    document.querySelector('#btnLogoutMobile').addEventListener('click', () => {
+        localStorage.removeItem('usuarioLogado');
+        localStorage.removeItem('auth');
+        carregarLogin();
+        ativarListenerLogin();
+    });
 }
