@@ -1,7 +1,7 @@
 import './style.css'
 import * as aux from "./lib/funcoesAuxiliares.js"
 import { carregarRegistro, ativarListenerRegistro } from './pages/registro.js'
-import { Carregardashboardcoord, createProfileBtn } from './pages/dashboardcoord.js';
+import { Carregardashboardcoord, createProfileBtn, renderizarDemandas } from './pages/dashboardcoord.js';
 import { carregarLogin, ativarListenerLogin } from './pages/login.js';
 import * as nav from "./lib/navegacaoURL.js"
 

@@ -1,13 +1,58 @@
 import gato from '../components/assets/GATOGORDO.png'
 import * as aux from "../lib/funcoesAuxiliares"
-
+import { popularDemandas } from '../lib/funcoesAuxiliares';
+export function renderizarDemandas(){
+    console.log("Renderizando demandas...");
+    const demandasString = localStorage.getItem('demandas') || '[]';
+    console.log('localStorage:', demandasString);
+    const demandas = JSON.parse(demandasString);
+    console.log('Demandas:', demandas);
+    const container = document.querySelector('#demandasContainer');
+    console.log('Container encontrado:', container);
+    if (!container) return;
+    container.innerHTML = '';
+    demandas.forEach((demanda) =>{
+        console.log(demanda)
+        const demandaElement = document.createElement('div');
+        demandaElement.classList.add(
+            'bg-white',
+            'border',
+            'border-gray-200',
+            'rounded-2xl',
+            'p-5',
+            'shadow-lg',
+            'hover:-translate-y-1',
+            'transition-transform',
+            'duration-200',
+            'ease-out'
+        );
+        demandaElement.classList.add('demandas');
+        const statusColor = demanda.status === 'concluido' ? 'bg-emerald-100 text-emerald-700' : demanda.status === 'em_analise' ? 'bg-amber-100 text-amber-700' : demanda.status === 'requer_ajuste' ? 'bg-orange-100 text-orange-700' : 'bg-slate-100 text-slate-700';
+        const descricao = demanda.descricao ? demanda.descricao : '';
+        demandaElement.innerHTML = `
+            <div class="flex items-start justify-between gap-4 mb-4">
+                <div class="space-y-2">
+                    <h3 class="text-lg font-semibold text-zinc-900">${demanda.tipo}</h3>
+                    <p class="text-sm text-zinc-500">${descricao}</p>
+                </div>
+                <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${statusColor}">${demanda.status.replace('_', ' ').toUpperCase()}</span>
+            </div>
+            <div class="grid gap-2 text-sm text-zinc-600">
+                <p><span class="font-semibold text-zinc-800">Protocolo:</span> ${demanda.protocolo}</p>
+                <p><span class="font-semibold text-zinc-800">Matrícula:</span> ${demanda.matriculaAluno}</p>
+            </div>
+        `;
+        container.appendChild(demandaElement);
+    })
+    return container;
+}
 const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 const dashboardViews = {
     nome: `
         <div class="space-y-6">
             <section class="relative overflow-hidden bg-zinc-900 p-6  text-white">
                 <div class="absolute inset-0 opacity-15">
-                    <img class="w-full h-full object-cover" data-alt="An abstract architectural composition of sharp angles and geometric planes in shades of deep charcoal and burnt orange. The image has a sophisticated, minimalist feel, representing the intersection of data and institutional structure. High-contrast lighting creates strong shadows, reinforcing the geometric institutionalism brand identity of the Clarify platform." src="https://lh3.googleusercontent.com/aida/ADBb0ujSia4aBQLXG-iDCxNtnt-voKc0tRw5t7i4W1HWCnTaojCWcpeB9NtLb32npBd2nD3bGRRrA_rXE-koIkxkVicCaAQV-0dJmJGCNNXUgg58Hab_xfgty2yUY2F8jxKrOKTnub9NABjLE97Cn754GRPyzD5CB3AXGadtJdXOnWumA41elODuvAfKMNMbGoaHhZeyO46Zgtz_ojolL124-2l7Wk_iioeNE2b41S5j0mNWvnuP0lLWLNAwP5KHRdcTCjOmL6BVtAsc-OQ"/>
+                    <img class="w-full h-full object-cover" data-alt="An abstract architectural composition of sharp angles and geometric planes in shades of deep charcoal and burnt orange. The image has a sophisticated, minimalist feel, representing the intersection of data and institutional structure. High-contrast lighting creates strong shadows, reinforcing the geometric institutionalism brand identity of the Clarify platform." src="${gato}"/>
                 </div>
                 <div class="relative z-10 space-y-4">
                     <span class="text-primary-fixed font-label-caps text-[10px] tracking-[0.2em] uppercase block">PORTAL DO COORDENADOR</span>
@@ -112,6 +157,8 @@ const dashboardViews = {
             <h2 class="text-2xl font-semibold mb-4">Demandas</h2>
             <p class="text-gray-600">Veja as demandas abertas, tarefas pendentes e notificações importantes.</p>
         </div>
+        <div id="demandasContainer" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        </div>
     `,
     adicionar: `
         <div class=" border border-dashed border-gray-300 bg-white p-8 shadow-sm">
@@ -143,6 +190,9 @@ export function renderDashboardView(view = 'nome') {
     const container = document.querySelector('#dashboardContent');
     if (!container) return;
     container.innerHTML = dashboardViews[view] || dashboardViews.nome;
+    if (view === 'demandas') {
+        renderizarDemandas();
+    }
     setActiveDashboardTab(view);
 }
 
@@ -235,7 +285,7 @@ export function Carregardashboardcoord() {
                 </button>
             </div>
         </div>
-        <aside class="w-full md:w-72 bg-gray-50 shadow p-6 border border-gray-100">
+        <aside class="hidden w-full md:w-72 md:block bg-gray-50 shadow p-6 border border-gray-100">
             <div class="h-18 mb-3 rounded-xl p-3 flex items-center justify-center w-full gap-3">
                 <img src="${gato}" alt="Clarify Logo" class="w-12 h-12 object-contain" />
                 <h1 class="text-2xl font-bold text-orange-600">Clarify</h1>
