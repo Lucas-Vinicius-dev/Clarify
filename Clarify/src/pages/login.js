@@ -28,7 +28,15 @@ function checarLogin(e) {
         localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
         localStorage.setItem('auth', true);
 
-        redirecionarPorCargo(usuarioLogado.cargo);
+        if (usuarioLogado.cargo === "aluno") {
+            carregarCentralDemandas();
+            ativarListenerCentralDemandas();
+            return;
+        }
+
+        Carregardashboardcoord();
+        setupDashboardState();
+        createProfileBtn();
         return;
     }
 

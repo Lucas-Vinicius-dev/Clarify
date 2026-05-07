@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.4",
+    "lucide": "^1.14.0",
     "tailwindcss": "^4.2.4"
   }
 }

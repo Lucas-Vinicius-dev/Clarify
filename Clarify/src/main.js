@@ -17,7 +17,12 @@ function main() {
    });
    
    if (localStorage.getItem('auth') === "true" && window.location.pathname === "/") {
-      aux.adicionarCaminhoURL("dashboardcoord");
+      const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado')) || {};
+      if (usuarioLogado.cargo === "aluno") {
+         aux.adicionarCaminhoURL("centraldemandas");
+      } else {
+         aux.adicionarCaminhoURL("dashboardcoord");
+      }
    }
 
    nav.navigateURL(window.location.pathname);
