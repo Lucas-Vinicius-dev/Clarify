@@ -1,34 +1,10 @@
 import * as aux from '../lib/funcoesAuxiliares.js'
-import {
-    createIcons,
-    ArrowRight,
-    Bell,
-    Calendar,
-    ChevronRight,
-    ClipboardList,
-    Clock,
-    Filter,
-    HelpCircle,
-    History,
-    Hourglass,
-    LogOut,
-    Menu,
-    Plus,
-    PlusCircle,
-    Search,
-    Settings,
-    X
-} from 'lucide'
+import { iconesUsados, processarIcones } from '../components/assets/icons.js';
 import { carregarLogin, ativarListenerLogin } from './login.js'
 import { renderChipUsuario } from '../components/structures/topbar.js';
 import { renderSidebarAlunos } from '../components/structures/sidebar.js';
 
-// Ícones usados pelo Lucide nesta tela.
-const iconesUsados = {
-    ArrowRight, Bell, Calendar, ChevronRight, ClipboardList,
-    Clock, Filter, HelpCircle, History, Hourglass,
-    LogOut, Menu, Plus, PlusCircle, Search, Settings, X
-}
+
 
 // Estado dos filtros aplicados no board.
 const filtros = {
@@ -72,11 +48,6 @@ function aplicarFiltros(demandas) {
 
         return casaStatus && casaBusca;
     });
-}
-
-// Renderiza os ícones do Lucide na tela.
-function processarIcones() {
-    createIcons({ icons: iconesUsados, attrs: { 'stroke-width': 1.75 } });
 }
 
 // Renderiza um card de demanda em aberto (status diferente de "concluido").
@@ -532,4 +503,5 @@ export function carregarCentralDemandas() {
 
     </div>
     `;
+    processarIcones();
 }

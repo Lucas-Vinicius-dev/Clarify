@@ -3,6 +3,9 @@ import * as aux from "../lib/funcoesAuxiliares"
 import { carregarLogin, ativarListenerLogin } from './login.js'
 import { renderSidebarCoord } from '../components/structures/sidebar.js';
 import { renderChipUsuario } from '../components/structures/topbar.js';
+import { iconesUsados, processarIcones } from '../components/assets/icons.js';
+
+processarIcones();
 
 const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 
@@ -104,7 +107,9 @@ const dashboardViews = {
                 </div>
             </div>
         </div>
-    `,
+     `
+    ,
+    
     alunos: `
         <div class="border border-dashed border-gray-300 bg-white p-8 shadow-sm">
             <h2 class="text-2xl font-semibold mb-4">Alunos</h2>
@@ -298,7 +303,8 @@ export function Carregardashboardcoord() {
                 </div>
             </form>
         </div>
-    </div>`;
+    </div>`
+    processarIcones();
 
     setupDashboardState();
 

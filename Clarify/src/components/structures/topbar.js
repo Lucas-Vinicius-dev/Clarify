@@ -1,3 +1,5 @@
+import { iconesUsados } from "../assets/icons";
+
 export function renderChipUsuario(usuario, mostrarNome = true) {
     const nome = usuario?.nome || "Usuário";
     const primeiroNome = nome.split(" ")[0];
@@ -22,6 +24,7 @@ export function renderChipUsuario(usuario, mostrarNome = true) {
             <button 
                 type="button"
                 title="Sair da conta"
+                id = "btnLogoutDesktop"
                 class="btnSairConta w-8 h-8 rounded-full text-gray-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-colors cursor-pointer"
             >
                 <i data-lucide="log-out" class="w-4 h-4"></i>
@@ -29,4 +32,5 @@ export function renderChipUsuario(usuario, mostrarNome = true) {
 
         </div>
     `;
+    processarIcones()
 }
