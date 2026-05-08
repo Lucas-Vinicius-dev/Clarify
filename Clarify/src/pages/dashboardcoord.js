@@ -204,6 +204,7 @@ export function ativarListenerDashboardCoord() {
     document.querySelector('#criarPerfilForm').addEventListener('submit', (e) => {
         e.preventDefault();
         checarDashboardCoord();
+        aux.limparFormulario(["#nome", "#matricula", "#email", "#senha", "#cargo"]);
     });
 }
 
@@ -248,7 +249,6 @@ export function setupDashboardState() {
             const modal = document.getElementById('criarPerfil');
             if (view === 'adicionar') {
                 modal?.classList.remove('hidden');
-                ativarListenerDashboardCoord();
             } else {
                 modal?.classList.add('hidden');
             }
@@ -371,6 +371,7 @@ export function Carregardashboardcoord() {
     processarIcones();
 
     setupDashboardState();
+    ativarListenerDashboardCoord();
 
     document.querySelector('#btnLogoutDesktop').addEventListener('click', () => {
         localStorage.removeItem('usuarioLogado');
