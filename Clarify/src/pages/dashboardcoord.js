@@ -73,7 +73,7 @@ export function renderizarAlunos() {
                 </p>
                 <p><span class="font-semibold text-zinc-800">Demandas em aberto:</span>
                     <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 ml-1">
-                        ${demandas.filter(d => d.matriculaAluno === aluno.matricula).length}
+                        ${demandas.filter(d => d.matriculaAluno === aluno.matricula && d.status !== 'concluido').length}
                     </span>
                 </p>
 
@@ -95,8 +95,8 @@ export function renderizarDemandas(){
     console.log('Container encontrado:', container);
     if (!container) return;
     container.innerHTML = '';
-    demandas.forEach((demanda) =>{
-        console.log(demanda)
+
+    demandas.filter(d => d.status !== 'concluido').forEach((demanda) => {
         const demandaElement = document.createElement('div');
         demandaElement.classList.add(
             'bg-white',
