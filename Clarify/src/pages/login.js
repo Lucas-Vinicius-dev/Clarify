@@ -34,6 +34,14 @@ export function ativarListenerLogin() {
         e.preventDefault();
         checarLogin(e);
     }); // Evita o comportamento padrão de recarregar a página
+
+    const registroLink = document.querySelector('#irRegistro');
+    if (registroLink) {
+        registroLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            aux.adicionarCaminhoURL("registro");
+        });
+    }
 }
 // Carregamento da página de login
 export function carregarLogin() {
@@ -126,6 +134,11 @@ export function carregarLogin() {
             <div class="text-center">
             <a href="#" class="text-sm font-semibold text-brand-primary hover:underline transition-all">
                 Recuperar Credenciais de Acesso
+            </a>
+            </div>
+            <div class="text-center">
+            <a href="#" id="irRegistro" class="text-sm font-semibold text-brand-primary hover:underline transition-all">
+                Registro
             </a>
             </div>
         </form>

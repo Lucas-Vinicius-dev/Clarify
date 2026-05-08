@@ -234,9 +234,38 @@ export function adicionarUsuario(nome, matricula, email, senha, cargo) {
     localStorage.setItem('usuarios', JSON.stringify(usuarios));
 }
 
+// Usado para redirecionar o usuário pelas páginas do site pelo URL
 export function adicionarCaminhoURL(nome) {
    if (window.location.pathname !== `/${nome}`) {
       window.history.pushState({}, "", `/${nome}`);
       navigateURL(`/${nome}`);
    }
+}
+
+// Recebe o JSON no localStorage do coordenador e adiciona um usuário adicionado por ele ao localStorage
+export function atribuirAluno(matriculaCoord, matriculaAluno) {
+    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+    const coordenador = usuarios.find(
+        usuario => String(usuario.matricula) === String(matriculaCoord)
+    );
+
+    if (!coordenador) return;
+
+    if (!coordenador.usuariosCadastrados) {
+        coordenador.usuariosCadastrados = [];
+    }
+
+    coordenador.usuariosCadastrados.push(matriculaAluno);
+    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+}
+
+// Acha um usuário no localStorage apenas pela matrícula
+export function acharUsuario(matricula) {
+    const usuariosSalvos = JSON.parse(localStorage.getItem('usuarios')) || [];
+
+   return usuariosSalvos.find((usuario) => {
+      const matriculaSalva = usuario.matricula;
+      return String(matriculaSalva) === String(matricula)
+   });
 }
