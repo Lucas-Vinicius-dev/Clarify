@@ -196,15 +196,20 @@ function checarDashboardCoord() {
         aux.limparFormulario(["#nome", "#matricula", "#email", "#senha", "#cargo"]);
         return;
     }
+
+    const coordenadorLogado = JSON.parse(localStorage.getItem("usuarioLogado"));
+
     alert("Usuário criado com sucesso!");
     aux.adicionarUsuario(nome, matricula, email, senha, cargo);
+    console.log(aux.acharUsuario(coordenadorLogado["matricula"]));
+    aux.atribuirAluno(coordenadorLogado.matricula, matricula);
 }
 
 export function ativarListenerDashboardCoord() {
-    document.querySelector('#criarPerfilForm').addEventListener('submit', (e) => {
+    document.querySelector('#criarPerfilForm').onsubmit = (e) => {
         e.preventDefault();
         checarDashboardCoord();
-    });
+    };
 }
 
 export function renderDashboardView(view = 'nome') {
