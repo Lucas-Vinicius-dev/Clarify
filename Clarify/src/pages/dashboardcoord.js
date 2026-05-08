@@ -242,7 +242,7 @@ export function ativarListenerDashboardCoord() {
         e.preventDefault();
         checarDashboardCoord();
         aux.limparFormulario(["#nome", "#matricula", "#email", "#senha", "#cargo"]);
-    });
+    };
 }
 
 export function renderDashboardView(view = 'nome') {
