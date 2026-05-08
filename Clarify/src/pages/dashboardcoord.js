@@ -15,7 +15,7 @@ export function renderizarAlunos() {
     const usuarios = JSON.parse(usuariosString);
     const coordLista = usuarios.find(u => u.matricula === coord.matricula);
     const matriculasCadastradas = coordLista?.usuariosCadastrados || [];
-    const meusAlunos = usuarios.filter(u => matriculasCadastradas.includes(u.matricula));
+    const meusAlunos = usuarios.filter(u => matriculasCadastradas.includes(u.matricula) && u.cargo === 'aluno');
     const demandasString = localStorage.getItem('demandas') || '[]';
     const demandas = JSON.parse(demandasString);
 
