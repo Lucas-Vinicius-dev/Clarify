@@ -7,12 +7,15 @@ import { renderChipUsuario } from '../components/structures/topbar.js';
 import { iconesUsados, processarIcones } from '../components/assets/icons.js';
 
 processarIcones();
+const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 
 export function renderizarAlunos() {
     console.log("Renderizando alunos...");
     const usuariosString = localStorage.getItem('usuarios') || '[]';
     const usuarios = JSON.parse(usuariosString);
-    const alunos = usuarios.filter(u => u.cargo === 'aluno');
+    const coordLista = usuarios.find(u => u.matricula === coord.matricula);
+    const matriculasCadastradas = coordLista?.usuariosCadastrados || [];
+    const meusAlunos = usuarios.filter(u => matriculasCadastradas.includes(u.matricula));
     const demandasString = localStorage.getItem('demandas') || '[]';
     const demandas = JSON.parse(demandasString);
 
@@ -20,7 +23,7 @@ export function renderizarAlunos() {
     if (!container) return;
     container.innerHTML = '';
 
-    if (alunos.length === 0) {
+    if (meusAlunos.length === 0) {
         container.innerHTML = `
             <div class="col-span-full text-center py-12 text-zinc-400">
                 <span class="material-symbols-outlined text-4xl mb-2 block">person_off</span>
@@ -29,8 +32,8 @@ export function renderizarAlunos() {
         `;
         return;
     }
-
-    alunos.forEach((aluno) => {
+    
+    meusAlunos.forEach((aluno) => {
         const iniciais = aluno.nome
             .split(' ')
             .slice(0, 2)
@@ -127,7 +130,6 @@ export function renderizarDemandas(){
     })
     return container;
 }
-const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 
 const dashboardViews = {
     nome: `
@@ -284,7 +286,7 @@ export function ativarListenerDashboardCoord() {
         e.preventDefault();
         checarDashboardCoord();
         aux.limparFormulario(["#nome", "#matricula", "#email", "#senha", "#cargo"]);
-    });
+    };
 }
 
 export function renderDashboardView(view = 'nome') {
