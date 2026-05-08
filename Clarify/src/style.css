@@ -54,6 +54,10 @@
         0 12px 28px -10px rgba(15, 23, 42, 0.10);
 }
 
+.bg-brand-primary {
+    background-color: #ca5f15;
+}
+
 @keyframes float-slow {
     0%, 100% { transform: translateY(0px); }
     50%      { transform: translateY(-10px); }
