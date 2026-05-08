@@ -5,6 +5,7 @@ import { carregarLogin, ativarListenerLogin } from './login.js'
 import { renderSidebarCoord } from '../components/structures/sidebar.js';
 import { renderChipUsuario } from '../components/structures/topbar.js';
 import { iconesUsados, processarIcones } from '../components/assets/icons.js';
+import { ativarListenerTurmas } from '../services/turmas.js';
 
 processarIcones();
 
@@ -175,7 +176,22 @@ const dashboardViews = {
             <h2 class="text-2xl font-semibold mb-4">Adicionar aluno</h2>
             <p class="text-gray-600">Clique no botão para abrir o formulário de cadastro de aluno.</p>
         </div>
-    `
+    `,
+    turmas: `
+    <div class="border border-dashed border-gray-300 bg-white p-8 shadow-sm flex items-center justify-between">
+        <div>
+            <h2 class="text-2xl font-semibold mb-1">Turmas</h2>
+            <p class="text-gray-600">Gerencie as turmas, visualize horários e acesse informações de matrícula.</p>
+        </div>
+        <button
+            id="btnCriarTurma"
+            class="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg font-semibold text-sm hover:bg-orange-600 transition-colors cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+            Criar turma
+        </button>
+    </div>
+    <div id="turmasContainer" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+`,
 };
 function existeDuplicidadeDashboard(matricula, email, usuarios) {
     return usuarios.some((usuario) => {
@@ -210,7 +226,7 @@ export function ativarListenerDashboardCoord() {
         e.preventDefault();
         checarDashboardCoord();
         aux.limparFormulario(["#nome", "#matricula", "#email", "#senha", "#cargo"]);
-    });
+    };
 }
 
 export function renderDashboardView(view = 'nome') {
@@ -219,6 +235,9 @@ export function renderDashboardView(view = 'nome') {
     container.innerHTML = dashboardViews[view] || dashboardViews.nome;
     if (view === 'demandas') {
         renderizarDemandas();
+    }
+    if (view === 'turmas') {
+        renderizarTurmas();
     }
     setActiveDashboardTab(view);
 }
@@ -308,6 +327,7 @@ export function Carregardashboardcoord() {
                 <button type="button" data-view="demandas" aria-label="Demandas" class="min-w-[72px] flex h-10 items-center justify-center rounded-2xl border border-gray-200 px-3 text-sm font-medium text-gray-700 transition-colors bg-transparent hover:bg-brand-primary/10">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/><path d="M15 3v5a1 1 0 0 0 1 1h5"/></svg>
                 </button>
+            
             </div>
         </div>
 
@@ -377,6 +397,7 @@ export function Carregardashboardcoord() {
 
     setupDashboardState();
     ativarListenerDashboardCoord();
+    ativarListenerTurmas();
 
     document.querySelector('#btnLogoutDesktop').addEventListener('click', () => {
         localStorage.removeItem('usuarioLogado');
