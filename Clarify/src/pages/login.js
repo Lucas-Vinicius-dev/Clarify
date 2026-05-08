@@ -1,52 +1,41 @@
 import gato from '../components/assets/GATOGORDO.png'
 import * as aux from '../lib/funcoesAuxiliares'
-import { Carregardashboardcoord, createProfileBtn, setupDashboardState } from './dashboardcoord';
+import { Carregardashboardcoord, createProfileBtn, setupDashboardState as setupDashboardStateCoord } from './dashboardcoord';
 import { carregarCentralDemandas, ativarListenerCentralDemandas } from './centralDemandas.js';
+// Redirecionamento baseado no cargo do usuário
+function redirecionarPorCargo(cargo) {
+    if (cargo === 'aluno') {
+        carregarCentralDemandas();
+        ativarListenerCentralDemandas();
+        return;
+    }
+
+    Carregardashboardcoord();
+    setupDashboardStateCoord();
+    createProfileBtn();
+}
 
 // Trata se o login enviado no formulário é válido
 function checarLogin(e) {
-
+    // Extrai os dados do formulário de login
     const formData = new FormData(e.target);
     const { institutionalId, securityKey } = Object.fromEntries(formData.entries());
-    const usuarioEncontrado = aux.buscarUsuarioCadastrado(institutionalId, securityKey);
-
-    if (usuarioEncontrado) {
-        const { senha, ...usuarioLogado } = usuarioEncontrado;
-        localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
-        localStorage.setItem('auth', true);
-
-        if (usuarioLogado.cargo === "aluno") {
-            carregarCentralDemandas();
-            ativarListenerCentralDemandas();
-            return;
-        }
-
-        Carregardashboardcoord();
-        setupDashboardState();
-        createProfileBtn();
-        return;
+    const resultado = aux.autenticarLogin(institutionalId, securityKey);
+    if (resultado.ok) {
+        // Redireciona com base no cargo do usuario
+        redirecionarPorCargo(resultado.usuarioLogado.cargo);
     }
-
-    const usuarioExiste = aux.UsuarioExiste(institutionalId);
-    if (!usuarioExiste) {
-        aux.exibirMensagemErro("Usuário não encontrado.");
-        aux.limparFormulario(["#institutionalId", "#securityKey"]);
-        return;
-    }
-
-    aux.exibirMensagemErro("Chave de segurança incorreta.");
-    aux.limparFormulario(["#securityKey"]);
-
 }
 
 // Adiciona um listener para o evento de submit do formulário de login
 export function ativarListenerLogin() {
-    document.querySelector('#loginForm').addEventListener('submit', (e) => {
+    // Listener para o envio do formulário
+    document.querySelector('#loginForm').addEventListener('submit', (e) => { 
         e.preventDefault();
         checarLogin(e);
-    });
+    }); // Evita o comportamento padrão de recarregar a página
 }
-
+// Carregamento da página de login
 export function carregarLogin() {
     aux.adicionarCaminhoURL("login");
     document.querySelector("title").innerHTML = `Login - Clarify`;

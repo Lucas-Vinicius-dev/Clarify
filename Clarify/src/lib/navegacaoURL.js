@@ -5,6 +5,42 @@ import { carregarCentralDemandas, ativarListenerCentralDemandas } from '../pages
 import { carregarLanding, ativarListenerLanding } from '../pages/landing.js';
 
 const isAuthenticated = () => localStorage.getItem('auth') === 'true';
+const getCargo = () => {
+  try {
+    const usuario = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
+    return usuario.cargo || '';
+  } catch {
+    return '';
+  }
+};
+
+const goTo = (path, load, activate) => {
+  if (path) {
+    window.history.replaceState({}, '', path);
+  }
+
+  if (load) {
+    load();
+  }
+
+  if (activate) {
+    activate();
+  }
+};
+
+const goToLogin = () => goTo('/login', carregarLogin, ativarListenerLogin);
+const goToRegistro = () => goTo('/registro', carregarRegistro, ativarListenerRegistro);
+
+const goToDashboardCoord = () => {
+  Carregardashboardcoord();
+  setupDashboardState();
+  createProfileBtn();
+};
+
+const goToCentralDemandas = () => {
+  carregarCentralDemandas();
+  ativarListenerCentralDemandas();
+};
 
 export function navigateURL(url) {
    switch (url) {
@@ -13,28 +49,49 @@ export function navigateURL(url) {
         ativarListenerLanding();
         break;
       case "/registro":
-        carregarRegistro();
-        ativarListenerRegistro();
+        goToRegistro();
         break;
       case "/login":
-        carregarLogin();
-        ativarListenerLogin();
+        goToLogin();
         break;
       case "/dashboardcoord":
         if (!isAuthenticated()) {
-          window.history.replaceState({}, '', '/login');
-          carregarLogin();
-          ativarListenerLogin();
+          goToLogin();
           break;
         }
 
-        Carregardashboardcoord();
-        setupDashboardState();
-        createProfileBtn();
+        if (getCargo() === 'aluno') {
+          goTo('/centraldemandas', carregarCentralDemandas, ativarListenerCentralDemandas);
+          break;
+        }
+
+        goToDashboardCoord();
+        break;
+      case "/dashboardaluno":
+        if (!isAuthenticated()) {
+          goToLogin();
+          break;
+        }
+
+        if (getCargo() !== 'aluno') {
+          goTo('/dashboardcoord', goToDashboardCoord);
+          break;
+        }
+
+        goTo('/centraldemandas', goToCentralDemandas);
         break;
       case "/centraldemandas":
-        carregarCentralDemandas();
-        ativarListenerCentralDemandas();
+        if (!isAuthenticated()) {
+          goToLogin();
+          break;
+        }
+
+        if (getCargo() !== 'aluno') {
+          goTo('/dashboardcoord', goToDashboardCoord);
+          break;
+        }
+
+        goToCentralDemandas();
         break;
       default:
         carregarLanding();

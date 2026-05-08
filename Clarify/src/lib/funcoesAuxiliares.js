@@ -20,6 +20,14 @@ export function exibirMensagemErro(mensagem, seletor = "#submitIncorrectAlert la
     }
 }
 
+const MENSAGEM_USUARIO_NAO_ENCONTRADO = 'Usuário não encontrado.';
+const MENSAGEM_CHAVE_INCORRETA = 'Chave de segurança incorreta.';
+
+function exibirErroLogin(mensagem, camposParaLimpar) {
+    exibirMensagemErro(mensagem);
+    limparFormulario(camposParaLimpar);
+}
+
 // Busca se um usuário está cadastrado no localStorage com base no ID institucional
 export function UsuarioExiste(matricula) {
     const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
@@ -40,6 +48,28 @@ export function buscarUsuarioCadastrado(matricula, senha) {
 
       return String(matriculaSalva) === String(matricula) && String(senhaSalva) === String(senha);
    });
+}
+
+export function autenticarLogin(institutionalId, securityKey) {
+    const usuarioEncontrado = buscarUsuarioCadastrado(institutionalId, securityKey);
+
+    if (usuarioEncontrado) {
+        const { senha, ...usuarioLogado } = usuarioEncontrado;
+        localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
+        localStorage.setItem('auth', true);
+        return { ok: true, usuarioLogado };
+    }
+
+    const usuarioExiste = UsuarioExiste(institutionalId);
+    if (!usuarioExiste) {
+        // Caso o usuário não exista, exibirá uma mensagem de erro e limpará ambos os campos do formulário
+        exibirErroLogin(MENSAGEM_USUARIO_NAO_ENCONTRADO, ["#institutionalId", "#securityKey"]);
+        return { ok: false };
+    }
+
+    // Caso o usuário exista, mas a chave de segurança esteja incorreta
+    exibirErroLogin(MENSAGEM_CHAVE_INCORRETA, ["#securityKey"]);
+    return { ok: false };
 }
 
 // Popula o localStorage com dados falsos para facilitar a funcionalidade de funções do sistema
