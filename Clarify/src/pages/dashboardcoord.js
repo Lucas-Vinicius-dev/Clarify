@@ -1,5 +1,6 @@
 import gato from '../components/assets/GATOGORDO.png'
 import * as aux from "../lib/funcoesAuxiliares"
+import { popularDemandas } from '../lib/funcoesAuxiliares';
 import { carregarLogin, ativarListenerLogin } from './login.js'
 import { renderSidebarCoord } from '../components/structures/sidebar.js';
 import { renderChipUsuario } from '../components/structures/topbar.js';
@@ -126,7 +127,6 @@ export function renderizarDemandas(){
     })
     return container;
 }
-
 const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 
 const dashboardViews = {
@@ -134,7 +134,7 @@ const dashboardViews = {
         <div class="space-y-6">
             <section class="relative overflow-hidden bg-zinc-900 p-5 text-white">
                 <div class="absolute inset-0 opacity-15">
-                    <img src= ${gato} class="w-full h-full object-cover">
+                    <img class="w-full h-full object-cover" data-alt="An abstract architectural composition of sharp angles and geometric planes in shades of deep charcoal and burnt orange. The image has a sophisticated, minimalist feel, representing the intersection of data and institutional structure. High-contrast lighting creates strong shadows, reinforcing the geometric institutionalism brand identity of the Clarify platform." src="${gato}"/>
                 </div>
                 <div class="relative z-10 space-y-4">
                     <span class="text-primary-fixed font-label-caps text-[10px] tracking-[0.2em] uppercase block">PORTAL DO COORDENADOR</span>
@@ -251,19 +251,31 @@ demandas: `
         </div>
     `
 };
+function existeDuplicidadeDashboard(matricula, email, usuarios) {
+    return usuarios.some((usuario) => {
+        return (String(usuario.matricula) === String(matricula) || String(usuario.email) === String(email));
+    })
+}
 
-export function checarDashboardCoord() {
-    const nome = document.querySelector("#nome");
-    const matricula = document.querySelector("#matricula");
-    const email = document.querySelector("#email");
-    const senha = document.querySelector("#senha");
-    const cargo = document.querySelector("#cargo");
+function checarDashboardCoord() {
+    const nome = document.querySelector("#nome").value;
+    const matricula = document.querySelector("#matricula").value;
+    const email = document.querySelector("#email").value;
+    const senha = document.querySelector("#senha").value;
+    const cargo = document.querySelector("#cargo").value;
 
     const usuarios = JSON.parse(localStorage.getItem("usuarios"));
+    if (existeDuplicidadeDashboard(matricula, email, usuarios)) {
+        alert("Usuário já existe");
+        aux.limparFormulario(["#nome", "#matricula", "#email", "#senha", "#cargo"]);
+        return;
+    }
+    alert("Usuário criado com sucesso!");
+    aux.adicionarUsuario(nome, matricula, email, senha, cargo);
 }
 
 export function ativarListenerDashboardCoord() {
-    document.querySelector('#dashboardCoordForm').addEventListener('submit', (e) => {
+    document.querySelector('#criarPerfilForm').addEventListener('submit', (e) => {
         e.preventDefault();
         checarDashboardCoord();
     });
@@ -313,6 +325,7 @@ export function setupDashboardState() {
             const modal = document.getElementById('criarPerfil');
             if (view === 'adicionar') {
                 modal?.classList.remove('hidden');
+                ativarListenerDashboardCoord();
             } else {
                 modal?.classList.add('hidden');
             }
