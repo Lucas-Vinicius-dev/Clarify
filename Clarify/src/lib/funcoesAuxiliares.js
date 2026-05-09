@@ -76,7 +76,8 @@ export function autenticarLogin(institutionalId, securityKey) {
 export function popularLocalStorage() {
     const usuariosTeste = [
         { nome: "João da Silva", matricula: "123", email: "joao@academico.edu.br", senha: "123456", cargo: "coordenador" },
-        { nome: "Maria Aparecida", matricula: "003", email: "maria@academico.edu.br", senha: "123456", cargo: "aluno" }
+        { nome: "Maria Aparecida", matricula: "003", email: "maria@academico.edu.br", senha: "123456", cargo: "aluno" },
+        { nome: "Carlos Eduardo", matricula: "456", email: "carlos@academico.edu.br", senha: "123456", cargo: "aluno" }
     ];
 
     localStorage.setItem('usuarios', JSON.stringify(usuariosTeste));

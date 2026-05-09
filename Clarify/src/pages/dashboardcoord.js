@@ -8,7 +8,84 @@ import { iconesUsados, processarIcones } from '../components/assets/icons.js';
 import { ativarListenerTurmas } from '../services/turmas.js';
 
 processarIcones();
+const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 
+export function renderizarAlunos() {
+    console.log("Renderizando alunos...");
+    const usuariosString = localStorage.getItem('usuarios') || '[]';
+    const usuarios = JSON.parse(usuariosString);
+    const coordLista = usuarios.find(u => u.matricula === coord.matricula);
+    const matriculasCadastradas = coordLista?.usuariosCadastrados || [];
+    const meusAlunos = usuarios.filter(u => matriculasCadastradas.includes(u.matricula) && u.cargo === 'aluno');
+    const demandasString = localStorage.getItem('demandas') || '[]';
+    const demandas = JSON.parse(demandasString);
+
+    const container = document.querySelector('#alunosContainer');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (meusAlunos.length === 0) {
+        container.innerHTML = `
+            <div class="col-span-full text-center py-12 text-zinc-400">
+                <span class="material-symbols-outlined text-4xl mb-2 block">person_off</span>
+                <p class="text-sm">Nenhum aluno cadastrado.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    meusAlunos.forEach((aluno) => {
+        const iniciais = aluno.nome
+            .split(' ')
+            .slice(0, 2)
+            .map(n => n[0].toUpperCase())
+            .join('');
+
+        const alunoElement = document.createElement('div');
+        alunoElement.classList.add(
+            'bg-white',
+            'border',
+            'border-gray-200',
+            'rounded-2xl',
+            'p-5',
+            'shadow-lg',
+            'hover:-translate-y-1',
+            'transition-transform',
+            'duration-200',
+            'ease-out'
+        );
+
+        alunoElement.innerHTML = `
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary-container font-bold text-sm shrink-0">
+                    ${iniciais}
+                </div>
+                <div class="min-w-0">
+                    <h3 class="text-base font-semibold text-zinc-900 truncate">${aluno.nome}</h3>
+                    <p class="text-xs text-zinc-400 truncate">${aluno.email}</p>
+                </div>
+            </div>
+            <div class="grid gap-2 text-sm text-zinc-600">
+                <p><span class="font-semibold text-zinc-800">Nome:</span> ${aluno.nome}</p>
+                <p><span class="font-semibold text-zinc-800">Matrícula:</span>
+                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 ml-1">
+                        ${aluno.matricula}
+                    </span>
+                </p>
+                <p><span class="font-semibold text-zinc-800">Demandas em aberto:</span>
+                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 ml-1">
+                        ${demandas.filter(d => d.matriculaAluno === aluno.matricula && d.status !== 'concluido').length}
+                    </span>
+                </p>
+
+            </div>
+        `;
+
+        container.appendChild(alunoElement);
+    });
+
+    return container;
+}
 export function renderizarDemandas(){
     console.log("Renderizando demandas...");
     const demandasString = localStorage.getItem('demandas') || '[]';
@@ -19,8 +96,8 @@ export function renderizarDemandas(){
     console.log('Container encontrado:', container);
     if (!container) return;
     container.innerHTML = '';
-    demandas.forEach((demanda) =>{
-        console.log(demanda)
+
+    demandas.filter(d => d.status !== 'concluido').forEach((demanda) => {
         const demandaElement = document.createElement('div');
         demandaElement.classList.add(
             'bg-white',
@@ -54,7 +131,6 @@ export function renderizarDemandas(){
     })
     return container;
 }
-const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 
 const dashboardViews = {
     nome: `
@@ -158,19 +234,19 @@ const dashboardViews = {
     ,
     
     alunos: `
-        <div class="border border-dashed border-gray-300 bg-white p-8 shadow-sm">
-            <h2 class="text-2xl font-semibold mb-4">Alunos</h2>
-            <p class="text-gray-600">Gerencie a lista de alunos, visualize registros e acesse informações de matrícula.</p>
-        </div>
-    `,
-    demandas: `
-        <div class="border border-dashed border-gray-300 bg-white p-8 shadow-sm">
-            <h2 class="text-2xl font-semibold mb-4">Demandas</h2>
-            <p class="text-gray-600">Veja as demandas abertas, tarefas pendentes e notificações importantes.</p>
-        </div>
-        <div id="demandasContainer" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        </div>
-    `,
+    <div class="border border-dashed border-gray-300 bg-white p-8 shadow-sm">
+        <h2 class="text-2xl font-semibold mb-4">Alunos</h2>
+        <p class="text-gray-600">Gerencie a lista de alunos, visualize registros e acesse informações de matrícula.</p>
+    </div>
+    <div id="alunosContainer" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+`,
+demandas: `
+    <div class="border border-dashed border-gray-300 bg-white p-8 shadow-sm">
+        <h2 class="text-2xl font-semibold mb-4">Demandas</h2>
+        <p class="text-gray-600">Veja as demandas abertas, tarefas pendentes e notificações importantes.</p>
+    </div>
+    <div id="demandasContainer" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+`,
     adicionar: `
         <div class="border border-dashed border-gray-300 bg-white p-8 shadow-sm">
             <h2 class="text-2xl font-semibold mb-4">Adicionar aluno</h2>
@@ -236,8 +312,13 @@ export function renderDashboardView(view = 'nome') {
     if (view === 'demandas') {
         renderizarDemandas();
     }
+<<<<<<< us02-ts05
+    if (view === 'alunos') {
+        renderizarAlunos();
+=======
     if (view === 'turmas') {
         renderizarTurmas();
+>>>>>>> develop
     }
     setActiveDashboardTab(view);
 }
