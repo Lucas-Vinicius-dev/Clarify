@@ -5,7 +5,7 @@ import { carregarLogin, ativarListenerLogin } from './login.js'
 import { renderSidebarCoord } from '../components/structures/sidebar.js';
 import { renderChipUsuario } from '../components/structures/topbar.js';
 import { iconesUsados, processarIcones } from '../components/assets/icons.js';
-import { ativarListenerTurmas } from '../services/turmas.js';
+import { ativarListenerTurmas, renderizarTurmas } from '../services/turmas.js';
 
 processarIcones();
 export function aprovarDemanda(protocolo){
@@ -341,17 +341,18 @@ export function ativarListenerDashboardCoord() {
 export function renderDashboardView(view = 'nome') {
     const container = document.querySelector('#dashboardContent');
     if (!container) return;
+
     container.innerHTML = dashboardViews[view] || dashboardViews.nome;
+
     if (view === 'demandas') {
         renderizarDemandas();
-    }
-    if (view === 'alunos') {
+    } else if (view === 'alunos') {
         renderizarAlunos();
+    } else if (view === 'turmas') {
+            renderizarTurmas();
+            ativarListenerTurmas();
     }
-    if (view === 'turmas') {
-        renderizarTurmas();
-    }
-    setActiveDashboardTab(view);
+        setActiveDashboardTab(view);
 }
 
 export function setActiveDashboardTab(view) {
@@ -510,7 +511,6 @@ export function Carregardashboardcoord() {
 
     setupDashboardState();
     ativarListenerDashboardCoord();
-    ativarListenerTurmas();
 
     document.querySelector('#btnLogoutDesktop').addEventListener('click', () => {
         localStorage.removeItem('usuarioLogado');

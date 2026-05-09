@@ -9,7 +9,7 @@ function salvarTurma(turma) {
     localStorage.setItem('turmas', JSON.stringify(turmas));
 }
 
-function renderizarTurmas() {
+export function renderizarTurmas() {
     const turmas = JSON.parse(localStorage.getItem('turmas') || '[]');
     const coordLogado = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
     const container = document.querySelector('#turmasContainer');
@@ -207,10 +207,14 @@ function abrirModalCriarTurma() {
 }
 
 export function ativarListenerTurmas() {
-    // delegação de evento: funciona mesmo se o botão for re-renderizado
-    document.addEventListener('click', (e) => {
-        if (e.target.closest('#btnCriarTurma')) {
-            abrirModalCriarTurma();
-        }
-    });
+    const btn = document.querySelector('#btnCriarTurma');
+    if (!btn) return;
+
+    btn.onclick = (e) => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        
+        console.log("Abrindo modal de criação...");
+        abrirModalCriarTurma();
+    };
 }
