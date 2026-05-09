@@ -10,12 +10,12 @@ import { ativarListenerTurmas, renderizarTurmas } from '../services/turmas.js';
 processarIcones();
 export function demandaDetalhada(protocolo){
     const demandas = JSON.parse(localStorage.getItem('demandas') || '[]')
-    demandas.forEach(demanda =>{
-        if (demanda.protocolo == protocolo){
-            const modal = document.createElement('div')
-            modal.id = 'modal-container';
-            modal.classList.add('fixed', 'inset-0', 'bg-black/50', 'flex', 'items-center', 'justify-center', 'z-50');
-            const demandaCard = `
+    const demanda = demandas.find(d => d.protocolo === protocolo);
+    if (demanda) {
+        const modal = document.createElement('div')
+        modal.id = 'modal-container';
+        modal.classList.add('fixed', 'inset-0', 'bg-black/50', 'flex', 'items-center', 'justify-center', 'z-50');
+        const demandaCard = `
             <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
             <button onclick="document.getElementById('modal-container').remove()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors  cursor-pointer">
             <i data-lucide="x" class="w-5 h-5"></i></button>
@@ -36,15 +36,13 @@ export function demandaDetalhada(protocolo){
             document.body.appendChild(modal);
             processarIcones();
         }
-    })
 }
 export function aprovarDemanda(protocolo){
     const demandas = JSON.parse(localStorage.getItem('demandas') || '[]')
-    demandas.forEach(demanda =>{
-        if (demanda.protocolo == protocolo){
-            demanda.status = 'aprovada'
-        }
-    })
+    const demanda = demandas.find(d => d.protocolo === protocolo);
+    if (demanda) {
+        demanda.status = 'aprovada';
+    }
     localStorage.setItem('demandas', JSON.stringify(demandas))
     renderizarDemandas()
 }
@@ -64,12 +62,11 @@ export function reprovarDemanda(protocolo){
         e.preventDefault();
         const feedback = document.querySelector('#feedback').value
     const demandas = JSON.parse(localStorage.getItem('demandas') || '[]')
-    demandas.forEach(demanda =>{
-        if (demanda.protocolo == protocolo){
-            demanda.status = 'negada'
-            demanda.feedback = feedback
-        }
-    })
+    const demanda = demandas.find(d => d.protocolo === protocolo);
+    if (demanda) {
+        demanda.status = 'negada';
+        demanda.feedback = feedback;
+    }
 
     localStorage.setItem('demandas', JSON.stringify(demandas))
     modal.remove();
