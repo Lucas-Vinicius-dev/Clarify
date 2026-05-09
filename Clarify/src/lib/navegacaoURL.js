@@ -56,7 +56,8 @@ export function navigateURL(url) {
         break;
       case "/dashboardcoord":
         if (!isAuthenticated()) {
-          goToLogin();
+          carregarLanding();
+          ativarListenerLanding();
           break;
         }
 
@@ -69,7 +70,8 @@ export function navigateURL(url) {
         break;
       case "/dashboardaluno":
         if (!isAuthenticated()) {
-          goToLogin();
+          carregarLanding();
+          ativarListenerLanding();
           break;
         }
 
@@ -77,21 +79,16 @@ export function navigateURL(url) {
           goTo('/dashboardcoord', goToDashboardCoord);
           break;
         }
-
-        goTo('/centraldemandas', goToCentralDemandas);
-        break;
       case "/centraldemandas":
         if (!isAuthenticated()) {
-          goToLogin();
+          carregarLanding();
+          ativarListenerLanding();
           break;
         }
-
         if (getCargo() !== 'aluno') {
-          goTo('/dashboardcoord', goToDashboardCoord);
-          break;
-        }
-
-        goToCentralDemandas();
+            goTo('/dashboardcoord', goToDashboardCoord);}
+          else {
+        goTo('/centraldemandas', goToCentralDemandas);}
         break;
       default:
         carregarLanding();
