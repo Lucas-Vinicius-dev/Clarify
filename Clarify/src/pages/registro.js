@@ -4,17 +4,6 @@ import { carregarLogin, ativarListenerLogin } from './login.js'
 import { Carregardashboardcoord, createProfileBtn, setupDashboardState as setupDashboardStateCoord } from './dashboardcoord';
 import { carregarCentralDemandas, ativarListenerCentralDemandas } from './centralDemandas.js';
 
-function redirecionarPorCargo(cargo) {
-    if (cargo === 'aluno') {
-        carregarCentralDemandas();
-        ativarListenerCentralDemandas();
-        return;
-    }
-
-    Carregardashboardcoord();
-    setupDashboardStateCoord();
-    createProfileBtn();
-}
 
 // Trata se o registro enviado no formulário é válido
 function checarRegistro() {
@@ -23,7 +12,6 @@ function checarRegistro() {
     const matricula = document.querySelector("#institutionalId").value;
     const email = document.querySelector("#institutionalEmail").value;
     const senha = document.querySelector("#securityKey").value;
-    const cargo = document.querySelector("#cargo").value;
     const senha_ativacao = document.querySelector("#activationKey").value;
 
     const usuarioExiste = aux.UsuarioExiste(matricula);
@@ -40,13 +28,13 @@ function checarRegistro() {
         aux.limparFormulario(["#activationKey"]);
         return;
     }
-    aux.adicionarUsuario(nome, matricula, email, senha, cargo);
+    aux.adicionarUsuario(nome, matricula, email, senha, "coordenador");
     alert("Registro feito com sucesso!");
 
-    const usuarioLogado = { nome, matricula, email, cargo };
+    const usuarioLogado = { nome, matricula, email, cargo: "coordenador" };
     localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
     localStorage.setItem('auth', true);
-    redirecionarPorCargo(cargo);
+    Carregardashboardcoord();
 }
 
 // Adiciona um listener para o evento de submit do formulário de registro
@@ -78,9 +66,9 @@ export function carregarRegistro() {
                     linear-gradient(150deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
                     linear-gradient(60deg, #8a3f09 25%, transparent 25.5%, transparent 75%, #8a3f09 75%, #8a3f09),
                     linear-gradient(60deg, #8a3f09 25%, transparent 25.5%, transparent 75%, #8a3f09 75%, #8a3f09);
-    background-size: 80px 140px;
-    background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;">
-            </div>
+             background-size: 80px 140px;
+             background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;">
+        </div>
     
             <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 z-10 border border-brand-surface-dim">
             <div class="flex flex-col items-center mb-8">
@@ -157,28 +145,6 @@ export function carregarRegistro() {
                     class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
                     required
                     />
-                </div>
-
-                <div>
-                <label class="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
-                    Cargo
-                </label>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    </span>
-                    <select
-                    name="cargo"
-                    id="cargo"
-                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
-                    required
-                    >
-                    <option value="coordenador">Coordenador</option>
-                    <option value="aluno">Aluno</option>
-                    </select>
-                </div>
                 </div>
                 </div>
 
