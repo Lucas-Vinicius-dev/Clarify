@@ -5,9 +5,31 @@ import { carregarLogin, ativarListenerLogin } from './login.js'
 import { renderSidebarCoord } from '../components/structures/sidebar.js';
 import { renderChipUsuario } from '../components/structures/topbar.js';
 import { iconesUsados, processarIcones } from '../components/assets/icons.js';
-import { ativarListenerTurmas } from '../services/turmas.js';
+import { ativarListenerTurmas, renderizarTurmas } from '../services/turmas.js';
 
 processarIcones();
+export function aprovarDemanda(protocolo){
+    const demandas = JSON.parse(localStorage.getItem('demandas') || '[]')
+    demandas.forEach(demanda =>{
+        if (demanda.protocolo == protocolo){
+            demanda.status = 'aprovada'
+        }
+    })
+    localStorage.setItem('demandas', JSON.stringify(demandas))
+    renderizarDemandas()
+}
+export function reprovarDemanda(protocolo){
+    const demandas = JSON.parse(localStorage.getItem('demandas') || '[]')
+    demandas.forEach(demanda =>{
+        if (demanda.protocolo == protocolo){
+            demanda.status = 'negada'
+        }
+    })
+    localStorage.setItem('demandas', JSON.stringify(demandas))
+    renderizarDemandas()
+}
+window.aprovarDemanda = aprovarDemanda
+window.reprovarDemanda = reprovarDemanda
 const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 
 export function renderizarAlunos() {
@@ -109,7 +131,11 @@ export function renderizarDemandas(){
             'hover:-translate-y-1',
             'transition-transform',
             'duration-200',
-            'ease-out'
+            'ease-out',
+            'flex',
+            'flex-col',
+            'justify-between',
+            'h-full'
         );
         demandaElement.classList.add('demandas');
         const statusColor = demanda.status === 'concluido' ? 'bg-emerald-100 text-emerald-700' : demanda.status === 'em_analise' ? 'bg-amber-100 text-amber-700' : demanda.status === 'requer_ajuste' ? 'bg-orange-100 text-orange-700' : 'bg-slate-100 text-slate-700';
@@ -126,9 +152,16 @@ export function renderizarDemandas(){
                 <p><span class="font-semibold text-zinc-800">Protocolo:</span> ${demanda.protocolo}</p>
                 <p><span class="font-semibold text-zinc-800">Matrícula:</span> ${demanda.matriculaAluno}</p>
             </div>
+            <div class="mt-4 text-sm text-zinc-500 flex items-center justify-end gap-2">
+                <button class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors" onclick="aprovarDemanda('${demanda.protocolo}')"><i data-lucide="check"></i></button>
+                <button class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors ml-2" onclick="reprovarDemanda('${demanda.protocolo}')"><i data-lucide="x"></i></button>
+            </div>
         `;
-        container.appendChild(demandaElement);
+        if (demanda.status === 'pendente'){
+            container.appendChild(demandaElement);
+        }
     })
+    processarIcones();
     return container;
 }
 
@@ -308,14 +341,18 @@ export function ativarListenerDashboardCoord() {
 export function renderDashboardView(view = 'nome') {
     const container = document.querySelector('#dashboardContent');
     if (!container) return;
+
     container.innerHTML = dashboardViews[view] || dashboardViews.nome;
+
     if (view === 'demandas') {
         renderizarDemandas();
+    } else if (view === 'alunos') {
+        renderizarAlunos();
+    } else if (view === 'turmas') {
+            renderizarTurmas();
+            ativarListenerTurmas();
     }
-    if (view === 'turmas') {
-        renderizarTurmas();
-    }
-    setActiveDashboardTab(view);
+        setActiveDashboardTab(view);
 }
 
 export function setActiveDashboardTab(view) {
@@ -469,11 +506,11 @@ export function Carregardashboardcoord() {
             </form>
         </div>
     </div>`
+
     processarIcones();
 
     setupDashboardState();
     ativarListenerDashboardCoord();
-    ativarListenerTurmas();
 
     document.querySelector('#btnLogoutDesktop').addEventListener('click', () => {
         localStorage.removeItem('usuarioLogado');
