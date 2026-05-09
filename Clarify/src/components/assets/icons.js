@@ -16,7 +16,8 @@ import {
     PlusCircle,
     Search,
     Settings,
-    X
+    X,
+    Check
 } from 'lucide';
 
 export const iconesUsados = {
@@ -36,7 +37,8 @@ export const iconesUsados = {
     PlusCircle,
     Search,
     Settings,
-    X
+    X,
+    Check
 }
 
 export function processarIcones() {
