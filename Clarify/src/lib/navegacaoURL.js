@@ -79,8 +79,16 @@ export function navigateURL(url) {
           goTo('/dashboardcoord', goToDashboardCoord);
           break;
         }
-
-        goTo('/centraldemandas', goToCentralDemandas);
+      case "/centraldemandas":
+        if (!isAuthenticated()) {
+          carregarLanding();
+          ativarListenerLanding();
+          break;
+        }
+        if (getCargo() !== 'aluno') {
+            goTo('/dashboardcoord', goToDashboardCoord);}
+          else {
+        goTo('/centraldemandas', goToCentralDemandas);}
         break;
       default:
         carregarLanding();
