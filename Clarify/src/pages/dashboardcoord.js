@@ -312,13 +312,8 @@ export function renderDashboardView(view = 'nome') {
     if (view === 'demandas') {
         renderizarDemandas();
     }
-<<<<<<< us02-ts05
-    if (view === 'alunos') {
-        renderizarAlunos();
-=======
     if (view === 'turmas') {
         renderizarTurmas();
->>>>>>> develop
     }
     setActiveDashboardTab(view);
 }
