@@ -19,14 +19,32 @@ export function aprovarDemanda(protocolo){
     renderizarDemandas()
 }
 export function reprovarDemanda(protocolo){
+    const modal = document.createElement('div');
+    modal.id = 'modalFeedback';
+    modal.classList.add('fixed', 'inset-0', 'bg-black/50', 'flex', 'items-center', 'justify-center', 'z-50');
+    const formFeedback = `
+    <form id='formfeedback' class='bg-white p-6 rounded-lg shadow-lg w-full max-w-sm'>
+    <input type='text' id='feedback' placeholder='Digite seu feedback...' class='w-full border border-gray-300 rounded-lg p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all' required>
+    <button type='submit' class='bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition-colors'>Enviar</button>
+    </form>`
+    modal.innerHTML = formFeedback
+    document.body.appendChild(modal);
+    const form = modal.querySelector('#formfeedback')
+    form.onsubmit = (e) =>{
+        e.preventDefault();
+        const feedback = document.querySelector('#feedback').value
     const demandas = JSON.parse(localStorage.getItem('demandas') || '[]')
     demandas.forEach(demanda =>{
         if (demanda.protocolo == protocolo){
             demanda.status = 'negada'
+            demanda.feedback = feedback
         }
     })
+
     localStorage.setItem('demandas', JSON.stringify(demandas))
+    modal.remove();
     renderizarDemandas()
+}
 }
 window.aprovarDemanda = aprovarDemanda
 window.reprovarDemanda = reprovarDemanda
