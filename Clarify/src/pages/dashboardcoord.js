@@ -5,7 +5,7 @@ import { carregarLogin, ativarListenerLogin } from './login.js'
 import { renderSidebarCoord } from '../components/structures/sidebar.js';
 import { renderChipUsuario } from '../components/structures/topbar.js';
 import { iconesUsados, processarIcones } from '../components/assets/icons.js';
-import { ativarListenerTurmas } from '../services/turmas.js';
+import { ativarListenerTurmas, renderizarTurmas } from '../services/turmas.js';
 
 processarIcones();
 const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
@@ -308,19 +308,18 @@ export function ativarListenerDashboardCoord() {
 export function renderDashboardView(view = 'nome') {
     const container = document.querySelector('#dashboardContent');
     if (!container) return;
+
     container.innerHTML = dashboardViews[view] || dashboardViews.nome;
+
     if (view === 'demandas') {
         renderizarDemandas();
-    }
-<<<<<<< us02-ts05
-    if (view === 'alunos') {
+    } else if (view === 'alunos') {
         renderizarAlunos();
-=======
-    if (view === 'turmas') {
-        renderizarTurmas();
->>>>>>> develop
+    } else if (view === 'turmas') {
+            renderizarTurmas();
+            ativarListenerTurmas();
     }
-    setActiveDashboardTab(view);
+        setActiveDashboardTab(view);
 }
 
 export function setActiveDashboardTab(view) {
@@ -478,7 +477,6 @@ export function Carregardashboardcoord() {
 
     setupDashboardState();
     ativarListenerDashboardCoord();
-    ativarListenerTurmas();
 
     document.querySelector('#btnLogoutDesktop').addEventListener('click', () => {
         localStorage.removeItem('usuarioLogado');
