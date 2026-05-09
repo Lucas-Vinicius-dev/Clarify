@@ -138,7 +138,7 @@ export function carregarLogin() {
             </div>
             <div class="text-center">
             <a href="#" id="irRegistro" class="text-sm font-semibold text-brand-primary hover:underline transition-all">
-                Registro
+                Ir para o Registro
             </a>
             </div>
         </form>
