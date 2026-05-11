@@ -8,13 +8,41 @@ import { iconesUsados, processarIcones } from '../components/assets/icons.js';
 import { ativarListenerTurmas, renderizarTurmas } from '../services/turmas.js';
 
 processarIcones();
+export function demandaDetalhada(protocolo){
+    const demandas = JSON.parse(localStorage.getItem('demandas') || '[]')
+    const demanda = demandas.find(d => d.protocolo === protocolo);
+    if (demanda) {
+        const modal = document.createElement('div')
+        modal.id = 'modal-container';
+        modal.classList.add('fixed', 'inset-0', 'bg-black/50', 'flex', 'items-center', 'justify-center', 'z-50');
+        const demandaCard = `
+            <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
+            <button onclick="document.getElementById('modal-container').remove()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors  cursor-pointer">
+            <i data-lucide="x" class="w-5 h-5"></i></button>
+            <h1 class="text-2xl font-bold mb-4">${demanda.tipo}</h1>
+            <p class="text-gray-600 mb-4">${demanda.descricao}</p>
+            <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Protocolo:</span> ${demanda.protocolo}</p>
+            <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Matrícula do Aluno:</span> ${demanda.matriculaAluno}</p>
+            <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Status:</span> ${demanda.status.replace('_', ' ').toUpperCase()}</p>
+            <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Data de Criação:</span> ${aux.formatarData(demanda.dataCriacao)}</p>
+            <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Data de Atualização:</span> ${aux.formatarData(demanda.dataAtualizacao)}</p>
+            </div>`
+            modal.addEventListener('click', (e) => {
+            if (e.target.id === 'modal-container') {
+                modal.remove();
+            }
+            });
+            modal.innerHTML = demandaCard
+            document.body.appendChild(modal);
+            processarIcones();
+        }
+}
 export function aprovarDemanda(protocolo){
     const demandas = JSON.parse(localStorage.getItem('demandas') || '[]')
-    demandas.forEach(demanda =>{
-        if (demanda.protocolo == protocolo){
-            demanda.status = 'aprovada'
-        }
-    })
+    const demanda = demandas.find(d => d.protocolo === protocolo);
+    if (demanda) {
+        demanda.status = 'aprovada';
+    }
     localStorage.setItem('demandas', JSON.stringify(demandas))
     renderizarDemandas()
 }
@@ -34,12 +62,11 @@ export function reprovarDemanda(protocolo){
         e.preventDefault();
         const feedback = document.querySelector('#feedback').value
     const demandas = JSON.parse(localStorage.getItem('demandas') || '[]')
-    demandas.forEach(demanda =>{
-        if (demanda.protocolo == protocolo){
-            demanda.status = 'negada'
-            demanda.feedback = feedback
-        }
-    })
+    const demanda = demandas.find(d => d.protocolo === protocolo);
+    if (demanda) {
+        demanda.status = 'negada';
+        demanda.feedback = feedback;
+    }
 
     localStorage.setItem('demandas', JSON.stringify(demandas))
     modal.remove();
@@ -48,6 +75,7 @@ export function reprovarDemanda(protocolo){
 }
 window.aprovarDemanda = aprovarDemanda
 window.reprovarDemanda = reprovarDemanda
+window.demandaDetalhada = demandaDetalhada
 const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 
 export function renderizarAlunos() {
@@ -159,7 +187,7 @@ export function renderizarDemandas(){
         const statusColor = demanda.status === 'concluido' ? 'bg-emerald-100 text-emerald-700' : demanda.status === 'em_analise' ? 'bg-amber-100 text-amber-700' : demanda.status === 'requer_ajuste' ? 'bg-orange-100 text-orange-700' : 'bg-slate-100 text-slate-700';
         const descricao = demanda.descricao ? demanda.descricao : '';
         demandaElement.innerHTML = `
-            <div class="flex items-start justify-between gap-4 mb-4">
+            <div class="flex items-start justify-between gap-4 mb-4" onclick="demandaDetalhada('${demanda.protocolo}')">
                 <div class="space-y-2">
                     <h3 class="text-lg font-semibold text-zinc-900">${demanda.tipo}</h3>
                     <p class="text-sm text-zinc-500">${descricao}</p>
