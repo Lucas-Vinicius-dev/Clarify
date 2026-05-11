@@ -1,17 +1,12 @@
 import gato from '../components/assets/GATOGORDO.png'
 import * as aux from '../lib/funcoesAuxiliares'
 import { carregarLogin, ativarListenerLogin } from './login.js'
+import { Carregardashboardcoord, createProfileBtn, setupDashboardState as setupDashboardStateCoord } from './dashboardcoord';
+import { carregarCentralDemandas, ativarListenerCentralDemandas } from './centralDemandas.js';
 
-function exibirErroRegistro(mensagem) {
-    const label = document.querySelector("#submitIncorrectAlert label");
-    if (label) {
-        label.textContent = mensagem;
-    }
-}
 
 // Trata se o registro enviado no formulário é válido
-function checarRegistro(e) {
-    e.preventDefault();
+function checarRegistro() {
 
     const nome = document.querySelector("#fullName").value;
     const matricula = document.querySelector("#institutionalId").value;
@@ -19,32 +14,34 @@ function checarRegistro(e) {
     const senha = document.querySelector("#securityKey").value;
     const senha_ativacao = document.querySelector("#activationKey").value;
 
-    const usuarioExiste = aux.UsuarioExiste(matricula);
+    const usuarioExiste = aux.UsuarioExiste(matricula,email);
     const chaveAtivacaoValida = usuarioExiste ? true : aux.chaveValida(senha_ativacao);
 
     if (usuarioExiste || !chaveAtivacaoValida) {
         if (usuarioExiste) {
-            exibirErroRegistro("Usuário já cadastrado.");
+            aux.exibirMensagemErro("Usuário já cadastrado.");
             aux.limparFormulario(["#fullName", "#institutionalEmail", "#securityKey", "#activationKey"]);
             return;
         }
 
-        exibirErroRegistro("Chave de ativação inválida ou já utilizada.");
+        aux.exibirMensagemErro("Chave de ativação inválida ou já utilizada.");
         aux.limparFormulario(["#activationKey"]);
         return;
     }
     aux.adicionarUsuario(nome, matricula, email, senha, "coordenador");
     alert("Registro feito com sucesso!");
 
-    carregarLogin();
-    ativarListenerLogin();
+    const usuarioLogado = { nome, matricula, email, cargo: "coordenador" };
+    localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
+    localStorage.setItem('auth', true);
+    Carregardashboardcoord();
 }
 
 // Adiciona um listener para o evento de submit do formulário de registro
 export function ativarListenerRegistro() {
     document.querySelector('#registrationForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      checarRegistro(e);
+      checarRegistro();
    });
 
     const voltarLogin = document.querySelector('#voltarLogin');
@@ -56,6 +53,7 @@ export function ativarListenerRegistro() {
 }}
 
 export function carregarRegistro() {
+    aux.adicionarCaminhoURL("registro");
     document.querySelector("title").innerHTML = `Registro - Clarify`;
     document.querySelector('#app').innerHTML = `
         <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
@@ -68,9 +66,9 @@ export function carregarRegistro() {
                     linear-gradient(150deg, #ca5f15 12%, transparent 12.5%, transparent 87%, #ca5f15 87.5%, #ca5f15),
                     linear-gradient(60deg, #8a3f09 25%, transparent 25.5%, transparent 75%, #8a3f09 75%, #8a3f09),
                     linear-gradient(60deg, #8a3f09 25%, transparent 25.5%, transparent 75%, #8a3f09 75%, #8a3f09);
-    background-size: 80px 140px;
-    background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;">
-            </div>
+             background-size: 80px 140px;
+             background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;">
+        </div>
     
             <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 z-10 border border-brand-surface-dim">
             <div class="flex flex-col items-center mb-8">

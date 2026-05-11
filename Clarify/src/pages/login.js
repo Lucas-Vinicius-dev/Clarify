@@ -1,51 +1,51 @@
 import gato from '../components/assets/GATOGORDO.png'
 import * as aux from '../lib/funcoesAuxiliares'
-import { Carregardashboardcoord, createProfileBtn } from './dashboardcoord';
-
-function exibirErroLogin(mensagem) {
-    const label = document.querySelector("#submitIncorrectAlert label");
-    if (label) {
-        label.textContent = mensagem;
+import { Carregardashboardcoord, createProfileBtn, setupDashboardState as setupDashboardStateCoord } from './dashboardcoord';
+import { carregarCentralDemandas, ativarListenerCentralDemandas } from './centralDemandas.js';
+// Redirecionamento baseado no cargo do usuário
+function redirecionarPorCargo(cargo) {
+    if (cargo === 'aluno') {
+        carregarCentralDemandas();
+        ativarListenerCentralDemandas();
+        return;
     }
+
+    Carregardashboardcoord();
+    setupDashboardStateCoord();
+    createProfileBtn();
 }
 
 // Trata se o login enviado no formulário é válido
 function checarLogin(e) {
-
+    // Extrai os dados do formulário de login
     const formData = new FormData(e.target);
     const { institutionalId, securityKey } = Object.fromEntries(formData.entries());
-    const usuarioEncontrado = aux.buscarUsuarioCadastrado(institutionalId, securityKey);
-
-    if (usuarioEncontrado) {
-        const { senha, ...usuarioLogado } = usuarioEncontrado;
-        localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
-
-        Carregardashboardcoord();
-        createProfileBtn();
-        return;
+    const resultado = aux.autenticarLogin(institutionalId, securityKey);
+    if (resultado.ok) {
+        // Redireciona com base no cargo do usuario
+        redirecionarPorCargo(resultado.usuarioLogado.cargo);
     }
-
-    const usuarioExiste = aux.UsuarioExiste(institutionalId);
-    if (!usuarioExiste) {
-        exibirErroLogin("Usuário não encontrado.");
-        aux.limparFormulario(["#institutionalId", "#securityKey"]);
-        return;
-    }
-
-    exibirErroLogin("Chave de segurança incorreta.");
-    aux.limparFormulario(["#securityKey"]);
-
 }
 
 // Adiciona um listener para o evento de submit do formulário de login
 export function ativarListenerLogin() {
-    document.querySelector('#loginForm').addEventListener('submit', (e) => {
+    // Listener para o envio do formulário
+    document.querySelector('#loginForm').addEventListener('submit', (e) => { 
         e.preventDefault();
         checarLogin(e);
-    });
-}
+    }); // Evita o comportamento padrão de recarregar a página
 
+    const registroLink = document.querySelector('#irRegistro');
+    if (registroLink) {
+        registroLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            aux.adicionarCaminhoURL("registro");
+        });
+    }
+}
+// Carregamento da página de login
 export function carregarLogin() {
+    aux.adicionarCaminhoURL("login");
     document.querySelector("title").innerHTML = `Login - Clarify`;
     document.querySelector('#app').innerHTML = `
     <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden animate-cubes">
@@ -134,6 +134,11 @@ export function carregarLogin() {
             <div class="text-center">
             <a href="#" class="text-sm font-semibold text-brand-primary hover:underline transition-all">
                 Recuperar Credenciais de Acesso
+            </a>
+            </div>
+            <div class="text-center">
+            <a href="#" id="irRegistro" class="text-sm font-semibold text-brand-primary hover:underline transition-all">
+                Ir para o Registro
             </a>
             </div>
         </form>
