@@ -334,7 +334,7 @@ function checarDashboardCoord() {
     const cargo = document.querySelector("#cargo").value;
 
     const usuarios = JSON.parse(localStorage.getItem("usuarios"));
-    if (existeDuplicidadeDashboard(matricula, email, usuarios)) {
+    if (aux.UsuarioExiste(matricula, email)) {
         alert("Usuário já existe");
         aux.limparFormulario(["#nome", "#matricula", "#email", "#senha", "#cargo"]);
         return;

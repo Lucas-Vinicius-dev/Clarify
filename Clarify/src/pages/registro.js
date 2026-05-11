@@ -14,7 +14,7 @@ function checarRegistro() {
     const senha = document.querySelector("#securityKey").value;
     const senha_ativacao = document.querySelector("#activationKey").value;
 
-    const usuarioExiste = aux.UsuarioExiste(matricula);
+    const usuarioExiste = aux.UsuarioExiste(matricula,email);
     const chaveAtivacaoValida = usuarioExiste ? true : aux.chaveValida(senha_ativacao);
 
     if (usuarioExiste || !chaveAtivacaoValida) {

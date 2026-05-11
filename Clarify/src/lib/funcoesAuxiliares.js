@@ -29,12 +29,13 @@ function exibirErroLogin(mensagem, camposParaLimpar) {
 }
 
 // Busca se um usuário está cadastrado no localStorage com base no ID institucional
-export function UsuarioExiste(matricula) {
+export function UsuarioExiste(matricula,email) {
     const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
     return usuarios.some((usuario) => {
         const matriculaSalva = usuario.matricula;
+        const emailSalvo = usuario.email;
 
-        return String(matriculaSalva) === String(matricula);
+        return String(matriculaSalva) === String(matricula) || String(emailSalvo) === String(email);
     });
 }
 
