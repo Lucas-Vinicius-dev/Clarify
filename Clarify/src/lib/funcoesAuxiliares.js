@@ -235,6 +235,7 @@ export function adicionarUsuario(nome, matricula, email, senha, cargo) {
     localStorage.setItem('usuarios', JSON.stringify(usuarios));
 }
 
+<<<<<<< develop
 // Usado para redirecionar o usuário pelas páginas do site pelo URL
 export function adicionarCaminhoURL(nome) {
    if (window.location.pathname !== `/${nome}`) {
@@ -270,3 +271,14 @@ export function acharUsuario(matricula) {
       return String(matriculaSalva) === String(matricula)
    });
 }
+=======
+export function validDuplicidade(email, matricula, array){
+    for (let i = 0; i < array.length; i++){
+        if (email === array[i].institutionalEmail || matricula === array[i].institutionalId){
+            return `Possui duplicidade`
+            break
+        }
+    }
+    return 
+}
+>>>>>>> main
