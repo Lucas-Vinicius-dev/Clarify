@@ -254,10 +254,10 @@ export function atribuirCoordenador(matriculaAluno, matriculaCoord) {
     if (!aluno) return;
 
     if (!aluno.coordenador) {
-        aluno.coordenador = [];
+        aluno.coordenador = matriculaCoord;
     }
 
-    aluno.coordenador.push(matriculaCoord);
+    aluno.coordenador = matriculaCoord;
     localStorage.setItem("usuarios", JSON.stringify(usuarios));
 }
 
