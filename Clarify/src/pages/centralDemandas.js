@@ -4,97 +4,12 @@ import { carregarLogin, ativarListenerLogin } from './login.js'
 import { renderChipUsuario } from '../components/structures/topbar.js';
 import { abrirModalNovaDemanda, abrirModalDetalhesDemanda } from '../components/structures/modais.js';
 import logoClarify from '../components/assets/GATOGORDO.png';
+import * as dms from '../services/demands.js';
 
-
-
-// Estado dos filtros aplicados no board.
-const filtros = {
-    busca: '',
-    status: 'todos'
-}
-
-// Mapeia a chave técnica do status para o rótulo exibido na tela.
-const ROTULOS_STATUS = {
-    pendente: 'Pendente',
-    em_analise: 'Em Análise',
-    requer_ajuste: 'Requer Ajuste',
-    concluido: 'Concluído'
-}
-
-// Retorna as classes Tailwind do badge de cada status.
-function classesDoStatus(status) {
-    switch (status) {
-        case 'pendente':
-            return 'bg-amber-100 text-amber-800 border border-amber-200';
-        case 'em_analise':
-            return 'bg-blue-100 text-blue-800 border border-blue-200';
-        case 'requer_ajuste':
-            return 'bg-rose-100 text-rose-800 border border-rose-200';
-        case 'concluido':
-            return 'bg-emerald-100 text-emerald-800 border border-emerald-200';
-        default:
-            return 'bg-gray-100 text-gray-800 border border-gray-200';
-    }
-}
-
-// Aplica os filtros de busca e status sobre a lista de demandas do aluno.
-function aplicarFiltros(demandas) {
-    return demandas.filter((demanda) => {
-        const casaStatus = filtros.status === 'todos' || demanda.status === filtros.status;
-
-        const termo = filtros.busca.trim().toLowerCase();
-        const casaBusca = termo === ''
-            || demanda.protocolo.toLowerCase().includes(termo)
-            || demanda.tipo.toLowerCase().includes(termo);
-
-        return casaStatus && casaBusca;
-    });
-}
-
-// Renderiza um card de demanda em aberto (status diferente de "concluido").
-function renderCardDemanda(demanda) {
-    const rotulo = ROTULOS_STATUS[demanda.status] || demanda.status;
-    return `
-        <article class="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 flex flex-col gap-3 hover:shadow-md hover:-translate-y-0.5 transition-all">
-            <div class="flex items-center justify-between gap-2">
-                <span class="text-xs font-semibold text-gray-500 tracking-wider">#${demanda.protocolo}</span>
-                <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full whitespace-nowrap ${classesDoStatus(demanda.status)}">
-                    ${rotulo}
-                </span>
-            </div>
-
-            <div class="min-w-0">
-                <h3 class="text-base font-bold text-gray-900 break-words [overflow-wrap:anywhere]">${demanda.tipo}</h3>
-                <p class="text-sm text-gray-600 mt-1 line-clamp-2 break-words [overflow-wrap:anywhere]">${demanda.descricao}</p>
-            </div>
-
-            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 pt-2 border-t border-gray-100">
-                <span class="inline-flex items-center gap-1.5">
-                    <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
-                    ${aux.formatarData(demanda.dataCriacao)}
-                </span>
-                <span class="inline-flex items-center gap-1.5">
-                    <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-                    ${aux.formatarData(demanda.dataAtualizacao)}
-                </span>
-            </div>
-
-            ${demanda.feedback ? `
-                <div class="text-xs bg-gray-50 border border-gray-100 rounded-md p-2 text-gray-700">
-                    <strong class="text-gray-900">Observação:</strong> ${demanda.feedback}
-                </div>
-            ` : ''}
-
-            <button type="button" data-acao="ver-detalhes" data-protocolo="${demanda.protocolo}" class="mt-1 inline-flex items-center gap-1 text-xs font-bold text-brand-primary uppercase tracking-widest hover:underline self-start cursor-pointer">
-                Ver Detalhes
-                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-            </button>
-        </article>
-    `;
-}
 
 // Card "vazio" que convida o aluno a abrir uma nova demanda.
-function renderCardNovaDemanda() {
+
+export function renderCardNovaDemanda() {
     return `
         <button type="button" data-acao="nova-demanda" class="border-2 border-dashed border-gray-300 rounded-xl p-5 flex flex-col items-center justify-center gap-2 text-gray-500 hover:border-brand-primary hover:text-brand-primary hover:bg-white transition-colors min-h-[180px] cursor-pointer">
             <span class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
@@ -106,92 +21,6 @@ function renderCardNovaDemanda() {
     `;
 }
 
-// Linha do histórico para a tabela (md+).
-function renderLinhaHistorico(demanda) {
-    const rotulo = ROTULOS_STATUS[demanda.status] || demanda.status;
-    return `
-        <tr class="border-t border-gray-100">
-            <td class="py-3 text-xs font-semibold text-gray-500">#${demanda.protocolo}</td>
-            <td class="py-3 text-sm text-gray-900 break-words [overflow-wrap:anywhere]">${demanda.tipo}</td>
-            <td class="py-3">
-                <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full ${classesDoStatus(demanda.status)}">
-                    ${rotulo}
-                </span>
-            </td>
-            <td class="py-3 text-xs text-gray-500">${aux.formatarData(demanda.dataAtualizacao)}</td>
-        </tr>
-    `;
-}
-
-// Card compacto do histórico para o mobile (substitui a tabela em telas pequenas).
-function renderCardHistorico(demanda) {
-    const rotulo = ROTULOS_STATUS[demanda.status] || demanda.status;
-    return `
-        <article class="bg-white rounded-xl border border-gray-200 p-4 flex flex-col gap-2">
-            <div class="flex items-center justify-between gap-2">
-                <span class="text-xs font-semibold text-gray-500 tracking-wider">#${demanda.protocolo}</span>
-                <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full whitespace-nowrap ${classesDoStatus(demanda.status)}">
-                    ${rotulo}
-                </span>
-            </div>
-            <h4 class="text-sm font-bold text-gray-900 break-words [overflow-wrap:anywhere]">${demanda.tipo}</h4>
-            <span class="inline-flex items-center gap-1.5 text-xs text-gray-500">
-                <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-                Concluído em ${aux.formatarData(demanda.dataAtualizacao)}
-            </span>
-        </article>
-    `;
-}
-
-// Mostra mensagem amigável quando o aluno ainda não tem nenhuma demanda.
-function renderEstadoVazio() {
-    return `
-        <div class="col-span-full bg-white border border-dashed border-gray-300 rounded-xl p-8 sm:p-10 text-center">
-            <h3 class="text-base font-bold text-gray-900">Você ainda não possui solicitações</h3>
-            <p class="text-sm text-gray-500 mt-1">
-                Quando você abrir uma demanda, ela aparecerá aqui para acompanhamento.
-            </p>
-        </div>
-    `;
-}
-
-// Atualiza a lista de cards e o histórico.
-function renderListaDemandas(demandasDoAluno) {
-    const filtradas = aplicarFiltros(demandasDoAluno);
-
-    const emAberto = filtradas.filter((d) => d.status !== 'concluido');
-    const concluidas = filtradas.filter((d) => d.status === 'concluido');
-
-    const containerCards = document.querySelector('#listaDemandasAbertas');
-    const containerTabelaHistorico = document.querySelector('#corpoHistorico');
-    const containerCardsHistorico = document.querySelector('#listaHistoricoMobile');
-    const contador = document.querySelector('#contadorAbertas');
-
-    if (contador) {
-        contador.textContent = emAberto.length;
-    }
-
-    if (containerCards) {
-        const cards = emAberto.map(renderCardDemanda).join('');
-        containerCards.innerHTML = emAberto.length > 0
-            ? cards + renderCardNovaDemanda()
-            : renderEstadoVazio();
-    }
-
-    if (containerTabelaHistorico) {
-        containerTabelaHistorico.innerHTML = concluidas.length > 0
-            ? concluidas.map(renderLinhaHistorico).join('')
-            : `<tr><td colspan="4" class="py-4 text-center text-xs text-gray-400">Nenhuma demanda concluída ainda.</td></tr>`;
-    }
-
-    if (containerCardsHistorico) {
-        containerCardsHistorico.innerHTML = concluidas.length > 0
-            ? concluidas.map(renderCardHistorico).join('')
-            : `<div class="bg-white border border-dashed border-gray-200 rounded-xl p-6 text-center text-xs text-gray-400">Nenhuma demanda concluída ainda.</div>`;
-    }
-
-    processarIcones();
-}
 
 // Abre/fecha o drawer de navegação no mobile.
 function alternarDrawer(abrir) {
@@ -222,14 +51,11 @@ export function ativarListenerCentralDemandas() {
 
     // Cada rerender tem que reler do localStorage senão fica com a lista antiga depois
     // de criar uma demanda nova.
-    function obterDemandas() {
-        return aux.buscarDemandasPorAluno(usuarioLogado.matricula);
-    }
 
     function rerender() {
-        const demandas = obterDemandas();
+        const demandas = dms.obterDemandas();
         atualizarMetricasNoTopo(demandas);
-        renderListaDemandas(demandas);
+        dms.renderListaDemandas(demandas);
     }
 
     processarIcones();
@@ -237,12 +63,12 @@ export function ativarListenerCentralDemandas() {
 
     document.querySelector('#filtroBusca').addEventListener('input', (e) => {
         filtros.busca = e.target.value;
-        renderListaDemandas(obterDemandas());
+        dms.renderListaDemandas(dms.obterDemandas());
     });
 
     document.querySelector('#filtroStatus').addEventListener('change', (e) => {
         filtros.status = e.target.value;
-        renderListaDemandas(obterDemandas());
+        dms.renderListaDemandas(dms.obterDemandas());
     });
 
     document.querySelector('#limparFiltros').addEventListener('click', () => {
@@ -250,7 +76,7 @@ export function ativarListenerCentralDemandas() {
         filtros.status = 'todos';
         document.querySelector('#filtroBusca').value = '';
         document.querySelector('#filtroStatus').value = 'todos';
-        renderListaDemandas(obterDemandas());
+        dms.renderListaDemandas(dms.obterDemandas());
     });
 
     // O botão de nova demanda existe em 3 lugares (desktop, FAB do mobile, card vazio).
@@ -358,7 +184,7 @@ export function carregarCentralDemandas() {
     const primeiroNome = (usuarioLogado.nome || 'Aluno').split(' ')[0];
     const inicial = primeiroNome.charAt(0).toUpperCase();
 
-    const demandasDoAluno = aux.buscarDemandasPorAluno(usuarioLogado.matricula);
+    const demandasDoAluno = dms.obterDemandas();
     const metricas = calcularMetricas(demandasDoAluno);
     const total = metricas.total;
     const emAnalise = metricas.emAnalise;
