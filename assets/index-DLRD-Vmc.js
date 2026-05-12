@@ -1,4 +1,4 @@
-(function(){let e=document.createElement(`link`).relList;if(e&&e.supports&&e.supports(`modulepreload`))return;for(let e of document.querySelectorAll(`link[rel="modulepreload"]`))n(e);new MutationObserver(e=>{for(let t of e)if(t.type===`childList`)for(let e of t.addedNodes)e.tagName===`LINK`&&e.rel===`modulepreload`&&n(e)}).observe(document,{childList:!0,subtree:!0});function t(e){let t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),e.crossOrigin===`use-credentials`?t.credentials=`include`:e.crossOrigin===`anonymous`?t.credentials=`omit`:t.credentials=`same-origin`,t}function n(e){if(e.ep)return;e.ep=!0;let n=t(e);fetch(e.href,n)}})();var e=`/https://github.com/Lucas-Vinicius-dev/Clarify/assets/GATOGORDO-jbbncu78.png`;function t(){return`
+(function(){let e=document.createElement(`link`).relList;if(e&&e.supports&&e.supports(`modulepreload`))return;for(let e of document.querySelectorAll(`link[rel="modulepreload"]`))n(e);new MutationObserver(e=>{for(let t of e)if(t.type===`childList`)for(let e of t.addedNodes)e.tagName===`LINK`&&e.rel===`modulepreload`&&n(e)}).observe(document,{childList:!0,subtree:!0});function t(e){let t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),e.crossOrigin===`use-credentials`?t.credentials=`include`:e.crossOrigin===`anonymous`?t.credentials=`omit`:t.credentials=`same-origin`,t}function n(e){if(e.ep)return;e.ep=!0;let n=t(e);fetch(e.href,n)}})();var e=`/Clarify/assets/GATOGORDO-jbbncu78.png`;function t(){return`
         <!-- Sidebar desktop -->
         <aside class="hidden md:flex md:flex-col w-64 bg-gray-50 shadow border-r border-gray-200 p-5 shrink-0">
 
@@ -135,30 +135,10 @@
             </nav>
 
         </aside>
-    `}function n(){return`
-    <aside class="hidden md:flex md:flex-col w-64 bg-gray-50 shadow border-r border-gray-200 p-5 shrink-0">
-
-            <!-- Logo -->
-            <div class="mb-6 flex items-center gap-3 px-2">
-                <img 
-                    src="${e}" 
-                    alt="Clarify Logo" 
-                    class="w-11 h-11 object-contain"
-                />
-
-                <h1 class="text-2xl font-bold text-orange-600">
-                    Clarify
-                </h1>
-            </div>
-
-            <nav class="flex-1 px-4 py-6 space-y-1 text-sm">
-                
-            </nav>
-        </aside>
-        `}var r={xmlns:`http://www.w3.org/2000/svg`,width:24,height:24,viewBox:`0 0 24 24`,fill:`none`,stroke:`currentColor`,"stroke-width":2,"stroke-linecap":`round`,"stroke-linejoin":`round`},i=([e,t,n])=>{let r=document.createElementNS(`http://www.w3.org/2000/svg`,e);return Object.keys(t).forEach(e=>{r.setAttribute(e,String(t[e]))}),n?.length&&n.forEach(e=>{let t=i(e);r.appendChild(t)}),r},a=(e,t={})=>i([`svg`,{...r,...t},e]),o=e=>{for(let t in e)if(t.startsWith(`aria-`)||t===`role`||t===`title`)return!0;return!1},s=(...e)=>e.filter((e,t,n)=>!!e&&e.trim()!==``&&n.indexOf(e)===t).join(` `).trim(),c=e=>e.replace(/^([A-Z])|[\s-_]+(\w)/g,(e,t,n)=>n?n.toUpperCase():t.toLowerCase()),ee=e=>{let t=c(e);return t.charAt(0).toUpperCase()+t.slice(1)},te=e=>Array.from(e.attributes).reduce((e,t)=>(e[t.name]=t.value,e),{}),l=e=>typeof e==`string`?e:!e||!e.class?``:e.class&&typeof e.class==`string`?e.class.split(` `):e.class&&Array.isArray(e.class)?e.class:``,u=(e,{nameAttr:t,icons:n,attrs:i})=>{let c=e.getAttribute(t);if(c==null)return;let u=n[ee(c)];if(!u)return console.warn(`${e.outerHTML} icon name was not found in the provided icons object.`);let d=te(e),f=o(d)?{}:{"aria-hidden":`true`},p={...r,"data-lucide":c,...f,...i,...d},m=l(d),h=l(i),g=s(`lucide`,`lucide-${c}`,...m,...h);g&&Object.assign(p,{class:g});let _=a(u,p);return e.parentNode?.replaceChild(_,e)},d=[[`path`,{d:`M5 12h14`}],[`path`,{d:`m12 5 7 7-7 7`}]],f=[[`path`,{d:`M10.268 21a2 2 0 0 0 3.464 0`}],[`path`,{d:`M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326`}]],p=[[`path`,{d:`M8 2v4`}],[`path`,{d:`M16 2v4`}],[`rect`,{width:`18`,height:`18`,x:`3`,y:`4`,rx:`2`}],[`path`,{d:`M3 10h18`}]],m=[[`path`,{d:`M20 6 9 17l-5-5`}]],h=[[`path`,{d:`m9 18 6-6-6-6`}]],g=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`path`,{d:`m9 12 2 2 4-4`}]],_=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`path`,{d:`M8 12h8`}],[`path`,{d:`M12 8v8`}]],ne=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`path`,{d:`M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3`}],[`path`,{d:`M12 17h.01`}]],re=[[`rect`,{width:`8`,height:`4`,x:`8`,y:`2`,rx:`1`,ry:`1`}],[`path`,{d:`M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2`}],[`path`,{d:`M12 11h4`}],[`path`,{d:`M12 16h4`}],[`path`,{d:`M8 11h.01`}],[`path`,{d:`M8 16h.01`}]],v=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`path`,{d:`M12 6v6l4 2`}]],ie=[[`path`,{d:`M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0`}],[`circle`,{cx:`12`,cy:`12`,r:`3`}]],ae=[[`path`,{d:`M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z`}]],oe=[[`path`,{d:`M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z`}],[`path`,{d:`M22 10v6`}],[`path`,{d:`M6 12.5V16a6 3 0 0 0 12 0v-3.5`}]],se=[[`path`,{d:`M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8`}],[`path`,{d:`M3 3v5h5`}],[`path`,{d:`M12 7v5l4 2`}]],ce=[[`path`,{d:`M5 22h14`}],[`path`,{d:`M5 2h14`}],[`path`,{d:`M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22`}],[`path`,{d:`M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2`}]],le=[[`path`,{d:`m16 17 5-5-5-5`}],[`path`,{d:`M21 12H9`}],[`path`,{d:`M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4`}]],ue=[[`path`,{d:`M4 5h16`}],[`path`,{d:`M4 12h16`}],[`path`,{d:`M4 19h16`}]],y=[[`path`,{d:`M5 12h14`}],[`path`,{d:`M12 5v14`}]],de=[[`path`,{d:`m21 21-4.34-4.34`}],[`circle`,{cx:`11`,cy:`11`,r:`8`}]],fe=[[`path`,{d:`M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z`}],[`path`,{d:`m21.854 2.147-10.94 10.939`}]],pe=[[`path`,{d:`M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915`}],[`circle`,{cx:`12`,cy:`12`,r:`3`}]],me=[[`path`,{d:`M10 15H6a4 4 0 0 0-4 4v2`}],[`path`,{d:`m14.305 16.53.923-.382`}],[`path`,{d:`m15.228 13.852-.923-.383`}],[`path`,{d:`m16.852 12.228-.383-.923`}],[`path`,{d:`m16.852 17.772-.383.924`}],[`path`,{d:`m19.148 12.228.383-.923`}],[`path`,{d:`m19.53 18.696-.382-.924`}],[`path`,{d:`m20.772 13.852.924-.383`}],[`path`,{d:`m20.772 16.148.924.383`}],[`circle`,{cx:`18`,cy:`15`,r:`3`}],[`circle`,{cx:`9`,cy:`7`,r:`4`}]],he=[[`path`,{d:`M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2`}],[`path`,{d:`M16 3.128a4 4 0 0 1 0 7.744`}],[`path`,{d:`M22 21v-2a4 4 0 0 0-3-3.87`}],[`circle`,{cx:`9`,cy:`7`,r:`4`}]],ge=[[`path`,{d:`M18 6 6 18`}],[`path`,{d:`m6 6 12 12`}]],b=({icons:e={},nameAttr:t=`data-lucide`,attrs:n={},root:r=document,inTemplates:i}={})=>{if(!Object.values(e).length)throw Error(`Please provide an icons object.
+    `}var n={xmlns:`http://www.w3.org/2000/svg`,width:24,height:24,viewBox:`0 0 24 24`,fill:`none`,stroke:`currentColor`,"stroke-width":2,"stroke-linecap":`round`,"stroke-linejoin":`round`},r=([e,t,n])=>{let i=document.createElementNS(`http://www.w3.org/2000/svg`,e);return Object.keys(t).forEach(e=>{i.setAttribute(e,String(t[e]))}),n?.length&&n.forEach(e=>{let t=r(e);i.appendChild(t)}),i},i=(e,t={})=>r([`svg`,{...n,...t},e]),a=e=>{for(let t in e)if(t.startsWith(`aria-`)||t===`role`||t===`title`)return!0;return!1},o=(...e)=>e.filter((e,t,n)=>!!e&&e.trim()!==``&&n.indexOf(e)===t).join(` `).trim(),s=e=>e.replace(/^([A-Z])|[\s-_]+(\w)/g,(e,t,n)=>n?n.toUpperCase():t.toLowerCase()),c=e=>{let t=s(e);return t.charAt(0).toUpperCase()+t.slice(1)},l=e=>Array.from(e.attributes).reduce((e,t)=>(e[t.name]=t.value,e),{}),u=e=>typeof e==`string`?e:!e||!e.class?``:e.class&&typeof e.class==`string`?e.class.split(` `):e.class&&Array.isArray(e.class)?e.class:``,d=(e,{nameAttr:t,icons:r,attrs:s})=>{let d=e.getAttribute(t);if(d==null)return;let f=r[c(d)];if(!f)return console.warn(`${e.outerHTML} icon name was not found in the provided icons object.`);let p=l(e),m=a(p)?{}:{"aria-hidden":`true`},h={...n,"data-lucide":d,...m,...s,...p},ee=u(p),te=u(s),g=o(`lucide`,`lucide-${d}`,...ee,...te);g&&Object.assign(h,{class:g});let ne=i(f,h);return e.parentNode?.replaceChild(ne,e)},f=[[`path`,{d:`M5 12h14`}],[`path`,{d:`m12 5 7 7-7 7`}]],p=[[`path`,{d:`M10.268 21a2 2 0 0 0 3.464 0`}],[`path`,{d:`M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326`}]],m=[[`path`,{d:`M8 2v4`}],[`path`,{d:`M16 2v4`}],[`rect`,{width:`18`,height:`18`,x:`3`,y:`4`,rx:`2`}],[`path`,{d:`M3 10h18`}]],h=[[`path`,{d:`M20 6 9 17l-5-5`}]],ee=[[`path`,{d:`m9 18 6-6-6-6`}]],te=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`line`,{x1:`12`,x2:`12`,y1:`8`,y2:`12`}],[`line`,{x1:`12`,x2:`12.01`,y1:`16`,y2:`16`}]],g=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`path`,{d:`m9 12 2 2 4-4`}]],ne=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`path`,{d:`M8 12h8`}],[`path`,{d:`M12 8v8`}]],re=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`path`,{d:`M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3`}],[`path`,{d:`M12 17h.01`}]],ie=[[`rect`,{width:`8`,height:`4`,x:`8`,y:`2`,rx:`1`,ry:`1`}],[`path`,{d:`M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2`}],[`path`,{d:`M12 11h4`}],[`path`,{d:`M12 16h4`}],[`path`,{d:`M8 11h.01`}],[`path`,{d:`M8 16h.01`}]],_=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`path`,{d:`M12 6v6l4 2`}]],ae=[[`path`,{d:`M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0`}],[`circle`,{cx:`12`,cy:`12`,r:`3`}]],oe=[[`path`,{d:`M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z`}],[`path`,{d:`M14 2v5a1 1 0 0 0 1 1h5`}],[`path`,{d:`M10 9H8`}],[`path`,{d:`M16 13H8`}],[`path`,{d:`M16 17H8`}]],se=[[`path`,{d:`M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z`}]],ce=[[`path`,{d:`M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z`}],[`path`,{d:`M22 10v6`}],[`path`,{d:`M6 12.5V16a6 3 0 0 0 12 0v-3.5`}]],le=[[`line`,{x1:`4`,x2:`20`,y1:`9`,y2:`9`}],[`line`,{x1:`4`,x2:`20`,y1:`15`,y2:`15`}],[`line`,{x1:`10`,x2:`8`,y1:`3`,y2:`21`}],[`line`,{x1:`16`,x2:`14`,y1:`3`,y2:`21`}]],ue=[[`path`,{d:`M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8`}],[`path`,{d:`M3 3v5h5`}],[`path`,{d:`M12 7v5l4 2`}]],de=[[`path`,{d:`M5 22h14`}],[`path`,{d:`M5 2h14`}],[`path`,{d:`M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22`}],[`path`,{d:`M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2`}]],fe=[[`path`,{d:`m16 17 5-5-5-5`}],[`path`,{d:`M21 12H9`}],[`path`,{d:`M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4`}]],pe=[[`path`,{d:`m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7`}],[`rect`,{x:`2`,y:`4`,width:`20`,height:`16`,rx:`2`}]],me=[[`path`,{d:`M4 5h16`}],[`path`,{d:`M4 12h16`}],[`path`,{d:`M4 19h16`}]],he=[[`path`,{d:`M14 14a2 2 0 0 0 2-2V8h-2`}],[`path`,{d:`M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z`}],[`path`,{d:`M8 14a2 2 0 0 0 2-2V8H8`}]],ge=[[`path`,{d:`M5 12h14`}],[`path`,{d:`M12 5v14`}]],_e=[[`path`,{d:`m21 21-4.34-4.34`}],[`circle`,{cx:`11`,cy:`11`,r:`8`}]],ve=[[`path`,{d:`M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z`}],[`path`,{d:`m21.854 2.147-10.94 10.939`}]],ye=[[`path`,{d:`M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915`}],[`circle`,{cx:`12`,cy:`12`,r:`3`}]],be=[[`path`,{d:`M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z`}],[`path`,{d:`M20 2v4`}],[`path`,{d:`M22 4h-4`}],[`circle`,{cx:`4`,cy:`20`,r:`2`}]],xe=[[`path`,{d:`M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z`}],[`circle`,{cx:`7.5`,cy:`7.5`,r:`.5`,fill:`currentColor`}]],Se=[[`path`,{d:`M10 15H6a4 4 0 0 0-4 4v2`}],[`path`,{d:`m14.305 16.53.923-.382`}],[`path`,{d:`m15.228 13.852-.923-.383`}],[`path`,{d:`m16.852 12.228-.383-.923`}],[`path`,{d:`m16.852 17.772-.383.924`}],[`path`,{d:`m19.148 12.228.383-.923`}],[`path`,{d:`m19.53 18.696-.382-.924`}],[`path`,{d:`m20.772 13.852.924-.383`}],[`path`,{d:`m20.772 16.148.924.383`}],[`circle`,{cx:`18`,cy:`15`,r:`3`}],[`circle`,{cx:`9`,cy:`7`,r:`4`}]],Ce=[[`path`,{d:`M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2`}],[`circle`,{cx:`12`,cy:`7`,r:`4`}]],we=[[`path`,{d:`M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2`}],[`path`,{d:`M16 3.128a4 4 0 0 1 0 7.744`}],[`path`,{d:`M22 21v-2a4 4 0 0 0-3-3.87`}],[`circle`,{cx:`9`,cy:`7`,r:`4`}]],Te=[[`path`,{d:`M18 6 6 18`}],[`path`,{d:`m6 6 12 12`}]],v=({icons:e={},nameAttr:t=`data-lucide`,attrs:n={},root:r=document,inTemplates:i}={})=>{if(!Object.values(e).length)throw Error(`Please provide an icons object.
 If you want to use all the icons you can import it like:
  \`import { createIcons, icons } from 'lucide';
-lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only works in a browser environment.");if(Array.from(r.querySelectorAll(`[${t}]`)).forEach(r=>u(r,{nameAttr:t,icons:e,attrs:n})),i&&Array.from(r.querySelectorAll(`template`)).forEach(r=>b({icons:e,nameAttr:t,attrs:n,root:r.content,inTemplates:i})),t===`data-lucide`){let t=r.querySelectorAll(`[icon-name]`);t.length>0&&(console.warn(`[Lucide] Some icons were found with the now deprecated icon-name attribute. These will still be replaced for backwards compatibility, but will no longer be supported in v1.0 and you should switch to data-lucide`),Array.from(t).forEach(t=>u(t,{nameAttr:`icon-name`,icons:e,attrs:n})))}},_e={ArrowRight:d,Bell:f,Calendar:p,ChevronRight:h,ClipboardList:re,Clock:v,Filter:ae,HelpCircle:ne,History:se,Hourglass:ce,LogOut:le,Menu:ue,Plus:y,PlusCircle:_,Search:de,Settings:pe,X:ge,Check:m};function x(){b({icons:_e,attrs:{"stroke-width":1.75}})}function S(e,t=!0){let n=e?.nome||`Usuário`;return`
+lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only works in a browser environment.");if(Array.from(r.querySelectorAll(`[${t}]`)).forEach(r=>d(r,{nameAttr:t,icons:e,attrs:n})),i&&Array.from(r.querySelectorAll(`template`)).forEach(r=>v({icons:e,nameAttr:t,attrs:n,root:r.content,inTemplates:i})),t===`data-lucide`){let t=r.querySelectorAll(`[icon-name]`);t.length>0&&(console.warn(`[Lucide] Some icons were found with the now deprecated icon-name attribute. These will still be replaced for backwards compatibility, but will no longer be supported in v1.0 and you should switch to data-lucide`),Array.from(t).forEach(t=>d(t,{nameAttr:`icon-name`,icons:e,attrs:n})))}},Ee={AlertCircle:te,ArrowRight:f,Bell:p,Calendar:m,Check:h,CheckCircle2:g,ChevronRight:ee,ClipboardList:ie,Clock:_,FileText:oe,Filter:se,Hash:le,HelpCircle:re,History:ue,Hourglass:de,LogOut:fe,Mail:pe,MessageSquareQuote:he,Menu:me,Plus:ge,PlusCircle:ne,Search:_e,Send:ve,Settings:ye,Sparkles:be,Tag:xe,User:Ce,X:Te};function y(){v({icons:Ee,attrs:{"stroke-width":1.75}})}function b(e,t=!0){let n=e?.nome||`Usuário`;return`
         <div class="flex items-center gap-2 bg-white border border-gray-200 rounded-full pl-2 pr-1 py-1 shadow-sm">
             
             <!-- Avatar -->
@@ -184,7 +164,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
             </button>
 
         </div>
-    `}function ve(){return`turma_`+Date.now()+`_`+Math.random().toString(36).slice(2,7)}function ye(e){let t=JSON.parse(localStorage.getItem(`turmas`)||`[]`);t.push(e),localStorage.setItem(`turmas`,JSON.stringify(t))}function be(){let e=JSON.parse(localStorage.getItem(`turmas`)||`[]`),t=JSON.parse(localStorage.getItem(`usuarioLogado`)||`{}`),n=document.querySelector(`#turmasContainer`);if(!n)return;let r=e.filter(e=>e.coordenador===String(t.matricula));if(r.length===0){n.innerHTML=`
+    `}function De(){return`turma_`+Date.now()+`_`+Math.random().toString(36).slice(2,7)}function Oe(e){let t=JSON.parse(localStorage.getItem(`turmas`)||`[]`);t.push(e),localStorage.setItem(`turmas`,JSON.stringify(t))}function x(){let e=JSON.parse(localStorage.getItem(`turmas`)||`[]`),t=JSON.parse(localStorage.getItem(`usuarioLogado`)||`{}`),n=document.querySelector(`#turmasContainer`);if(!n)return;let r=e.filter(e=>e.coordenador===String(t.matricula));if(r.length===0){n.innerHTML=`
             <p class="col-span-full text-center text-gray-400 py-8 text-sm">
                 Nenhuma turma criada ainda.
             </p>`;return}n.innerHTML=``,r.forEach(e=>{let t=document.createElement(`div`);t.classList.add(`bg-white`,`border`,`border-gray-200`,`rounded-2xl`,`p-5`,`shadow-lg`,`hover:-translate-y-1`,`transition-transform`,`duration-200`,`ease-out`),t.innerHTML=`
@@ -200,7 +180,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
             <div class="text-sm text-zinc-500">
                 <span class="font-semibold text-zinc-700">ID:</span> ${e.id}
             </div>
-        `,n.appendChild(t)})}function xe(){if(document.getElementById(`modalCriarTurma`))return;let e=[],t=document.createElement(`div`);t.id=`modalCriarTurma`,t.className=`fixed inset-0 bg-black/50 flex items-center justify-center z-50`,t.innerHTML=`
+        `,n.appendChild(t)})}function ke(){if(document.getElementById(`modalCriarTurma`))return;let e=[],t=document.createElement(`div`);t.id=`modalCriarTurma`,t.className=`fixed inset-0 bg-black/50 flex items-center justify-center z-50`,t.innerHTML=`
         <div class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl relative">
             <button id="fecharModalTurma"
                 class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 cursor-pointer">
@@ -286,7 +266,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                     <path d="M18 6 6 18M6 6l12 12"/>
                 </svg>
             </button>
-        `,n.querySelector(`button`).onclick=()=>{let r=e.indexOf(t);r>-1&&e.splice(r,1),n.remove()},document.getElementById(`turmaAlunosChips`).appendChild(n),document.getElementById(`turmaAlunoMatricula`).value=``}document.getElementById(`btnAdicionarAluno`).onclick=()=>{let e=document.getElementById(`turmaAlunoMatricula`).value;r(e)},document.getElementById(`turmaAlunoMatricula`).addEventListener(`keydown`,e=>{e.key===`Enter`&&(e.preventDefault(),r(e.target.value))}),document.getElementById(`formCriarTurma`).onsubmit=t=>{t.preventDefault();let r=JSON.parse(localStorage.getItem(`usuarioLogado`)||`{}`),i={id:ve(),nome:document.getElementById(`turmaNome`).value.trim(),disciplina:document.getElementById(`turmaDisciplina`).value.trim(),alunos:[...e],coordenador:String(r.matricula),criadaEm:new Date().toISOString()};ye(i),n(),be(),alert(`Turma "${i.nome}" criada com sucesso!`)}}function Se(){let e=document.querySelector(`#btnCriarTurma`);e&&(e.onclick=e=>{e.preventDefault(),e.stopImmediatePropagation(),console.log(`Abrindo modal de criação...`),xe()})}x();function Ce(e){let t=JSON.parse(localStorage.getItem(`demandas`)||`[]`).find(t=>t.protocolo===e);if(t){let e=document.createElement(`div`);e.id=`modal-container`,e.classList.add(`fixed`,`inset-0`,`bg-black/50`,`flex`,`items-center`,`justify-center`,`z-50`);let n=`
+        `,n.querySelector(`button`).onclick=()=>{let r=e.indexOf(t);r>-1&&e.splice(r,1),n.remove()},document.getElementById(`turmaAlunosChips`).appendChild(n),document.getElementById(`turmaAlunoMatricula`).value=``}document.getElementById(`btnAdicionarAluno`).onclick=()=>{let e=document.getElementById(`turmaAlunoMatricula`).value;r(e)},document.getElementById(`turmaAlunoMatricula`).addEventListener(`keydown`,e=>{e.key===`Enter`&&(e.preventDefault(),r(e.target.value))}),document.getElementById(`formCriarTurma`).onsubmit=t=>{t.preventDefault();let r=JSON.parse(localStorage.getItem(`usuarioLogado`)||`{}`),i={id:De(),nome:document.getElementById(`turmaNome`).value.trim(),disciplina:document.getElementById(`turmaDisciplina`).value.trim(),alunos:[...e],coordenador:String(r.matricula),criadaEm:new Date().toISOString()};Oe(i),n(),x(),alert(`Turma "${i.nome}" criada com sucesso!`)}}function Ae(){let e=document.querySelector(`#btnCriarTurma`);e&&(e.onclick=e=>{e.preventDefault(),e.stopImmediatePropagation(),console.log(`Abrindo modal de criação...`),ke()})}y();function je(e){let t=JSON.parse(localStorage.getItem(`demandas`)||`[]`).find(t=>t.protocolo===e);if(t){let e=document.createElement(`div`);e.id=`modal-container`,e.classList.add(`fixed`,`inset-0`,`bg-black/50`,`flex`,`items-center`,`justify-center`,`z-50`);let n=`
             <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
             <button onclick="document.getElementById('modal-container').remove()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors  cursor-pointer">
             <i data-lucide="x" class="w-5 h-5"></i></button>
@@ -295,13 +275,13 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
             <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Protocolo:</span> ${t.protocolo}</p>
             <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Matrícula do Aluno:</span> ${t.matriculaAluno}</p>
             <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Status:</span> ${t.status.replace(`_`,` `).toUpperCase()}</p>
-            <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Data de Criação:</span> ${Z(t.dataCriacao)}</p>
-            <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Data de Atualização:</span> ${Z(t.dataAtualizacao)}</p>
-            </div>`;e.addEventListener(`click`,t=>{t.target.id===`modal-container`&&e.remove()}),e.innerHTML=n,document.body.appendChild(e),x()}}function we(e){let t=JSON.parse(localStorage.getItem(`demandas`)||`[]`),n=t.find(t=>t.protocolo===e);n&&(n.status=`aprovada`),localStorage.setItem(`demandas`,JSON.stringify(t)),w()}function Te(e){let t=document.createElement(`div`);t.id=`modalFeedback`,t.classList.add(`fixed`,`inset-0`,`bg-black/50`,`flex`,`items-center`,`justify-center`,`z-50`),t.innerHTML=`
+            <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Data de Criação:</span> ${Q(t.dataCriacao)}</p>
+            <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Data de Atualização:</span> ${Q(t.dataAtualizacao)}</p>
+            </div>`;e.addEventListener(`click`,t=>{t.target.id===`modal-container`&&e.remove()}),e.innerHTML=n,document.body.appendChild(e),y()}}function Me(e){let t=JSON.parse(localStorage.getItem(`demandas`)||`[]`),n=t.find(t=>t.protocolo===e);n&&(n.status=`aprovada`),localStorage.setItem(`demandas`,JSON.stringify(t)),C()}function Ne(e){let t=document.createElement(`div`);t.id=`modalFeedback`,t.classList.add(`fixed`,`inset-0`,`bg-black/50`,`flex`,`items-center`,`justify-center`,`z-50`),t.innerHTML=`
     <form id='formfeedback' class='bg-white p-6 rounded-lg shadow-lg w-full max-w-sm'>
     <input type='text' id='feedback' placeholder='Digite seu feedback...' class='w-full border border-gray-300 rounded-lg p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all' required>
     <button type='submit' class='bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition-colors'>Enviar</button>
-    </form>`,document.body.appendChild(t);let n=t.querySelector(`#formfeedback`);n.onsubmit=n=>{n.preventDefault();let r=document.querySelector(`#feedback`).value,i=JSON.parse(localStorage.getItem(`demandas`)||`[]`),a=i.find(t=>t.protocolo===e);a&&(a.status=`negada`,a.feedback=r),localStorage.setItem(`demandas`,JSON.stringify(i)),t.remove(),w()}}window.aprovarDemanda=we,window.reprovarDemanda=Te,window.demandaDetalhada=Ce;var C=JSON.parse(localStorage.getItem(`usuarioLogado`)||`{"nome":"Usuário"}`);function Ee(){console.log(`Renderizando alunos...`);let e=localStorage.getItem(`usuarios`)||`[]`,t=JSON.parse(e),n=t.find(e=>e.matricula===C.matricula)?.usuariosCadastrados||[],r=t.filter(e=>n.includes(e.matricula)&&e.cargo===`aluno`),i=localStorage.getItem(`demandas`)||`[]`,a=JSON.parse(i),o=document.querySelector(`#alunosContainer`);if(o){if(o.innerHTML=``,r.length===0){o.innerHTML=`
+    </form>`,document.body.appendChild(t);let n=t.querySelector(`#formfeedback`);n.onsubmit=n=>{n.preventDefault();let r=document.querySelector(`#feedback`).value,i=JSON.parse(localStorage.getItem(`demandas`)||`[]`),a=i.find(t=>t.protocolo===e);a&&(a.status=`negada`,a.feedback=r),localStorage.setItem(`demandas`,JSON.stringify(i)),t.remove(),C()}}window.aprovarDemanda=Me,window.reprovarDemanda=Ne,window.demandaDetalhada=je;var S=JSON.parse(localStorage.getItem(`usuarioLogado`)||`{"nome":"Usuário"}`);function Pe(){console.log(`Renderizando alunos...`);let e=localStorage.getItem(`usuarios`)||`[]`,t=JSON.parse(e),n=t.find(e=>e.matricula===S.matricula)?.usuariosCadastrados||[],r=t.filter(e=>n.includes(e.matricula)&&e.cargo===`aluno`),i=localStorage.getItem(`demandas`)||`[]`,a=JSON.parse(i),o=document.querySelector(`#alunosContainer`);if(o){if(o.innerHTML=``,r.length===0){o.innerHTML=`
             <div class="col-span-full text-center py-12 text-zinc-400">
                 <span class="material-symbols-outlined text-4xl mb-2 block">person_off</span>
                 <p class="text-sm">Nenhum aluno cadastrado.</p>
@@ -330,7 +310,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                 </p>
 
             </div>
-        `,o.appendChild(n)}),o}}function w(){console.log(`Renderizando demandas...`);let e=localStorage.getItem(`demandas`)||`[]`;console.log(`localStorage:`,e);let t=JSON.parse(e);console.log(`Demandas:`,t);let n=document.querySelector(`#demandasContainer`);if(console.log(`Container encontrado:`,n),n)return n.innerHTML=``,t.filter(e=>e.status!==`concluido`).forEach(e=>{let t=document.createElement(`div`);t.classList.add(`bg-white`,`border`,`border-gray-200`,`rounded-2xl`,`p-5`,`shadow-lg`,`hover:-translate-y-1`,`transition-transform`,`duration-200`,`ease-out`,`flex`,`flex-col`,`justify-between`,`h-full`),t.classList.add(`demandas`);let r=e.status===`concluido`?`bg-emerald-100 text-emerald-700`:e.status===`em_analise`?`bg-amber-100 text-amber-700`:e.status===`requer_ajuste`?`bg-orange-100 text-orange-700`:`bg-slate-100 text-slate-700`,i=e.descricao?e.descricao:``;t.innerHTML=`
+        `,o.appendChild(n)}),o}}function C(){console.log(`Renderizando demandas...`);let e=localStorage.getItem(`demandas`)||`[]`;console.log(`localStorage:`,e);let t=JSON.parse(e);console.log(`Demandas:`,t);let n=document.querySelector(`#demandasContainer`);if(console.log(`Container encontrado:`,n),n)return n.innerHTML=``,t.filter(e=>e.status!==`concluido`).forEach(e=>{let t=document.createElement(`div`);t.classList.add(`bg-white`,`border`,`border-gray-200`,`rounded-2xl`,`p-5`,`shadow-lg`,`hover:-translate-y-1`,`transition-transform`,`duration-200`,`ease-out`,`flex`,`flex-col`,`justify-between`,`h-full`),t.classList.add(`demandas`);let r=e.status===`concluido`?`bg-emerald-100 text-emerald-700`:e.status===`em_analise`?`bg-amber-100 text-amber-700`:e.status===`requer_ajuste`?`bg-orange-100 text-orange-700`:`bg-slate-100 text-slate-700`,i=e.descricao?e.descricao:``;t.innerHTML=`
             <div class="flex items-start justify-between gap-4 mb-4" onclick="demandaDetalhada('${e.protocolo}')">
                 <div class="space-y-2">
                     <h3 class="text-lg font-semibold text-zinc-900">${e.tipo}</h3>
@@ -346,7 +326,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                 <button class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors" onclick="aprovarDemanda('${e.protocolo}')"><i data-lucide="check"></i></button>
                 <button class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors ml-2" onclick="reprovarDemanda('${e.protocolo}')"><i data-lucide="x"></i></button>
             </div>
-        `,e.status===`pendente`&&n.appendChild(t)}),x(),n}var T={nome:`
+        `,e.status===`pendente`&&n.appendChild(t)}),y(),n}var Fe={nome:`
         <div class="space-y-6">
             <section class="relative overflow-hidden bg-zinc-900 p-5 text-white">
                 <div class="absolute inset-0 opacity-15">
@@ -354,7 +334,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                 </div>
                 <div class="relative z-10 space-y-4">
                     <span class="text-primary-fixed font-label-caps text-[10px] tracking-[0.2em] uppercase block">PORTAL DO COORDENADOR</span>
-                    <h1 class="font-h1 text-3xl lg:text-4xl font-semibold">Bem-vindo, ${C.nome}</h1>
+                    <h1 class="font-h1 text-3xl lg:text-4xl font-semibold">Bem-vindo, ${S.nome}</h1>
                     <p class="text-zinc-400 text-sm lg:text-base max-w-2xl">Acompanhe as demandas e gerencie o fluxo de solicitações acadêmicas com precisão e clareza.</p>
                 </div>
             </section>
@@ -474,7 +454,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
         </button>
     </div>
     <div id="turmasContainer" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-`};function De(){let e=document.querySelector(`#nome`).value,t=document.querySelector(`#matricula`).value,n=document.querySelector(`#email`).value,r=document.querySelector(`#senha`).value,i=document.querySelector(`#cargo`).value;if(JSON.parse(localStorage.getItem(`usuarios`)),X(t,n)){alert(`Usuário já existe`),q([`#nome`,`#matricula`,`#email`,`#senha`,`#cargo`]);return}let a=JSON.parse(localStorage.getItem(`usuarioLogado`));alert(`Usuário criado com sucesso!`),Q(e,t,n,r,i),console.log(nt(a.matricula)),tt(a.matricula,t)}function Oe(){document.querySelector(`#criarPerfilForm`).onsubmit=e=>{e.preventDefault(),De(),q([`#nome`,`#matricula`,`#email`,`#senha`,`#cargo`])}}function E(e=`nome`){let t=document.querySelector(`#dashboardContent`);t&&(t.innerHTML=T[e]||T.nome,e===`demandas`?w():e===`alunos`?Ee():e===`turmas`&&(be(),Se()),D(e))}function D(e){let t=document.querySelectorAll(`[data-view]`),n=document.getElementById(`ver-todas`);n&&n.addEventListener(`click`,()=>{E(`demandas`),D(`demandas`)}),t.forEach(t=>{let n=t.dataset.view===e;t.classList.toggle(`bg-brand-primary/10`,n),t.classList.toggle(`text-brand-primary`,n),t.classList.toggle(`bg-transparent`,!n),t.classList.toggle(`text-gray-700`,!n)})}function O(){E(`nome`),document.querySelectorAll(`[data-view]`).forEach(e=>{e.addEventListener(`click`,()=>{let t=e.dataset.view;if(!t)return;E(t);let n=document.getElementById(`criarPerfil`);t===`adicionar`?n?.classList.remove(`hidden`):n?.classList.add(`hidden`)})})}function k(){let e=document.querySelectorAll(`[data-view='adicionar']`);e.length&&e.forEach(e=>{e.addEventListener(`click`,()=>{document.getElementById(`criarPerfil`).classList.remove(`hidden`)})})}function A(){$(`dashboardcoord`),document.querySelector(`title`).innerHTML=`Dashboard - Clarify`,document.querySelector(`#app`).innerHTML=`
+`};function Ie(){let e=document.querySelector(`#nome`).value,t=document.querySelector(`#matricula`).value,n=document.querySelector(`#email`).value,r=document.querySelector(`#senha`).value,i=document.querySelector(`#cargo`).value;if(JSON.parse(localStorage.getItem(`usuarios`)),Z(t,n)){alert(`Usuário já existe`),Y([`#nome`,`#matricula`,`#email`,`#senha`,`#cargo`]);return}let a=JSON.parse(localStorage.getItem(`usuarioLogado`));alert(`Usuário criado com sucesso!`),Ct(e,t,n,r,i),console.log(Tt(a.matricula)),wt(a.matricula,t)}function Le(){document.querySelector(`#criarPerfilForm`).onsubmit=e=>{e.preventDefault(),Ie(),Y([`#nome`,`#matricula`,`#email`,`#senha`,`#cargo`])}}function w(e=`nome`){let t=document.querySelector(`#dashboardContent`);t&&(t.innerHTML=Fe[e]||Fe.nome,e===`demandas`?C():e===`alunos`?Pe():e===`turmas`&&(x(),Ae()),Re(e))}function Re(e){let t=document.querySelectorAll(`[data-view]`),n=document.getElementById(`ver-todas`);n&&n.addEventListener(`click`,()=>{w(`demandas`),Re(`demandas`)}),t.forEach(t=>{let n=t.dataset.view===e;t.classList.toggle(`bg-brand-primary/10`,n),t.classList.toggle(`text-brand-primary`,n),t.classList.toggle(`bg-transparent`,!n),t.classList.toggle(`text-gray-700`,!n)})}function T(){w(`nome`),document.querySelectorAll(`[data-view]`).forEach(e=>{e.addEventListener(`click`,()=>{let t=e.dataset.view;if(!t)return;w(t);let n=document.getElementById(`criarPerfil`);t===`adicionar`?n?.classList.remove(`hidden`):n?.classList.add(`hidden`)})})}function E(){let e=document.querySelectorAll(`[data-view='adicionar']`);e.length&&e.forEach(e=>{e.addEventListener(`click`,()=>{document.getElementById(`criarPerfil`).classList.remove(`hidden`)})})}function D(){$(`dashboardcoord`),document.querySelector(`title`).innerHTML=`Dashboard - Clarify`,document.querySelector(`#app`).innerHTML=`
     <div class="min-h-screen w-full bg-pink-50 flex flex-col md:flex-row relative overflow-hidden">
         ${t()}
         <!-- Navbar mobile -->
@@ -526,7 +506,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
             <i data-lucide="help-circle" class="w-4 h-4"></i>
         </button>
 
-        ${S(C)}
+        ${b(S)}
     </div>
 
     <!-- Conteúdo dashboard -->
@@ -570,28 +550,217 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                 </div>
             </form>
         </div>
-    </div>`,x(),O(),Oe(),document.querySelector(`#btnLogoutDesktop`).addEventListener(`click`,()=>{localStorage.removeItem(`usuarioLogado`),localStorage.removeItem(`auth`),z(),R()}),document.querySelector(`#btnLogoutMobile`).addEventListener(`click`,()=>{localStorage.removeItem(`usuarioLogado`),localStorage.removeItem(`auth`),z(),R()})}var j={busca:``,status:`todos`},M={pendente:`Pendente`,em_analise:`Em Análise`,requer_ajuste:`Requer Ajuste`,concluido:`Concluído`};function N(e){switch(e){case`pendente`:return`bg-amber-100 text-amber-800 border border-amber-200`;case`em_analise`:return`bg-blue-100 text-blue-800 border border-blue-200`;case`requer_ajuste`:return`bg-rose-100 text-rose-800 border border-rose-200`;case`concluido`:return`bg-emerald-100 text-emerald-800 border border-emerald-200`;default:return`bg-gray-100 text-gray-800 border border-gray-200`}}function ke(e){return e.filter(e=>{let t=j.status===`todos`||e.status===j.status,n=j.busca.trim().toLowerCase(),r=n===``||e.protocolo.toLowerCase().includes(n)||e.tipo.toLowerCase().includes(n);return t&&r})}function Ae(e){let t=M[e.status]||e.status;return`
+    </div>`,y(),T(),Le(),document.querySelector(`#btnLogoutDesktop`).addEventListener(`click`,()=>{localStorage.removeItem(`usuarioLogado`),localStorage.removeItem(`auth`),V(),B()}),document.querySelector(`#btnLogoutMobile`).addEventListener(`click`,()=>{localStorage.removeItem(`usuarioLogado`),localStorage.removeItem(`auth`),V(),B()})}var ze={pendente:`Pendente`,em_analise:`Em Análise`,requer_ajuste:`Requer Ajuste`,concluido:`Concluído`},O=500,k=null;function A(){let e=document.querySelector(`#modalContainer`);if(!e||!e.firstElementChild)return;let t=e.firstElementChild,n=t.querySelector(`.modal-panel`);t.classList.add(`is-closing`),n&&n.classList.add(`is-closing`),k&&=(document.removeEventListener(`keydown`,k),null),setTimeout(()=>{e.innerHTML=``,document.body.classList.remove(`modal-open`)},170)}function j(e){let t=document.querySelector(`#modalContainer`);t||(t=document.createElement(`div`),t.id=`modalContainer`,document.body.appendChild(t)),t.innerHTML=`
+        <div class="modal-backdrop fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6">
+            <div class="modal-panel relative w-full ${e} bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden"></div>
+        </div>
+    `,document.body.classList.add(`modal-open`);let n=t.firstElementChild,r=n.querySelector(`.modal-panel`);return n.addEventListener(`click`,e=>{e.target===n&&A()}),k=e=>{e.key===`Escape`&&A()},document.addEventListener(`keydown`,k),r}function Be(e){return`
+        <form id="formNovaDemanda" class="flex flex-col modal-scroll">
+            <div class="flex items-start justify-between px-5 sm:px-7 pt-5 sm:pt-6">
+                <div class="inline-flex items-center gap-2">
+                    <span class="modal-eyebrow-dot"></span>
+                    <span class="modal-label">Nova solicitação</span>
+                </div>
+                <button type="button" class="modal-close" data-acao="fechar" title="Fechar">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="px-5 sm:px-7 pt-4 sm:pt-5 pb-2 modal-stagger">
+
+                <header>
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tighter-2 leading-tight">
+                        Conte para a coordenação<br/>
+                        <span class="text-gradient-warm">o que precisa ser resolvido.</span>
+                    </h2>
+                    <p class="text-sm text-gray-500 mt-2 max-w-md">
+                        Quanto mais claro o pedido, mais rápido a análise. Inclua disciplina, datas e qualquer contexto relevante.
+                    </p>
+                </header>
+
+                <section class="mt-5">
+                    <label for="campoTituloDemanda" class="modal-label">Título</label>
+                    <input
+                        id="campoTituloDemanda"
+                        name="titulo"
+                        type="text"
+                        autocomplete="off"
+                        maxlength="80"
+                        placeholder="Ex.: Justificativa de falta — Cálculo III"
+                        class="modal-input font-semibold mt-1"
+                    />
+                </section>
+
+                <section class="mt-5">
+                    <div class="flex items-end justify-between gap-3">
+                        <label for="campoDescricaoDemanda" class="modal-label">Descrição</label>
+                        <span id="contadorDescricao" class="modal-counter">0 / ${O}</span>
+                    </div>
+                    <textarea
+                        id="campoDescricaoDemanda"
+                        name="descricao"
+                        rows="5"
+                        maxlength="${O}"
+                        placeholder="Descreva a situação, os documentos anexos (se houver) e o que você espera como resolução."
+                        class="modal-textarea mt-2"
+                    ></textarea>
+                </section>
+
+                <section class="mt-5 flex items-center gap-3 bg-brand-surface rounded-2xl px-3.5 py-2.5 border border-gray-100">
+                    <div class="w-8 h-8 rounded-full bg-brand-primary text-white text-xs font-bold flex items-center justify-center shrink-0">
+                        ${(e.nome||`Você`).split(` `)[0].charAt(0).toUpperCase()}
+                    </div>
+                    <div class="min-w-0">
+                        <p class="modal-label leading-none">Enviando como</p>
+                        <p class="text-sm font-semibold text-gray-900 mt-1 truncate">
+                            ${e.nome||`Aluno`} · Matrícula ${e.matricula||`—`}
+                        </p>
+                    </div>
+                </section>
+
+                <div id="erroNovaDemanda" hidden class="mt-4 items-start gap-2 text-xs font-semibold text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-3 py-2">
+                    <i data-lucide="alert-circle" class="w-4 h-4 mt-px"></i>
+                    <span></span>
+                </div>
+            </div>
+
+            <footer class="flex items-center justify-between gap-3 px-5 sm:px-7 py-4 mt-3 border-t border-gray-100 bg-gradient-to-b from-white to-brand-surface/40">
+                <button type="button" class="modal-btn-ghost" data-acao="fechar">
+                    Cancelar
+                </button>
+                <button type="submit" id="btnEnviarDemanda" class="modal-btn-primary" disabled>
+                    Enviar solicitação
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </footer>
+        </form>
+    `}function Ve({onCriado:e}={}){let t=JSON.parse(localStorage.getItem(`usuarioLogado`))||{},n=j(`max-w-lg`);n.innerHTML=Be(t),y();let r=n.querySelector(`#formNovaDemanda`),i=n.querySelector(`#campoTituloDemanda`),a=n.querySelector(`#campoDescricaoDemanda`),o=n.querySelector(`#contadorDescricao`),s=n.querySelector(`#btnEnviarDemanda`),c=n.querySelector(`#erroNovaDemanda`);setTimeout(()=>i.focus(),100);function l(){s.disabled=!(i.value.trim().length>=4&&a.value.trim().length>=10)}function u(){let e=a.value.length;o.textContent=`${e} / ${O}`,o.classList.toggle(`is-near`,e>=O*.85&&e<O),o.classList.toggle(`is-over`,e>=O)}i.addEventListener(`input`,l),a.addEventListener(`input`,()=>{u(),l()}),n.querySelectorAll(`[data-acao="fechar"]`).forEach(e=>{e.addEventListener(`click`,A)}),r.addEventListener(`submit`,n=>{n.preventDefault();let r=i.value.trim(),o=a.value.trim();if(r.length<4||o.length<10){c.removeAttribute(`hidden`),c.classList.add(`inline-flex`),c.querySelector(`span`).textContent=`Preencha um título com pelo menos 4 caracteres e uma descrição com pelo menos 10.`;return}if(!t.matricula){c.removeAttribute(`hidden`),c.classList.add(`inline-flex`),c.querySelector(`span`).textContent=`Sessão expirada. Faça login novamente para enviar a solicitação.`;return}let s=bt({matriculaAluno:t.matricula,tipo:r,descricao:o});A(),e&&e(s)})}function He(e){switch(e){case`pendente`:return`bg-amber-100 text-amber-800 border-amber-200`;case`em_analise`:return`bg-blue-100 text-blue-800 border-blue-200`;case`requer_ajuste`:return`bg-rose-100 text-rose-800 border-rose-200`;case`concluido`:return`bg-emerald-100 text-emerald-800 border-emerald-200`;default:return`bg-gray-100 text-gray-800 border-gray-200`}}function Ue(e){if(!e)return null;let[t,n,r]=e.split(`-`).map(Number),i=new Date(t,n-1,r),a=new Date().setHours(0,0,0,0)-i.setHours(0,0,0,0);return Math.max(0,Math.round(a/(1e3*60*60*24)))}function We(e){let t=[{chave:`pendente`,rotulo:`Recebida`},{chave:`em_analise`,rotulo:`Em análise`},{chave:`requer_ajuste`,rotulo:`Resolução`},{chave:`concluido`,rotulo:`Concluída`}],n=0;e===`em_analise`?n=1:e===`requer_ajuste`?n=2:e===`concluido`&&(n=3);let r=``;for(let e=0;e<t.length;++e){let i=``,a=``;e<n?(i=`is-done`,a=`<i data-lucide="check" class="w-3.5 h-3.5 text-white"></i>`):e===n&&(i=`is-current`),r+=`
+            <div class="modal-timeline-step ${i}">
+                <div class="modal-timeline-dot">${a}</div>
+                <p class="modal-timeline-label">${t[e].rotulo}</p>
+            </div>
+        `}return r}function Ge(e,t){let n=ze[e.status]||e.status,r=Ue(e.dataCriacao),i=t&&t.nome||`Matrícula ${e.matriculaAluno}`,a=i.charAt(0).toUpperCase(),o=t&&t.email||`—`;return`
+        <article class="flex flex-col modal-scroll">
+            <div class="flex items-start justify-between px-5 sm:px-7 pt-5 sm:pt-6">
+                <div class="inline-flex items-center gap-2">
+                    <span class="modal-eyebrow-dot"></span>
+                    <span class="modal-label">Solicitação · #${e.protocolo}</span>
+                </div>
+                <button type="button" class="modal-close" data-acao="fechar" title="Fechar">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="px-5 sm:px-7 pt-4 sm:pt-5 pb-2 modal-stagger">
+
+                <header class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tighter-2 leading-tight break-words [overflow-wrap:anywhere]">
+                            ${e.tipo}
+                        </h2>
+                        <p class="text-sm text-gray-500 mt-1.5">
+                            Aberta em <span class="font-semibold text-gray-700">${Q(e.dataCriacao)}</span>
+                            ${r===null?``:` · há ${r} dias`}
+                        </p>
+                    </div>
+                    <span class="self-start inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border whitespace-nowrap ${He(e.status)}">
+                        <span class="w-1.5 h-1.5 rounded-full bg-current opacity-70"></span>
+                        ${n}
+                    </span>
+                </header>
+
+                <section class="mt-6 bg-gradient-to-br from-white to-brand-surface/50 rounded-2xl border border-gray-100 px-3 sm:px-6 py-4">
+                    <div class="flex items-start gap-0">
+                        ${We(e.status)}
+                    </div>
+                </section>
+
+                <section class="mt-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <i data-lucide="file-text" class="w-3.5 h-3.5 text-brand-primary"></i>
+                        <p class="modal-label">Detalhes da solicitação</p>
+                    </div>
+                    <div class="bg-brand-surface/50 border border-brand-surface-dim/40 rounded-2xl px-5 py-4">
+                        <p class="text-[0.95rem] sm:text-base text-gray-800 leading-relaxed break-words [overflow-wrap:anywhere] whitespace-pre-wrap">${e.descricao}</p>
+                    </div>
+                </section>
+
+                <section class="mt-6">
+                    <p class="modal-label">Enviado por</p>
+                    <div class="mt-3 flex items-center gap-3 bg-brand-surface/60 rounded-2xl px-4 py-3 border border-gray-100">
+                        <div class="w-11 h-11 rounded-full bg-brand-primary text-white text-base font-bold flex items-center justify-center shrink-0 shadow-soft-md">
+                            ${a}
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-sm font-semibold text-gray-900 truncate">${i}</p>
+                            <p class="text-xs text-gray-500 truncate inline-flex items-center gap-1.5">
+                                <i data-lucide="hash" class="w-3 h-3"></i>
+                                ${e.matriculaAluno}
+                                <span class="opacity-30">·</span>
+                                <i data-lucide="mail" class="w-3 h-3"></i>
+                                <span class="truncate">${o}</span>
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mt-7 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="bg-white rounded-2xl border border-gray-100 px-4 py-3">
+                        <p class="modal-label">Criada em</p>
+                        <p class="text-sm font-semibold text-gray-900 mt-1 inline-flex items-center gap-1.5">
+                            <i data-lucide="calendar" class="w-3.5 h-3.5 text-gray-400"></i>
+                            ${Q(e.dataCriacao)}
+                        </p>
+                    </div>
+                    <div class="bg-white rounded-2xl border border-gray-100 px-4 py-3">
+                        <p class="modal-label">Status</p>
+                        <p class="text-sm font-semibold text-gray-900 mt-1 inline-flex items-center gap-1.5">
+                            <i data-lucide="tag" class="w-3.5 h-3.5 text-gray-400"></i>
+                            ${n}
+                        </p>
+                    </div>
+                </section>
+
+                ${e.feedback?`
+                <section class="mt-6">
+                    <p class="modal-label inline-flex items-center gap-1.5">
+                        <i data-lucide="message-square-quote" class="w-3.5 h-3.5"></i>
+                        Observação da coordenação
+                    </p>
+                    <div class="mt-3 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 text-sm text-amber-900 leading-relaxed break-words [overflow-wrap:anywhere] whitespace-pre-wrap">${e.feedback}</div>
+                </section>
+                `:``}
+
+            </div>
+
+            <footer class="flex items-center justify-end gap-3 px-5 sm:px-7 py-4 mt-3 border-t border-gray-100 bg-gradient-to-b from-white to-brand-surface/40">
+                <button type="button" class="modal-btn-ghost" data-acao="fechar">
+                    Fechar
+                </button>
+            </footer>
+        </article>
+    `}function Ke(e){let t=vt(e);if(!t)return;let n=Tt(t.matriculaAluno),r=j(`max-w-xl`);r.innerHTML=Ge(t,n),y(),r.querySelectorAll(`[data-acao="fechar"]`).forEach(e=>{e.addEventListener(`click`,A)})}var M={busca:``,status:`todos`},N={pendente:`Pendente`,em_analise:`Em Análise`,requer_ajuste:`Requer Ajuste`,concluido:`Concluído`};function P(e){switch(e){case`pendente`:return`bg-amber-100 text-amber-800 border border-amber-200`;case`em_analise`:return`bg-blue-100 text-blue-800 border border-blue-200`;case`requer_ajuste`:return`bg-rose-100 text-rose-800 border border-rose-200`;case`concluido`:return`bg-emerald-100 text-emerald-800 border border-emerald-200`;default:return`bg-gray-100 text-gray-800 border border-gray-200`}}function qe(e){return e.filter(e=>{let t=M.status===`todos`||e.status===M.status,n=M.busca.trim().toLowerCase(),r=n===``||e.protocolo.toLowerCase().includes(n)||e.tipo.toLowerCase().includes(n);return t&&r})}function Je(e){let t=N[e.status]||e.status;return`
         <article class="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 flex flex-col gap-3 hover:shadow-md hover:-translate-y-0.5 transition-all">
             <div class="flex items-center justify-between gap-2">
                 <span class="text-xs font-semibold text-gray-500 tracking-wider">#${e.protocolo}</span>
-                <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full whitespace-nowrap ${N(e.status)}">
+                <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full whitespace-nowrap ${P(e.status)}">
                     ${t}
                 </span>
             </div>
 
-            <div>
-                <h3 class="text-base font-bold text-gray-900">${e.tipo}</h3>
-                <p class="text-sm text-gray-600 mt-1 line-clamp-2">${e.descricao}</p>
+            <div class="min-w-0">
+                <h3 class="text-base font-bold text-gray-900 break-words [overflow-wrap:anywhere]">${e.tipo}</h3>
+                <p class="text-sm text-gray-600 mt-1 line-clamp-2 break-words [overflow-wrap:anywhere]">${e.descricao}</p>
             </div>
 
             <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 pt-2 border-t border-gray-100">
                 <span class="inline-flex items-center gap-1.5">
                     <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
-                    ${Z(e.dataCriacao)}
+                    ${Q(e.dataCriacao)}
                 </span>
                 <span class="inline-flex items-center gap-1.5">
                     <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-                    ${Z(e.dataAtualizacao)}
+                    ${Q(e.dataAtualizacao)}
                 </span>
             </div>
 
@@ -601,52 +770,52 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                 </div>
             `:``}
 
-            <button type="button" class="mt-1 inline-flex items-center gap-1 text-xs font-bold text-brand-primary uppercase tracking-widest hover:underline self-start cursor-pointer">
+            <button type="button" data-acao="ver-detalhes" data-protocolo="${e.protocolo}" class="mt-1 inline-flex items-center gap-1 text-xs font-bold text-brand-primary uppercase tracking-widest hover:underline self-start cursor-pointer">
                 Ver Detalhes
                 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
             </button>
         </article>
-    `}function je(){return`
-        <button type="button" class="border-2 border-dashed border-gray-300 rounded-xl p-5 flex flex-col items-center justify-center gap-2 text-gray-500 hover:border-brand-primary hover:text-brand-primary hover:bg-white transition-colors min-h-[180px] cursor-pointer">
+    `}function Ye(){return`
+        <button type="button" data-acao="nova-demanda" class="border-2 border-dashed border-gray-300 rounded-xl p-5 flex flex-col items-center justify-center gap-2 text-gray-500 hover:border-brand-primary hover:text-brand-primary hover:bg-white transition-colors min-h-[180px] cursor-pointer">
             <span class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
                 <i data-lucide="plus" class="w-5 h-5"></i>
             </span>
             <span class="text-sm font-bold">Nova Solicitação</span>
             <span class="text-xs">Abra uma nova demanda acadêmica</span>
         </button>
-    `}function Me(e){let t=M[e.status]||e.status;return`
+    `}function Xe(e){let t=N[e.status]||e.status;return`
         <tr class="border-t border-gray-100">
             <td class="py-3 text-xs font-semibold text-gray-500">#${e.protocolo}</td>
-            <td class="py-3 text-sm text-gray-900">${e.tipo}</td>
+            <td class="py-3 text-sm text-gray-900 break-words [overflow-wrap:anywhere]">${e.tipo}</td>
             <td class="py-3">
-                <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full ${N(e.status)}">
+                <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full ${P(e.status)}">
                     ${t}
                 </span>
             </td>
-            <td class="py-3 text-xs text-gray-500">${Z(e.dataAtualizacao)}</td>
+            <td class="py-3 text-xs text-gray-500">${Q(e.dataAtualizacao)}</td>
         </tr>
-    `}function Ne(e){let t=M[e.status]||e.status;return`
+    `}function Ze(e){let t=N[e.status]||e.status;return`
         <article class="bg-white rounded-xl border border-gray-200 p-4 flex flex-col gap-2">
             <div class="flex items-center justify-between gap-2">
                 <span class="text-xs font-semibold text-gray-500 tracking-wider">#${e.protocolo}</span>
-                <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full whitespace-nowrap ${N(e.status)}">
+                <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full whitespace-nowrap ${P(e.status)}">
                     ${t}
                 </span>
             </div>
-            <h4 class="text-sm font-bold text-gray-900">${e.tipo}</h4>
+            <h4 class="text-sm font-bold text-gray-900 break-words [overflow-wrap:anywhere]">${e.tipo}</h4>
             <span class="inline-flex items-center gap-1.5 text-xs text-gray-500">
                 <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-                Concluído em ${Z(e.dataAtualizacao)}
+                Concluído em ${Q(e.dataAtualizacao)}
             </span>
         </article>
-    `}function Pe(){return`
+    `}function Qe(){return`
         <div class="col-span-full bg-white border border-dashed border-gray-300 rounded-xl p-8 sm:p-10 text-center">
             <h3 class="text-base font-bold text-gray-900">Você ainda não possui solicitações</h3>
             <p class="text-sm text-gray-500 mt-1">
                 Quando você abrir uma demanda, ela aparecerá aqui para acompanhamento.
             </p>
         </div>
-    `}function P(e){let t=ke(e),n=t.filter(e=>e.status!==`concluido`),r=t.filter(e=>e.status===`concluido`),i=document.querySelector(`#listaDemandasAbertas`),a=document.querySelector(`#corpoHistorico`),o=document.querySelector(`#listaHistoricoMobile`),s=document.querySelector(`#contadorAbertas`);if(s&&(s.textContent=n.length),i){let e=n.map(Ae).join(``);i.innerHTML=n.length>0?e+je():Pe()}a&&(a.innerHTML=r.length>0?r.map(Me).join(``):`<tr><td colspan="4" class="py-4 text-center text-xs text-gray-400">Nenhuma demanda concluída ainda.</td></tr>`),o&&(o.innerHTML=r.length>0?r.map(Ne).join(``):`<div class="bg-white border border-dashed border-gray-200 rounded-xl p-6 text-center text-xs text-gray-400">Nenhuma demanda concluída ainda.</div>`),x()}function F(e){let t=document.querySelector(`#drawerMobile`),n=document.querySelector(`#drawerPainel`);!t||!n||(e?(t.classList.remove(`hidden`),setTimeout(()=>n.classList.remove(`-translate-x-full`),10),document.body.classList.add(`overflow-hidden`)):(n.classList.add(`-translate-x-full`),document.body.classList.remove(`overflow-hidden`),setTimeout(()=>t.classList.add(`hidden`),200)))}function I(){let e=JSON.parse(localStorage.getItem(`usuarioLogado`));if(!e){z(),R();return}let t=Qe(e.matricula);x(),P(t),document.querySelector(`#filtroBusca`).addEventListener(`input`,e=>{j.busca=e.target.value,P(t)}),document.querySelector(`#filtroStatus`).addEventListener(`change`,e=>{j.status=e.target.value,P(t)}),document.querySelector(`#limparFiltros`).addEventListener(`click`,()=>{j.busca=``,j.status=`todos`,document.querySelector(`#filtroBusca`).value=``,document.querySelector(`#filtroStatus`).value=`todos`,P(t)});let n=document.querySelectorAll(`.btnSairConta`);for(let e=0;e<n.length;++e)n[e].addEventListener(`click`,()=>{localStorage.removeItem(`usuarioLogado`),localStorage.removeItem(`auth`),document.body.classList.remove(`overflow-hidden`),z(),R()});let r=document.querySelector(`#abrirDrawer`),i=document.querySelector(`#fecharDrawer`),a=document.querySelector(`#drawerOverlay`);r&&r.addEventListener(`click`,()=>F(!0)),i&&i.addEventListener(`click`,()=>F(!1)),a&&a.addEventListener(`click`,()=>F(!1))}function Fe(e){let t=e.length,n=e.filter(e=>e.status===`em_analise`).length,r=e.filter(e=>e.status===`concluido`).length;return{total:t,emAnalise:n,eficiencia:t>0?Math.round(r/t*100):0}}function Ie(){return`
+    `}function F(e){let t=qe(e),n=t.filter(e=>e.status!==`concluido`),r=t.filter(e=>e.status===`concluido`),i=document.querySelector(`#listaDemandasAbertas`),a=document.querySelector(`#corpoHistorico`),o=document.querySelector(`#listaHistoricoMobile`),s=document.querySelector(`#contadorAbertas`);if(s&&(s.textContent=n.length),i){let e=n.map(Je).join(``);i.innerHTML=n.length>0?e+Ye():Qe()}a&&(a.innerHTML=r.length>0?r.map(Xe).join(``):`<tr><td colspan="4" class="py-4 text-center text-xs text-gray-400">Nenhuma demanda concluída ainda.</td></tr>`),o&&(o.innerHTML=r.length>0?r.map(Ze).join(``):`<div class="bg-white border border-dashed border-gray-200 rounded-xl p-6 text-center text-xs text-gray-400">Nenhuma demanda concluída ainda.</div>`),y()}function I(e){let t=document.querySelector(`#drawerMobile`),n=document.querySelector(`#drawerPainel`);!t||!n||(e?(t.classList.remove(`hidden`),setTimeout(()=>n.classList.remove(`-translate-x-full`),10),document.body.classList.add(`overflow-hidden`)):(n.classList.add(`-translate-x-full`),document.body.classList.remove(`overflow-hidden`),setTimeout(()=>t.classList.add(`hidden`),200)))}function L(){let e=JSON.parse(localStorage.getItem(`usuarioLogado`));if(!e){V(),B();return}function t(){return _t(e.matricula)}function n(){let e=t();$e(e),F(e)}y(),n(),document.querySelector(`#filtroBusca`).addEventListener(`input`,e=>{M.busca=e.target.value,F(t())}),document.querySelector(`#filtroStatus`).addEventListener(`change`,e=>{M.status=e.target.value,F(t())}),document.querySelector(`#limparFiltros`).addEventListener(`click`,()=>{M.busca=``,M.status=`todos`,document.querySelector(`#filtroBusca`).value=``,document.querySelector(`#filtroStatus`).value=`todos`,F(t())});function r(){Ve({onCriado:n})}let i=document.querySelector(`#btnNovaDemandaDesktop`),a=document.querySelector(`#btnNovaDemandaMobile`);i&&i.addEventListener(`click`,r),a&&a.addEventListener(`click`,r);let o=document.querySelector(`#listaDemandasAbertas`);o&&o.addEventListener(`click`,e=>{let t=e.target.closest(`[data-acao="ver-detalhes"]`);if(t){let e=t.getAttribute(`data-protocolo`);e&&Ke(e);return}e.target.closest(`[data-acao="nova-demanda"]`)&&r()});let s=document.querySelectorAll(`.btnSairConta`);for(let e=0;e<s.length;++e)s[e].addEventListener(`click`,()=>{localStorage.removeItem(`usuarioLogado`),localStorage.removeItem(`auth`),document.body.classList.remove(`overflow-hidden`),V(),B()});let c=document.querySelector(`#abrirDrawer`),l=document.querySelector(`#fecharDrawer`),u=document.querySelector(`#drawerOverlay`);c&&c.addEventListener(`click`,()=>I(!0)),l&&l.addEventListener(`click`,()=>I(!1)),u&&u.addEventListener(`click`,()=>I(!1))}function $e(e){let t=R(e),n=document.querySelector(`[data-metrica="total"]`),r=document.querySelector(`[data-metrica="em-analise"]`),i=document.querySelector(`[data-metrica="eficiencia"]`),a=document.querySelector(`[data-metrica="eficiencia-barra"]`);n&&(n.textContent=t.total),r&&(r.textContent=t.emAnalise<10?`0`+t.emAnalise:t.emAnalise),i&&(i.textContent=`${t.eficiencia}%`),a&&(a.style.width=`${t.eficiencia}%`)}function R(e){let t=e.length,n=e.filter(e=>e.status===`em_analise`).length,r=e.filter(e=>e.status===`concluido`).length;return{total:t,emAnalise:n,eficiencia:t>0?Math.round(r/t*100):0}}function et(){return`
         <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-brand-surface-dim/40 text-brand-primary font-semibold">
             <i data-lucide="clipboard-list" class="w-4 h-4"></i> Minhas Demandas
         </a>
@@ -656,12 +825,8 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
         <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:bg-gray-50">
             <i data-lucide="settings" class="w-4 h-4"></i> Configurações
         </a>
-    `}function L(){$(`centraldemandas`),document.querySelector(`title`).innerHTML=`Central de Demandas - Clarify`;let e=JSON.parse(localStorage.getItem(`usuarioLogado`))||{},t=(e.nome||`Aluno`).split(` `)[0];t.charAt(0).toUpperCase();let r=Fe(Qe(e.matricula)),i=r.total,a=r.emAnalise,o=r.eficiencia;document.querySelector(`#app`).innerHTML=`
-    <div class="min-h-screen w-full flex bg-brand-surface">
-
-        <!-- Sidebar (desktop) -->
-        ${n()}
-        
+    `}function z(){$(`centraldemandas`),document.querySelector(`title`).innerHTML=`Central de Demandas - Clarify`;let t=JSON.parse(localStorage.getItem(`usuarioLogado`))||{},n=(t.nome||`Aluno`).split(` `)[0];n.charAt(0).toUpperCase();let r=R(_t(t.matricula)),i=r.total,a=r.emAnalise,o=r.eficiencia;document.querySelector(`#app`).innerHTML=`
+    <div class="min-h-screen w-full bg-brand-surface">
 
         <!-- Drawer de navegação (mobile) -->
         <div id="drawerMobile" class="fixed inset-0 z-40 hidden md:hidden">
@@ -680,13 +845,13 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                 </div>
 
                 <nav class="flex-1 px-4 py-4 space-y-1 text-sm overflow-y-auto">
-                    ${Ie()}
+                    ${et()}
                 </nav>
             </aside>
         </div>
 
         <!-- Conteúdo principal -->
-        <main class="flex-1 overflow-x-hidden">
+        <main class="overflow-x-hidden">
 
             <!-- Topbar mobile (sticky) -->
             <header class="md:hidden sticky top-0 z-20 bg-white/95 backdrop-blur border-b border-gray-200 flex items-center justify-between gap-3 px-4 h-14">
@@ -701,21 +866,31 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                     <button type="button" class="w-9 h-9 rounded-full text-gray-500 hover:text-brand-primary hover:bg-gray-100 flex items-center justify-center transition-colors cursor-pointer" title="Notificações">
                         <i data-lucide="bell" class="w-4 h-4"></i>
                     </button>
-                    ${S(JSON.parse(localStorage.getItem(`usuarioLogado`)))}
+                    ${b(JSON.parse(localStorage.getItem(`usuarioLogado`)))}
                 </div>
             </header>
 
             <div class="px-4 py-5 md:px-10 md:py-8">
 
                 <!-- Topbar desktop -->
-                <div class="hidden md:flex items-center justify-end gap-3 mb-8">
-                    <button type="button" class="w-9 h-9 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:text-brand-primary hover:border-brand-primary transition-colors cursor-pointer">
-                        <i data-lucide="bell" class="w-4 h-4"></i>
-                    </button>
-                    <button type="button" class="w-9 h-9 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:text-brand-primary hover:border-brand-primary transition-colors cursor-pointer">
-                        <i data-lucide="help-circle" class="w-4 h-4"></i>
-                    </button>
-                    ${S(JSON.parse(localStorage.getItem(`usuarioLogado`)))}
+                <div class="hidden md:flex items-center justify-between gap-3 mb-8">
+                    <a href="/" class="flex items-center gap-2.5 group">
+                        <img src="${e}" alt="Clarify" class="w-10 h-10 object-contain drop-shadow-[0_4px_12px_rgba(202,95,21,0.25)] transition-transform group-hover:scale-105" />
+                        <div class="leading-none">
+                            <p class="text-lg font-bold text-slate-900 tracking-tight">Clarify</p>
+                            <p class="text-[9px] font-semibold uppercase tracking-[0.18em] text-slate-400 mt-0.5">Federal Institution</p>
+                        </div>
+                    </a>
+
+                    <div class="flex items-center gap-3">
+                        <button type="button" class="w-9 h-9 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:text-brand-primary hover:border-brand-primary transition-colors cursor-pointer">
+                            <i data-lucide="bell" class="w-4 h-4"></i>
+                        </button>
+                        <button type="button" class="w-9 h-9 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:text-brand-primary hover:border-brand-primary transition-colors cursor-pointer">
+                            <i data-lucide="help-circle" class="w-4 h-4"></i>
+                        </button>
+                        ${b(JSON.parse(localStorage.getItem(`usuarioLogado`)))}
+                    </div>
                 </div>
 
                 <!-- Cabeçalho da página -->
@@ -726,11 +901,11 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                         </p>
                         <h2 class="text-2xl md:text-3xl font-bold text-gray-900 md:mt-1">Central de Demandas</h2>
                         <p class="text-sm text-gray-500 mt-1">
-                            Olá, ${t}. Acompanhe aqui suas solicitações.
+                            Olá, ${n}. Acompanhe aqui suas solicitações.
                         </p>
                     </div>
 
-                    <button type="button" class="hidden sm:inline-flex items-center gap-2 bg-brand-primary text-white text-sm font-bold px-5 py-3 rounded-xl shadow hover:bg-orange-700 transition-colors cursor-pointer self-start sm:self-auto">
+                    <button id="btnNovaDemandaDesktop" type="button" class="hidden sm:inline-flex items-center gap-2 bg-brand-primary text-white text-sm font-bold px-5 py-3 rounded-xl shadow hover:bg-orange-700 transition-colors cursor-pointer self-start sm:self-auto">
                         <i data-lucide="plus" class="w-4 h-4"></i> Nova Demanda
                     </button>
                 </div>
@@ -740,7 +915,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                     <div class="min-w-[80%] shrink-0 snap-start sm:min-w-0 sm:shrink bg-white rounded-xl border border-gray-200 p-5">
                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total de Solicitações</p>
                         <div class="flex items-end gap-3 mt-2">
-                            <span class="text-3xl font-bold text-gray-900">${i}</span>
+                            <span class="text-3xl font-bold text-gray-900" data-metrica="total">${i}</span>
                             <span class="text-xs text-gray-500 pb-1">no semestre</span>
                         </div>
                     </div>
@@ -748,7 +923,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                     <div class="min-w-[80%] shrink-0 snap-start sm:min-w-0 sm:shrink bg-white rounded-xl border border-gray-200 p-5">
                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Em Análise</p>
                         <div class="flex items-end gap-3 mt-2">
-                            <span class="text-3xl font-bold text-gray-900">${a<10?`0`+a:a}</span>
+                            <span class="text-3xl font-bold text-gray-900" data-metrica="em-analise">${a<10?`0`+a:a}</span>
                             <i data-lucide="hourglass" class="w-4 h-4 text-blue-500 mb-2"></i>
                         </div>
                     </div>
@@ -756,9 +931,9 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                     <div class="min-w-[80%] shrink-0 snap-start sm:min-w-0 sm:shrink bg-white rounded-xl border border-gray-200 p-5">
                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Eficiência</p>
                         <div class="flex items-center gap-3 mt-2">
-                            <span class="text-3xl font-bold text-gray-900">${o}%</span>
+                            <span class="text-3xl font-bold text-gray-900" data-metrica="eficiencia">${o}%</span>
                             <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                <div class="h-full bg-brand-primary rounded-full" style="width: ${o}%"></div>
+                                <div class="h-full bg-brand-primary rounded-full" data-metrica="eficiencia-barra" style="width: ${o}%"></div>
                             </div>
                         </div>
                         <p class="text-[10px] text-gray-400 mt-1">Demandas concluídas sobre o total</p>
@@ -841,14 +1016,14 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
             </div>
 
             <!-- FAB Nova Demanda (mobile) -->
-            <button type="button" class="sm:hidden fixed bottom-5 right-5 z-30 w-14 h-14 rounded-full bg-brand-primary text-white shadow-lg shadow-orange-900/20 flex items-center justify-center hover:bg-orange-700 transition-colors cursor-pointer" title="Nova Demanda">
+            <button id="btnNovaDemandaMobile" type="button" class="sm:hidden fixed bottom-5 right-5 z-30 w-14 h-14 rounded-full bg-brand-primary text-white shadow-lg shadow-orange-900/20 flex items-center justify-center hover:bg-orange-700 transition-colors cursor-pointer" title="Nova Demanda">
                 <i data-lucide="plus" class="w-6 h-6"></i>
             </button>
 
         </main>
 
     </div>
-    `,x()}function Le(e){if(e===`aluno`){L(),I();return}A(),O(),k()}function Re(e){let t=new FormData(e.target),{institutionalId:n,securityKey:r}=Object.fromEntries(t.entries()),i=Ye(n,r);i.ok&&Le(i.usuarioLogado.cargo)}function R(){document.querySelector(`#loginForm`).addEventListener(`submit`,e=>{e.preventDefault(),Re(e)});let e=document.querySelector(`#irRegistro`);e&&e.addEventListener(`click`,e=>{e.preventDefault(),$(`registro`)})}function z(){$(`login`),document.querySelector(`title`).innerHTML=`Login - Clarify`,document.querySelector(`#app`).innerHTML=`
+    `,y()}function tt(e){if(e===`aluno`){z(),L();return}D(),T(),E()}function nt(e){let t=new FormData(e.target),{institutionalId:n,securityKey:r}=Object.fromEntries(t.entries()),i=mt(n,r);i.ok&&tt(i.usuarioLogado.cargo)}function B(){document.querySelector(`#loginForm`).addEventListener(`submit`,e=>{e.preventDefault(),nt(e)});let e=document.querySelector(`#irRegistro`);e&&e.addEventListener(`click`,e=>{e.preventDefault(),$(`registro`)})}function V(){$(`login`),document.querySelector(`title`).innerHTML=`Login - Clarify`,document.querySelector(`#app`).innerHTML=`
     <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden animate-cubes">
         <!-- Fundo Geométrico com Losangos -->
         <div class="absolute inset-0 opacity-15 pointer-events-none animate-cubes" 
@@ -950,7 +1125,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
         </div>
         </div>
     </div>
-`}function ze(){let e=document.querySelector(`#fullName`).value,t=document.querySelector(`#institutionalId`).value,n=document.querySelector(`#institutionalEmail`).value,r=document.querySelector(`#securityKey`).value,i=document.querySelector(`#activationKey`).value,a=X(t,n),o=a?!0:$e(i);if(a||!o){if(a){J(`Usuário já cadastrado.`),q([`#fullName`,`#institutionalEmail`,`#securityKey`,`#activationKey`]);return}J(`Chave de ativação inválida ou já utilizada.`),q([`#activationKey`]);return}Q(e,t,n,r,`coordenador`),alert(`Registro feito com sucesso!`);let s={nome:e,matricula:t,email:n,cargo:`coordenador`};localStorage.setItem(`usuarioLogado`,JSON.stringify(s)),localStorage.setItem(`auth`,!0),A()}function Be(){document.querySelector(`#registrationForm`).addEventListener(`submit`,e=>{e.preventDefault(),ze()});let e=document.querySelector(`#voltarLogin`);e&&(e.onclick=()=>{z(),R()})}function Ve(){$(`registro`),document.querySelector(`title`).innerHTML=`Registro - Clarify`,document.querySelector(`#app`).innerHTML=`
+`}function rt(){let e=document.querySelector(`#fullName`).value,t=document.querySelector(`#institutionalId`).value,n=document.querySelector(`#institutionalEmail`).value,r=document.querySelector(`#securityKey`).value,i=document.querySelector(`#activationKey`).value,a=Z(t,n),o=a?!0:xt(i);if(a||!o){if(a){X(`Usuário já cadastrado.`),Y([`#fullName`,`#institutionalEmail`,`#securityKey`,`#activationKey`]);return}X(`Chave de ativação inválida ou já utilizada.`),Y([`#activationKey`]);return}Ct(e,t,n,r,`coordenador`),alert(`Registro feito com sucesso!`);let s={nome:e,matricula:t,email:n,cargo:`coordenador`};localStorage.setItem(`usuarioLogado`,JSON.stringify(s)),localStorage.setItem(`auth`,!0),D()}function it(){document.querySelector(`#registrationForm`).addEventListener(`submit`,e=>{e.preventDefault(),rt()});let e=document.querySelector(`#voltarLogin`);e&&(e.onclick=()=>{V(),B()})}function at(){$(`registro`),document.querySelector(`title`).innerHTML=`Registro - Clarify`,document.querySelector(`#app`).innerHTML=`
         <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
             <!-- Fundo Geométrico com Losangos -->
             <div class="absolute inset-0 opacity-15 pointer-events-none animate-cubes" 
@@ -1115,7 +1290,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
             </div>
             </div>
         </div>
-    `}var He={ArrowRight:d,Bell:f,Calendar:p,Check:m,CheckCircle2:g,Clock:v,Eye:ie,GraduationCap:oe,Plus:y,Send:fe,UserCog:me,Users:he};function B(){$(``),document.querySelector(`title`).innerHTML=`Clarify`,document.querySelector(`#app`).innerHTML=`
+    `}var ot={ArrowRight:f,Bell:p,Calendar:m,Check:h,CheckCircle2:g,Clock:_,Eye:ae,GraduationCap:ce,Plus:ge,Send:ve,UserCog:Se,Users:we};function H(){$(``),document.querySelector(`title`).innerHTML=`Clarify`,document.querySelector(`#app`).innerHTML=`
     <div class="relative min-h-screen text-slate-900 overflow-x-hidden">
 
         <!-- Fundo ambiente, bem sutil -->
@@ -1467,4 +1642,4 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
         </footer>
 
     </div>
-    `,b({icons:He,attrs:{"stroke-width":1.6}})}function V(){let e=document.querySelectorAll(`.btnEntrar`);for(let t=0;t<e.length;++t)e[t].addEventListener(`click`,e=>{e.preventDefault(),$(`login`)});let t=document.querySelectorAll(`.btnCriarConta`);for(let e=0;e<t.length;++e)t[e].addEventListener(`click`,e=>{e.preventDefault(),$(`registro`)});let n=document.querySelectorAll(`a[href^="#"]`);for(let e=0;e<n.length;++e)n[e].addEventListener(`click`,t=>{let r=n[e].getAttribute(`href`).slice(1);if(r===``)return;let i=document.getElementById(r);i&&(t.preventDefault(),i.scrollIntoView({behavior:`smooth`,block:`start`}))});let r=document.getElementById(`landingNav`);r&&window.addEventListener(`scroll`,()=>{window.scrollY>12?r.classList.add(`is-scrolled`):r.classList.remove(`is-scrolled`)});let i=document.querySelectorAll(`[data-reveal]`),a=new IntersectionObserver(e=>{for(let t=0;t<e.length;++t)e[t].isIntersecting&&(e[t].target.classList.add(`is-revealed`),a.unobserve(e[t].target))},{threshold:.12});for(let e=0;e<i.length;++e)a.observe(i[e])}var H=()=>localStorage.getItem(`auth`)===`true`,U=()=>{try{return JSON.parse(localStorage.getItem(`usuarioLogado`)||`{}`).cargo||``}catch{return``}},W=(e,t,n)=>{e&&window.history.replaceState({},``,e),t&&t(),n&&n()},Ue=()=>W(`/login`,z,R),We=()=>W(`/registro`,Ve,Be),G=()=>{A(),O(),k()},Ge=()=>{L(),I()};function K(e){switch(e){case`/`:B(),V();break;case`/registro`:We();break;case`/login`:Ue();break;case`/dashboardcoord`:if(!H()){B(),V();break}if(U()===`aluno`){W(`/centraldemandas`,L,I);break}G();break;case`/dashboardaluno`:if(!H()){B(),V();break}if(U()!==`aluno`){W(`/dashboardcoord`,G);break}case`/centraldemandas`:if(!H()){B(),V();break}U()===`aluno`?W(`/centraldemandas`,Ge):W(`/dashboardcoord`,G);break;default:B(),V();break}}function q(e){for(let t=0;t<e.length;++t){let n=document.querySelector(`${e[t]}`);n.value=``}}function J(e,t=`#submitIncorrectAlert label`){let n=document.querySelector(t);n&&(n.textContent=e)}var Ke=`Usuário não encontrado.`,qe=`Chave de segurança incorreta.`;function Y(e,t){J(e),q(t)}function X(e,t){return(JSON.parse(localStorage.getItem(`usuarios`))||[]).some(n=>{let r=n.matricula,i=n.email;return String(r)===String(e)||String(i)===String(t)})}function Je(e,t){return(JSON.parse(localStorage.getItem(`usuarios`))||[]).find(n=>{let r=n.matricula,i=n.senha;return String(r)===String(e)&&String(i)===String(t)})}function Ye(e,t){let n=Je(e,t);if(n){let{senha:e,...t}=n;return localStorage.setItem(`usuarioLogado`,JSON.stringify(t)),localStorage.setItem(`auth`,!0),{ok:!0,usuarioLogado:t}}return X(e)?(Y(qe,[`#securityKey`]),{ok:!1}):(Y(Ke,[`#institutionalId`,`#securityKey`]),{ok:!1})}function Xe(){localStorage.setItem(`usuarios`,JSON.stringify([{nome:`João da Silva`,matricula:`123`,email:`joao@academico.edu.br`,senha:`123456`,cargo:`coordenador`},{nome:`Maria Aparecida`,matricula:`003`,email:`maria@academico.edu.br`,senha:`123456`,cargo:`aluno`},{nome:`Carlos Eduardo`,matricula:`456`,email:`carlos@academico.edu.br`,senha:`123456`,cargo:`aluno`}])),Ze()}function Ze(){localStorage.setItem(`demandas`,JSON.stringify([{protocolo:`REQ-402`,matriculaAluno:`003`,tipo:`Quebra de Pré-requisito`,descricao:`Solicitação para cursar Cálculo III sem a aprovação em Cálculo II.`,status:`pendente`,dataCriacao:`2025-11-12`,dataAtualizacao:`2025-11-12`,feedback:``},{protocolo:`REQ-398`,matriculaAluno:`003`,tipo:`Revisão de Prova`,descricao:`Discordância em relação à correção da questão 4 da prova de Banco de Dados.`,status:`em_analise`,dataCriacao:`2025-11-08`,dataAtualizacao:`2026-05-04`,feedback:``},{protocolo:`REQ-385`,matriculaAluno:`003`,tipo:`Aproveitamento de Horas AC`,descricao:`Envio de certificados de cursos extracurriculares para integralização.`,status:`pendente`,dataCriacao:`2025-11-02`,dataAtualizacao:`2025-11-02`,feedback:``},{protocolo:`REQ-350`,matriculaAluno:`003`,tipo:`Trancamento de Disciplina`,descricao:`Pedido de trancamento da disciplina de Sistemas Operacionais.`,status:`concluido`,dataCriacao:`2025-10-15`,dataAtualizacao:`2025-10-25`,feedback:`Trancamento aprovado. Disciplina removida do histórico do semestre.`},{protocolo:`REQ-342`,matriculaAluno:`003`,tipo:`Troca de Turma`,descricao:`Mudança da turma da manhã para a turma da noite por motivo de trabalho.`,status:`em_analise`,dataCriacao:`2025-10-12`,dataAtualizacao:`2025-10-22`,feedback:``},{protocolo:`REQ-320`,matriculaAluno:`003`,tipo:`Solicitação de Histórico`,descricao:`Emissão do histórico escolar atualizado para fins de estágio.`,status:`concluido`,dataCriacao:`2025-10-05`,dataAtualizacao:`2025-10-15`,feedback:`Documento disponível para retirada na secretaria.`},{protocolo:`REQ-310`,matriculaAluno:`003`,tipo:`Justificativa de Falta`,descricao:`Atestado médico referente às faltas dos dias 22 e 23 de setembro.`,status:`requer_ajuste`,dataCriacao:`2025-09-25`,dataAtualizacao:`2025-09-30`,feedback:`Atestado precisa estar legível e conter o CID. Reenviar.`}]))}function Qe(e){return(JSON.parse(localStorage.getItem(`demandas`))||[]).filter(t=>String(t.matriculaAluno)===String(e))}function Z(e){if(!e)return``;let t=[`Jan`,`Fev`,`Mar`,`Abr`,`Mai`,`Jun`,`Jul`,`Ago`,`Set`,`Out`,`Nov`,`Dez`],n=e.split(`-`),r=n[0],i=n[1];return`${n[2]} ${t[Number(i)-1]} ${r}`}function $e(e){let t=String(e??``).trim();if(!t)return!1;let n=JSON.parse(localStorage.getItem(`chavesAtivacao`));Array.isArray(n)||(et(),n=JSON.parse(localStorage.getItem(`chavesAtivacao`))||[]);let r=n.find(e=>String(e.code)===t&&!e.used);return r===void 0?!1:(r.used=!0,localStorage.setItem(`chavesAtivacao`,JSON.stringify(n)),!0)}function et(){localStorage.setItem(`chavesAtivacao`,JSON.stringify([{code:`123`,used:!1},{code:`456`,used:!1},{code:`789`,used:!1}]))}function Q(e,t,n,r,i){let a=JSON.parse(localStorage.getItem(`usuarios`))||[];a.push({nome:e,matricula:t,email:n,senha:r,cargo:i}),localStorage.setItem(`usuarios`,JSON.stringify(a))}function $(e){window.location.pathname!==`/${e}`&&(window.history.pushState({},``,`/${e}`),K(`/${e}`))}function tt(e,t){let n=JSON.parse(localStorage.getItem(`usuarios`))||[],r=n.find(t=>String(t.matricula)===String(e));r&&(r.usuariosCadastrados||=[],r.usuariosCadastrados.push(t),localStorage.setItem(`usuarios`,JSON.stringify(n)))}function nt(e){return(JSON.parse(localStorage.getItem(`usuarios`))||[]).find(t=>{let n=t.matricula;return String(n)===String(e)})}function rt(){et(),Xe(),window.addEventListener(`popstate`,()=>{K(window.location.pathname)}),localStorage.getItem(`auth`)===`true`&&window.location.pathname===`/`&&((JSON.parse(localStorage.getItem(`usuarioLogado`))||{}).cargo===`aluno`?$(`centraldemandas`):$(`dashboardcoord`)),K(window.location.pathname)}rt();
+    `,v({icons:ot,attrs:{"stroke-width":1.6}})}function U(){let e=document.querySelectorAll(`.btnEntrar`);for(let t=0;t<e.length;++t)e[t].addEventListener(`click`,e=>{e.preventDefault(),$(`login`)});let t=document.querySelectorAll(`.btnCriarConta`);for(let e=0;e<t.length;++e)t[e].addEventListener(`click`,e=>{e.preventDefault(),$(`registro`)});let n=document.querySelectorAll(`a[href^="#"]`);for(let e=0;e<n.length;++e)n[e].addEventListener(`click`,t=>{let r=n[e].getAttribute(`href`).slice(1);if(r===``)return;let i=document.getElementById(r);i&&(t.preventDefault(),i.scrollIntoView({behavior:`smooth`,block:`start`}))});let r=document.getElementById(`landingNav`);r&&window.addEventListener(`scroll`,()=>{window.scrollY>12?r.classList.add(`is-scrolled`):r.classList.remove(`is-scrolled`)});let i=document.querySelectorAll(`[data-reveal]`),a=new IntersectionObserver(e=>{for(let t=0;t<e.length;++t)e[t].isIntersecting&&(e[t].target.classList.add(`is-revealed`),a.unobserve(e[t].target))},{threshold:.12});for(let e=0;e<i.length;++e)a.observe(i[e])}var W=()=>localStorage.getItem(`auth`)===`true`,G=()=>{try{return JSON.parse(localStorage.getItem(`usuarioLogado`)||`{}`).cargo||``}catch{return``}},K=(e,t,n)=>{e&&window.history.replaceState({},``,e),t&&t(),n&&n()},st=()=>K(`/login`,V,B),ct=()=>K(`/registro`,at,it),q=()=>{D(),T(),E()},lt=()=>{z(),L()};function J(e){switch(e){case`/`:H(),U();break;case`/registro`:ct();break;case`/login`:st();break;case`/dashboardcoord`:if(!W()){H(),U();break}if(G()===`aluno`){K(`/centraldemandas`,z,L);break}q();break;case`/dashboardaluno`:if(!W()){H(),U();break}if(G()!==`aluno`){K(`/dashboardcoord`,q);break}case`/centraldemandas`:if(!W()){H(),U();break}G()===`aluno`?K(`/centraldemandas`,lt):K(`/dashboardcoord`,q);break;default:H(),U();break}}function Y(e){for(let t=0;t<e.length;++t){let n=document.querySelector(`${e[t]}`);n.value=``}}function X(e,t=`#submitIncorrectAlert label`){let n=document.querySelector(t);n&&(n.textContent=e)}var ut=`Usuário não encontrado.`,dt=`Chave de segurança incorreta.`;function ft(e,t){X(e),Y(t)}function Z(e,t){return(JSON.parse(localStorage.getItem(`usuarios`))||[]).some(n=>{let r=n.matricula,i=n.email;return String(r)===String(e)||String(i)===String(t)})}function pt(e,t){return(JSON.parse(localStorage.getItem(`usuarios`))||[]).find(n=>{let r=n.matricula,i=n.senha;return String(r)===String(e)&&String(i)===String(t)})}function mt(e,t){let n=pt(e,t);if(n){let{senha:e,...t}=n;return localStorage.setItem(`usuarioLogado`,JSON.stringify(t)),localStorage.setItem(`auth`,!0),{ok:!0,usuarioLogado:t}}return Z(e)?(ft(dt,[`#securityKey`]),{ok:!1}):(ft(ut,[`#institutionalId`,`#securityKey`]),{ok:!1})}function ht(){localStorage.setItem(`usuarios`,JSON.stringify([{nome:`João da Silva`,matricula:`123`,email:`joao@academico.edu.br`,senha:`123456`,cargo:`coordenador`},{nome:`Maria Aparecida`,matricula:`003`,email:`maria@academico.edu.br`,senha:`123456`,cargo:`aluno`},{nome:`Carlos Eduardo`,matricula:`456`,email:`carlos@academico.edu.br`,senha:`123456`,cargo:`aluno`}])),gt()}function gt(){localStorage.setItem(`demandas`,JSON.stringify([{protocolo:`REQ-402`,matriculaAluno:`003`,tipo:`Quebra de Pré-requisito`,descricao:`Solicitação para cursar Cálculo III sem a aprovação em Cálculo II.`,status:`pendente`,dataCriacao:`2025-11-12`,dataAtualizacao:`2025-11-12`,feedback:``},{protocolo:`REQ-398`,matriculaAluno:`003`,tipo:`Revisão de Prova`,descricao:`Discordância em relação à correção da questão 4 da prova de Banco de Dados.`,status:`em_analise`,dataCriacao:`2025-11-08`,dataAtualizacao:`2026-05-04`,feedback:``},{protocolo:`REQ-385`,matriculaAluno:`003`,tipo:`Aproveitamento de Horas AC`,descricao:`Envio de certificados de cursos extracurriculares para integralização.`,status:`pendente`,dataCriacao:`2025-11-02`,dataAtualizacao:`2025-11-02`,feedback:``},{protocolo:`REQ-350`,matriculaAluno:`003`,tipo:`Trancamento de Disciplina`,descricao:`Pedido de trancamento da disciplina de Sistemas Operacionais.`,status:`concluido`,dataCriacao:`2025-10-15`,dataAtualizacao:`2025-10-25`,feedback:`Trancamento aprovado. Disciplina removida do histórico do semestre.`},{protocolo:`REQ-342`,matriculaAluno:`003`,tipo:`Troca de Turma`,descricao:`Mudança da turma da manhã para a turma da noite por motivo de trabalho.`,status:`em_analise`,dataCriacao:`2025-10-12`,dataAtualizacao:`2025-10-22`,feedback:``},{protocolo:`REQ-320`,matriculaAluno:`003`,tipo:`Solicitação de Histórico`,descricao:`Emissão do histórico escolar atualizado para fins de estágio.`,status:`concluido`,dataCriacao:`2025-10-05`,dataAtualizacao:`2025-10-15`,feedback:`Documento disponível para retirada na secretaria.`},{protocolo:`REQ-310`,matriculaAluno:`003`,tipo:`Justificativa de Falta`,descricao:`Atestado médico referente às faltas dos dias 22 e 23 de setembro.`,status:`requer_ajuste`,dataCriacao:`2025-09-25`,dataAtualizacao:`2025-09-30`,feedback:`Atestado precisa estar legível e conter o CID. Reenviar.`}]))}function _t(e){return(JSON.parse(localStorage.getItem(`demandas`))||[]).filter(t=>String(t.matriculaAluno)===String(e))}function vt(e){return(JSON.parse(localStorage.getItem(`demandas`))||[]).find(t=>t.protocolo===e)}function yt(){let e=JSON.parse(localStorage.getItem(`demandas`))||[],t=0;for(let n=0;n<e.length;++n){let r=Number(e[n].protocolo.split(`-`)[1]);r>t&&(t=r)}return`REQ-${t+1}`}function bt({matriculaAluno:e,tipo:t,descricao:n}){let r=JSON.parse(localStorage.getItem(`demandas`))||[],i=new Date,a=`${i.getFullYear()}-${String(i.getMonth()+1).padStart(2,`0`)}-${String(i.getDate()).padStart(2,`0`)}`,o={protocolo:yt(),matriculaAluno:e,tipo:t.trim(),descricao:n.trim(),status:`pendente`,dataCriacao:a,dataAtualizacao:a,feedback:``};return r.unshift(o),localStorage.setItem(`demandas`,JSON.stringify(r)),o}function Q(e){if(!e)return``;let t=[`Jan`,`Fev`,`Mar`,`Abr`,`Mai`,`Jun`,`Jul`,`Ago`,`Set`,`Out`,`Nov`,`Dez`],n=e.split(`-`),r=n[0],i=n[1];return`${n[2]} ${t[Number(i)-1]} ${r}`}function xt(e){let t=String(e??``).trim();if(!t)return!1;let n=JSON.parse(localStorage.getItem(`chavesAtivacao`));Array.isArray(n)||(St(),n=JSON.parse(localStorage.getItem(`chavesAtivacao`))||[]);let r=n.find(e=>String(e.code)===t&&!e.used);return r===void 0?!1:(r.used=!0,localStorage.setItem(`chavesAtivacao`,JSON.stringify(n)),!0)}function St(){localStorage.setItem(`chavesAtivacao`,JSON.stringify([{code:`123`,used:!1},{code:`456`,used:!1},{code:`789`,used:!1}]))}function Ct(e,t,n,r,i){let a=JSON.parse(localStorage.getItem(`usuarios`))||[];a.push({nome:e,matricula:t,email:n,senha:r,cargo:i}),localStorage.setItem(`usuarios`,JSON.stringify(a))}function $(e){window.location.pathname!==`/${e}`&&(window.history.pushState({},``,`/${e}`),J(`/${e}`))}function wt(e,t){let n=JSON.parse(localStorage.getItem(`usuarios`))||[],r=n.find(t=>String(t.matricula)===String(e));r&&(r.usuariosCadastrados||=[],r.usuariosCadastrados.push(t),localStorage.setItem(`usuarios`,JSON.stringify(n)))}function Tt(e){return(JSON.parse(localStorage.getItem(`usuarios`))||[]).find(t=>{let n=t.matricula;return String(n)===String(e)})}function Et(){St(),ht(),window.addEventListener(`popstate`,()=>{J(window.location.pathname)}),localStorage.getItem(`auth`)===`true`&&window.location.pathname===`/`&&((JSON.parse(localStorage.getItem(`usuarioLogado`))||{}).cargo===`aluno`?$(`centraldemandas`):$(`dashboardcoord`)),J(window.location.pathname)}Et();
