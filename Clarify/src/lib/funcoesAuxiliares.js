@@ -62,12 +62,14 @@ export function autenticarLogin(institutionalId, securityKey) {
     const usuarioExiste = UsuarioExiste(institutionalId);
     if (!usuarioExiste) {
         // Caso o usuário não exista, exibirá uma mensagem de erro e limpará ambos os campos do formulário
-        exibirErroLogin(ERRORS.USUARIO_NAO_ENCONTRADO, ["#institutionalId", "#securityKey"]);
+        exibirMensagemErro(ERRORS.USUARIO_NAO_ENCONTRADO);
+        limparFormulario(["#institutionalId", "#securityKey"]);
         return { ok: false };
     }
 
     // Caso o usuário exista, mas a chave de segurança esteja incorreta
-    exibirErroLogin(ERRORS.CHAVE_INCORRETA, ["#securityKey"]);
+    exibirMensagemErro(ERRORS.CHAVE_INCORRETA);
+    limparFormulario(["#securityKey"]);
     return { ok: false };
 }
 
