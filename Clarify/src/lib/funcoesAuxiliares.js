@@ -243,21 +243,37 @@ export function adicionarCaminhoURL(nome) {
    }
 }
 
-// Recebe o JSON no localStorage do coordenador e adiciona um usuário adicionado por ele ao localStorage
-export function atribuirAluno(matriculaCoord, matriculaAluno) {
+
+export function atribuirCoordenador(matriculaAluno, matriculaCoord) {
     const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
+    const aluno = usuarios.find(
+        usuario => String(usuario.matricula) === String(matriculaAluno)
+    );
+
+    if (!aluno) return;
+
+    if (!aluno.coordenador) {
+        aluno.coordenador = [];
+    }
+
+    aluno.coordenador.push(matriculaCoord);
+    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+}
+
+export function atribuirAluno(matriculaAluno, matriculaCoord) {
+    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
     const coordenador = usuarios.find(
         usuario => String(usuario.matricula) === String(matriculaCoord)
     );
 
     if (!coordenador) return;
 
-    if (!coordenador.usuariosCadastrados) {
-        coordenador.usuariosCadastrados = [];
+    if (!coordenador.alunosCadastrados) {
+        coordenador.alunosCadastrados = [];
     }
 
-    coordenador.usuariosCadastrados.push(matriculaAluno);
+    coordenador.alunosCadastrados.push(matriculaAluno);
     localStorage.setItem("usuarios", JSON.stringify(usuarios));
 }
 
