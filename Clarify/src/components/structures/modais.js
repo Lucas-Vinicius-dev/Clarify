@@ -12,26 +12,13 @@ const ROTULOS_STATUS = {
     concluido: 'Concluído'
 };
 
-const CONTAINER_ID = 'modalContainer';
-const LIMITE_TITULO = 80;
 const LIMITE_DESCRICAO = 500;
 
-let elementoFocoAnterior = null;
-let escapeListener = null;
+let listenerEsc = null;
 
-function obterContainer() {
-    let container = document.querySelector(`#${CONTAINER_ID}`);
-    if (!container) {
-        container = document.createElement('div');
-        container.id = CONTAINER_ID;
-        document.body.appendChild(container);
-    }
-    return container;
-}
-
-// Fecha a modal que estiver aberta, esperando a animação de saída antes de remover do DOM.
+// Fecha a modal aberta com uma animação de saída curtinha.
 export function fecharModal() {
-    const container = document.querySelector(`#${CONTAINER_ID}`);
+    const container = document.querySelector('#modalContainer');
     if (!container || !container.firstElementChild) return;
 
     const backdrop = container.firstElementChild;
@@ -39,34 +26,29 @@ export function fecharModal() {
     backdrop.classList.add('is-closing');
     if (panel) panel.classList.add('is-closing');
 
-    if (escapeListener) {
-        document.removeEventListener('keydown', escapeListener);
-        escapeListener = null;
+    if (listenerEsc) {
+        document.removeEventListener('keydown', listenerEsc);
+        listenerEsc = null;
     }
 
     setTimeout(() => {
         container.innerHTML = '';
         document.body.classList.remove('modal-open');
-        if (elementoFocoAnterior && typeof elementoFocoAnterior.focus === 'function') {
-            elementoFocoAnterior.focus();
-        }
-        elementoFocoAnterior = null;
     }, 170);
 }
 
-// Monta backdrop + painel vazio e devolve o painel pra quem chamou preencher com o HTML interno.
-function montarModal({ rotuloAria, larguraMax = 'max-w-xl' }) {
-    elementoFocoAnterior = document.activeElement;
-    const container = obterContainer();
+// Cria o backdrop + o painel vazio dentro do body e devolve o painel pra quem chamou preencher.
+function montarModal(larguraMax) {
+    let container = document.querySelector('#modalContainer');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'modalContainer';
+        document.body.appendChild(container);
+    }
 
     container.innerHTML = `
         <div class="modal-backdrop fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6">
-            <div
-                role="dialog"
-                aria-modal="true"
-                aria-label="${rotuloAria}"
-                class="modal-panel relative w-full ${larguraMax} bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden"
-            ></div>
+            <div class="modal-panel relative w-full ${larguraMax} bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden"></div>
         </div>
     `;
 
@@ -75,14 +57,14 @@ function montarModal({ rotuloAria, larguraMax = 'max-w-xl' }) {
     const backdrop = container.firstElementChild;
     const panel = backdrop.querySelector('.modal-panel');
 
-    backdrop.addEventListener('mousedown', (event) => {
+    backdrop.addEventListener('click', (event) => {
         if (event.target === backdrop) fecharModal();
     });
 
-    escapeListener = (event) => {
+    listenerEsc = (event) => {
         if (event.key === 'Escape') fecharModal();
     };
-    document.addEventListener('keydown', escapeListener);
+    document.addEventListener('keydown', listenerEsc);
 
     return panel;
 }
@@ -90,25 +72,25 @@ function montarModal({ rotuloAria, larguraMax = 'max-w-xl' }) {
 // ---- Nova Demanda ---------------------------------------------------------
 
 function templateNovaDemanda(usuario) {
-    const primeiroNome = (usuario?.nome || 'Você').split(' ')[0];
+    const primeiroNome = (usuario.nome || 'Você').split(' ')[0];
     const inicial = primeiroNome.charAt(0).toUpperCase();
 
     return `
         <form id="formNovaDemanda" class="flex flex-col modal-scroll">
-            <div class="flex items-start justify-between px-6 sm:px-10 pt-6 sm:pt-8">
+            <div class="flex items-start justify-between px-5 sm:px-7 pt-5 sm:pt-6">
                 <div class="inline-flex items-center gap-2">
                     <span class="modal-eyebrow-dot"></span>
                     <span class="modal-label">Nova solicitação</span>
                 </div>
-                <button type="button" class="modal-close" data-acao="fechar" title="Fechar (Esc)" aria-label="Fechar">
+                <button type="button" class="modal-close" data-acao="fechar" title="Fechar">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
 
-            <div class="px-6 sm:px-10 pt-6 sm:pt-7 pb-2 modal-stagger">
+            <div class="px-5 sm:px-7 pt-4 sm:pt-5 pb-2 modal-stagger">
 
                 <header>
-                    <h2 class="text-[1.75rem] sm:text-3xl font-bold text-gray-900 tracking-tighter-2 leading-tight">
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tighter-2 leading-tight">
                         Conte para a coordenação<br/>
                         <span class="text-gradient-warm">o que precisa ser resolvido.</span>
                     </h2>
@@ -117,20 +99,20 @@ function templateNovaDemanda(usuario) {
                     </p>
                 </header>
 
-                <section class="mt-7">
+                <section class="mt-5">
                     <label for="campoTituloDemanda" class="modal-label">Título</label>
                     <input
                         id="campoTituloDemanda"
                         name="titulo"
                         type="text"
                         autocomplete="off"
-                        maxlength="${LIMITE_TITULO}"
+                        maxlength="80"
                         placeholder="Ex.: Justificativa de falta — Cálculo III"
                         class="modal-input font-semibold mt-1"
                     />
                 </section>
 
-                <section class="mt-6">
+                <section class="mt-5">
                     <div class="flex items-end justify-between gap-3">
                         <label for="campoDescricaoDemanda" class="modal-label">Descrição</label>
                         <span id="contadorDescricao" class="modal-counter">0 / ${LIMITE_DESCRICAO}</span>
@@ -138,21 +120,21 @@ function templateNovaDemanda(usuario) {
                     <textarea
                         id="campoDescricaoDemanda"
                         name="descricao"
-                        rows="6"
+                        rows="5"
                         maxlength="${LIMITE_DESCRICAO}"
                         placeholder="Descreva a situação, os documentos anexos (se houver) e o que você espera como resolução."
                         class="modal-textarea mt-2"
                     ></textarea>
                 </section>
 
-                <section class="mt-6 flex items-center gap-3 bg-brand-surface rounded-2xl px-4 py-3 border border-gray-100">
-                    <div class="w-9 h-9 rounded-full bg-brand-primary text-white text-sm font-bold flex items-center justify-center shrink-0">
+                <section class="mt-5 flex items-center gap-3 bg-brand-surface rounded-2xl px-3.5 py-2.5 border border-gray-100">
+                    <div class="w-8 h-8 rounded-full bg-brand-primary text-white text-xs font-bold flex items-center justify-center shrink-0">
                         ${inicial}
                     </div>
                     <div class="min-w-0">
                         <p class="modal-label leading-none">Enviando como</p>
                         <p class="text-sm font-semibold text-gray-900 mt-1 truncate">
-                            ${usuario?.nome || 'Aluno'} · Matrícula ${usuario?.matricula || '—'}
+                            ${usuario.nome || 'Aluno'} · Matrícula ${usuario.matricula || '—'}
                         </p>
                     </div>
                 </section>
@@ -163,7 +145,7 @@ function templateNovaDemanda(usuario) {
                 </div>
             </div>
 
-            <footer class="flex items-center justify-between gap-3 px-6 sm:px-10 py-5 mt-4 border-t border-gray-100 bg-gradient-to-b from-white to-brand-surface/40">
+            <footer class="flex items-center justify-between gap-3 px-5 sm:px-7 py-4 mt-3 border-t border-gray-100 bg-gradient-to-b from-white to-brand-surface/40">
                 <button type="button" class="modal-btn-ghost" data-acao="fechar">
                     Cancelar
                 </button>
@@ -180,7 +162,7 @@ function templateNovaDemanda(usuario) {
 // pra quem chamou poder rerenderizar a lista de demandas.
 export function abrirModalNovaDemanda({ onCriado } = {}) {
     const usuario = JSON.parse(localStorage.getItem('usuarioLogado')) || {};
-    const panel = montarModal({ rotuloAria: 'Nova demanda', larguraMax: 'max-w-xl' });
+    const panel = montarModal('max-w-lg');
     panel.innerHTML = templateNovaDemanda(usuario);
     processarIcones();
 
@@ -191,7 +173,7 @@ export function abrirModalNovaDemanda({ onCriado } = {}) {
     const botaoEnviar = panel.querySelector('#btnEnviarDemanda');
     const erroBox = panel.querySelector('#erroNovaDemanda');
 
-    setTimeout(() => inputTitulo.focus(), 60);
+    setTimeout(() => inputTitulo.focus(), 100);
 
     function atualizarEstadoBotao() {
         const valido = inputTitulo.value.trim().length >= 4 && inputDescricao.value.trim().length >= 10;
@@ -241,9 +223,7 @@ export function abrirModalNovaDemanda({ onCriado } = {}) {
         });
 
         fecharModal();
-        if (typeof onCriado === 'function') {
-            onCriado(demandaCriada);
-        }
+        if (onCriado) onCriado(demandaCriada);
     });
 }
 
@@ -306,32 +286,32 @@ function montarTimeline(status) {
 function templateDetalhes(demanda, remetente) {
     const rotulo = ROTULOS_STATUS[demanda.status] || demanda.status;
     const dias = diasDesde(demanda.dataCriacao);
-    const nomeRemetente = remetente?.nome || `Matrícula ${demanda.matriculaAluno}`;
+    const nomeRemetente = (remetente && remetente.nome) || `Matrícula ${demanda.matriculaAluno}`;
     const inicialRemetente = nomeRemetente.charAt(0).toUpperCase();
-    const emailRemetente = remetente?.email || '—';
+    const emailRemetente = (remetente && remetente.email) || '—';
 
     return `
         <article class="flex flex-col modal-scroll">
-            <div class="flex items-start justify-between px-6 sm:px-10 pt-6 sm:pt-8">
+            <div class="flex items-start justify-between px-5 sm:px-7 pt-5 sm:pt-6">
                 <div class="inline-flex items-center gap-2">
                     <span class="modal-eyebrow-dot"></span>
                     <span class="modal-label">Solicitação · #${demanda.protocolo}</span>
                 </div>
-                <button type="button" class="modal-close" data-acao="fechar" title="Fechar (Esc)" aria-label="Fechar">
+                <button type="button" class="modal-close" data-acao="fechar" title="Fechar">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
 
-            <div class="px-6 sm:px-10 pt-5 sm:pt-6 pb-2 modal-stagger">
+            <div class="px-5 sm:px-7 pt-4 sm:pt-5 pb-2 modal-stagger">
 
                 <header class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div class="min-w-0 flex-1">
-                        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tighter-2 leading-tight break-words [overflow-wrap:anywhere]">
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tighter-2 leading-tight break-words [overflow-wrap:anywhere]">
                             ${demanda.tipo}
                         </h2>
                         <p class="text-sm text-gray-500 mt-1.5">
                             Aberta em <span class="font-semibold text-gray-700">${aux.formatarData(demanda.dataCriacao)}</span>
-                            ${dias !== null ? ` · há ${dias === 0 ? 'hoje' : (dias === 1 ? '1 dia' : `${dias} dias`)}` : ''}
+                            ${dias !== null ? ` · há ${dias} dias` : ''}
                         </p>
                     </div>
                     <span class="self-start inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border whitespace-nowrap ${classesDoStatus(demanda.status)}">
@@ -340,13 +320,13 @@ function templateDetalhes(demanda, remetente) {
                     </span>
                 </header>
 
-                <section class="mt-7 bg-gradient-to-br from-white to-brand-surface/50 rounded-2xl border border-gray-100 px-4 sm:px-8 py-5">
+                <section class="mt-6 bg-gradient-to-br from-white to-brand-surface/50 rounded-2xl border border-gray-100 px-3 sm:px-6 py-4">
                     <div class="flex items-start gap-0">
                         ${montarTimeline(demanda.status)}
                     </div>
                 </section>
 
-                <section class="mt-7">
+                <section class="mt-6">
                     <div class="flex items-center gap-2 mb-3">
                         <i data-lucide="file-text" class="w-3.5 h-3.5 text-brand-primary"></i>
                         <p class="modal-label">Detalhes da solicitação</p>
@@ -356,7 +336,7 @@ function templateDetalhes(demanda, remetente) {
                     </div>
                 </section>
 
-                <section class="mt-7">
+                <section class="mt-6">
                     <p class="modal-label">Enviado por</p>
                     <div class="mt-3 flex items-center gap-3 bg-brand-surface/60 rounded-2xl px-4 py-3 border border-gray-100">
                         <div class="w-11 h-11 rounded-full bg-brand-primary text-white text-base font-bold flex items-center justify-center shrink-0 shadow-soft-md">
@@ -393,7 +373,7 @@ function templateDetalhes(demanda, remetente) {
                 </section>
 
                 ${demanda.feedback ? `
-                <section class="mt-7">
+                <section class="mt-6">
                     <p class="modal-label inline-flex items-center gap-1.5">
                         <i data-lucide="message-square-quote" class="w-3.5 h-3.5"></i>
                         Observação da coordenação
@@ -404,7 +384,7 @@ function templateDetalhes(demanda, remetente) {
 
             </div>
 
-            <footer class="flex items-center justify-end gap-3 px-6 sm:px-10 py-5 mt-4 border-t border-gray-100 bg-gradient-to-b from-white to-brand-surface/40">
+            <footer class="flex items-center justify-end gap-3 px-5 sm:px-7 py-4 mt-3 border-t border-gray-100 bg-gradient-to-b from-white to-brand-surface/40">
                 <button type="button" class="modal-btn-ghost" data-acao="fechar">
                     Fechar
                 </button>
@@ -420,7 +400,7 @@ export function abrirModalDetalhesDemanda(protocolo) {
 
     const remetente = aux.acharUsuario(demanda.matriculaAluno);
 
-    const panel = montarModal({ rotuloAria: `Detalhes da solicitação ${demanda.protocolo}`, larguraMax: 'max-w-2xl' });
+    const panel = montarModal('max-w-xl');
     panel.innerHTML = templateDetalhes(demanda, remetente);
     processarIcones();
 
