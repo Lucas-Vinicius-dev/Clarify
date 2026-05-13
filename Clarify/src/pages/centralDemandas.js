@@ -2,7 +2,8 @@ import * as aux from '../lib/funcoesAuxiliares.js'
 import { iconesUsados, processarIcones } from '../components/assets/icons.js';
 import { carregarLogin, ativarListenerLogin } from './login.js'
 import { renderChipUsuario } from '../components/structures/topbar.js';
-import { renderSidebarAlunos } from '../components/structures/sidebar.js';
+import { abrirModalNovaDemanda, abrirModalDetalhesDemanda } from '../components/structures/modais.js';
+import logoClarify from '../components/assets/GATOGORDO.png';
 
 
 
@@ -62,9 +63,9 @@ function renderCardDemanda(demanda) {
                 </span>
             </div>
 
-            <div>
-                <h3 class="text-base font-bold text-gray-900">${demanda.tipo}</h3>
-                <p class="text-sm text-gray-600 mt-1 line-clamp-2">${demanda.descricao}</p>
+            <div class="min-w-0">
+                <h3 class="text-base font-bold text-gray-900 break-words [overflow-wrap:anywhere]">${demanda.tipo}</h3>
+                <p class="text-sm text-gray-600 mt-1 line-clamp-2 break-words [overflow-wrap:anywhere]">${demanda.descricao}</p>
             </div>
 
             <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 pt-2 border-t border-gray-100">
@@ -84,7 +85,7 @@ function renderCardDemanda(demanda) {
                 </div>
             ` : ''}
 
-            <button type="button" class="mt-1 inline-flex items-center gap-1 text-xs font-bold text-brand-primary uppercase tracking-widest hover:underline self-start cursor-pointer">
+            <button type="button" data-acao="ver-detalhes" data-protocolo="${demanda.protocolo}" class="mt-1 inline-flex items-center gap-1 text-xs font-bold text-brand-primary uppercase tracking-widest hover:underline self-start cursor-pointer">
                 Ver Detalhes
                 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
             </button>
@@ -95,7 +96,7 @@ function renderCardDemanda(demanda) {
 // Card "vazio" que convida o aluno a abrir uma nova demanda.
 function renderCardNovaDemanda() {
     return `
-        <button type="button" class="border-2 border-dashed border-gray-300 rounded-xl p-5 flex flex-col items-center justify-center gap-2 text-gray-500 hover:border-brand-primary hover:text-brand-primary hover:bg-white transition-colors min-h-[180px] cursor-pointer">
+        <button type="button" data-acao="nova-demanda" class="border-2 border-dashed border-gray-300 rounded-xl p-5 flex flex-col items-center justify-center gap-2 text-gray-500 hover:border-brand-primary hover:text-brand-primary hover:bg-white transition-colors min-h-[180px] cursor-pointer">
             <span class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
                 <i data-lucide="plus" class="w-5 h-5"></i>
             </span>
@@ -111,7 +112,7 @@ function renderLinhaHistorico(demanda) {
     return `
         <tr class="border-t border-gray-100">
             <td class="py-3 text-xs font-semibold text-gray-500">#${demanda.protocolo}</td>
-            <td class="py-3 text-sm text-gray-900">${demanda.tipo}</td>
+            <td class="py-3 text-sm text-gray-900 break-words [overflow-wrap:anywhere]">${demanda.tipo}</td>
             <td class="py-3">
                 <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full ${classesDoStatus(demanda.status)}">
                     ${rotulo}
@@ -133,7 +134,7 @@ function renderCardHistorico(demanda) {
                     ${rotulo}
                 </span>
             </div>
-            <h4 class="text-sm font-bold text-gray-900">${demanda.tipo}</h4>
+            <h4 class="text-sm font-bold text-gray-900 break-words [overflow-wrap:anywhere]">${demanda.tipo}</h4>
             <span class="inline-flex items-center gap-1.5 text-xs text-gray-500">
                 <i data-lucide="clock" class="w-3.5 h-3.5"></i>
                 Concluído em ${aux.formatarData(demanda.dataAtualizacao)}
@@ -219,19 +220,29 @@ export function ativarListenerCentralDemandas() {
         return;
     }
 
-    const demandasDoAluno = aux.buscarDemandasPorAluno(usuarioLogado.matricula);
+    // Cada rerender tem que reler do localStorage senão fica com a lista antiga depois
+    // de criar uma demanda nova.
+    function obterDemandas() {
+        return aux.buscarDemandasPorAluno(usuarioLogado.matricula);
+    }
+
+    function rerender() {
+        const demandas = obterDemandas();
+        atualizarMetricasNoTopo(demandas);
+        renderListaDemandas(demandas);
+    }
 
     processarIcones();
-    renderListaDemandas(demandasDoAluno);
+    rerender();
 
     document.querySelector('#filtroBusca').addEventListener('input', (e) => {
         filtros.busca = e.target.value;
-        renderListaDemandas(demandasDoAluno);
+        renderListaDemandas(obterDemandas());
     });
 
     document.querySelector('#filtroStatus').addEventListener('change', (e) => {
         filtros.status = e.target.value;
-        renderListaDemandas(demandasDoAluno);
+        renderListaDemandas(obterDemandas());
     });
 
     document.querySelector('#limparFiltros').addEventListener('click', () => {
@@ -239,8 +250,36 @@ export function ativarListenerCentralDemandas() {
         filtros.status = 'todos';
         document.querySelector('#filtroBusca').value = '';
         document.querySelector('#filtroStatus').value = 'todos';
-        renderListaDemandas(demandasDoAluno);
+        renderListaDemandas(obterDemandas());
     });
+
+    // O botão de nova demanda existe em 3 lugares (desktop, FAB do mobile, card vazio).
+    // Todos abrem a mesma modal.
+    function disparaNovaDemanda() {
+        abrirModalNovaDemanda({ onCriado: rerender });
+    }
+
+    const btnNovaDesktop = document.querySelector('#btnNovaDemandaDesktop');
+    const btnNovaMobile = document.querySelector('#btnNovaDemandaMobile');
+    if (btnNovaDesktop) btnNovaDesktop.addEventListener('click', disparaNovaDemanda);
+    if (btnNovaMobile) btnNovaMobile.addEventListener('click', disparaNovaDemanda);
+
+    // Os botões de ver detalhes e o card vazio são recriados a cada rerender,
+    // então preciso usar delegação no container pai pra não ter que reanexar os listeners.
+    const containerLista = document.querySelector('#listaDemandasAbertas');
+    if (containerLista) {
+        containerLista.addEventListener('click', (event) => {
+            const botaoDetalhes = event.target.closest('[data-acao="ver-detalhes"]');
+            if (botaoDetalhes) {
+                const protocolo = botaoDetalhes.getAttribute('data-protocolo');
+                if (protocolo) abrirModalDetalhesDemanda(protocolo);
+                return;
+            }
+
+            const botaoNova = event.target.closest('[data-acao="nova-demanda"]');
+            if (botaoNova) disparaNovaDemanda();
+        });
+    }
 
     // Logout pode ser disparado por mais de um botão (mobile e desktop).
     const botoesSair = document.querySelectorAll('.btnSairConta');
@@ -268,6 +307,21 @@ export function ativarListenerCentralDemandas() {
     if (drawerOverlay) {
         drawerOverlay.addEventListener('click', () => alternarDrawer(false));
     }
+}
+
+// Os cards de métrica do topo são gerados no innerHTML inicial, mas depois precisam
+// ser atualizados quando o aluno cria uma nova demanda. Por isso atualizo só o textContent.
+function atualizarMetricasNoTopo(demandas) {
+    const metricas = calcularMetricas(demandas);
+    const total = document.querySelector('[data-metrica="total"]');
+    const emAnalise = document.querySelector('[data-metrica="em-analise"]');
+    const eficiencia = document.querySelector('[data-metrica="eficiencia"]');
+    const eficienciaBarra = document.querySelector('[data-metrica="eficiencia-barra"]');
+
+    if (total) total.textContent = metricas.total;
+    if (emAnalise) emAnalise.textContent = metricas.emAnalise < 10 ? '0' + metricas.emAnalise : metricas.emAnalise;
+    if (eficiencia) eficiencia.textContent = `${metricas.eficiencia}%`;
+    if (eficienciaBarra) eficienciaBarra.style.width = `${metricas.eficiencia}%`;
 }
 
 // Calcula as métricas exibidas nos cards do topo a partir das demandas do aluno.
@@ -311,11 +365,7 @@ export function carregarCentralDemandas() {
     const eficiencia = metricas.eficiencia;
 
     document.querySelector('#app').innerHTML = `
-    <div class="min-h-screen w-full flex bg-brand-surface">
-
-        <!-- Sidebar (desktop) -->
-        ${renderSidebarAlunos()}
-        
+    <div class="min-h-screen w-full bg-brand-surface">
 
         <!-- Drawer de navegação (mobile) -->
         <div id="drawerMobile" class="fixed inset-0 z-40 hidden md:hidden">
@@ -340,7 +390,7 @@ export function carregarCentralDemandas() {
         </div>
 
         <!-- Conteúdo principal -->
-        <main class="flex-1 overflow-x-hidden">
+        <main class="overflow-x-hidden">
 
             <!-- Topbar mobile (sticky) -->
             <header class="md:hidden sticky top-0 z-20 bg-white/95 backdrop-blur border-b border-gray-200 flex items-center justify-between gap-3 px-4 h-14">
@@ -362,14 +412,24 @@ export function carregarCentralDemandas() {
             <div class="px-4 py-5 md:px-10 md:py-8">
 
                 <!-- Topbar desktop -->
-                <div class="hidden md:flex items-center justify-end gap-3 mb-8">
-                    <button type="button" class="w-9 h-9 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:text-brand-primary hover:border-brand-primary transition-colors cursor-pointer">
-                        <i data-lucide="bell" class="w-4 h-4"></i>
-                    </button>
-                    <button type="button" class="w-9 h-9 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:text-brand-primary hover:border-brand-primary transition-colors cursor-pointer">
-                        <i data-lucide="help-circle" class="w-4 h-4"></i>
-                    </button>
-                    ${renderChipUsuario(JSON.parse(localStorage.getItem('usuarioLogado')))}
+                <div class="hidden md:flex items-center justify-between gap-3 mb-8">
+                    <a href="/" class="flex items-center gap-2.5 group">
+                        <img src="${logoClarify}" alt="Clarify" class="w-10 h-10 object-contain drop-shadow-[0_4px_12px_rgba(202,95,21,0.25)] transition-transform group-hover:scale-105" />
+                        <div class="leading-none">
+                            <p class="text-lg font-bold text-slate-900 tracking-tight">Clarify</p>
+                            <p class="text-[9px] font-semibold uppercase tracking-[0.18em] text-slate-400 mt-0.5">Federal Institution</p>
+                        </div>
+                    </a>
+
+                    <div class="flex items-center gap-3">
+                        <button type="button" class="w-9 h-9 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:text-brand-primary hover:border-brand-primary transition-colors cursor-pointer">
+                            <i data-lucide="bell" class="w-4 h-4"></i>
+                        </button>
+                        <button type="button" class="w-9 h-9 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:text-brand-primary hover:border-brand-primary transition-colors cursor-pointer">
+                            <i data-lucide="help-circle" class="w-4 h-4"></i>
+                        </button>
+                        ${renderChipUsuario(JSON.parse(localStorage.getItem('usuarioLogado')))}
+                    </div>
                 </div>
 
                 <!-- Cabeçalho da página -->
@@ -384,7 +444,7 @@ export function carregarCentralDemandas() {
                         </p>
                     </div>
 
-                    <button type="button" class="hidden sm:inline-flex items-center gap-2 bg-brand-primary text-white text-sm font-bold px-5 py-3 rounded-xl shadow hover:bg-orange-700 transition-colors cursor-pointer self-start sm:self-auto">
+                    <button id="btnNovaDemandaDesktop" type="button" class="hidden sm:inline-flex items-center gap-2 bg-brand-primary text-white text-sm font-bold px-5 py-3 rounded-xl shadow hover:bg-orange-700 transition-colors cursor-pointer self-start sm:self-auto">
                         <i data-lucide="plus" class="w-4 h-4"></i> Nova Demanda
                     </button>
                 </div>
@@ -394,7 +454,7 @@ export function carregarCentralDemandas() {
                     <div class="min-w-[80%] shrink-0 snap-start sm:min-w-0 sm:shrink bg-white rounded-xl border border-gray-200 p-5">
                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total de Solicitações</p>
                         <div class="flex items-end gap-3 mt-2">
-                            <span class="text-3xl font-bold text-gray-900">${total}</span>
+                            <span class="text-3xl font-bold text-gray-900" data-metrica="total">${total}</span>
                             <span class="text-xs text-gray-500 pb-1">no semestre</span>
                         </div>
                     </div>
@@ -402,7 +462,7 @@ export function carregarCentralDemandas() {
                     <div class="min-w-[80%] shrink-0 snap-start sm:min-w-0 sm:shrink bg-white rounded-xl border border-gray-200 p-5">
                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Em Análise</p>
                         <div class="flex items-end gap-3 mt-2">
-                            <span class="text-3xl font-bold text-gray-900">${emAnalise < 10 ? '0' + emAnalise : emAnalise}</span>
+                            <span class="text-3xl font-bold text-gray-900" data-metrica="em-analise">${emAnalise < 10 ? '0' + emAnalise : emAnalise}</span>
                             <i data-lucide="hourglass" class="w-4 h-4 text-blue-500 mb-2"></i>
                         </div>
                     </div>
@@ -410,9 +470,9 @@ export function carregarCentralDemandas() {
                     <div class="min-w-[80%] shrink-0 snap-start sm:min-w-0 sm:shrink bg-white rounded-xl border border-gray-200 p-5">
                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Eficiência</p>
                         <div class="flex items-center gap-3 mt-2">
-                            <span class="text-3xl font-bold text-gray-900">${eficiencia}%</span>
+                            <span class="text-3xl font-bold text-gray-900" data-metrica="eficiencia">${eficiencia}%</span>
                             <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                <div class="h-full bg-brand-primary rounded-full" style="width: ${eficiencia}%"></div>
+                                <div class="h-full bg-brand-primary rounded-full" data-metrica="eficiencia-barra" style="width: ${eficiencia}%"></div>
                             </div>
                         </div>
                         <p class="text-[10px] text-gray-400 mt-1">Demandas concluídas sobre o total</p>
@@ -495,7 +555,7 @@ export function carregarCentralDemandas() {
             </div>
 
             <!-- FAB Nova Demanda (mobile) -->
-            <button type="button" class="sm:hidden fixed bottom-5 right-5 z-30 w-14 h-14 rounded-full bg-brand-primary text-white shadow-lg shadow-orange-900/20 flex items-center justify-center hover:bg-orange-700 transition-colors cursor-pointer" title="Nova Demanda">
+            <button id="btnNovaDemandaMobile" type="button" class="sm:hidden fixed bottom-5 right-5 z-30 w-14 h-14 rounded-full bg-brand-primary text-white shadow-lg shadow-orange-900/20 flex items-center justify-center hover:bg-orange-700 transition-colors cursor-pointer" title="Nova Demanda">
                 <i data-lucide="plus" class="w-6 h-6"></i>
             </button>
 
