@@ -186,8 +186,8 @@ export function renderizarDemandas(){
     container.innerHTML = '';
 
     const demandas_filtradas = demandas.filter(d => d.status !== 'concluido');
-    const minhas_minhas_demandas = demandas_filtradas.filter(d => d.matriculaAluno === coord.matricula);
-    demandas_filtradas.forEach((demanda) => {
+    const minhas_minhas_demandas = demandas_filtradas.filter(d => coord.alunosCadastrados.includes(d.matriculaAluno));
+    minhas_minhas_demandas.forEach((demanda) => {
         const demandaElement = document.createElement('div');
         demandaElement.classList.add(
             'bg-white',
