@@ -3,7 +3,11 @@ import { iconesUsados, processarIcones } from '../components/assets/icons.js';
 import { carregarLogin, ativarListenerLogin } from './login.js'
 import { renderChipUsuario } from '../components/structures/topbar.js';
 import { renderSidebarAlunos } from '../components/structures/sidebar.js';
+import { abrirModalNovaDemanda, abrirModalDetalhesDemanda } from '../components/structures/modais.js';
+import logoClarify from '../components/assets/GATOGORDO.png';
 import gato from '../components/assets/GATOGORDO.png';
+
+
 
 // Estado dos filtros aplicados no board.
 const filtros = {

@@ -25,10 +25,8 @@ import {
     Send,
     Settings,
     X,
-    Check,
     BarChart,
     MessageCircle,
-    Mail,
     Home
 } from 'lucide';
 
