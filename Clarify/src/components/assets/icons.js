@@ -17,7 +17,11 @@ import {
     Search,
     Settings,
     X,
-    Check
+    Check,
+    BarChart,
+    MessageCircle,
+    Mail,
+    Home
 } from 'lucide';
 
 export const iconesUsados = {
@@ -38,7 +42,11 @@ export const iconesUsados = {
     Search,
     Settings,
     X,
-    Check
+    Check,
+    BarChart,
+    MessageCircle,
+    Mail,
+    Home
 }
 
 export function processarIcones() {
