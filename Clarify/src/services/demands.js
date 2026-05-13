@@ -2,8 +2,6 @@ import * as aux from '../lib/funcoesAuxiliares.js';
 import { processarIcones } from '../components/assets/icons';
 import { renderCardNovaDemanda  } from '../pages/centralDemandas.js';
 
-const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'))
-
 export const filtros = {
     busca: '',
     status: 'todos'
@@ -169,5 +167,6 @@ function renderEstadoVazio() {
 }
 
 export function obterDemandas() {
-        return aux.buscarDemandasPorAluno(usuarioLogado.matricula);
-    }
+    const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
+    return aux.buscarDemandasPorAluno(usuarioLogado.matricula);
+}

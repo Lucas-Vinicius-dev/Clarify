@@ -7,6 +7,7 @@ import logoClarify from '../components/assets/GATOGORDO.png';
 import * as dms from '../services/demands.js';
 
 
+
 // Card "vazio" que convida o aluno a abrir uma nova demanda.
 
 export function renderCardNovaDemanda() {
