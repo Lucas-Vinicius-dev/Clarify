@@ -81,9 +81,7 @@ const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"UsuÃ
 export function renderizarAlunos() {
     const usuariosString = localStorage.getItem('usuarios') || '[]';
     const usuarios = JSON.parse(usuariosString);
-    const coordLista = usuarios.find(u => u.matricula === coord.matricula);
-    const matriculasCadastradas = coordLista?.usuariosCadastrados || [];
-    const meusAlunos = usuarios.filter(u => matriculasCadastradas.includes(u.matricula) && u.cargo === 'aluno');
+    const meusAlunos = usuarios.filter(u => u.coordenador === coord.matricula);
     const demandasString = localStorage.getItem('demandas') || '[]';
     const demandas = JSON.parse(demandasString);
 
