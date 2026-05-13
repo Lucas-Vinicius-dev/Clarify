@@ -5,6 +5,7 @@ import { renderChipUsuario } from '../components/structures/topbar.js';
 import { renderSidebarAlunos } from '../components/structures/sidebar.js';
 import { abrirModalNovaDemanda, abrirModalDetalhesDemanda } from '../components/structures/modais.js';
 import logoClarify from '../components/assets/GATOGORDO.png';
+import gato from '../components/assets/GATOGORDO.png';
 
 
 
