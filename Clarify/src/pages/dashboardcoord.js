@@ -8,7 +8,7 @@ import { iconesUsados, processarIcones } from '../components/assets/icons.js';
 import { ativarListenerTurmas, renderizarTurmas } from '../services/turmas.js';
 
 processarIcones();
-export function demandaDetalhada(protocolo){
+export function demandaDetalhada(protocolo) {
     const demandas = JSON.parse(localStorage.getItem('demandas') || '[]')
     const demanda = demandas.find(d => d.protocolo === protocolo);
     if (demanda) {
@@ -27,17 +27,17 @@ export function demandaDetalhada(protocolo){
             <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Data de Criação:</span> ${aux.formatarData(demanda.dataCriacao)}</p>
             <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Data de Atualização:</span> ${aux.formatarData(demanda.dataAtualizacao)}</p>
             </div>`
-            modal.addEventListener('click', (e) => {
+        modal.addEventListener('click', (e) => {
             if (e.target.id === 'modal-container') {
                 modal.remove();
             }
-            });
-            modal.innerHTML = demandaCard
-            document.body.appendChild(modal);
-            processarIcones();
-        }
+        });
+        modal.innerHTML = demandaCard
+        document.body.appendChild(modal);
+        processarIcones();
+    }
 }
-export function aprovarDemanda(protocolo){
+export function aprovarDemanda(protocolo) {
     const demandas = JSON.parse(localStorage.getItem('demandas') || '[]')
     const demanda = demandas.find(d => d.protocolo === protocolo);
     if (demanda) {
@@ -46,7 +46,7 @@ export function aprovarDemanda(protocolo){
     localStorage.setItem('demandas', JSON.stringify(demandas))
     renderizarDemandas()
 }
-export function reprovarDemanda(protocolo){
+export function reprovarDemanda(protocolo) {
     const modal = document.createElement('div');
     modal.id = 'modalFeedback';
     modal.classList.add('fixed', 'inset-0', 'bg-black/50', 'flex', 'items-center', 'justify-center', 'z-50');
@@ -58,20 +58,20 @@ export function reprovarDemanda(protocolo){
     modal.innerHTML = formFeedback
     document.body.appendChild(modal);
     const form = modal.querySelector('#formfeedback')
-    form.onsubmit = (e) =>{
+    form.onsubmit = (e) => {
         e.preventDefault();
         const feedback = document.querySelector('#feedback').value
-    const demandas = JSON.parse(localStorage.getItem('demandas') || '[]')
-    const demanda = demandas.find(d => d.protocolo === protocolo);
-    if (demanda) {
-        demanda.status = 'negada';
-        demanda.feedback = feedback;
-    }
+        const demandas = JSON.parse(localStorage.getItem('demandas') || '[]')
+        const demanda = demandas.find(d => d.protocolo === protocolo);
+        if (demanda) {
+            demanda.status = 'negada';
+            demanda.feedback = feedback;
+        }
 
-    localStorage.setItem('demandas', JSON.stringify(demandas))
-    modal.remove();
-    renderizarDemandas()
-}
+        localStorage.setItem('demandas', JSON.stringify(demandas))
+        modal.remove();
+        renderizarDemandas()
+    }
 }
 window.aprovarDemanda = aprovarDemanda
 window.reprovarDemanda = reprovarDemanda
@@ -79,7 +79,7 @@ window.demandaDetalhada = demandaDetalhada
 const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 
 export function renderizarAlunos() {
-    console.log("Renderizando alunos...");
+
     const usuariosString = localStorage.getItem('usuarios') || '[]';
     const usuarios = JSON.parse(usuariosString);
     const coordLista = usuarios.find(u => u.matricula === coord.matricula);
@@ -101,7 +101,7 @@ export function renderizarAlunos() {
         `;
         return;
     }
-    
+
     meusAlunos.forEach((aluno) => {
         const iniciais = aluno.nome
             .split(' ')
@@ -154,14 +154,10 @@ export function renderizarAlunos() {
 
     return container;
 }
-export function renderizarDemandas(){
-    console.log("Renderizando demandas...");
+export function renderizarDemandas() {
     const demandasString = localStorage.getItem('demandas') || '[]';
-    console.log('localStorage:', demandasString);
     const demandas = JSON.parse(demandasString);
-    console.log('Demandas:', demandas);
     const container = document.querySelector('#demandasContainer');
-    console.log('Container encontrado:', container);
     if (!container) return;
     container.innerHTML = '';
 
@@ -203,7 +199,7 @@ export function renderizarDemandas(){
                 <button class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors ml-2" onclick="reprovarDemanda('${demanda.protocolo}')"><i data-lucide="x"></i></button>
             </div>
         `;
-        if (demanda.status === 'pendente'){
+        if (demanda.status === 'pendente') {
             container.appendChild(demandaElement);
         }
     })
@@ -311,7 +307,7 @@ const dashboardViews = {
         </div>
      `
     ,
-    
+
     alunos: `
     <div class="border border-dashed border-gray-300 bg-white p-8 shadow-sm">
         <h2 class="text-2xl font-semibold mb-4">Alunos</h2>
@@ -319,7 +315,7 @@ const dashboardViews = {
     </div>
     <div id="alunosContainer" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
 `,
-demandas: `
+    demandas: `
     <div class="border border-dashed border-gray-300 bg-white p-8 shadow-sm">
         <h2 class="text-2xl font-semibold mb-4">Demandas</h2>
         <p class="text-gray-600">Veja as demandas abertas, tarefas pendentes e notificações importantes.</p>
@@ -372,7 +368,6 @@ function checarDashboardCoord() {
 
     alert("Usuário criado com sucesso!");
     aux.adicionarUsuario(nome, matricula, email, senha, cargo);
-    console.log(aux.acharUsuario(coordenadorLogado["matricula"]));
     aux.atribuirAluno(coordenadorLogado.matricula, matricula);
 }
 
@@ -395,10 +390,10 @@ export function renderDashboardView(view = 'nome') {
     } else if (view === 'alunos') {
         renderizarAlunos();
     } else if (view === 'turmas') {
-            renderizarTurmas();
-            ativarListenerTurmas();
+        renderizarTurmas();
+        ativarListenerTurmas();
     }
-        setActiveDashboardTab(view);
+    setActiveDashboardTab(view);
 }
 
 export function setActiveDashboardTab(view) {
