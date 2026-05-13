@@ -372,8 +372,8 @@ function checarDashboardCoord() {
 
     alert("Usuário criado com sucesso!");
     aux.adicionarUsuario(nome, matricula, email, senha, cargo);
-    console.log(aux.acharUsuario(coordenadorLogado["matricula"]));
-    aux.atribuirAluno(coordenadorLogado.matricula, matricula);
+    aux.atribuirCoordenador(matricula, coordenadorLogado.matricula);
+    aux.atribuirAluno(matricula, coordenadorLogado.matricula);
 }
 
 export function ativarListenerDashboardCoord() {
