@@ -135,10 +135,50 @@
             </nav>
 
         </aside>
-    `}var n={xmlns:`http://www.w3.org/2000/svg`,width:24,height:24,viewBox:`0 0 24 24`,fill:`none`,stroke:`currentColor`,"stroke-width":2,"stroke-linecap":`round`,"stroke-linejoin":`round`},r=([e,t,n])=>{let i=document.createElementNS(`http://www.w3.org/2000/svg`,e);return Object.keys(t).forEach(e=>{i.setAttribute(e,String(t[e]))}),n?.length&&n.forEach(e=>{let t=r(e);i.appendChild(t)}),i},i=(e,t={})=>r([`svg`,{...n,...t},e]),a=e=>{for(let t in e)if(t.startsWith(`aria-`)||t===`role`||t===`title`)return!0;return!1},o=(...e)=>e.filter((e,t,n)=>!!e&&e.trim()!==``&&n.indexOf(e)===t).join(` `).trim(),s=e=>e.replace(/^([A-Z])|[\s-_]+(\w)/g,(e,t,n)=>n?n.toUpperCase():t.toLowerCase()),c=e=>{let t=s(e);return t.charAt(0).toUpperCase()+t.slice(1)},l=e=>Array.from(e.attributes).reduce((e,t)=>(e[t.name]=t.value,e),{}),u=e=>typeof e==`string`?e:!e||!e.class?``:e.class&&typeof e.class==`string`?e.class.split(` `):e.class&&Array.isArray(e.class)?e.class:``,d=(e,{nameAttr:t,icons:r,attrs:s})=>{let d=e.getAttribute(t);if(d==null)return;let f=r[c(d)];if(!f)return console.warn(`${e.outerHTML} icon name was not found in the provided icons object.`);let p=l(e),m=a(p)?{}:{"aria-hidden":`true`},h={...n,"data-lucide":d,...m,...s,...p},ee=u(p),te=u(s),g=o(`lucide`,`lucide-${d}`,...ee,...te);g&&Object.assign(h,{class:g});let ne=i(f,h);return e.parentNode?.replaceChild(ne,e)},f=[[`path`,{d:`M5 12h14`}],[`path`,{d:`m12 5 7 7-7 7`}]],p=[[`path`,{d:`M10.268 21a2 2 0 0 0 3.464 0`}],[`path`,{d:`M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326`}]],m=[[`path`,{d:`M8 2v4`}],[`path`,{d:`M16 2v4`}],[`rect`,{width:`18`,height:`18`,x:`3`,y:`4`,rx:`2`}],[`path`,{d:`M3 10h18`}]],h=[[`path`,{d:`M20 6 9 17l-5-5`}]],ee=[[`path`,{d:`m9 18 6-6-6-6`}]],te=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`line`,{x1:`12`,x2:`12`,y1:`8`,y2:`12`}],[`line`,{x1:`12`,x2:`12.01`,y1:`16`,y2:`16`}]],g=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`path`,{d:`m9 12 2 2 4-4`}]],ne=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`path`,{d:`M8 12h8`}],[`path`,{d:`M12 8v8`}]],re=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`path`,{d:`M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3`}],[`path`,{d:`M12 17h.01`}]],ie=[[`rect`,{width:`8`,height:`4`,x:`8`,y:`2`,rx:`1`,ry:`1`}],[`path`,{d:`M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2`}],[`path`,{d:`M12 11h4`}],[`path`,{d:`M12 16h4`}],[`path`,{d:`M8 11h.01`}],[`path`,{d:`M8 16h.01`}]],_=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`path`,{d:`M12 6v6l4 2`}]],ae=[[`path`,{d:`M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0`}],[`circle`,{cx:`12`,cy:`12`,r:`3`}]],oe=[[`path`,{d:`M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z`}],[`path`,{d:`M14 2v5a1 1 0 0 0 1 1h5`}],[`path`,{d:`M10 9H8`}],[`path`,{d:`M16 13H8`}],[`path`,{d:`M16 17H8`}]],se=[[`path`,{d:`M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z`}]],ce=[[`path`,{d:`M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z`}],[`path`,{d:`M22 10v6`}],[`path`,{d:`M6 12.5V16a6 3 0 0 0 12 0v-3.5`}]],le=[[`line`,{x1:`4`,x2:`20`,y1:`9`,y2:`9`}],[`line`,{x1:`4`,x2:`20`,y1:`15`,y2:`15`}],[`line`,{x1:`10`,x2:`8`,y1:`3`,y2:`21`}],[`line`,{x1:`16`,x2:`14`,y1:`3`,y2:`21`}]],ue=[[`path`,{d:`M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8`}],[`path`,{d:`M3 3v5h5`}],[`path`,{d:`M12 7v5l4 2`}]],de=[[`path`,{d:`M5 22h14`}],[`path`,{d:`M5 2h14`}],[`path`,{d:`M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22`}],[`path`,{d:`M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2`}]],fe=[[`path`,{d:`m16 17 5-5-5-5`}],[`path`,{d:`M21 12H9`}],[`path`,{d:`M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4`}]],pe=[[`path`,{d:`m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7`}],[`rect`,{x:`2`,y:`4`,width:`20`,height:`16`,rx:`2`}]],me=[[`path`,{d:`M4 5h16`}],[`path`,{d:`M4 12h16`}],[`path`,{d:`M4 19h16`}]],he=[[`path`,{d:`M14 14a2 2 0 0 0 2-2V8h-2`}],[`path`,{d:`M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z`}],[`path`,{d:`M8 14a2 2 0 0 0 2-2V8H8`}]],ge=[[`path`,{d:`M5 12h14`}],[`path`,{d:`M12 5v14`}]],_e=[[`path`,{d:`m21 21-4.34-4.34`}],[`circle`,{cx:`11`,cy:`11`,r:`8`}]],ve=[[`path`,{d:`M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z`}],[`path`,{d:`m21.854 2.147-10.94 10.939`}]],ye=[[`path`,{d:`M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915`}],[`circle`,{cx:`12`,cy:`12`,r:`3`}]],be=[[`path`,{d:`M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z`}],[`path`,{d:`M20 2v4`}],[`path`,{d:`M22 4h-4`}],[`circle`,{cx:`4`,cy:`20`,r:`2`}]],xe=[[`path`,{d:`M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z`}],[`circle`,{cx:`7.5`,cy:`7.5`,r:`.5`,fill:`currentColor`}]],Se=[[`path`,{d:`M10 15H6a4 4 0 0 0-4 4v2`}],[`path`,{d:`m14.305 16.53.923-.382`}],[`path`,{d:`m15.228 13.852-.923-.383`}],[`path`,{d:`m16.852 12.228-.383-.923`}],[`path`,{d:`m16.852 17.772-.383.924`}],[`path`,{d:`m19.148 12.228.383-.923`}],[`path`,{d:`m19.53 18.696-.382-.924`}],[`path`,{d:`m20.772 13.852.924-.383`}],[`path`,{d:`m20.772 16.148.924.383`}],[`circle`,{cx:`18`,cy:`15`,r:`3`}],[`circle`,{cx:`9`,cy:`7`,r:`4`}]],Ce=[[`path`,{d:`M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2`}],[`circle`,{cx:`12`,cy:`7`,r:`4`}]],we=[[`path`,{d:`M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2`}],[`path`,{d:`M16 3.128a4 4 0 0 1 0 7.744`}],[`path`,{d:`M22 21v-2a4 4 0 0 0-3-3.87`}],[`circle`,{cx:`9`,cy:`7`,r:`4`}]],Te=[[`path`,{d:`M18 6 6 18`}],[`path`,{d:`m6 6 12 12`}]],v=({icons:e={},nameAttr:t=`data-lucide`,attrs:n={},root:r=document,inTemplates:i}={})=>{if(!Object.values(e).length)throw Error(`Please provide an icons object.
+    `}function n(){return`
+    <aside class="hidden md:flex md:flex-col w-64 bg-gray-50 shadow border-r border-gray-200 p-5 shrink-0">
+
+            <!-- Logo -->
+            <div class="mb-6 flex items-center gap-3 px-2">
+                <img 
+                    src="${e}" 
+                    alt="Clarify Logo" 
+                    class="w-11 h-11 object-contain"
+                />
+
+                <h1 class="text-2xl font-bold text-orange-600">
+                    Clarify
+                </h1>
+            </div>
+
+            <nav class="flex-1 px-4 py-6 space-y-1 text-sm">
+                <button type="button" data-view="inicio" class="w-full flex items-center gap-3 rounded-xl px-4 py-3 text-left text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    <i data-lucide="home" class="w-5 h-5"></i>
+                    <span class="font-medium">Início</span>
+                </button>
+                <button type="button" data-view="demandas" class="w-full flex items-center gap-3 rounded-xl px-4 py-3 text-left text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                    <span class="font-medium">Central de Demandas</span>
+                </button>
+                <a href="#" class="w-full flex items-center gap-3 rounded-xl px-4 py-3 text-left text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path d="M12 22s8-4 8-10V5l-8 3-8-3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span class="font-medium">Turmas</span>
+                </a>
+            </nav>
+        </aside>
+        `}var r={xmlns:`http://www.w3.org/2000/svg`,width:24,height:24,viewBox:`0 0 24 24`,fill:`none`,stroke:`currentColor`,"stroke-width":2,"stroke-linecap":`round`,"stroke-linejoin":`round`},i=([e,t,n])=>{let r=document.createElementNS(`http://www.w3.org/2000/svg`,e);return Object.keys(t).forEach(e=>{r.setAttribute(e,String(t[e]))}),n?.length&&n.forEach(e=>{let t=i(e);r.appendChild(t)}),r},a=(e,t={})=>i([`svg`,{...r,...t},e]),o=e=>{for(let t in e)if(t.startsWith(`aria-`)||t===`role`||t===`title`)return!0;return!1},s=(...e)=>e.filter((e,t,n)=>!!e&&e.trim()!==``&&n.indexOf(e)===t).join(` `).trim(),c=e=>e.replace(/^([A-Z])|[\s-_]+(\w)/g,(e,t,n)=>n?n.toUpperCase():t.toLowerCase()),l=e=>{let t=c(e);return t.charAt(0).toUpperCase()+t.slice(1)},ee=e=>Array.from(e.attributes).reduce((e,t)=>(e[t.name]=t.value,e),{}),te=e=>typeof e==`string`?e:!e||!e.class?``:e.class&&typeof e.class==`string`?e.class.split(` `):e.class&&Array.isArray(e.class)?e.class:``,u=(e,{nameAttr:t,icons:n,attrs:i})=>{let c=e.getAttribute(t);if(c==null)return;let u=n[l(c)];if(!u)return console.warn(`${e.outerHTML} icon name was not found in the provided icons object.`);let d=ee(e),f=o(d)?{}:{"aria-hidden":`true`},p={...r,"data-lucide":c,...f,...i,...d},ne=te(d),m=te(i),h=s(`lucide`,`lucide-${c}`,...ne,...m);h&&Object.assign(p,{class:h});let g=a(u,p);return e.parentNode?.replaceChild(g,e)},d=[[`path`,{d:`M5 12h14`}],[`path`,{d:`m12 5 7 7-7 7`}]],f=[[`path`,{d:`M10.268 21a2 2 0 0 0 3.464 0`}],[`path`,{d:`M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326`}]],p=[[`path`,{d:`M8 2v4`}],[`path`,{d:`M16 2v4`}],[`rect`,{width:`18`,height:`18`,x:`3`,y:`4`,rx:`2`}],[`path`,{d:`M3 10h18`}]],ne=[[`path`,{d:`M5 21v-6`}],[`path`,{d:`M12 21V9`}],[`path`,{d:`M19 21V3`}]],m=[[`path`,{d:`M20 6 9 17l-5-5`}]],h=[[`path`,{d:`m9 18 6-6-6-6`}]],g=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`line`,{x1:`12`,x2:`12`,y1:`8`,y2:`12`}],[`line`,{x1:`12`,x2:`12.01`,y1:`16`,y2:`16`}]],_=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`path`,{d:`m9 12 2 2 4-4`}]],re=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`path`,{d:`M8 12h8`}],[`path`,{d:`M12 8v8`}]],ie=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`path`,{d:`M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3`}],[`path`,{d:`M12 17h.01`}]],ae=[[`rect`,{width:`8`,height:`4`,x:`8`,y:`2`,rx:`1`,ry:`1`}],[`path`,{d:`M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2`}],[`path`,{d:`M12 11h4`}],[`path`,{d:`M12 16h4`}],[`path`,{d:`M8 11h.01`}],[`path`,{d:`M8 16h.01`}]],oe=[[`circle`,{cx:`12`,cy:`12`,r:`10`}],[`path`,{d:`M12 6v6l4 2`}]],se=[[`path`,{d:`M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0`}],[`circle`,{cx:`12`,cy:`12`,r:`3`}]],ce=[[`path`,{d:`M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z`}],[`path`,{d:`M14 2v5a1 1 0 0 0 1 1h5`}],[`path`,{d:`M10 9H8`}],[`path`,{d:`M16 13H8`}],[`path`,{d:`M16 17H8`}]],le=[[`path`,{d:`M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z`}]],ue=[[`path`,{d:`M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z`}],[`path`,{d:`M22 10v6`}],[`path`,{d:`M6 12.5V16a6 3 0 0 0 12 0v-3.5`}]],de=[[`line`,{x1:`4`,x2:`20`,y1:`9`,y2:`9`}],[`line`,{x1:`4`,x2:`20`,y1:`15`,y2:`15`}],[`line`,{x1:`10`,x2:`8`,y1:`3`,y2:`21`}],[`line`,{x1:`16`,x2:`14`,y1:`3`,y2:`21`}]],fe=[[`path`,{d:`M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8`}],[`path`,{d:`M3 3v5h5`}],[`path`,{d:`M12 7v5l4 2`}]],pe=[[`path`,{d:`M5 22h14`}],[`path`,{d:`M5 2h14`}],[`path`,{d:`M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22`}],[`path`,{d:`M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2`}]],me=[[`path`,{d:`M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8`}],[`path`,{d:`M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z`}]],he=[[`path`,{d:`m16 17 5-5-5-5`}],[`path`,{d:`M21 12H9`}],[`path`,{d:`M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4`}]],ge=[[`path`,{d:`m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7`}],[`rect`,{x:`2`,y:`4`,width:`20`,height:`16`,rx:`2`}]],_e=[[`path`,{d:`M4 5h16`}],[`path`,{d:`M4 12h16`}],[`path`,{d:`M4 19h16`}]],ve=[[`path`,{d:`M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719`}]],ye=[[`path`,{d:`M14 14a2 2 0 0 0 2-2V8h-2`}],[`path`,{d:`M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z`}],[`path`,{d:`M8 14a2 2 0 0 0 2-2V8H8`}]],be=[[`path`,{d:`M5 12h14`}],[`path`,{d:`M12 5v14`}]],xe=[[`path`,{d:`m21 21-4.34-4.34`}],[`circle`,{cx:`11`,cy:`11`,r:`8`}]],Se=[[`path`,{d:`M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z`}],[`path`,{d:`m21.854 2.147-10.94 10.939`}]],Ce=[[`path`,{d:`M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915`}],[`circle`,{cx:`12`,cy:`12`,r:`3`}]],we=[[`path`,{d:`M10 15H6a4 4 0 0 0-4 4v2`}],[`path`,{d:`m14.305 16.53.923-.382`}],[`path`,{d:`m15.228 13.852-.923-.383`}],[`path`,{d:`m16.852 12.228-.383-.923`}],[`path`,{d:`m16.852 17.772-.383.924`}],[`path`,{d:`m19.148 12.228.383-.923`}],[`path`,{d:`m19.53 18.696-.382-.924`}],[`path`,{d:`m20.772 13.852.924-.383`}],[`path`,{d:`m20.772 16.148.924.383`}],[`circle`,{cx:`18`,cy:`15`,r:`3`}],[`circle`,{cx:`9`,cy:`7`,r:`4`}]],Te=[[`path`,{d:`M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2`}],[`path`,{d:`M16 3.128a4 4 0 0 1 0 7.744`}],[`path`,{d:`M22 21v-2a4 4 0 0 0-3-3.87`}],[`circle`,{cx:`9`,cy:`7`,r:`4`}]],Ee=[[`path`,{d:`M18 6 6 18`}],[`path`,{d:`m6 6 12 12`}]],v=({icons:e={},nameAttr:t=`data-lucide`,attrs:n={},root:r=document,inTemplates:i}={})=>{if(!Object.values(e).length)throw Error(`Please provide an icons object.
 If you want to use all the icons you can import it like:
  \`import { createIcons, icons } from 'lucide';
-lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only works in a browser environment.");if(Array.from(r.querySelectorAll(`[${t}]`)).forEach(r=>d(r,{nameAttr:t,icons:e,attrs:n})),i&&Array.from(r.querySelectorAll(`template`)).forEach(r=>v({icons:e,nameAttr:t,attrs:n,root:r.content,inTemplates:i})),t===`data-lucide`){let t=r.querySelectorAll(`[icon-name]`);t.length>0&&(console.warn(`[Lucide] Some icons were found with the now deprecated icon-name attribute. These will still be replaced for backwards compatibility, but will no longer be supported in v1.0 and you should switch to data-lucide`),Array.from(t).forEach(t=>d(t,{nameAttr:`icon-name`,icons:e,attrs:n})))}},Ee={AlertCircle:te,ArrowRight:f,Bell:p,Calendar:m,Check:h,CheckCircle2:g,ChevronRight:ee,ClipboardList:ie,Clock:_,FileText:oe,Filter:se,Hash:le,HelpCircle:re,History:ue,Hourglass:de,LogOut:fe,Mail:pe,MessageSquareQuote:he,Menu:me,Plus:ge,PlusCircle:ne,Search:_e,Send:ve,Settings:ye,Sparkles:be,Tag:xe,User:Ce,X:Te};function y(){v({icons:Ee,attrs:{"stroke-width":1.75}})}function b(e,t=!0){let n=e?.nome||`Usuário`;return`
+lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only works in a browser environment.");if(Array.from(r.querySelectorAll(`[${t}]`)).forEach(r=>u(r,{nameAttr:t,icons:e,attrs:n})),i&&Array.from(r.querySelectorAll(`template`)).forEach(r=>v({icons:e,nameAttr:t,attrs:n,root:r.content,inTemplates:i})),t===`data-lucide`){let t=r.querySelectorAll(`[icon-name]`);t.length>0&&(console.warn(`[Lucide] Some icons were found with the now deprecated icon-name attribute. These will still be replaced for backwards compatibility, but will no longer be supported in v1.0 and you should switch to data-lucide`),Array.from(t).forEach(t=>u(t,{nameAttr:`icon-name`,icons:e,attrs:n})))}},De={AlertCircle:g,ArrowRight:d,Bell:f,Calendar:p,Check:m,CheckCircle2:_,ChevronRight:h,ClipboardList:ae,Clock:oe,FileText:ce,Filter:le,Hash:de,HelpCircle:ie,History:fe,Hourglass:pe,LogOut:he,Mail:ge,MessageSquareQuote:ye,Menu:_e,Plus:be,PlusCircle:re,Search:xe,Send:Se,Settings:Ce,X:Ee,Check:m,BarChart:ne,MessageCircle:ve,Mail:ge,Home:me};function y(){v({icons:De,attrs:{"stroke-width":1.75}})}function b(e,t=!0){let n=e?.nome||`Usuário`;return`
         <div class="flex items-center gap-2 bg-white border border-gray-200 rounded-full pl-2 pr-1 py-1 shadow-sm">
             
             <!-- Avatar -->
@@ -164,7 +204,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
             </button>
 
         </div>
-    `}function De(){return`turma_`+Date.now()+`_`+Math.random().toString(36).slice(2,7)}function Oe(e){let t=JSON.parse(localStorage.getItem(`turmas`)||`[]`);t.push(e),localStorage.setItem(`turmas`,JSON.stringify(t))}function x(){let e=JSON.parse(localStorage.getItem(`turmas`)||`[]`),t=JSON.parse(localStorage.getItem(`usuarioLogado`)||`{}`),n=document.querySelector(`#turmasContainer`);if(!n)return;let r=e.filter(e=>e.coordenador===String(t.matricula));if(r.length===0){n.innerHTML=`
+    `}function Oe(){return`turma_`+Date.now()+`_`+Math.random().toString(36).slice(2,7)}function ke(e){let t=JSON.parse(localStorage.getItem(`turmas`)||`[]`);t.push(e),localStorage.setItem(`turmas`,JSON.stringify(t))}function Ae(){let e=JSON.parse(localStorage.getItem(`turmas`)||`[]`),t=JSON.parse(localStorage.getItem(`usuarioLogado`)||`{}`),n=document.querySelector(`#turmasContainer`);if(!n)return;let r=e.filter(e=>e.coordenador===String(t.matricula));if(r.length===0){n.innerHTML=`
             <p class="col-span-full text-center text-gray-400 py-8 text-sm">
                 Nenhuma turma criada ainda.
             </p>`;return}n.innerHTML=``,r.forEach(e=>{let t=document.createElement(`div`);t.classList.add(`bg-white`,`border`,`border-gray-200`,`rounded-2xl`,`p-5`,`shadow-lg`,`hover:-translate-y-1`,`transition-transform`,`duration-200`,`ease-out`),t.innerHTML=`
@@ -180,7 +220,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
             <div class="text-sm text-zinc-500">
                 <span class="font-semibold text-zinc-700">ID:</span> ${e.id}
             </div>
-        `,n.appendChild(t)})}function ke(){if(document.getElementById(`modalCriarTurma`))return;let e=[],t=document.createElement(`div`);t.id=`modalCriarTurma`,t.className=`fixed inset-0 bg-black/50 flex items-center justify-center z-50`,t.innerHTML=`
+        `,n.appendChild(t)})}function je(){if(document.getElementById(`modalCriarTurma`))return;let e=[],t=document.createElement(`div`);t.id=`modalCriarTurma`,t.className=`fixed inset-0 bg-black/50 flex items-center justify-center z-50`,t.innerHTML=`
         <div class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl relative">
             <button id="fecharModalTurma"
                 class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 cursor-pointer">
@@ -266,7 +306,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                     <path d="M18 6 6 18M6 6l12 12"/>
                 </svg>
             </button>
-        `,n.querySelector(`button`).onclick=()=>{let r=e.indexOf(t);r>-1&&e.splice(r,1),n.remove()},document.getElementById(`turmaAlunosChips`).appendChild(n),document.getElementById(`turmaAlunoMatricula`).value=``}document.getElementById(`btnAdicionarAluno`).onclick=()=>{let e=document.getElementById(`turmaAlunoMatricula`).value;r(e)},document.getElementById(`turmaAlunoMatricula`).addEventListener(`keydown`,e=>{e.key===`Enter`&&(e.preventDefault(),r(e.target.value))}),document.getElementById(`formCriarTurma`).onsubmit=t=>{t.preventDefault();let r=JSON.parse(localStorage.getItem(`usuarioLogado`)||`{}`),i={id:De(),nome:document.getElementById(`turmaNome`).value.trim(),disciplina:document.getElementById(`turmaDisciplina`).value.trim(),alunos:[...e],coordenador:String(r.matricula),criadaEm:new Date().toISOString()};Oe(i),n(),x(),alert(`Turma "${i.nome}" criada com sucesso!`)}}function Ae(){let e=document.querySelector(`#btnCriarTurma`);e&&(e.onclick=e=>{e.preventDefault(),e.stopImmediatePropagation(),console.log(`Abrindo modal de criação...`),ke()})}y();function je(e){let t=JSON.parse(localStorage.getItem(`demandas`)||`[]`).find(t=>t.protocolo===e);if(t){let e=document.createElement(`div`);e.id=`modal-container`,e.classList.add(`fixed`,`inset-0`,`bg-black/50`,`flex`,`items-center`,`justify-center`,`z-50`);let n=`
+        `,n.querySelector(`button`).onclick=()=>{let r=e.indexOf(t);r>-1&&e.splice(r,1),n.remove()},document.getElementById(`turmaAlunosChips`).appendChild(n),document.getElementById(`turmaAlunoMatricula`).value=``}document.getElementById(`btnAdicionarAluno`).onclick=()=>{let e=document.getElementById(`turmaAlunoMatricula`).value;r(e)},document.getElementById(`turmaAlunoMatricula`).addEventListener(`keydown`,e=>{e.key===`Enter`&&(e.preventDefault(),r(e.target.value))}),document.getElementById(`formCriarTurma`).onsubmit=t=>{t.preventDefault();let r=JSON.parse(localStorage.getItem(`usuarioLogado`)||`{}`),i={id:Oe(),nome:document.getElementById(`turmaNome`).value.trim(),disciplina:document.getElementById(`turmaDisciplina`).value.trim(),alunos:[...e],coordenador:String(r.matricula),criadaEm:new Date().toISOString()};ke(i),n(),Ae(),alert(`Turma "${i.nome}" criada com sucesso!`)}}function Me(){let e=document.querySelector(`#btnCriarTurma`);e&&(e.onclick=e=>{e.preventDefault(),e.stopImmediatePropagation(),console.log(`Abrindo modal de criação...`),je()})}y();function Ne(e){let t=JSON.parse(localStorage.getItem(`demandas`)||`[]`).find(t=>t.protocolo===e);if(t){let e=document.createElement(`div`);e.id=`modal-container`,e.classList.add(`fixed`,`inset-0`,`bg-black/50`,`flex`,`items-center`,`justify-center`,`z-50`);let n=`
             <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
             <button onclick="document.getElementById('modal-container').remove()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors  cursor-pointer">
             <i data-lucide="x" class="w-5 h-5"></i></button>
@@ -275,13 +315,13 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
             <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Protocolo:</span> ${t.protocolo}</p>
             <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Matrícula do Aluno:</span> ${t.matriculaAluno}</p>
             <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Status:</span> ${t.status.replace(`_`,` `).toUpperCase()}</p>
-            <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Data de Criação:</span> ${Q(t.dataCriacao)}</p>
-            <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Data de Atualização:</span> ${Q(t.dataAtualizacao)}</p>
-            </div>`;e.addEventListener(`click`,t=>{t.target.id===`modal-container`&&e.remove()}),e.innerHTML=n,document.body.appendChild(e),y()}}function Me(e){let t=JSON.parse(localStorage.getItem(`demandas`)||`[]`),n=t.find(t=>t.protocolo===e);n&&(n.status=`aprovada`),localStorage.setItem(`demandas`,JSON.stringify(t)),C()}function Ne(e){let t=document.createElement(`div`);t.id=`modalFeedback`,t.classList.add(`fixed`,`inset-0`,`bg-black/50`,`flex`,`items-center`,`justify-center`,`z-50`),t.innerHTML=`
+            <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Data de Criação:</span> ${Z(t.dataCriacao)}</p>
+            <p class="text-sm text-gray-500 mb-2"><span class="font-semibold">Data de Atualização:</span> ${Z(t.dataAtualizacao)}</p>
+            </div>`;e.addEventListener(`click`,t=>{t.target.id===`modal-container`&&e.remove()}),e.innerHTML=n,document.body.appendChild(e),y()}}function Pe(e){let t=JSON.parse(localStorage.getItem(`demandas`)||`[]`),n=t.find(t=>t.protocolo===e);n&&(n.status=`aprovada`),localStorage.setItem(`demandas`,JSON.stringify(t)),S()}function Fe(e){let t=document.createElement(`div`);t.id=`modalFeedback`,t.classList.add(`fixed`,`inset-0`,`bg-black/50`,`flex`,`items-center`,`justify-center`,`z-50`),t.innerHTML=`
     <form id='formfeedback' class='bg-white p-6 rounded-lg shadow-lg w-full max-w-sm'>
     <input type='text' id='feedback' placeholder='Digite seu feedback...' class='w-full border border-gray-300 rounded-lg p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all' required>
     <button type='submit' class='bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition-colors'>Enviar</button>
-    </form>`,document.body.appendChild(t);let n=t.querySelector(`#formfeedback`);n.onsubmit=n=>{n.preventDefault();let r=document.querySelector(`#feedback`).value,i=JSON.parse(localStorage.getItem(`demandas`)||`[]`),a=i.find(t=>t.protocolo===e);a&&(a.status=`negada`,a.feedback=r),localStorage.setItem(`demandas`,JSON.stringify(i)),t.remove(),C()}}window.aprovarDemanda=Me,window.reprovarDemanda=Ne,window.demandaDetalhada=je;var S=JSON.parse(localStorage.getItem(`usuarioLogado`)||`{"nome":"Usuário"}`);function Pe(){console.log(`Renderizando alunos...`);let e=localStorage.getItem(`usuarios`)||`[]`,t=JSON.parse(e),n=t.find(e=>e.matricula===S.matricula)?.usuariosCadastrados||[],r=t.filter(e=>n.includes(e.matricula)&&e.cargo===`aluno`),i=localStorage.getItem(`demandas`)||`[]`,a=JSON.parse(i),o=document.querySelector(`#alunosContainer`);if(o){if(o.innerHTML=``,r.length===0){o.innerHTML=`
+    </form>`,document.body.appendChild(t);let n=t.querySelector(`#formfeedback`);n.onsubmit=n=>{n.preventDefault();let r=document.querySelector(`#feedback`).value,i=JSON.parse(localStorage.getItem(`demandas`)||`[]`),a=i.find(t=>t.protocolo===e);a&&(a.status=`negada`,a.feedback=r),localStorage.setItem(`demandas`,JSON.stringify(i)),t.remove(),S()}}window.aprovarDemanda=Pe,window.reprovarDemanda=Fe,window.demandaDetalhada=Ne;var x=JSON.parse(localStorage.getItem(`usuarioLogado`)||`{"nome":"Usuário"}`);function Ie(){console.log(`Renderizando alunos...`);let e=localStorage.getItem(`usuarios`)||`[]`,t=JSON.parse(e),n=t.find(e=>e.matricula===x.matricula)?.usuariosCadastrados||[],r=t.filter(e=>n.includes(e.matricula)&&e.cargo===`aluno`),i=localStorage.getItem(`demandas`)||`[]`,a=JSON.parse(i),o=document.querySelector(`#alunosContainer`);if(o){if(o.innerHTML=``,r.length===0){o.innerHTML=`
             <div class="col-span-full text-center py-12 text-zinc-400">
                 <span class="material-symbols-outlined text-4xl mb-2 block">person_off</span>
                 <p class="text-sm">Nenhum aluno cadastrado.</p>
@@ -310,7 +350,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                 </p>
 
             </div>
-        `,o.appendChild(n)}),o}}function C(){console.log(`Renderizando demandas...`);let e=localStorage.getItem(`demandas`)||`[]`;console.log(`localStorage:`,e);let t=JSON.parse(e);console.log(`Demandas:`,t);let n=document.querySelector(`#demandasContainer`);if(console.log(`Container encontrado:`,n),n)return n.innerHTML=``,t.filter(e=>e.status!==`concluido`).forEach(e=>{let t=document.createElement(`div`);t.classList.add(`bg-white`,`border`,`border-gray-200`,`rounded-2xl`,`p-5`,`shadow-lg`,`hover:-translate-y-1`,`transition-transform`,`duration-200`,`ease-out`,`flex`,`flex-col`,`justify-between`,`h-full`),t.classList.add(`demandas`);let r=e.status===`concluido`?`bg-emerald-100 text-emerald-700`:e.status===`em_analise`?`bg-amber-100 text-amber-700`:e.status===`requer_ajuste`?`bg-orange-100 text-orange-700`:`bg-slate-100 text-slate-700`,i=e.descricao?e.descricao:``;t.innerHTML=`
+        `,o.appendChild(n)}),o}}function S(){console.log(`Renderizando demandas...`);let e=localStorage.getItem(`demandas`)||`[]`;console.log(`localStorage:`,e);let t=JSON.parse(e);console.log(`Demandas:`,t);let n=document.querySelector(`#demandasContainer`);if(console.log(`Container encontrado:`,n),n)return n.innerHTML=``,t.filter(e=>e.status!==`concluido`).forEach(e=>{let t=document.createElement(`div`);t.classList.add(`bg-white`,`border`,`border-gray-200`,`rounded-2xl`,`p-5`,`shadow-lg`,`hover:-translate-y-1`,`transition-transform`,`duration-200`,`ease-out`,`flex`,`flex-col`,`justify-between`,`h-full`),t.classList.add(`demandas`);let r=e.status===`concluido`?`bg-emerald-100 text-emerald-700`:e.status===`em_analise`?`bg-amber-100 text-amber-700`:e.status===`requer_ajuste`?`bg-orange-100 text-orange-700`:`bg-slate-100 text-slate-700`,i=e.descricao?e.descricao:``;t.innerHTML=`
             <div class="flex items-start justify-between gap-4 mb-4" onclick="demandaDetalhada('${e.protocolo}')">
                 <div class="space-y-2">
                     <h3 class="text-lg font-semibold text-zinc-900">${e.tipo}</h3>
@@ -326,7 +366,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                 <button class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors" onclick="aprovarDemanda('${e.protocolo}')"><i data-lucide="check"></i></button>
                 <button class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors ml-2" onclick="reprovarDemanda('${e.protocolo}')"><i data-lucide="x"></i></button>
             </div>
-        `,e.status===`pendente`&&n.appendChild(t)}),y(),n}var Fe={nome:`
+        `,e.status===`pendente`&&n.appendChild(t)}),y(),n}var Le={nome:`
         <div class="space-y-6">
             <section class="relative overflow-hidden bg-zinc-900 p-5 text-white">
                 <div class="absolute inset-0 opacity-15">
@@ -334,7 +374,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                 </div>
                 <div class="relative z-10 space-y-4">
                     <span class="text-primary-fixed font-label-caps text-[10px] tracking-[0.2em] uppercase block">PORTAL DO COORDENADOR</span>
-                    <h1 class="font-h1 text-3xl lg:text-4xl font-semibold">Bem-vindo, ${S.nome}</h1>
+                    <h1 class="font-h1 text-3xl lg:text-4xl font-semibold">Bem-vindo, ${x.nome}</h1>
                     <p class="text-zinc-400 text-sm lg:text-base max-w-2xl">Acompanhe as demandas e gerencie o fluxo de solicitações acadêmicas com precisão e clareza.</p>
                 </div>
             </section>
@@ -454,7 +494,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
         </button>
     </div>
     <div id="turmasContainer" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-`};function Ie(){let e=document.querySelector(`#nome`).value,t=document.querySelector(`#matricula`).value,n=document.querySelector(`#email`).value,r=document.querySelector(`#senha`).value,i=document.querySelector(`#cargo`).value;if(JSON.parse(localStorage.getItem(`usuarios`)),Z(t,n)){alert(`Usuário já existe`),Y([`#nome`,`#matricula`,`#email`,`#senha`,`#cargo`]);return}let a=JSON.parse(localStorage.getItem(`usuarioLogado`));alert(`Usuário criado com sucesso!`),Ct(e,t,n,r,i),console.log(Tt(a.matricula)),wt(a.matricula,t)}function Le(){document.querySelector(`#criarPerfilForm`).onsubmit=e=>{e.preventDefault(),Ie(),Y([`#nome`,`#matricula`,`#email`,`#senha`,`#cargo`])}}function w(e=`nome`){let t=document.querySelector(`#dashboardContent`);t&&(t.innerHTML=Fe[e]||Fe.nome,e===`demandas`?C():e===`alunos`?Pe():e===`turmas`&&(x(),Ae()),Re(e))}function Re(e){let t=document.querySelectorAll(`[data-view]`),n=document.getElementById(`ver-todas`);n&&n.addEventListener(`click`,()=>{w(`demandas`),Re(`demandas`)}),t.forEach(t=>{let n=t.dataset.view===e;t.classList.toggle(`bg-brand-primary/10`,n),t.classList.toggle(`text-brand-primary`,n),t.classList.toggle(`bg-transparent`,!n),t.classList.toggle(`text-gray-700`,!n)})}function T(){w(`nome`),document.querySelectorAll(`[data-view]`).forEach(e=>{e.addEventListener(`click`,()=>{let t=e.dataset.view;if(!t)return;w(t);let n=document.getElementById(`criarPerfil`);t===`adicionar`?n?.classList.remove(`hidden`):n?.classList.add(`hidden`)})})}function E(){let e=document.querySelectorAll(`[data-view='adicionar']`);e.length&&e.forEach(e=>{e.addEventListener(`click`,()=>{document.getElementById(`criarPerfil`).classList.remove(`hidden`)})})}function D(){$(`dashboardcoord`),document.querySelector(`title`).innerHTML=`Dashboard - Clarify`,document.querySelector(`#app`).innerHTML=`
+`};function Re(){let e=document.querySelector(`#nome`).value,t=document.querySelector(`#matricula`).value,n=document.querySelector(`#email`).value,r=document.querySelector(`#senha`).value,i=document.querySelector(`#cargo`).value;if(JSON.parse(localStorage.getItem(`usuarios`)),X(t,n)){alert(`Usuário já existe`),q([`#nome`,`#matricula`,`#email`,`#senha`,`#cargo`]);return}let a=JSON.parse(localStorage.getItem(`usuarioLogado`));alert(`Usuário criado com sucesso!`),Q(e,t,n,r,i),Et(t,a.matricula),Dt(t,a.matricula)}function ze(){document.querySelector(`#criarPerfilForm`).onsubmit=e=>{e.preventDefault(),Re(),q([`#nome`,`#matricula`,`#email`,`#senha`,`#cargo`])}}function C(e=`nome`){let t=document.querySelector(`#dashboardContent`);t&&(t.innerHTML=Le[e]||Le.nome,e===`demandas`?S():e===`alunos`?Ie():e===`turmas`&&(Ae(),Me()),Be(e))}function Be(e){let t=document.querySelectorAll(`[data-view]`),n=document.getElementById(`ver-todas`);n&&n.addEventListener(`click`,()=>{C(`demandas`),Be(`demandas`)}),t.forEach(t=>{let n=t.dataset.view===e;t.classList.toggle(`bg-brand-primary/10`,n),t.classList.toggle(`text-brand-primary`,n),t.classList.toggle(`bg-transparent`,!n),t.classList.toggle(`text-gray-700`,!n)})}function w(){C(`nome`),document.querySelectorAll(`[data-view]`).forEach(e=>{e.addEventListener(`click`,()=>{let t=e.dataset.view;if(!t)return;C(t);let n=document.getElementById(`criarPerfil`);t===`adicionar`?n?.classList.remove(`hidden`):n?.classList.add(`hidden`)})})}function Ve(){let e=document.querySelectorAll(`[data-view='adicionar']`);e.length&&e.forEach(e=>{e.addEventListener(`click`,()=>{document.getElementById(`criarPerfil`).classList.remove(`hidden`)})})}function T(){$(`dashboardcoord`),document.querySelector(`title`).innerHTML=`Dashboard - Clarify`,document.querySelector(`#app`).innerHTML=`
     <div class="min-h-screen w-full bg-pink-50 flex flex-col md:flex-row relative overflow-hidden">
         ${t()}
         <!-- Navbar mobile -->
@@ -506,7 +546,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
             <i data-lucide="help-circle" class="w-4 h-4"></i>
         </button>
 
-        ${b(S)}
+        ${b(x)}
     </div>
 
     <!-- Conteúdo dashboard -->
@@ -550,11 +590,11 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                 </div>
             </form>
         </div>
-    </div>`,y(),T(),Le(),document.querySelector(`#btnLogoutDesktop`).addEventListener(`click`,()=>{localStorage.removeItem(`usuarioLogado`),localStorage.removeItem(`auth`),V(),B()}),document.querySelector(`#btnLogoutMobile`).addEventListener(`click`,()=>{localStorage.removeItem(`usuarioLogado`),localStorage.removeItem(`auth`),V(),B()})}var ze={pendente:`Pendente`,em_analise:`Em Análise`,requer_ajuste:`Requer Ajuste`,concluido:`Concluído`},O=500,k=null;function A(){let e=document.querySelector(`#modalContainer`);if(!e||!e.firstElementChild)return;let t=e.firstElementChild,n=t.querySelector(`.modal-panel`);t.classList.add(`is-closing`),n&&n.classList.add(`is-closing`),k&&=(document.removeEventListener(`keydown`,k),null),setTimeout(()=>{e.innerHTML=``,document.body.classList.remove(`modal-open`)},170)}function j(e){let t=document.querySelector(`#modalContainer`);t||(t=document.createElement(`div`),t.id=`modalContainer`,document.body.appendChild(t)),t.innerHTML=`
+    </div>`,y(),w(),ze(),document.querySelector(`#btnLogoutDesktop`).addEventListener(`click`,()=>{localStorage.removeItem(`usuarioLogado`),localStorage.removeItem(`auth`),z(),R()}),document.querySelector(`#btnLogoutMobile`).addEventListener(`click`,()=>{localStorage.removeItem(`usuarioLogado`),localStorage.removeItem(`auth`),z(),R()})}var He={pendente:`Pendente`,em_analise:`Em Análise`,requer_ajuste:`Requer Ajuste`,concluido:`Concluído`},E=500,D=null;function O(){let e=document.querySelector(`#modalContainer`);if(!e||!e.firstElementChild)return;let t=e.firstElementChild,n=t.querySelector(`.modal-panel`);t.classList.add(`is-closing`),n&&n.classList.add(`is-closing`),D&&=(document.removeEventListener(`keydown`,D),null),setTimeout(()=>{e.innerHTML=``,document.body.classList.remove(`modal-open`)},170)}function Ue(e){let t=document.querySelector(`#modalContainer`);t||(t=document.createElement(`div`),t.id=`modalContainer`,document.body.appendChild(t)),t.innerHTML=`
         <div class="modal-backdrop fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6">
             <div class="modal-panel relative w-full ${e} bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden"></div>
         </div>
-    `,document.body.classList.add(`modal-open`);let n=t.firstElementChild,r=n.querySelector(`.modal-panel`);return n.addEventListener(`click`,e=>{e.target===n&&A()}),k=e=>{e.key===`Escape`&&A()},document.addEventListener(`keydown`,k),r}function Be(e){return`
+    `,document.body.classList.add(`modal-open`);let n=t.firstElementChild,r=n.querySelector(`.modal-panel`);return n.addEventListener(`click`,e=>{e.target===n&&O()}),D=e=>{e.key===`Escape`&&O()},document.addEventListener(`keydown`,D),r}function We(e){return`
         <form id="formNovaDemanda" class="flex flex-col modal-scroll">
             <div class="flex items-start justify-between px-5 sm:px-7 pt-5 sm:pt-6">
                 <div class="inline-flex items-center gap-2">
@@ -594,13 +634,13 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                 <section class="mt-5">
                     <div class="flex items-end justify-between gap-3">
                         <label for="campoDescricaoDemanda" class="modal-label">Descrição</label>
-                        <span id="contadorDescricao" class="modal-counter">0 / ${O}</span>
+                        <span id="contadorDescricao" class="modal-counter">0 / ${E}</span>
                     </div>
                     <textarea
                         id="campoDescricaoDemanda"
                         name="descricao"
                         rows="5"
-                        maxlength="${O}"
+                        maxlength="${E}"
                         placeholder="Descreva a situação, os documentos anexos (se houver) e o que você espera como resolução."
                         class="modal-textarea mt-2"
                     ></textarea>
@@ -634,12 +674,12 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                 </button>
             </footer>
         </form>
-    `}function Ve({onCriado:e}={}){let t=JSON.parse(localStorage.getItem(`usuarioLogado`))||{},n=j(`max-w-lg`);n.innerHTML=Be(t),y();let r=n.querySelector(`#formNovaDemanda`),i=n.querySelector(`#campoTituloDemanda`),a=n.querySelector(`#campoDescricaoDemanda`),o=n.querySelector(`#contadorDescricao`),s=n.querySelector(`#btnEnviarDemanda`),c=n.querySelector(`#erroNovaDemanda`);setTimeout(()=>i.focus(),100);function l(){s.disabled=!(i.value.trim().length>=4&&a.value.trim().length>=10)}function u(){let e=a.value.length;o.textContent=`${e} / ${O}`,o.classList.toggle(`is-near`,e>=O*.85&&e<O),o.classList.toggle(`is-over`,e>=O)}i.addEventListener(`input`,l),a.addEventListener(`input`,()=>{u(),l()}),n.querySelectorAll(`[data-acao="fechar"]`).forEach(e=>{e.addEventListener(`click`,A)}),r.addEventListener(`submit`,n=>{n.preventDefault();let r=i.value.trim(),o=a.value.trim();if(r.length<4||o.length<10){c.removeAttribute(`hidden`),c.classList.add(`inline-flex`),c.querySelector(`span`).textContent=`Preencha um título com pelo menos 4 caracteres e uma descrição com pelo menos 10.`;return}if(!t.matricula){c.removeAttribute(`hidden`),c.classList.add(`inline-flex`),c.querySelector(`span`).textContent=`Sessão expirada. Faça login novamente para enviar a solicitação.`;return}let s=bt({matriculaAluno:t.matricula,tipo:r,descricao:o});A(),e&&e(s)})}function He(e){switch(e){case`pendente`:return`bg-amber-100 text-amber-800 border-amber-200`;case`em_analise`:return`bg-blue-100 text-blue-800 border-blue-200`;case`requer_ajuste`:return`bg-rose-100 text-rose-800 border-rose-200`;case`concluido`:return`bg-emerald-100 text-emerald-800 border-emerald-200`;default:return`bg-gray-100 text-gray-800 border-gray-200`}}function Ue(e){if(!e)return null;let[t,n,r]=e.split(`-`).map(Number),i=new Date(t,n-1,r),a=new Date().setHours(0,0,0,0)-i.setHours(0,0,0,0);return Math.max(0,Math.round(a/(1e3*60*60*24)))}function We(e){let t=[{chave:`pendente`,rotulo:`Recebida`},{chave:`em_analise`,rotulo:`Em análise`},{chave:`requer_ajuste`,rotulo:`Resolução`},{chave:`concluido`,rotulo:`Concluída`}],n=0;e===`em_analise`?n=1:e===`requer_ajuste`?n=2:e===`concluido`&&(n=3);let r=``;for(let e=0;e<t.length;++e){let i=``,a=``;e<n?(i=`is-done`,a=`<i data-lucide="check" class="w-3.5 h-3.5 text-white"></i>`):e===n&&(i=`is-current`),r+=`
+    `}function Ge({onCriado:e}={}){let t=JSON.parse(localStorage.getItem(`usuarioLogado`))||{},n=Ue(`max-w-lg`);n.innerHTML=We(t),y();let r=n.querySelector(`#formNovaDemanda`),i=n.querySelector(`#campoTituloDemanda`),a=n.querySelector(`#campoDescricaoDemanda`),o=n.querySelector(`#contadorDescricao`),s=n.querySelector(`#btnEnviarDemanda`),c=n.querySelector(`#erroNovaDemanda`);setTimeout(()=>i.focus(),100);function l(){s.disabled=!(i.value.trim().length>=4&&a.value.trim().length>=10)}function ee(){let e=a.value.length;o.textContent=`${e} / ${E}`,o.classList.toggle(`is-near`,e>=E*.85&&e<E),o.classList.toggle(`is-over`,e>=E)}i.addEventListener(`input`,l),a.addEventListener(`input`,()=>{ee(),l()}),n.querySelectorAll(`[data-acao="fechar"]`).forEach(e=>{e.addEventListener(`click`,O)}),r.addEventListener(`submit`,n=>{n.preventDefault();let r=i.value.trim(),o=a.value.trim();if(r.length<4||o.length<10){c.removeAttribute(`hidden`),c.classList.add(`inline-flex`),c.querySelector(`span`).textContent=`Preencha um título com pelo menos 4 caracteres e uma descrição com pelo menos 10.`;return}if(!t.matricula){c.removeAttribute(`hidden`),c.classList.add(`inline-flex`),c.querySelector(`span`).textContent=`Sessão expirada. Faça login novamente para enviar a solicitação.`;return}let s=Ct({matriculaAluno:t.matricula,tipo:r,descricao:o});O(),e&&e(s)})}function Ke(e){switch(e){case`pendente`:return`bg-amber-100 text-amber-800 border-amber-200`;case`em_analise`:return`bg-blue-100 text-blue-800 border-blue-200`;case`requer_ajuste`:return`bg-rose-100 text-rose-800 border-rose-200`;case`concluido`:return`bg-emerald-100 text-emerald-800 border-emerald-200`;default:return`bg-gray-100 text-gray-800 border-gray-200`}}function qe(e){if(!e)return null;let[t,n,r]=e.split(`-`).map(Number),i=new Date(t,n-1,r),a=new Date().setHours(0,0,0,0)-i.setHours(0,0,0,0);return Math.max(0,Math.round(a/(1e3*60*60*24)))}function Je(e){let t=[{chave:`pendente`,rotulo:`Recebida`},{chave:`em_analise`,rotulo:`Em análise`},{chave:`requer_ajuste`,rotulo:`Resolução`},{chave:`concluido`,rotulo:`Concluída`}],n=0;e===`em_analise`?n=1:e===`requer_ajuste`?n=2:e===`concluido`&&(n=3);let r=``;for(let e=0;e<t.length;++e){let i=``,a=``;e<n?(i=`is-done`,a=`<i data-lucide="check" class="w-3.5 h-3.5 text-white"></i>`):e===n&&(i=`is-current`),r+=`
             <div class="modal-timeline-step ${i}">
                 <div class="modal-timeline-dot">${a}</div>
                 <p class="modal-timeline-label">${t[e].rotulo}</p>
             </div>
-        `}return r}function Ge(e,t){let n=ze[e.status]||e.status,r=Ue(e.dataCriacao),i=t&&t.nome||`Matrícula ${e.matriculaAluno}`,a=i.charAt(0).toUpperCase(),o=t&&t.email||`—`;return`
+        `}return r}function Ye(e,t){let n=He[e.status]||e.status,r=qe(e.dataCriacao),i=t&&t.nome||`Matrícula ${e.matriculaAluno}`,a=i.charAt(0).toUpperCase(),o=t&&t.email||`—`;return`
         <article class="flex flex-col modal-scroll">
             <div class="flex items-start justify-between px-5 sm:px-7 pt-5 sm:pt-6">
                 <div class="inline-flex items-center gap-2">
@@ -659,11 +699,11 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                             ${e.tipo}
                         </h2>
                         <p class="text-sm text-gray-500 mt-1.5">
-                            Aberta em <span class="font-semibold text-gray-700">${Q(e.dataCriacao)}</span>
+                            Aberta em <span class="font-semibold text-gray-700">${Z(e.dataCriacao)}</span>
                             ${r===null?``:` · há ${r} dias`}
                         </p>
                     </div>
-                    <span class="self-start inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border whitespace-nowrap ${He(e.status)}">
+                    <span class="self-start inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border whitespace-nowrap ${Ke(e.status)}">
                         <span class="w-1.5 h-1.5 rounded-full bg-current opacity-70"></span>
                         ${n}
                     </span>
@@ -671,7 +711,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
 
                 <section class="mt-6 bg-gradient-to-br from-white to-brand-surface/50 rounded-2xl border border-gray-100 px-3 sm:px-6 py-4">
                     <div class="flex items-start gap-0">
-                        ${We(e.status)}
+                        ${Je(e.status)}
                     </div>
                 </section>
 
@@ -709,7 +749,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                         <p class="modal-label">Criada em</p>
                         <p class="text-sm font-semibold text-gray-900 mt-1 inline-flex items-center gap-1.5">
                             <i data-lucide="calendar" class="w-3.5 h-3.5 text-gray-400"></i>
-                            ${Q(e.dataCriacao)}
+                            ${Z(e.dataCriacao)}
                         </p>
                     </div>
                     <div class="bg-white rounded-2xl border border-gray-100 px-4 py-3">
@@ -739,11 +779,11 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                 </button>
             </footer>
         </article>
-    `}function Ke(e){let t=vt(e);if(!t)return;let n=Tt(t.matriculaAluno),r=j(`max-w-xl`);r.innerHTML=Ge(t,n),y(),r.querySelectorAll(`[data-acao="fechar"]`).forEach(e=>{e.addEventListener(`click`,A)})}var M={busca:``,status:`todos`},N={pendente:`Pendente`,em_analise:`Em Análise`,requer_ajuste:`Requer Ajuste`,concluido:`Concluído`};function P(e){switch(e){case`pendente`:return`bg-amber-100 text-amber-800 border border-amber-200`;case`em_analise`:return`bg-blue-100 text-blue-800 border border-blue-200`;case`requer_ajuste`:return`bg-rose-100 text-rose-800 border border-rose-200`;case`concluido`:return`bg-emerald-100 text-emerald-800 border border-emerald-200`;default:return`bg-gray-100 text-gray-800 border border-gray-200`}}function qe(e){return e.filter(e=>{let t=M.status===`todos`||e.status===M.status,n=M.busca.trim().toLowerCase(),r=n===``||e.protocolo.toLowerCase().includes(n)||e.tipo.toLowerCase().includes(n);return t&&r})}function Je(e){let t=N[e.status]||e.status;return`
+    `}function Xe(e){let t=xt(e);if(!t)return;let n=Ot(t.matriculaAluno),r=Ue(`max-w-xl`);r.innerHTML=Ye(t,n),y(),r.querySelectorAll(`[data-acao="fechar"]`).forEach(e=>{e.addEventListener(`click`,O)})}JSON.parse(localStorage.getItem(`usuarioLogado`));var k={busca:``,status:`todos`},A={pendente:`Pendente`,em_analise:`Em Análise`,requer_ajuste:`Requer Ajuste`,concluido:`Concluído`};function j(e){switch(e){case`pendente`:return`bg-amber-100 text-amber-800 border border-amber-200`;case`em_analise`:return`bg-blue-100 text-blue-800 border border-blue-200`;case`requer_ajuste`:return`bg-rose-100 text-rose-800 border border-rose-200`;case`concluido`:return`bg-emerald-100 text-emerald-800 border border-emerald-200`;default:return`bg-gray-100 text-gray-800 border border-gray-200`}}function Ze(e){return e.filter(e=>{let t=k.status===`todos`||e.status===k.status,n=k.busca.trim().toLowerCase(),r=n===``||e.protocolo.toLowerCase().includes(n)||e.tipo.toLowerCase().includes(n);return t&&r})}function Qe(e){let t=A[e.status]||e.status;return`
         <article class="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 flex flex-col gap-3 hover:shadow-md hover:-translate-y-0.5 transition-all">
             <div class="flex items-center justify-between gap-2">
                 <span class="text-xs font-semibold text-gray-500 tracking-wider">#${e.protocolo}</span>
-                <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full whitespace-nowrap ${P(e.status)}">
+                <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full whitespace-nowrap ${j(e.status)}">
                     ${t}
                 </span>
             </div>
@@ -756,11 +796,11 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
             <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 pt-2 border-t border-gray-100">
                 <span class="inline-flex items-center gap-1.5">
                     <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
-                    ${Q(e.dataCriacao)}
+                    ${Z(e.dataCriacao)}
                 </span>
                 <span class="inline-flex items-center gap-1.5">
                     <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-                    ${Q(e.dataAtualizacao)}
+                    ${Z(e.dataAtualizacao)}
                 </span>
             </div>
 
@@ -775,7 +815,39 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
             </button>
         </article>
-    `}function Ye(){return`
+    `}function $e(e){let t=A[e.status]||e.status;return`
+        <tr class="border-t border-gray-100">
+            <td class="py-3 text-xs font-semibold text-gray-500">#${e.protocolo}</td>
+            <td class="py-3 text-sm text-gray-900 break-words [overflow-wrap:anywhere]">${e.tipo}</td>
+            <td class="py-3">
+                <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full ${j(e.status)}">
+                    ${t}
+                </span>
+            </td>
+            <td class="py-3 text-xs text-gray-500">${Z(e.dataAtualizacao)}</td>
+        </tr>
+    `}function et(e){let t=A[e.status]||e.status;return`
+        <article class="bg-white rounded-xl border border-gray-200 p-4 flex flex-col gap-2">
+            <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-semibold text-gray-500 tracking-wider">#${e.protocolo}</span>
+                <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full whitespace-nowrap ${j(e.status)}">
+                    ${t}
+                </span>
+            </div>
+            <h4 class="text-sm font-bold text-gray-900 break-words [overflow-wrap:anywhere]">${e.tipo}</h4>
+            <span class="inline-flex items-center gap-1.5 text-xs text-gray-500">
+                <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                Concluído em ${Z(e.dataAtualizacao)}
+            </span>
+        </article>
+    `}function M(e){let t=Ze(e),n=t.filter(e=>e.status!==`concluido`),r=t.filter(e=>e.status===`concluido`),i=document.querySelector(`#listaDemandasAbertas`),a=document.querySelector(`#corpoHistorico`),o=document.querySelector(`#listaHistoricoMobile`),s=document.querySelector(`#contadorAbertas`);if(s&&(s.textContent=n.length),i){let e=n.map(Qe).join(``);i.innerHTML=n.length>0?e+nt():tt()}a&&(a.innerHTML=r.length>0?r.map($e).join(``):`<tr><td colspan="4" class="py-4 text-center text-xs text-gray-400">Nenhuma demanda concluída ainda.</td></tr>`),o&&(o.innerHTML=r.length>0?r.map(et).join(``):`<div class="bg-white border border-dashed border-gray-200 rounded-xl p-6 text-center text-xs text-gray-400">Nenhuma demanda concluída ainda.</div>`),y()}function tt(){return`
+        <div class="col-span-full bg-white border border-dashed border-gray-300 rounded-xl p-8 sm:p-10 text-center">
+            <h3 class="text-base font-bold text-gray-900">Você ainda não possui solicitações</h3>
+            <p class="text-sm text-gray-500 mt-1">
+                Quando você abrir uma demanda, ela aparecerá aqui para acompanhamento.
+            </p>
+        </div>
+    `}function nt(){return`
         <button type="button" data-acao="nova-demanda" class="border-2 border-dashed border-gray-300 rounded-xl p-5 flex flex-col items-center justify-center gap-2 text-gray-500 hover:border-brand-primary hover:text-brand-primary hover:bg-white transition-colors min-h-[180px] cursor-pointer">
             <span class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
                 <i data-lucide="plus" class="w-5 h-5"></i>
@@ -783,51 +855,227 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
             <span class="text-sm font-bold">Nova Solicitação</span>
             <span class="text-xs">Abra uma nova demanda acadêmica</span>
         </button>
-    `}function Xe(e){let t=N[e.status]||e.status;return`
-        <tr class="border-t border-gray-100">
-            <td class="py-3 text-xs font-semibold text-gray-500">#${e.protocolo}</td>
-            <td class="py-3 text-sm text-gray-900 break-words [overflow-wrap:anywhere]">${e.tipo}</td>
-            <td class="py-3">
-                <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full ${P(e.status)}">
-                    ${t}
-                </span>
-            </td>
-            <td class="py-3 text-xs text-gray-500">${Q(e.dataAtualizacao)}</td>
-        </tr>
-    `}function Ze(e){let t=N[e.status]||e.status;return`
-        <article class="bg-white rounded-xl border border-gray-200 p-4 flex flex-col gap-2">
-            <div class="flex items-center justify-between gap-2">
-                <span class="text-xs font-semibold text-gray-500 tracking-wider">#${e.protocolo}</span>
-                <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full whitespace-nowrap ${P(e.status)}">
-                    ${t}
-                </span>
-            </div>
-            <h4 class="text-sm font-bold text-gray-900 break-words [overflow-wrap:anywhere]">${e.tipo}</h4>
-            <span class="inline-flex items-center gap-1.5 text-xs text-gray-500">
-                <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-                Concluído em ${Q(e.dataAtualizacao)}
-            </span>
-        </article>
-    `}function Qe(){return`
-        <div class="col-span-full bg-white border border-dashed border-gray-300 rounded-xl p-8 sm:p-10 text-center">
-            <h3 class="text-base font-bold text-gray-900">Você ainda não possui solicitações</h3>
-            <p class="text-sm text-gray-500 mt-1">
-                Quando você abrir uma demanda, ela aparecerá aqui para acompanhamento.
-            </p>
-        </div>
-    `}function F(e){let t=qe(e),n=t.filter(e=>e.status!==`concluido`),r=t.filter(e=>e.status===`concluido`),i=document.querySelector(`#listaDemandasAbertas`),a=document.querySelector(`#corpoHistorico`),o=document.querySelector(`#listaHistoricoMobile`),s=document.querySelector(`#contadorAbertas`);if(s&&(s.textContent=n.length),i){let e=n.map(Je).join(``);i.innerHTML=n.length>0?e+Ye():Qe()}a&&(a.innerHTML=r.length>0?r.map(Xe).join(``):`<tr><td colspan="4" class="py-4 text-center text-xs text-gray-400">Nenhuma demanda concluída ainda.</td></tr>`),o&&(o.innerHTML=r.length>0?r.map(Ze).join(``):`<div class="bg-white border border-dashed border-gray-200 rounded-xl p-6 text-center text-xs text-gray-400">Nenhuma demanda concluída ainda.</div>`),y()}function I(e){let t=document.querySelector(`#drawerMobile`),n=document.querySelector(`#drawerPainel`);!t||!n||(e?(t.classList.remove(`hidden`),setTimeout(()=>n.classList.remove(`-translate-x-full`),10),document.body.classList.add(`overflow-hidden`)):(n.classList.add(`-translate-x-full`),document.body.classList.remove(`overflow-hidden`),setTimeout(()=>t.classList.add(`hidden`),200)))}function L(){let e=JSON.parse(localStorage.getItem(`usuarioLogado`));if(!e){V(),B();return}function t(){return _t(e.matricula)}function n(){let e=t();$e(e),F(e)}y(),n(),document.querySelector(`#filtroBusca`).addEventListener(`input`,e=>{M.busca=e.target.value,F(t())}),document.querySelector(`#filtroStatus`).addEventListener(`change`,e=>{M.status=e.target.value,F(t())}),document.querySelector(`#limparFiltros`).addEventListener(`click`,()=>{M.busca=``,M.status=`todos`,document.querySelector(`#filtroBusca`).value=``,document.querySelector(`#filtroStatus`).value=`todos`,F(t())});function r(){Ve({onCriado:n})}let i=document.querySelector(`#btnNovaDemandaDesktop`),a=document.querySelector(`#btnNovaDemandaMobile`);i&&i.addEventListener(`click`,r),a&&a.addEventListener(`click`,r);let o=document.querySelector(`#listaDemandasAbertas`);o&&o.addEventListener(`click`,e=>{let t=e.target.closest(`[data-acao="ver-detalhes"]`);if(t){let e=t.getAttribute(`data-protocolo`);e&&Ke(e);return}e.target.closest(`[data-acao="nova-demanda"]`)&&r()});let s=document.querySelectorAll(`.btnSairConta`);for(let e=0;e<s.length;++e)s[e].addEventListener(`click`,()=>{localStorage.removeItem(`usuarioLogado`),localStorage.removeItem(`auth`),document.body.classList.remove(`overflow-hidden`),V(),B()});let c=document.querySelector(`#abrirDrawer`),l=document.querySelector(`#fecharDrawer`),u=document.querySelector(`#drawerOverlay`);c&&c.addEventListener(`click`,()=>I(!0)),l&&l.addEventListener(`click`,()=>I(!1)),u&&u.addEventListener(`click`,()=>I(!1))}function $e(e){let t=R(e),n=document.querySelector(`[data-metrica="total"]`),r=document.querySelector(`[data-metrica="em-analise"]`),i=document.querySelector(`[data-metrica="eficiencia"]`),a=document.querySelector(`[data-metrica="eficiencia-barra"]`);n&&(n.textContent=t.total),r&&(r.textContent=t.emAnalise<10?`0`+t.emAnalise:t.emAnalise),i&&(i.textContent=`${t.eficiencia}%`),a&&(a.style.width=`${t.eficiencia}%`)}function R(e){let t=e.length,n=e.filter(e=>e.status===`em_analise`).length,r=e.filter(e=>e.status===`concluido`).length;return{total:t,emAnalise:n,eficiencia:t>0?Math.round(r/t*100):0}}function et(){return`
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-brand-surface-dim/40 text-brand-primary font-semibold">
-            <i data-lucide="clipboard-list" class="w-4 h-4"></i> Minhas Demandas
-        </a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:bg-gray-50">
-            <i data-lucide="plus-circle" class="w-4 h-4"></i> Nova Demanda
-        </a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:bg-gray-50">
-            <i data-lucide="settings" class="w-4 h-4"></i> Configurações
-        </a>
-    `}function z(){$(`centraldemandas`),document.querySelector(`title`).innerHTML=`Central de Demandas - Clarify`;let t=JSON.parse(localStorage.getItem(`usuarioLogado`))||{},n=(t.nome||`Aluno`).split(` `)[0];n.charAt(0).toUpperCase();let r=R(_t(t.matricula)),i=r.total,a=r.emAnalise,o=r.eficiencia;document.querySelector(`#app`).innerHTML=`
-    <div class="min-h-screen w-full bg-brand-surface">
+    `}function N(e){let t=document.querySelector(`#drawerMobile`),n=document.querySelector(`#drawerPainel`);!t||!n||(e?(t.classList.remove(`hidden`),setTimeout(()=>n.classList.remove(`-translate-x-full`),10),document.body.classList.add(`overflow-hidden`)):(n.classList.add(`-translate-x-full`),document.body.classList.remove(`overflow-hidden`),setTimeout(()=>t.classList.add(`hidden`),200)))}function P(){if(!JSON.parse(localStorage.getItem(`usuarioLogado`))){z(),R();return}I(`inicio`),F(`inicio`),document.querySelectorAll(`[data-view]`).forEach(e=>{e.addEventListener(`click`,()=>{I(e.dataset.view),F(e.dataset.view)})});function e(){let e=document.querySelector(`[data-view].text-orange-600`);I(e?e.dataset.view:`demandas`)}function t(){Ge({onCriado:e})}let n=document.querySelector(`#btnNovaDemandaDesktop`),r=document.querySelector(`#btnNovaDemandaMobile`);n&&n.addEventListener(`click`,t),r&&r.addEventListener(`click`,t);let i=document.querySelector(`#alunoContent`);i&&i.addEventListener(`click`,e=>{let n=e.target.closest(`[data-acao="ver-detalhes"]`);if(n){let e=n.getAttribute(`data-protocolo`);e&&Xe(e);return}e.target.closest(`[data-acao="nova-demanda"]`)&&t()});let a=document.querySelectorAll(`.btnSairConta`);for(let e=0;e<a.length;++e)a[e].addEventListener(`click`,()=>{localStorage.removeItem(`usuarioLogado`),localStorage.removeItem(`auth`),document.body.classList.remove(`overflow-hidden`),z(),R()});let o=document.querySelector(`#abrirDrawer`),s=document.querySelector(`#fecharDrawer`),c=document.querySelector(`#drawerOverlay`);o&&o.addEventListener(`click`,()=>N(!0)),s&&s.addEventListener(`click`,()=>N(!1)),c&&c.addEventListener(`click`,()=>N(!1))}function rt(e){let t=e.length,n=e.filter(e=>e.status===`em_analise`).length,r=e.filter(e=>e.status===`concluido`).length;return{total:t,emAnalise:n,eficiencia:t>0?Math.round(r/t*100):0}}function it(){return`
+        <button type="button" data-view="inicio" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:bg-gray-50 text-left transition-colors cursor-pointer">
+            <i data-lucide="home" class="w-4 h-4"></i> Início
+        </button>
+        <button type="button" data-view="demandas" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:bg-gray-50 text-left transition-colors cursor-pointer">
+            <i data-lucide="clipboard-list" class="w-4 h-4"></i> Central de Demandas
+        </button>
+        <button type="button" data-view="turmas" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:bg-gray-50 text-left transition-colors cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path d="M12 22s8-4 8-10V5l-8 3-8-3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span class="font-medium">Turmas</span>
+                </button>   
+    `}function at(t,n,r){let i=r.eficiencia,a=t.slice().sort((e,t)=>new Date(t.dataAtualizacao)-new Date(e.dataAtualizacao)).slice(0,3),o=``;return o=a.length===0?`<div class="p-4 text-center text-sm text-zinc-500">Nenhuma demanda recente.</div>`:a.map(e=>{let t=A[e.status]||e.status;return`
+            <div class="p-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between hover:bg-zinc-50 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-gray-100 flex items-center justify-center text-brand-primary font-bold rounded">#${e.protocolo.substring(0,4)}</div>
+                    <div>
+                        <h4 class="font-bold text-base text-zinc-900">${e.tipo}</h4>
+                        <p class="text-sm text-zinc-500">Atualizado em: ${Z(e.dataAtualizacao)}</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 lg:gap-8">
+                    <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full ${j(e.status)}">${t}</span>
+                    <button type="button" data-view="demandas" class="text-zinc-400 hover:text-brand-primary transition-colors cursor-pointer"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
+                </div>
+            </div>`}).join(``),`
+        <div class="space-y-6 max-w-6xl mx-auto">
+            <section class="relative overflow-hidden bg-zinc-900 p-6 md:p-8 text-white rounded-2xl shadow-md">
+                <div class="absolute inset-0 opacity-15">
+                    <img class="w-full h-full object-cover" src="${e}"/>
+                </div>
+                <div class="relative z-10 space-y-4">
+                    <span class="text-orange-500 font-bold text-[10px] tracking-[0.2em] uppercase block">PORTAL DO ALUNO</span>
+                    <h1 class="text-3xl lg:text-4xl font-semibold">Bem-vindo, ${n}</h1>
+                    <p class="text-zinc-400 text-sm lg:text-base max-w-2xl">Acompanhe suas solicitações acadêmicas e comunique-se com a coordenação de forma clara e ágil.</p>
+                </div>
+            </section>
 
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div class="bg-white border border-gray-200 p-5 rounded-2xl shadow-sm flex flex-col justify-between min-h-[140px]">
+                    <div class="flex justify-between items-start gap-4">
+                        <i data-lucide="bar-chart" class="w-6 h-6 text-brand-primary"></i>
+                        <span class="text-[10px] font-bold text-gray-400 uppercase">Demandas Atendidas</span>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex justify-between items-end mb-2">
+                            <h3 class="text-gray-500 uppercase tracking-[0.2em] text-[10px] font-bold">PROGRESSO</h3>
+                            <span class="text-xl font-bold text-gray-900">${i}%</span>
+                        </div>
+                        <div class="w-full bg-gray-100 rounded-full h-2.5">
+                            <div class="bg-brand-primary h-2.5 rounded-full transition-all duration-500" style="width: ${i}%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2 font-medium">${r.total>0?r.concluidas+` de `+r.total+` concluídas`:`Sem demandas`}</p>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-gray-200 p-5 rounded-2xl shadow-sm flex flex-col justify-between min-h-[140px]">
+                    <div class="flex justify-between items-start gap-4">
+                        <i data-lucide="message-circle" class="w-6 h-6 text-orange-500"></i>
+                        <span class="bg-orange-100 text-orange-800 text-[10px] px-2 py-0.5 font-bold rounded uppercase">CONTATO</span>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-gray-500 uppercase tracking-[0.2em] text-[10px] mb-2 font-bold">SUPORTE</h3>
+                        <p class="text-sm text-gray-700 mb-4 font-medium">Fale diretamente com o coordenador do seu curso.</p>
+                        <a href="mailto:coordenacao@clarify.edu.br" class="inline-flex items-center justify-center gap-2 bg-orange-50 hover:bg-orange-100 text-orange-600 px-4 py-2 rounded-xl text-sm font-bold transition-colors w-full sm:w-auto">
+                            <i data-lucide="mail" class="w-4 h-4"></i>
+                            Enviar Mensagem
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+                <div class="bg-gray-50 border-b border-gray-200 px-5 py-4 flex flex-col gap-3 lg:flex-row lg:justify-between lg:items-center">
+                    <h2 class="font-bold text-base lg:text-lg flex items-center gap-2 text-gray-900">
+                        <i data-lucide="clock" class="w-5 h-5 text-gray-500"></i>
+                        Demandas Recentes
+                    </h2>
+                    <button type="button" data-view="demandas" class="text-xs font-bold text-brand-primary hover:underline cursor-pointer">VER TODAS</button>
+                </div>
+                <div class="divide-y divide-gray-100">
+                    ${o}
+                </div>
+            </div>
+        </div>
+    `}function ot(e,t,n,r){return`
+        <div class="max-w-6xl mx-auto">
+            <!-- Cabeçalho da página -->
+            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6 md:mb-8">
+                <div>
+                    <p class="hidden md:inline-flex text-xs font-semibold text-gray-400 uppercase tracking-widest items-center gap-1">
+                        Portal <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i> Central de Demandas
+                    </p>
+                    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 md:mt-1">Central de Demandas</h2>
+                    <p class="text-sm text-gray-500 mt-1">
+                        Olá, ${e}. Acompanhe aqui suas solicitações.
+                    </p>
+                </div>
+
+                <button type="button" data-acao="nova-demanda" class="hidden sm:inline-flex items-center gap-2 bg-brand-primary text-white text-sm font-bold px-5 py-3 rounded-xl shadow hover:bg-orange-700 transition-colors cursor-pointer self-start sm:self-auto">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Nova Demanda
+                </button>
+            </div>
+
+            <!-- Métricas -->
+            <div class="-mx-4 px-4 sm:mx-0 sm:px-0 mb-6 md:mb-8 flex sm:grid sm:grid-cols-3 gap-3 sm:gap-4 overflow-x-auto sm:overflow-visible snap-x snap-mandatory sm:snap-none pb-2 sm:pb-0">
+                <div class="min-w-[80%] shrink-0 snap-start sm:min-w-0 sm:shrink bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total de Solicitações</p>
+                    <div class="flex items-end gap-3 mt-2">
+                        <span class="text-3xl font-bold text-gray-900">${t}</span>
+                        <span class="text-xs text-gray-500 pb-1">no semestre</span>
+                    </div>
+                </div>
+
+                <div class="min-w-[80%] shrink-0 snap-start sm:min-w-0 sm:shrink bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Em Análise</p>
+                    <div class="flex items-end gap-3 mt-2">
+                        <span class="text-3xl font-bold text-gray-900">${n<10?`0`+n:n}</span>
+                        <i data-lucide="hourglass" class="w-4 h-4 text-blue-500 mb-2"></i>
+                    </div>
+                </div>
+
+                <div class="min-w-[80%] shrink-0 snap-start sm:min-w-0 sm:shrink bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Eficiência</p>
+                    <div class="flex items-center gap-3 mt-2">
+                        <span class="text-3xl font-bold text-gray-900">${r}%</span>
+                        <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-brand-primary rounded-full" style="width: ${r}%"></div>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-gray-400 mt-1">Demandas concluídas sobre o total</p>
+                </div>
+            </div>
+
+            <!-- Barra de filtros -->
+            <div class="bg-white rounded-xl border border-gray-200 p-3 sm:p-4 flex flex-wrap gap-2 sm:gap-3 items-center mb-6 md:mb-8 shadow-sm">
+                <div class="flex-1 min-w-[12rem] relative">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input
+                        type="text"
+                        id="filtroBusca"
+                        placeholder="Pesquisar protocolo ou tipo..."
+                        class="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    />
+                </div>
+
+                <div class="relative">
+                    <i data-lucide="filter" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                    <select id="filtroStatus" class="pl-9 pr-8 py-2 border border-gray-200 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 appearance-none cursor-pointer max-w-[10rem] sm:max-w-none">
+                        <option value="todos">Status: Todos</option>
+                        <option value="pendente">Pendente</option>
+                        <option value="em_analise">Em Análise</option>
+                        <option value="requer_ajuste">Requer Ajuste</option>
+                        <option value="concluido">Concluído</option>
+                    </select>
+                </div>
+
+                <button id="limparFiltros" type="button" class="inline-flex items-center gap-1 text-sm font-semibold text-brand-primary hover:underline px-2 cursor-pointer" title="Limpar filtros">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                    <span class="hidden sm:inline">Limpar Filtros</span>
+                </button>
+            </div>
+
+            <!-- Demandas em aberto -->
+            <section class="mb-10">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg md:text-xl font-bold text-gray-900">
+                        Em Aberto
+                        <span id="contadorAbertas" class="ml-2 text-xs font-bold text-gray-400 align-middle">0</span>
+                    </h3>
+                    <a href="#" class="text-xs font-semibold text-brand-primary hover:underline inline-flex items-center gap-1">
+                        <span class="hidden sm:inline">Ver histórico completo</span>
+                        <span class="sm:hidden">Histórico</span>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+
+                <div id="listaDemandasAbertas" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                </div>
+            </section>
+
+            <!-- Histórico recente -->
+            <section class="pb-24 sm:pb-0">
+                <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-4 inline-flex items-center gap-2">
+                    <i data-lucide="history" class="w-5 h-5 text-gray-500"></i>
+                    Histórico Recente
+                </h3>
+
+                <!-- Mobile: cards -->
+                <div id="listaHistoricoMobile" class="md:hidden space-y-3"></div>
+
+                <!-- Desktop: tabela -->
+                <div class="hidden md:block bg-white rounded-xl border border-gray-200 p-5 overflow-x-auto shadow-sm">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                <th class="pb-2">Protocolo</th>
+                                <th class="pb-2">Assunto</th>
+                                <th class="pb-2">Status</th>
+                                <th class="pb-2">Última Modificação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpoHistorico"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    `}function F(e){document.querySelectorAll(`[data-view]`).forEach(t=>{t.dataset.view===e?(t.classList.add(`bg-orange-50`,`text-orange-600`),t.classList.remove(`text-gray-700`)):(t.classList.remove(`bg-orange-50`,`text-orange-600`),t.classList.add(`text-gray-700`))})}function I(e=`inicio`){let t=document.querySelector(`#alunoContent`);if(!t)return;let n=JSON.parse(localStorage.getItem(`usuarioLogado`))||{},r=(n.nome||`Aluno`).split(` `)[0],i=bt(n.matricula),a=rt(i);if(e===`inicio`)t.innerHTML=at(i,r,a);else if(e===`demandas`){t.innerHTML=ot(r,a.total,a.emAnalise,a.eficiencia),M(i);let e=document.querySelector(`#filtroBusca`);e&&e.addEventListener(`input`,e=>{k.busca=e.target.value,M(i)});let n=document.querySelector(`#filtroStatus`);n&&n.addEventListener(`change`,e=>{k.status=e.target.value,M(i)});let o=document.querySelector(`#limparFiltros`);o&&o.addEventListener(`click`,()=>{k.busca=``,k.status=`todos`,document.querySelector(`#filtroBusca`).value=``,document.querySelector(`#filtroStatus`).value=`todos`,M(i)})}t.querySelectorAll(`[data-view]`).forEach(e=>{e.addEventListener(`click`,()=>{I(e.dataset.view),F(e.dataset.view)})}),y()}function L(){$(`centraldemandas`),document.querySelector(`title`).innerHTML=`Central de Demandas - Clarify`,JSON.parse(localStorage.getItem(`usuarioLogado`)),document.querySelector(`#app`).innerHTML=`
+    <div class="min-h-screen w-full flex bg-brand-surface">
+
+        <!-- Sidebar (desktop) -->
+        ${n()}
+        
         <!-- Drawer de navegação (mobile) -->
         <div id="drawerMobile" class="fixed inset-0 z-40 hidden md:hidden">
             <div id="drawerOverlay" class="absolute inset-0 bg-black/40"></div>
@@ -845,16 +1093,16 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                 </div>
 
                 <nav class="flex-1 px-4 py-4 space-y-1 text-sm overflow-y-auto">
-                    ${et()}
+                    ${it()}
                 </nav>
             </aside>
         </div>
 
         <!-- Conteúdo principal -->
-        <main class="overflow-x-hidden">
+        <main class="flex-1 overflow-x-hidden flex flex-col h-screen">
 
             <!-- Topbar mobile (sticky) -->
-            <header class="md:hidden sticky top-0 z-20 bg-white/95 backdrop-blur border-b border-gray-200 flex items-center justify-between gap-3 px-4 h-14">
+            <header class="md:hidden shrink-0 sticky top-0 z-20 bg-white/95 backdrop-blur border-b border-gray-200 flex items-center justify-between gap-3 px-4 h-14">
                 <div class="flex items-center gap-2">
                     <button id="abrirDrawer" type="button" class="-ml-2 w-10 h-10 flex items-center justify-center text-gray-700 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer" title="Abrir menu">
                         <i data-lucide="menu" class="w-5 h-5"></i>
@@ -870,7 +1118,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                 </div>
             </header>
 
-            <div class="px-4 py-5 md:px-10 md:py-8">
+            <div class="px-4 py-5 md:px-10 md:py-8 flex-1 overflow-y-auto w-full">
 
                 <!-- Topbar desktop -->
                 <div class="hidden md:flex items-center justify-between gap-3 mb-8">
@@ -893,126 +1141,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
                     </div>
                 </div>
 
-                <!-- Cabeçalho da página -->
-                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6 md:mb-8">
-                    <div>
-                        <p class="hidden md:inline-flex text-xs font-semibold text-gray-400 uppercase tracking-widest items-center gap-1">
-                            Portal <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i> Central de Demandas
-                        </p>
-                        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 md:mt-1">Central de Demandas</h2>
-                        <p class="text-sm text-gray-500 mt-1">
-                            Olá, ${n}. Acompanhe aqui suas solicitações.
-                        </p>
-                    </div>
-
-                    <button id="btnNovaDemandaDesktop" type="button" class="hidden sm:inline-flex items-center gap-2 bg-brand-primary text-white text-sm font-bold px-5 py-3 rounded-xl shadow hover:bg-orange-700 transition-colors cursor-pointer self-start sm:self-auto">
-                        <i data-lucide="plus" class="w-4 h-4"></i> Nova Demanda
-                    </button>
-                </div>
-
-                <!-- Métricas -->
-                <div class="-mx-4 px-4 sm:mx-0 sm:px-0 mb-6 md:mb-8 flex sm:grid sm:grid-cols-3 gap-3 sm:gap-4 overflow-x-auto sm:overflow-visible snap-x snap-mandatory sm:snap-none pb-2 sm:pb-0">
-                    <div class="min-w-[80%] shrink-0 snap-start sm:min-w-0 sm:shrink bg-white rounded-xl border border-gray-200 p-5">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total de Solicitações</p>
-                        <div class="flex items-end gap-3 mt-2">
-                            <span class="text-3xl font-bold text-gray-900" data-metrica="total">${i}</span>
-                            <span class="text-xs text-gray-500 pb-1">no semestre</span>
-                        </div>
-                    </div>
-
-                    <div class="min-w-[80%] shrink-0 snap-start sm:min-w-0 sm:shrink bg-white rounded-xl border border-gray-200 p-5">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Em Análise</p>
-                        <div class="flex items-end gap-3 mt-2">
-                            <span class="text-3xl font-bold text-gray-900" data-metrica="em-analise">${a<10?`0`+a:a}</span>
-                            <i data-lucide="hourglass" class="w-4 h-4 text-blue-500 mb-2"></i>
-                        </div>
-                    </div>
-
-                    <div class="min-w-[80%] shrink-0 snap-start sm:min-w-0 sm:shrink bg-white rounded-xl border border-gray-200 p-5">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Eficiência</p>
-                        <div class="flex items-center gap-3 mt-2">
-                            <span class="text-3xl font-bold text-gray-900" data-metrica="eficiencia">${o}%</span>
-                            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                <div class="h-full bg-brand-primary rounded-full" data-metrica="eficiencia-barra" style="width: ${o}%"></div>
-                            </div>
-                        </div>
-                        <p class="text-[10px] text-gray-400 mt-1">Demandas concluídas sobre o total</p>
-                    </div>
-                </div>
-
-                <!-- Barra de filtros -->
-                <div class="bg-white rounded-xl border border-gray-200 p-3 sm:p-4 flex flex-wrap gap-2 sm:gap-3 items-center mb-6 md:mb-8">
-                    <div class="flex-1 min-w-[12rem] relative">
-                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                        <input
-                            type="text"
-                            id="filtroBusca"
-                            placeholder="Pesquisar protocolo ou tipo..."
-                            class="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        />
-                    </div>
-
-                    <div class="relative">
-                        <i data-lucide="filter" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
-                        <select id="filtroStatus" class="pl-9 pr-8 py-2 border border-gray-200 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 appearance-none cursor-pointer max-w-[10rem] sm:max-w-none">
-                            <option value="todos">Status: Todos</option>
-                            <option value="pendente">Pendente</option>
-                            <option value="em_analise">Em Análise</option>
-                            <option value="requer_ajuste">Requer Ajuste</option>
-                            <option value="concluido">Concluído</option>
-                        </select>
-                    </div>
-
-                    <button id="limparFiltros" type="button" class="inline-flex items-center gap-1 text-sm font-semibold text-brand-primary hover:underline px-2 cursor-pointer" title="Limpar filtros">
-                        <i data-lucide="x" class="w-4 h-4"></i>
-                        <span class="hidden sm:inline">Limpar Filtros</span>
-                    </button>
-                </div>
-
-                <!-- Demandas em aberto -->
-                <section class="mb-10">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg md:text-xl font-bold text-gray-900">
-                            Em Aberto
-                            <span id="contadorAbertas" class="ml-2 text-xs font-bold text-gray-400 align-middle">0</span>
-                        </h3>
-                        <a href="#" class="text-xs font-semibold text-brand-primary hover:underline inline-flex items-center gap-1">
-                            <span class="hidden sm:inline">Ver histórico completo</span>
-                            <span class="sm:hidden">Histórico</span>
-                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                        </a>
-                    </div>
-
-                    <div id="listaDemandasAbertas" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                    </div>
-                </section>
-
-                <!-- Histórico recente -->
-                <section class="pb-24 sm:pb-0">
-                    <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-4 inline-flex items-center gap-2">
-                        <i data-lucide="history" class="w-5 h-5 text-gray-500"></i>
-                        Histórico Recente
-                    </h3>
-
-                    <!-- Mobile: cards -->
-                    <div id="listaHistoricoMobile" class="md:hidden space-y-3"></div>
-
-                    <!-- Desktop: tabela -->
-                    <div class="hidden md:block bg-white rounded-xl border border-gray-200 p-5 overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead>
-                                <tr class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                                    <th class="pb-2">Protocolo</th>
-                                    <th class="pb-2">Assunto</th>
-                                    <th class="pb-2">Status</th>
-                                    <th class="pb-2">Última Modificação</th>
-                                </tr>
-                            </thead>
-                            <tbody id="corpoHistorico"></tbody>
-                        </table>
-                    </div>
-                </section>
-
+                <div id="alunoContent"></div>
             </div>
 
             <!-- FAB Nova Demanda (mobile) -->
@@ -1023,7 +1152,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
         </main>
 
     </div>
-    `,y()}function tt(e){if(e===`aluno`){z(),L();return}D(),T(),E()}function nt(e){let t=new FormData(e.target),{institutionalId:n,securityKey:r}=Object.fromEntries(t.entries()),i=mt(n,r);i.ok&&tt(i.usuarioLogado.cargo)}function B(){document.querySelector(`#loginForm`).addEventListener(`submit`,e=>{e.preventDefault(),nt(e)});let e=document.querySelector(`#irRegistro`);e&&e.addEventListener(`click`,e=>{e.preventDefault(),$(`registro`)})}function V(){$(`login`),document.querySelector(`title`).innerHTML=`Login - Clarify`,document.querySelector(`#app`).innerHTML=`
+    `}function st(e){if(e===`aluno`){L(),P();return}T(),w(),Ve()}function ct(e){let t=new FormData(e.target),{institutionalId:n,securityKey:r}=Object.fromEntries(t.entries()),i=_t(n,r);i.ok&&st(i.usuarioLogado.cargo)}function R(){document.querySelector(`#loginForm`).addEventListener(`submit`,e=>{e.preventDefault(),ct(e)});let e=document.querySelector(`#irRegistro`);e&&e.addEventListener(`click`,e=>{e.preventDefault(),$(`registro`)})}function z(){$(`login`),document.querySelector(`title`).innerHTML=`Login - Clarify`,document.querySelector(`#app`).innerHTML=`
     <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden animate-cubes">
         <!-- Fundo Geométrico com Losangos -->
         <div class="absolute inset-0 opacity-15 pointer-events-none animate-cubes" 
@@ -1125,7 +1254,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
         </div>
         </div>
     </div>
-`}function rt(){let e=document.querySelector(`#fullName`).value,t=document.querySelector(`#institutionalId`).value,n=document.querySelector(`#institutionalEmail`).value,r=document.querySelector(`#securityKey`).value,i=document.querySelector(`#activationKey`).value,a=Z(t,n),o=a?!0:xt(i);if(a||!o){if(a){X(`Usuário já cadastrado.`),Y([`#fullName`,`#institutionalEmail`,`#securityKey`,`#activationKey`]);return}X(`Chave de ativação inválida ou já utilizada.`),Y([`#activationKey`]);return}Ct(e,t,n,r,`coordenador`),alert(`Registro feito com sucesso!`);let s={nome:e,matricula:t,email:n,cargo:`coordenador`};localStorage.setItem(`usuarioLogado`,JSON.stringify(s)),localStorage.setItem(`auth`,!0),D()}function it(){document.querySelector(`#registrationForm`).addEventListener(`submit`,e=>{e.preventDefault(),rt()});let e=document.querySelector(`#voltarLogin`);e&&(e.onclick=()=>{V(),B()})}function at(){$(`registro`),document.querySelector(`title`).innerHTML=`Registro - Clarify`,document.querySelector(`#app`).innerHTML=`
+`}function lt(){let e=document.querySelector(`#fullName`).value,t=document.querySelector(`#institutionalId`).value,n=document.querySelector(`#institutionalEmail`).value,r=document.querySelector(`#securityKey`).value,i=document.querySelector(`#activationKey`).value,a=X(t,n),o=a?!0:wt(i);if(a||!o){if(a){J(`Usuário já cadastrado.`),q([`#fullName`,`#institutionalEmail`,`#securityKey`,`#activationKey`]);return}J(`Chave de ativação inválida ou já utilizada.`),q([`#activationKey`]);return}Q(e,t,n,r,`coordenador`),alert(`Registro feito com sucesso!`);let s={nome:e,matricula:t,email:n,cargo:`coordenador`};localStorage.setItem(`usuarioLogado`,JSON.stringify(s)),localStorage.setItem(`auth`,!0),T()}function ut(){document.querySelector(`#registrationForm`).addEventListener(`submit`,e=>{e.preventDefault(),lt()});let e=document.querySelector(`#voltarLogin`);e&&(e.onclick=()=>{z(),R()})}function dt(){$(`registro`),document.querySelector(`title`).innerHTML=`Registro - Clarify`,document.querySelector(`#app`).innerHTML=`
         <div class="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
             <!-- Fundo Geométrico com Losangos -->
             <div class="absolute inset-0 opacity-15 pointer-events-none animate-cubes" 
@@ -1290,7 +1419,7 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
             </div>
             </div>
         </div>
-    `}var ot={ArrowRight:f,Bell:p,Calendar:m,Check:h,CheckCircle2:g,Clock:_,Eye:ae,GraduationCap:ce,Plus:ge,Send:ve,UserCog:Se,Users:we};function H(){$(``),document.querySelector(`title`).innerHTML=`Clarify`,document.querySelector(`#app`).innerHTML=`
+    `}var ft={ArrowRight:d,Bell:f,Calendar:p,Check:m,CheckCircle2:_,Clock:oe,Eye:se,GraduationCap:ue,Plus:be,Send:Se,UserCog:we,Users:Te};function B(){$(``),document.querySelector(`title`).innerHTML=`Clarify`,document.querySelector(`#app`).innerHTML=`
     <div class="relative min-h-screen text-slate-900 overflow-x-hidden">
 
         <!-- Fundo ambiente, bem sutil -->
@@ -1642,4 +1771,4 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
         </footer>
 
     </div>
-    `,v({icons:ot,attrs:{"stroke-width":1.6}})}function U(){let e=document.querySelectorAll(`.btnEntrar`);for(let t=0;t<e.length;++t)e[t].addEventListener(`click`,e=>{e.preventDefault(),$(`login`)});let t=document.querySelectorAll(`.btnCriarConta`);for(let e=0;e<t.length;++e)t[e].addEventListener(`click`,e=>{e.preventDefault(),$(`registro`)});let n=document.querySelectorAll(`a[href^="#"]`);for(let e=0;e<n.length;++e)n[e].addEventListener(`click`,t=>{let r=n[e].getAttribute(`href`).slice(1);if(r===``)return;let i=document.getElementById(r);i&&(t.preventDefault(),i.scrollIntoView({behavior:`smooth`,block:`start`}))});let r=document.getElementById(`landingNav`);r&&window.addEventListener(`scroll`,()=>{window.scrollY>12?r.classList.add(`is-scrolled`):r.classList.remove(`is-scrolled`)});let i=document.querySelectorAll(`[data-reveal]`),a=new IntersectionObserver(e=>{for(let t=0;t<e.length;++t)e[t].isIntersecting&&(e[t].target.classList.add(`is-revealed`),a.unobserve(e[t].target))},{threshold:.12});for(let e=0;e<i.length;++e)a.observe(i[e])}var W=()=>localStorage.getItem(`auth`)===`true`,G=()=>{try{return JSON.parse(localStorage.getItem(`usuarioLogado`)||`{}`).cargo||``}catch{return``}},K=(e,t,n)=>{e&&window.history.replaceState({},``,e),t&&t(),n&&n()},st=()=>K(`/login`,V,B),ct=()=>K(`/registro`,at,it),q=()=>{D(),T(),E()},lt=()=>{z(),L()};function J(e){switch(e){case`/`:H(),U();break;case`/registro`:ct();break;case`/login`:st();break;case`/dashboardcoord`:if(!W()){H(),U();break}if(G()===`aluno`){K(`/centraldemandas`,z,L);break}q();break;case`/dashboardaluno`:if(!W()){H(),U();break}if(G()!==`aluno`){K(`/dashboardcoord`,q);break}case`/centraldemandas`:if(!W()){H(),U();break}G()===`aluno`?K(`/centraldemandas`,lt):K(`/dashboardcoord`,q);break;default:H(),U();break}}function Y(e){for(let t=0;t<e.length;++t){let n=document.querySelector(`${e[t]}`);n.value=``}}function X(e,t=`#submitIncorrectAlert label`){let n=document.querySelector(t);n&&(n.textContent=e)}var ut=`Usuário não encontrado.`,dt=`Chave de segurança incorreta.`;function ft(e,t){X(e),Y(t)}function Z(e,t){return(JSON.parse(localStorage.getItem(`usuarios`))||[]).some(n=>{let r=n.matricula,i=n.email;return String(r)===String(e)||String(i)===String(t)})}function pt(e,t){return(JSON.parse(localStorage.getItem(`usuarios`))||[]).find(n=>{let r=n.matricula,i=n.senha;return String(r)===String(e)&&String(i)===String(t)})}function mt(e,t){let n=pt(e,t);if(n){let{senha:e,...t}=n;return localStorage.setItem(`usuarioLogado`,JSON.stringify(t)),localStorage.setItem(`auth`,!0),{ok:!0,usuarioLogado:t}}return Z(e)?(ft(dt,[`#securityKey`]),{ok:!1}):(ft(ut,[`#institutionalId`,`#securityKey`]),{ok:!1})}function ht(){localStorage.setItem(`usuarios`,JSON.stringify([{nome:`João da Silva`,matricula:`123`,email:`joao@academico.edu.br`,senha:`123456`,cargo:`coordenador`},{nome:`Maria Aparecida`,matricula:`003`,email:`maria@academico.edu.br`,senha:`123456`,cargo:`aluno`},{nome:`Carlos Eduardo`,matricula:`456`,email:`carlos@academico.edu.br`,senha:`123456`,cargo:`aluno`}])),gt()}function gt(){localStorage.setItem(`demandas`,JSON.stringify([{protocolo:`REQ-402`,matriculaAluno:`003`,tipo:`Quebra de Pré-requisito`,descricao:`Solicitação para cursar Cálculo III sem a aprovação em Cálculo II.`,status:`pendente`,dataCriacao:`2025-11-12`,dataAtualizacao:`2025-11-12`,feedback:``},{protocolo:`REQ-398`,matriculaAluno:`003`,tipo:`Revisão de Prova`,descricao:`Discordância em relação à correção da questão 4 da prova de Banco de Dados.`,status:`em_analise`,dataCriacao:`2025-11-08`,dataAtualizacao:`2026-05-04`,feedback:``},{protocolo:`REQ-385`,matriculaAluno:`003`,tipo:`Aproveitamento de Horas AC`,descricao:`Envio de certificados de cursos extracurriculares para integralização.`,status:`pendente`,dataCriacao:`2025-11-02`,dataAtualizacao:`2025-11-02`,feedback:``},{protocolo:`REQ-350`,matriculaAluno:`003`,tipo:`Trancamento de Disciplina`,descricao:`Pedido de trancamento da disciplina de Sistemas Operacionais.`,status:`concluido`,dataCriacao:`2025-10-15`,dataAtualizacao:`2025-10-25`,feedback:`Trancamento aprovado. Disciplina removida do histórico do semestre.`},{protocolo:`REQ-342`,matriculaAluno:`003`,tipo:`Troca de Turma`,descricao:`Mudança da turma da manhã para a turma da noite por motivo de trabalho.`,status:`em_analise`,dataCriacao:`2025-10-12`,dataAtualizacao:`2025-10-22`,feedback:``},{protocolo:`REQ-320`,matriculaAluno:`003`,tipo:`Solicitação de Histórico`,descricao:`Emissão do histórico escolar atualizado para fins de estágio.`,status:`concluido`,dataCriacao:`2025-10-05`,dataAtualizacao:`2025-10-15`,feedback:`Documento disponível para retirada na secretaria.`},{protocolo:`REQ-310`,matriculaAluno:`003`,tipo:`Justificativa de Falta`,descricao:`Atestado médico referente às faltas dos dias 22 e 23 de setembro.`,status:`requer_ajuste`,dataCriacao:`2025-09-25`,dataAtualizacao:`2025-09-30`,feedback:`Atestado precisa estar legível e conter o CID. Reenviar.`}]))}function _t(e){return(JSON.parse(localStorage.getItem(`demandas`))||[]).filter(t=>String(t.matriculaAluno)===String(e))}function vt(e){return(JSON.parse(localStorage.getItem(`demandas`))||[]).find(t=>t.protocolo===e)}function yt(){let e=JSON.parse(localStorage.getItem(`demandas`))||[],t=0;for(let n=0;n<e.length;++n){let r=Number(e[n].protocolo.split(`-`)[1]);r>t&&(t=r)}return`REQ-${t+1}`}function bt({matriculaAluno:e,tipo:t,descricao:n}){let r=JSON.parse(localStorage.getItem(`demandas`))||[],i=new Date,a=`${i.getFullYear()}-${String(i.getMonth()+1).padStart(2,`0`)}-${String(i.getDate()).padStart(2,`0`)}`,o={protocolo:yt(),matriculaAluno:e,tipo:t.trim(),descricao:n.trim(),status:`pendente`,dataCriacao:a,dataAtualizacao:a,feedback:``};return r.unshift(o),localStorage.setItem(`demandas`,JSON.stringify(r)),o}function Q(e){if(!e)return``;let t=[`Jan`,`Fev`,`Mar`,`Abr`,`Mai`,`Jun`,`Jul`,`Ago`,`Set`,`Out`,`Nov`,`Dez`],n=e.split(`-`),r=n[0],i=n[1];return`${n[2]} ${t[Number(i)-1]} ${r}`}function xt(e){let t=String(e??``).trim();if(!t)return!1;let n=JSON.parse(localStorage.getItem(`chavesAtivacao`));Array.isArray(n)||(St(),n=JSON.parse(localStorage.getItem(`chavesAtivacao`))||[]);let r=n.find(e=>String(e.code)===t&&!e.used);return r===void 0?!1:(r.used=!0,localStorage.setItem(`chavesAtivacao`,JSON.stringify(n)),!0)}function St(){localStorage.setItem(`chavesAtivacao`,JSON.stringify([{code:`123`,used:!1},{code:`456`,used:!1},{code:`789`,used:!1}]))}function Ct(e,t,n,r,i){let a=JSON.parse(localStorage.getItem(`usuarios`))||[];a.push({nome:e,matricula:t,email:n,senha:r,cargo:i}),localStorage.setItem(`usuarios`,JSON.stringify(a))}function $(e){window.location.pathname!==`/${e}`&&(window.history.pushState({},``,`/${e}`),J(`/${e}`))}function wt(e,t){let n=JSON.parse(localStorage.getItem(`usuarios`))||[],r=n.find(t=>String(t.matricula)===String(e));r&&(r.usuariosCadastrados||=[],r.usuariosCadastrados.push(t),localStorage.setItem(`usuarios`,JSON.stringify(n)))}function Tt(e){return(JSON.parse(localStorage.getItem(`usuarios`))||[]).find(t=>{let n=t.matricula;return String(n)===String(e)})}function Et(){St(),ht(),window.addEventListener(`popstate`,()=>{J(window.location.pathname)}),localStorage.getItem(`auth`)===`true`&&window.location.pathname===`/`&&((JSON.parse(localStorage.getItem(`usuarioLogado`))||{}).cargo===`aluno`?$(`centraldemandas`):$(`dashboardcoord`)),J(window.location.pathname)}Et();
+    `,v({icons:ft,attrs:{"stroke-width":1.6}})}function V(){let e=document.querySelectorAll(`.btnEntrar`);for(let t=0;t<e.length;++t)e[t].addEventListener(`click`,e=>{e.preventDefault(),$(`login`)});let t=document.querySelectorAll(`.btnCriarConta`);for(let e=0;e<t.length;++e)t[e].addEventListener(`click`,e=>{e.preventDefault(),$(`registro`)});let n=document.querySelectorAll(`a[href^="#"]`);for(let e=0;e<n.length;++e)n[e].addEventListener(`click`,t=>{let r=n[e].getAttribute(`href`).slice(1);if(r===``)return;let i=document.getElementById(r);i&&(t.preventDefault(),i.scrollIntoView({behavior:`smooth`,block:`start`}))});let r=document.getElementById(`landingNav`);r&&window.addEventListener(`scroll`,()=>{window.scrollY>12?r.classList.add(`is-scrolled`):r.classList.remove(`is-scrolled`)});let i=document.querySelectorAll(`[data-reveal]`),a=new IntersectionObserver(e=>{for(let t=0;t<e.length;++t)e[t].isIntersecting&&(e[t].target.classList.add(`is-revealed`),a.unobserve(e[t].target))},{threshold:.12});for(let e=0;e<i.length;++e)a.observe(i[e])}var H=()=>localStorage.getItem(`auth`)===`true`,U=()=>{try{return JSON.parse(localStorage.getItem(`usuarioLogado`)||`{}`).cargo||``}catch{return``}},W=(e,t,n)=>{e&&window.history.replaceState({},``,e),t&&t(),n&&n()},pt=()=>W(`/login`,z,R),mt=()=>W(`/registro`,dt,ut),G=()=>{T(),w(),Ve()},ht=()=>{L(),P()};function K(e){switch(e){case`/`:B(),V();break;case`/registro`:mt();break;case`/login`:pt();break;case`/dashboardcoord`:if(!H()){B(),V();break}if(U()===`aluno`){W(`/centraldemandas`,L,P);break}G();break;case`/dashboardaluno`:if(!H()){B(),V();break}if(U()!==`aluno`){W(`/dashboardcoord`,G);break}case`/centraldemandas`:if(!H()){B(),V();break}U()===`aluno`?W(`/centraldemandas`,ht):W(`/dashboardcoord`,G);break;default:B(),V();break}}function q(e){for(let t=0;t<e.length;++t){let n=document.querySelector(`${e[t]}`);n.value=``}}function J(e,t=`#submitIncorrectAlert label`){let n=document.querySelector(t);n&&(n.textContent=e)}var Y={USUARIO_NAO_ENCONTRADO:`Usuário não encontrado.`,CHAVE_INCORRETA:`Chave de segurança incorreta.`};function X(e,t){return(JSON.parse(localStorage.getItem(`usuarios`))||[]).some(n=>{let r=n.matricula,i=n.email;return String(r)===String(e)||String(i)===String(t)})}function gt(e,t){return(JSON.parse(localStorage.getItem(`usuarios`))||[]).find(n=>{let r=n.matricula,i=n.senha;return String(r)===String(e)&&String(i)===String(t)})}function _t(e,t){let n=gt(e,t);if(n){let{senha:e,...t}=n;return localStorage.setItem(`usuarioLogado`,JSON.stringify(t)),localStorage.setItem(`auth`,!0),{ok:!0,usuarioLogado:t}}return X(e)?(J(Y.CHAVE_INCORRETA),q([`#securityKey`]),{ok:!1}):(J(Y.USUARIO_NAO_ENCONTRADO),q([`#institutionalId`,`#securityKey`]),{ok:!1})}function vt(){localStorage.setItem(`usuarios`,JSON.stringify([{nome:`João da Silva`,matricula:`123`,email:`joao@academico.edu.br`,senha:`123456`,cargo:`coordenador`},{nome:`Maria Aparecida`,matricula:`003`,email:`maria@academico.edu.br`,senha:`123456`,cargo:`aluno`},{nome:`Carlos Eduardo`,matricula:`456`,email:`carlos@academico.edu.br`,senha:`123456`,cargo:`aluno`}])),yt()}function yt(){localStorage.setItem(`demandas`,JSON.stringify([{protocolo:`REQ-402`,matriculaAluno:`003`,tipo:`Quebra de Pré-requisito`,descricao:`Solicitação para cursar Cálculo III sem a aprovação em Cálculo II.`,status:`pendente`,dataCriacao:`2025-11-12`,dataAtualizacao:`2025-11-12`,feedback:``},{protocolo:`REQ-398`,matriculaAluno:`003`,tipo:`Revisão de Prova`,descricao:`Discordância em relação à correção da questão 4 da prova de Banco de Dados.`,status:`em_analise`,dataCriacao:`2025-11-08`,dataAtualizacao:`2026-05-04`,feedback:``},{protocolo:`REQ-385`,matriculaAluno:`003`,tipo:`Aproveitamento de Horas AC`,descricao:`Envio de certificados de cursos extracurriculares para integralização.`,status:`pendente`,dataCriacao:`2025-11-02`,dataAtualizacao:`2025-11-02`,feedback:``},{protocolo:`REQ-350`,matriculaAluno:`003`,tipo:`Trancamento de Disciplina`,descricao:`Pedido de trancamento da disciplina de Sistemas Operacionais.`,status:`concluido`,dataCriacao:`2025-10-15`,dataAtualizacao:`2025-10-25`,feedback:`Trancamento aprovado. Disciplina removida do histórico do semestre.`},{protocolo:`REQ-342`,matriculaAluno:`003`,tipo:`Troca de Turma`,descricao:`Mudança da turma da manhã para a turma da noite por motivo de trabalho.`,status:`em_analise`,dataCriacao:`2025-10-12`,dataAtualizacao:`2025-10-22`,feedback:``},{protocolo:`REQ-320`,matriculaAluno:`003`,tipo:`Solicitação de Histórico`,descricao:`Emissão do histórico escolar atualizado para fins de estágio.`,status:`concluido`,dataCriacao:`2025-10-05`,dataAtualizacao:`2025-10-15`,feedback:`Documento disponível para retirada na secretaria.`},{protocolo:`REQ-310`,matriculaAluno:`003`,tipo:`Justificativa de Falta`,descricao:`Atestado médico referente às faltas dos dias 22 e 23 de setembro.`,status:`requer_ajuste`,dataCriacao:`2025-09-25`,dataAtualizacao:`2025-09-30`,feedback:`Atestado precisa estar legível e conter o CID. Reenviar.`}]))}function bt(e){return(JSON.parse(localStorage.getItem(`demandas`))||[]).filter(t=>String(t.matriculaAluno)===String(e))}function xt(e){return(JSON.parse(localStorage.getItem(`demandas`))||[]).find(t=>t.protocolo===e)}function St(){let e=JSON.parse(localStorage.getItem(`demandas`))||[],t=0;for(let n=0;n<e.length;++n){let r=Number(e[n].protocolo.split(`-`)[1]);r>t&&(t=r)}return`REQ-${t+1}`}function Ct({matriculaAluno:e,tipo:t,descricao:n}){let r=JSON.parse(localStorage.getItem(`demandas`))||[],i=new Date,a=`${i.getFullYear()}-${String(i.getMonth()+1).padStart(2,`0`)}-${String(i.getDate()).padStart(2,`0`)}`,o={protocolo:St(),matriculaAluno:e,tipo:t.trim(),descricao:n.trim(),status:`pendente`,dataCriacao:a,dataAtualizacao:a,feedback:``};return r.unshift(o),localStorage.setItem(`demandas`,JSON.stringify(r)),o}function Z(e){if(!e)return``;let t=[`Jan`,`Fev`,`Mar`,`Abr`,`Mai`,`Jun`,`Jul`,`Ago`,`Set`,`Out`,`Nov`,`Dez`],n=e.split(`-`),r=n[0],i=n[1];return`${n[2]} ${t[Number(i)-1]} ${r}`}function wt(e){let t=String(e??``).trim();if(!t)return!1;let n=JSON.parse(localStorage.getItem(`chavesAtivacao`));Array.isArray(n)||(Tt(),n=JSON.parse(localStorage.getItem(`chavesAtivacao`))||[]);let r=n.find(e=>String(e.code)===t&&!e.used);return r===void 0?!1:(r.used=!0,localStorage.setItem(`chavesAtivacao`,JSON.stringify(n)),!0)}function Tt(){localStorage.setItem(`chavesAtivacao`,JSON.stringify([{code:`123`,used:!1},{code:`456`,used:!1},{code:`789`,used:!1}]))}function Q(e,t,n,r,i){let a=JSON.parse(localStorage.getItem(`usuarios`))||[];a.push({nome:e,matricula:t,email:n,senha:r,cargo:i}),localStorage.setItem(`usuarios`,JSON.stringify(a))}function $(e){window.location.pathname!==`/${e}`&&(window.history.pushState({},``,`/${e}`),K(`/${e}`))}function Et(e,t){let n=JSON.parse(localStorage.getItem(`usuarios`))||[],r=n.find(t=>String(t.matricula)===String(e));r&&(r.coordenador||=t,r.coordenador=t,localStorage.setItem(`usuarios`,JSON.stringify(n)))}function Dt(e,t){let n=JSON.parse(localStorage.getItem(`usuarios`))||[],r=n.find(e=>String(e.matricula)===String(t));r&&(r.alunosCadastrados||=[],r.alunosCadastrados.push(e),localStorage.setItem(`usuarios`,JSON.stringify(n)))}function Ot(e){return(JSON.parse(localStorage.getItem(`usuarios`))||[]).find(t=>{let n=t.matricula;return String(n)===String(e)})}function kt(){Tt(),vt(),window.addEventListener(`popstate`,()=>{K(window.location.pathname)}),localStorage.getItem(`auth`)===`true`&&window.location.pathname===`/`&&((JSON.parse(localStorage.getItem(`usuarioLogado`))||{}).cargo===`aluno`?$(`centraldemandas`):$(`dashboardcoord`)),K(window.location.pathname)}kt();
