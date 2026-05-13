@@ -79,7 +79,6 @@ window.demandaDetalhada = demandaDetalhada
 const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 
 export function renderizarAlunos() {
-    console.log("Renderizando alunos...");
     const usuariosString = localStorage.getItem('usuarios') || '[]';
     const usuarios = JSON.parse(usuariosString);
     const coordLista = usuarios.find(u => u.matricula === coord.matricula);
@@ -91,7 +90,6 @@ export function renderizarAlunos() {
     const container = document.querySelector('#alunosContainer');
     if (!container) return;
     container.innerHTML = '';
-
     if (meusAlunos.length === 0) {
         container.innerHTML = `
             <div class="col-span-full text-center py-12 text-zinc-400">
