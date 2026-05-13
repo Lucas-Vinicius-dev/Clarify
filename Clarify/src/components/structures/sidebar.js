@@ -159,7 +159,27 @@ export function renderSidebarAlunos() {
             </div>
 
             <nav class="flex-1 px-4 py-6 space-y-1 text-sm">
-                
+                <button type="button" data-view="inicio" class="w-full flex items-center gap-3 rounded-xl px-4 py-3 text-left text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    <i data-lucide="home" class="w-5 h-5"></i>
+                    <span class="font-medium">Início</span>
+                </button>
+                <button type="button" data-view="demandas" class="w-full flex items-center gap-3 rounded-xl px-4 py-3 text-left text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                    <span class="font-medium">Central de Demandas</span>
+                </button>
+                <a href="#" class="w-full flex items-center gap-3 rounded-xl px-4 py-3 text-left text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path d="M12 22s8-4 8-10V5l-8 3-8-3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span class="font-medium">Turmas</span>
+                </a>
             </nav>
         </aside>
         `;

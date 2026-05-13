@@ -24,10 +24,10 @@ import {
     Search,
     Send,
     Settings,
-    Sparkles,
-    Tag,
-    User,
-    X
+    X,
+    BarChart,
+    MessageCircle,
+    Home,
 } from 'lucide';
 
 export const iconesUsados = {
@@ -55,10 +55,12 @@ export const iconesUsados = {
     Search,
     Send,
     Settings,
-    Sparkles,
-    Tag,
-    User,
-    X
+    X,
+    Check,
+    BarChart,
+    MessageCircle,
+    Mail,
+    Home
 }
 
 export function processarIcones() {
