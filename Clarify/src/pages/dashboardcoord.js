@@ -76,22 +76,18 @@ export function reprovarDemanda(protocolo){
 window.aprovarDemanda = aprovarDemanda
 window.reprovarDemanda = reprovarDemanda
 window.demandaDetalhada = demandaDetalhada
-const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
 
 export function renderizarAlunos() {
-    console.log("Renderizando alunos...");
+    const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
     const usuariosString = localStorage.getItem('usuarios') || '[]';
     const usuarios = JSON.parse(usuariosString);
-    const coordLista = usuarios.find(u => u.matricula === coord.matricula);
-    const matriculasCadastradas = coordLista?.usuariosCadastrados || [];
-    const meusAlunos = usuarios.filter(u => matriculasCadastradas.includes(u.matricula) && u.cargo === 'aluno');
+    const meusAlunos = usuarios.filter(u => u.coordenador === coord.matricula);
     const demandasString = localStorage.getItem('demandas') || '[]';
     const demandas = JSON.parse(demandasString);
 
     const container = document.querySelector('#alunosContainer');
     if (!container) return;
     container.innerHTML = '';
-
     if (meusAlunos.length === 0) {
         container.innerHTML = `
             <div class="col-span-full text-center py-12 text-zinc-400">
@@ -147,6 +143,14 @@ export function renderizarAlunos() {
                 </p>
 
             </div>
+             <div class="mt-4 flex justify-end">
+        <button 
+            onclick="deletarAluno('${aluno.matricula}')"
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-600 border border-rose-200 bg-rose-50 hover:bg-rose-100 transition-colors cursor-pointer">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            Remover aluno
+        </button>
+    </div>
         `;
 
         container.appendChild(alunoElement);
@@ -154,18 +158,36 @@ export function renderizarAlunos() {
 
     return container;
 }
+
+export function deletarAluno(matricula) {
+    if (!confirm(`Tem certeza que deseja remover o aluno ${matricula}?`)) return;
+
+    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+    const atualizados = usuarios.filter(u => u.matricula !== matricula);
+    localStorage.setItem('usuarios', JSON.stringify(atualizados));
+
+    // Remove também as demandas do aluno
+    const demandas = JSON.parse(localStorage.getItem('demandas') || '[]');
+    const demandasRestantes = demandas.filter(d => d.matriculaAluno !== matricula);
+    localStorage.setItem('demandas', JSON.stringify(demandasRestantes));
+
+    renderizarAlunos();
+}
+
+window.deletarAluno = deletarAluno;
+
 export function renderizarDemandas(){
-    console.log("Renderizando demandas...");
+    const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
     const demandasString = localStorage.getItem('demandas') || '[]';
-    console.log('localStorage:', demandasString);
     const demandas = JSON.parse(demandasString);
-    console.log('Demandas:', demandas);
     const container = document.querySelector('#demandasContainer');
     console.log('Container encontrado:', container);
     if (!container) return;
     container.innerHTML = '';
 
-    demandas.filter(d => d.status !== 'concluido').forEach((demanda) => {
+    const demandas_filtradas = demandas.filter(d => d.status !== 'concluido');
+    const minhas_minhas_demandas = demandas_filtradas.filter(d => d.matriculaAluno === coord.matricula);
+    demandas_filtradas.forEach((demanda) => {
         const demandaElement = document.createElement('div');
         demandaElement.classList.add(
             'bg-white',
@@ -211,7 +233,7 @@ export function renderizarDemandas(){
     return container;
 }
 
-const dashboardViews = {
+const dashboardViews =  (coord) =>({
     nome: `
         <div class="space-y-6">
             <section class="relative overflow-hidden bg-zinc-900 p-5 text-white">
@@ -347,7 +369,7 @@ demandas: `
     </div>
     <div id="turmasContainer" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
 `,
-};
+});
 function existeDuplicidadeDashboard(matricula, email, usuarios) {
     return usuarios.some((usuario) => {
         return (String(usuario.matricula) === String(matricula) || String(usuario.email) === String(email));
@@ -372,8 +394,8 @@ function checarDashboardCoord() {
 
     alert("Usuário criado com sucesso!");
     aux.adicionarUsuario(nome, matricula, email, senha, cargo);
-    console.log(aux.acharUsuario(coordenadorLogado["matricula"]));
-    aux.atribuirAluno(coordenadorLogado.matricula, matricula);
+    aux.atribuirCoordenador(matricula, coordenadorLogado.matricula);
+    aux.atribuirAluno(matricula, coordenadorLogado.matricula);
 }
 
 export function ativarListenerDashboardCoord() {
@@ -385,10 +407,11 @@ export function ativarListenerDashboardCoord() {
 }
 
 export function renderDashboardView(view = 'nome') {
+    const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
     const container = document.querySelector('#dashboardContent');
     if (!container) return;
 
-    container.innerHTML = dashboardViews[view] || dashboardViews.nome;
+    container.innerHTML = dashboardViews(coord)[view] || dashboardViews(coord).nome;
 
     if (view === 'demandas') {
         renderizarDemandas();
@@ -455,6 +478,7 @@ export function createProfileBtn() {
 export function Carregardashboardcoord() {
     aux.adicionarCaminhoURL("dashboardcoord");
     document.querySelector("title").innerHTML = `Dashboard - Clarify`;
+    const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{"nome":"Usuário"}');
     document.querySelector('#app').innerHTML = `
     <div class="min-h-screen w-full bg-pink-50 flex flex-col md:flex-row relative overflow-hidden">
         ${renderSidebarCoord()}

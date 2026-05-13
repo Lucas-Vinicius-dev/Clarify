@@ -20,13 +20,11 @@ export function exibirMensagemErro(mensagem, seletor = "#submitIncorrectAlert la
     }
 }
 
-const MENSAGEM_USUARIO_NAO_ENCONTRADO = 'Usuário não encontrado.';
-const MENSAGEM_CHAVE_INCORRETA = 'Chave de segurança incorreta.';
+const ERRORS = {
+    USUARIO_NAO_ENCONTRADO: "Usuário não encontrado.",
+    CHAVE_INCORRETA: "Chave de segurança incorreta.",
+};
 
-function exibirErroLogin(mensagem, camposParaLimpar) {
-    exibirMensagemErro(mensagem);
-    limparFormulario(camposParaLimpar);
-}
 
 // Busca se um usuário está cadastrado no localStorage com base no ID institucional
 export function UsuarioExiste(matricula,email) {
@@ -64,12 +62,14 @@ export function autenticarLogin(institutionalId, securityKey) {
     const usuarioExiste = UsuarioExiste(institutionalId);
     if (!usuarioExiste) {
         // Caso o usuário não exista, exibirá uma mensagem de erro e limpará ambos os campos do formulário
-        exibirErroLogin(MENSAGEM_USUARIO_NAO_ENCONTRADO, ["#institutionalId", "#securityKey"]);
+        exibirMensagemErro(ERRORS.USUARIO_NAO_ENCONTRADO);
+        limparFormulario(["#institutionalId", "#securityKey"]);
         return { ok: false };
     }
 
     // Caso o usuário exista, mas a chave de segurança esteja incorreta
-    exibirErroLogin(MENSAGEM_CHAVE_INCORRETA, ["#securityKey"]);
+    exibirMensagemErro(ERRORS.CHAVE_INCORRETA);
+    limparFormulario(["#securityKey"]);
     return { ok: false };
 }
 
@@ -77,8 +77,8 @@ export function autenticarLogin(institutionalId, securityKey) {
 export function popularLocalStorage() {
     const usuariosTeste = [
         { nome: "João da Silva", matricula: "123", email: "joao@academico.edu.br", senha: "123456", cargo: "coordenador" },
-        { nome: "Maria Aparecida", matricula: "003", email: "maria@academico.edu.br", senha: "123456", cargo: "aluno" },
-        { nome: "Carlos Eduardo", matricula: "456", email: "carlos@academico.edu.br", senha: "123456", cargo: "aluno" }
+        { nome: "Maria Aparecida", matricula: "003", email: "maria@academico.edu.br", senha: "123456", cargo: "aluno", coordenador: "123" },
+        { nome: "Carlos Eduardo", matricula: "456", email: "carlos@academico.edu.br", senha: "123456", cargo: "aluno", coordenador: "123" }
     ];
 
     localStorage.setItem('usuarios', JSON.stringify(usuariosTeste));
@@ -174,6 +174,53 @@ export function buscarDemandasPorAluno(matricula) {
     });
 }
 
+// Localiza uma demanda específica pelo protocolo (ex: "REQ-402").
+export function buscarDemandaPorProtocolo(protocolo) {
+    const demandas = JSON.parse(localStorage.getItem('demandas')) || [];
+    return demandas.find((demanda) => demanda.protocolo === protocolo);
+}
+
+// Gera o próximo protocolo (REQ-XXX) somando 1 ao maior número já presente no localStorage.
+export function gerarProximoProtocolo() {
+    const demandas = JSON.parse(localStorage.getItem('demandas')) || [];
+
+    let maior = 0;
+    for (let i = 0; i < demandas.length; ++i) {
+        const numero = Number(demandas[i].protocolo.split('-')[1]);
+        if (numero > maior) maior = numero;
+    }
+
+    return `REQ-${maior + 1}`;
+}
+
+// Cria uma nova demanda no localStorage e devolve ela pra quem chamou.
+// [OBS:] precisa rodar popularLocalStorage antes pelo menos uma vez, senão não tem chave "demandas" ainda
+export function criarDemanda({ matriculaAluno, tipo, descricao }) {
+    const demandas = JSON.parse(localStorage.getItem('demandas')) || [];
+
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+    const dia = String(hoje.getDate()).padStart(2, '0');
+    const dataISO = `${ano}-${mes}-${dia}`;
+
+    const novaDemanda = {
+        protocolo: gerarProximoProtocolo(),
+        matriculaAluno: matriculaAluno,
+        tipo: tipo.trim(),
+        descricao: descricao.trim(),
+        status: 'pendente',
+        dataCriacao: dataISO,
+        dataAtualizacao: dataISO,
+        feedback: ''
+    };
+
+    demandas.unshift(novaDemanda);
+    localStorage.setItem('demandas', JSON.stringify(demandas));
+
+    return novaDemanda;
+}
+
 // Converte uma data ISO ("2025-11-12") para o formato "12 Nov 2025" usado na UI.
 export function formatarData(dataISO) {
     if (!dataISO) return '';
@@ -243,21 +290,37 @@ export function adicionarCaminhoURL(nome) {
    }
 }
 
-// Recebe o JSON no localStorage do coordenador e adiciona um usuário adicionado por ele ao localStorage
-export function atribuirAluno(matriculaCoord, matriculaAluno) {
+
+export function atribuirCoordenador(matriculaAluno, matriculaCoord) {
     const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
+    const aluno = usuarios.find(
+        usuario => String(usuario.matricula) === String(matriculaAluno)
+    );
+
+    if (!aluno) return;
+
+    if (!aluno.coordenador) {
+        aluno.coordenador = matriculaCoord;
+    }
+
+    aluno.coordenador = matriculaCoord;
+    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+}
+
+export function atribuirAluno(matriculaAluno, matriculaCoord) {
+    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
     const coordenador = usuarios.find(
         usuario => String(usuario.matricula) === String(matriculaCoord)
     );
 
     if (!coordenador) return;
 
-    if (!coordenador.usuariosCadastrados) {
-        coordenador.usuariosCadastrados = [];
+    if (!coordenador.alunosCadastrados) {
+        coordenador.alunosCadastrados = [];
     }
 
-    coordenador.usuariosCadastrados.push(matriculaAluno);
+    coordenador.alunosCadastrados.push(matriculaAluno);
     localStorage.setItem("usuarios", JSON.stringify(usuarios));
 }
 
