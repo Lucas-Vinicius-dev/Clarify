@@ -143,6 +143,14 @@ export function renderizarAlunos() {
                 </p>
 
             </div>
+             <div class="mt-4 flex justify-end">
+        <button 
+            onclick="deletarAluno('${aluno.matricula}')"
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-600 border border-rose-200 bg-rose-50 hover:bg-rose-100 transition-colors cursor-pointer">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            Remover aluno
+        </button>
+    </div>
         `;
 
         container.appendChild(alunoElement);
@@ -150,6 +158,24 @@ export function renderizarAlunos() {
 
     return container;
 }
+
+export function deletarAluno(matricula) {
+    if (!confirm(`Tem certeza que deseja remover o aluno ${matricula}?`)) return;
+
+    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+    const atualizados = usuarios.filter(u => u.matricula !== matricula);
+    localStorage.setItem('usuarios', JSON.stringify(atualizados));
+
+    // Remove também as demandas do aluno
+    const demandas = JSON.parse(localStorage.getItem('demandas') || '[]');
+    const demandasRestantes = demandas.filter(d => d.matriculaAluno !== matricula);
+    localStorage.setItem('demandas', JSON.stringify(demandasRestantes));
+
+    renderizarAlunos();
+}
+
+window.deletarAluno = deletarAluno;
+
 export function renderizarDemandas(){
     const coord = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
     const demandasString = localStorage.getItem('demandas') || '[]';
@@ -159,7 +185,9 @@ export function renderizarDemandas(){
     if (!container) return;
     container.innerHTML = '';
 
-    demandas.filter(d => d.status !== 'concluido').forEach((demanda) => {
+    const demandas_filtradas = demandas.filter(d => d.status !== 'concluido');
+    const minhas_minhas_demandas = demandas_filtradas.filter(d => d.matriculaAluno === coord.matricula);
+    demandas_filtradas.forEach((demanda) => {
         const demandaElement = document.createElement('div');
         demandaElement.classList.add(
             'bg-white',
