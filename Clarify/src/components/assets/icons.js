@@ -27,7 +27,7 @@ import {
     X,
     BarChart,
     MessageCircle,
-    Home
+    Home,
 } from 'lucide';
 
 export const iconesUsados = {

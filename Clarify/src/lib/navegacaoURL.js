@@ -43,56 +43,61 @@ const goToCentralDemandas = () => {
 };
 
 export function navigateURL(url) {
-   switch (url) {
-      case "/":
+  switch (url) {
+    case "/":
+      carregarLanding();
+      ativarListenerLanding();
+      break;
+    case "/registro":
+      goToRegistro();
+      break;
+    case "/login":
+      goToLogin();
+      break;
+    case "/dashboardcoord":
+      if (!isAuthenticated()) {
         carregarLanding();
         ativarListenerLanding();
         break;
-      case "/registro":
-        goToRegistro();
-        break;
-      case "/login":
-        goToLogin();
-        break;
-      case "/dashboardcoord":
-        if (!isAuthenticated()) {
-          carregarLanding();
-          ativarListenerLanding();
-          break;
-        }
+      }
 
-        if (getCargo() === 'aluno') {
-          goTo('/centraldemandas', carregarCentralDemandas, ativarListenerCentralDemandas);
-          break;
-        }
-
-        goToDashboardCoord();
+      if (getCargo() === 'aluno') {
+        goTo('/centraldemandas', carregarCentralDemandas, ativarListenerCentralDemandas);
         break;
-      case "/dashboardaluno":
-        if (!isAuthenticated()) {
-          carregarLanding();
-          ativarListenerLanding();
-          break;
-        }
+      }
 
-        if (getCargo() !== 'aluno') {
-          goTo('/dashboardcoord', goToDashboardCoord);
-          break;
-        }
-      case "/centraldemandas":
-        if (!isAuthenticated()) {
-          carregarLanding();
-          ativarListenerLanding();
-          break;
-        }
-        if (getCargo() !== 'aluno') {
-            goTo('/dashboardcoord', goToDashboardCoord);}
-          else {
-        goTo('/centraldemandas', goToCentralDemandas);}
-        break;
-      default:
+      goToDashboardCoord();
+      break;
+    case "/dashboardaluno":
+      if (!isAuthenticated()) {
         carregarLanding();
         ativarListenerLanding();
         break;
-   }
+      }
+
+      if (getCargo() !== 'aluno') {
+        goTo('/dashboardcoord', goToDashboardCoord);
+        break;
+      }
+      
+    case "/centraldemandas":
+      if (!isAuthenticated()) {
+        carregarLanding();
+        ativarListenerLanding();
+        break;
+      }
+
+      if (getCargo() !== 'aluno') {
+        goTo('/dashboardcoord', goToDashboardCoord);
+      }
+      else {
+        goTo('/centraldemandas', goToCentralDemandas);
+      }
+      break;
+
+    default:
+      carregarLanding();
+      ativarListenerLanding();
+      break;
+  }
 }

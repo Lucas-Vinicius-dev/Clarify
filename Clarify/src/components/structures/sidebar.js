@@ -168,10 +168,6 @@ export function renderSidebarAlunos() {
                     <span class="font-medium">Central de Demandas</span>
                 </button>
                 <a href="#" class="w-full flex items-center gap-3 rounded-xl px-4 py-3 text-left text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
-                    <span class="font-medium">Nova Demanda</span>
-                </a>
-                <a href="#" class="w-full flex items-center gap-3 rounded-xl px-4 py-3 text-left text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg"
                         width="22"
                         height="22"
