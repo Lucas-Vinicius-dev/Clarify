@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Feature 07 — Anexos & Documentos — Clarify Brainstorm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+    main.container { max-width: 1080px; margin: 0 auto; padding: 48px 24px 0; }
+
+    .feature-hero {
+        position: relative;
+        padding: 56px 0 32px;
+    }
+    .feature-hero h1 {
+        font-size: clamp(2rem, 4.4vw, 3.4rem);
+        font-weight: 700;
+        line-height: 1.04;
+        letter-spacing: -0.045em;
+        margin: 18px 0 16px;
+        color: var(--slate-900);
+    }
+    .feature-hero p.lead {
+        font-size: 1.125rem;
+        color: var(--slate-500);
+        max-width: 720px;
+        line-height: 1.55;
+        margin: 0 0 24px;
+    }
+    .feature-hero .pills {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    /* Section scaffolding */
+    section.block {
+        margin-top: 72px;
+    }
+    section.block > .eyebrow {
+        display: inline-block;
+        margin-bottom: 10px;
+    }
+    section.block > h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        color: var(--slate-900);
+        margin: 0 0 12px;
+    }
+    section.block > p.sub {
+        color: var(--slate-500);
+        margin: 0 0 28px;
+        max-width: 760px;
+        line-height: 1.55;
+    }
+
+    /* Persona cards */
+    .personas {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    @media (min-width: 820px) {
+        .personas { grid-template-columns: repeat(3, 1fr); }
+    }
+    .persona-card {
+        position: relative;
+        padding: 24px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+    .persona-icon {
+        width: 40px; height: 40px;
+        border-radius: 12px;
+        background: rgba(202, 95, 21, 0.10);
+        color: var(--brand-primary);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .persona-card h3 {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: -0.02em;
+        color: var(--slate-900);
+    }
+    .ba-row { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .ba-cell {
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-size: 0.82rem;
+        line-height: 1.45;
+    }
+    .ba-before {
+        background: rgba(15, 23, 42, 0.04);
+        color: var(--slate-700);
+        border-left: 3px solid var(--slate-300);
+    }
+    .ba-after {
+        background: rgba(202, 95, 21, 0.07);
+        color: var(--slate-900);
+        border-left: 3px solid var(--brand-primary);
+    }
+    .ba-label {
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+        display: block;
+    }
+    .ba-before .ba-label { color: var(--slate-400); }
+    .ba-after .ba-label { color: var(--brand-primary); }
+    .persona-impact {
+        font-size: 0.85rem;
+        color: var(--slate-500);
+        font-style: italic;
+        border-top: 1px dashed var(--slate-200);
+        padding-top: 12px;
+        margin: 0;
+    }
+
+    /* Numbered flow */
+    .flow {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    .flow-step {
+        display: grid;
+        grid-template-columns: 48px 1fr;
+        gap: 16px;
+        padding: 18px 20px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        align-items: start;
+    }
+    .flow-num {
+        width: 36px; height: 36px;
+        border-radius: 10px;
+        display: inline-flex; align-items: center; justify-content: center;
+        background: linear-gradient(135deg, #ca5f15, #e07a30);
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.95rem;
+    }
+    .flow-step h4 {
+        font-size: 0.98rem;
+        font-weight: 700;
+        margin: 0 0 4px;
+        color: var(--slate-900);
+        letter-spacing: -0.015em;
+    }
+    .flow-step p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--slate-500);
+        line-height: 1.55;
+    }
+
+    /* Mockups specifics */
+    .mockup-stack {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+    @media (min-width: 940px) {
+        .mockup-stack.two-col { grid-template-columns: 1.05fr 0.95fr; align-items: start; }
+    }
+    .mockup-window .mockup-body { padding: 22px; }
+    .mockup-caption {
+        font-size: 0.78rem;
+        color: var(--slate-400);
+        margin-top: 8px;
+        text-align: center;
+        letter-spacing: 0.04em;
+    }
+
+    /* Drop zone visual */
+    .dropzone {
+        position: relative;
+        border: 2px dashed var(--brand-primary);
+        background:
+            repeating-linear-gradient(45deg, rgba(202, 95, 21, 0.04) 0 14px, transparent 14px 28px),
+            rgba(255, 248, 246, 0.6);
+        border-radius: 14px;
+        padding: 28px 20px;
+        text-align: center;
+        color: var(--slate-700);
+    }
+    .dropzone .dz-icon {
+        width: 48px; height: 48px;
+        border-radius: 14px;
+        background: rgba(202, 95, 21, 0.12);
+        color: var(--brand-primary);
+        display: inline-flex; align-items: center; justify-content: center;
+        margin-bottom: 12px;
+    }
+    .dropzone h5 {
+        margin: 0 0 4px;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--slate-900);
+    }
+    .dropzone .dz-sub {
+        font-size: 0.82rem;
+        color: var(--slate-500);
+    }
+    .dropzone .dz-action {
+        margin-top: 12px;
+        display: inline-flex; align-items: center; gap: 6px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--brand-primary);
+        letter-spacing: 0.02em;
+    }
+
+    /* Anexo card (preview de arquivo) */
+    .anexo-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 16px;
+    }
+    .anexo-card {
+        display: grid;
+        grid-template-columns: 56px 1fr auto;
+        gap: 14px;
+        align-items: center;
+        padding: 12px 14px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 12px;
+    }
+    .anexo-thumb {
+        width: 56px; height: 56px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, rgba(202, 95, 21, 0.12), rgba(224, 122, 48, 0.06));
+        display: inline-flex; align-items: center; justify-content: center;
+        color: var(--brand-primary);
+        font-weight: 800;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        position: relative;
+        overflow: hidden;
+    }
+    .anexo-thumb.img {
+        background:
+            linear-gradient(135deg, rgba(202, 95, 21, 0.25), rgba(224, 122, 48, 0.15)),
+            repeating-linear-gradient(45deg, #fff 0 4px, rgba(255, 248, 246, 1) 4px 8px);
+    }
+    .anexo-meta { min-width: 0; }
+    .anexo-meta .name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--slate-900);
+        margin: 0 0 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .anexo-meta .sub {
+        font-size: 0.76rem;
+        color: var(--slate-500);
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .anexo-actions { display: flex; gap: 4px; }
+    .icon-btn {
+        width: 30px; height: 30px;
+        border-radius: 8px;
+        border: 1px solid var(--slate-200);
+        background: #fff;
+        color: var(--slate-700);
+        display: inline-flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        transition: all 0.18s ease;
+    }
+    .icon-btn:hover { border-color: var(--brand-primary); color: var(--brand-primary); }
+    .icon-btn.danger:hover { border-color: #dc2626; color: #dc2626; }
+
+    .badge-sensivel {
+        display: inline-flex; align-items: center; gap: 4px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: rgba(202, 95, 21, 0.10);
+        color: var(--brand-primary);
+        border: 1px solid rgba(202, 95, 21, 0.25);
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+    }
+    .badge-version {
+        display: inline-flex; align-items: center; gap: 4px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.06);
+        color: var(--slate-700);
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+    }
+
+    /* PDF preview embed */
+    .pdf-frame {
+        background: #f8fafc;
+        border: 1px solid var(--slate-200);
+        border-radius: 12px;
+        padding: 14px;
+    }
+    .pdf-page {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 6px;
+        padding: 22px;
+        font-size: 0.7rem;
+        line-height: 1.7;
+        color: var(--slate-700);
+        font-family: 'Times New Roman', serif;
+    }
+    .pdf-page .header-doc {
+        text-align: center;
+        font-weight: 700;
+        color: var(--slate-900);
+        font-size: 0.8rem;
+        margin-bottom: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+    .pdf-page .stamp {
+        margin-top: 16px;
+        padding: 8px;
+        border: 2px solid rgba(202, 95, 21, 0.5);
+        border-radius: 6px;
+        color: var(--brand-primary);
+        font-weight: 700;
+        font-size: 0.65rem;
+        text-align: center;
+        font-family: 'Space Grotesk', sans-serif;
+        max-width: 200px;
+        margin-left: auto;
+        margin-right: auto;
+        letter-spacing: 0.08em;
+        transform: rotate(-3deg);
+    }
+
+    /* Versionamento timeline */
+    .version-row {
+        display: grid;
+        grid-template-columns: 14px 1fr;
+        gap: 16px;
+        padding: 10px 0;
+    }
+    .version-dot {
+        width: 14px; height: 14px;
+        border-radius: 999px;
+        background: var(--brand-primary);
+        margin-top: 8px;
+        box-shadow: 0 0 0 4px rgba(202, 95, 21, 0.15);
+    }
+    .version-dot.muted {
+        background: var(--slate-300);
+        box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
+    }
+    .version-line {
+        border-left: 2px dashed var(--slate-200);
+        margin-left: 6px;
+        padding-left: 24px;
+        margin-top: -10px;
+        padding-bottom: 8px;
+    }
+
+    /* KPI cards */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    @media (min-width: 720px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 980px) { .kpi-grid { grid-template-columns: repeat(4, 1fr); } }
+    .kpi-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        padding: 20px;
+        display: flex; flex-direction: column; gap: 8px;
+    }
+    .kpi-card .kpi-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+    }
+    .kpi-card .kpi-value {
+        font-size: 1.65rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        color: var(--slate-900);
+    }
+    .kpi-card .kpi-desc {
+        font-size: 0.78rem;
+        color: var(--slate-500);
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    /* Inspiration table */
+    .insp-table-wrap {
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        background: #fff;
+        overflow: hidden;
+    }
+    .insp-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+    }
+    .insp-table th {
+        text-align: left;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+        padding: 14px 18px;
+        background: var(--slate-100);
+        border-bottom: 1px solid var(--slate-200);
+    }
+    .insp-table td {
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--slate-100);
+        color: var(--slate-700);
+        line-height: 1.5;
+        vertical-align: top;
+    }
+    .insp-table tr:last-child td { border-bottom: none; }
+    .insp-table a { color: var(--brand-primary); text-decoration: none; font-weight: 600; }
+    .insp-table a:hover { text-decoration: underline; }
+
+    /* Quick wins vs versão completa */
+    .compare {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    @media (min-width: 820px) { .compare { grid-template-columns: 1fr 1fr; } }
+    .compare-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        padding: 22px;
+    }
+    .compare-card.mvp {
+        background: linear-gradient(180deg, #fff, rgba(202, 95, 21, 0.03));
+        border-color: rgba(202, 95, 21, 0.25);
+    }
+    .compare-card h4 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin: 0 0 6px;
+        letter-spacing: -0.02em;
+    }
+    .compare-card .compare-sub {
+        font-size: 0.78rem;
+        color: var(--slate-500);
+        margin: 0 0 14px;
+    }
+    .compare-card ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .compare-card ul li {
+        display: grid;
+        grid-template-columns: 18px 1fr;
+        gap: 8px;
+        padding: 7px 0;
+        font-size: 0.88rem;
+        color: var(--slate-700);
+        line-height: 1.5;
+        border-top: 1px dashed var(--slate-200);
+    }
+    .compare-card ul li:first-child { border-top: none; }
+    .compare-card .check {
+        color: var(--brand-primary);
+        font-weight: 700;
+    }
+
+    /* Risk cards */
+    .risk-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    @media (min-width: 820px) { .risk-grid { grid-template-columns: repeat(2, 1fr); } }
+    .risk-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        padding: 18px 20px;
+    }
+    .risk-card h4 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin: 0 0 6px;
+        color: var(--slate-900);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .risk-tag {
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        padding: 2px 8px;
+        border-radius: 6px;
+        background: rgba(220, 38, 38, 0.10);
+        color: #b91c1c;
+    }
+    .risk-tag.med { background: rgba(202, 95, 21, 0.12); color: var(--brand-primary); }
+    .risk-tag.low { background: rgba(15, 23, 42, 0.06); color: var(--slate-700); }
+    .risk-card p {
+        font-size: 0.85rem;
+        color: var(--slate-500);
+        margin: 0 0 10px;
+        line-height: 1.55;
+    }
+    .risk-mit {
+        font-size: 0.82rem;
+        color: var(--slate-900);
+        padding: 8px 12px;
+        background: rgba(202, 95, 21, 0.06);
+        border-left: 3px solid var(--brand-primary);
+        border-radius: 6px;
+    }
+    .risk-mit b {
+        font-weight: 700;
+        color: var(--brand-primary);
+        font-size: 0.7rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 2px;
+    }
+
+    /* Effort table */
+    .effort-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+    .effort-table th {
+        text-align: left;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+        padding: 14px 18px;
+        background: var(--slate-100);
+        border-bottom: 1px solid var(--slate-200);
+    }
+    .effort-table td {
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--slate-100);
+        color: var(--slate-700);
+        vertical-align: top;
+    }
+    .effort-table tr:last-child td { border-bottom: none; }
+    .effort-badge {
+        display: inline-flex;
+        font-size: 0.7rem;
+        font-weight: 800;
+        padding: 3px 8px;
+        border-radius: 6px;
+        letter-spacing: 0.06em;
+    }
+    .effort-xs { background: rgba(16, 185, 129, 0.14); color: #047857; }
+    .effort-s  { background: rgba(59, 130, 246, 0.14); color: #1d4ed8; }
+    .effort-m  { background: rgba(202, 95, 21, 0.14); color: var(--brand-primary); }
+    .effort-l  { background: rgba(220, 38, 38, 0.14); color: #b91c1c; }
+</style>
+</head>
+<body>
+
+<header style="position: sticky; top: 0; z-index: 10; background: rgba(255, 248, 246, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(15, 23, 42, 0.06);">
+    <div class="container" style="padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
+        <a href="index.html" style="display: inline-flex; align-items: center; gap: 8px; color: var(--slate-700); text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+            <span style="font-size: 1.1rem;">←</span> Hub de features
+        </a>
+        <span class="eyebrow eyebrow-muted">FEATURE 07 / 10</span>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- HERO -->
+    <section class="feature-hero">
+        <div style="display: inline-flex; align-items: center; gap: 10px;">
+            <span class="tier-badge tier-a">Tier A — Polish profissional</span>
+            <span class="eyebrow eyebrow-muted">Documentos · Upload</span>
+        </div>
+        <h1 class="tracking-headline">
+            Anexos &amp; documentos<br/>
+            <span class="text-gradient-warm">para demandas que precisam de prova</span>
+        </h1>
+        <p class="lead">
+            "Justificativa de Falta" sem atestado anexado é um fluxo quebrado. Hoje no Clarify o aluno só tem o campo
+            <span class="mono">descricao</span> — o coordenador é forçado a confiar na palavra ou pedir o arquivo por
+            outro canal. Esta feature fecha o ciclo: upload com drag-and-drop, preview inline, versionamento e o cuidado
+            certo para documentos sensíveis.
+        </p>
+        <div class="pills">
+            <span class="pill pill-warm">Upload</span>
+            <span class="pill">Documentos</span>
+            <span class="pill">PDF</span>
+            <span class="pill">Zendesk-like</span>
+            <span class="pill">LGPD-aware</span>
+        </div>
+    </section>
+
+    <!-- 5.3 POR QUE IMPORTA -->
+    <section class="block" data-reveal>
+        <span class="eyebrow">Por que isso importa</span>
+        <h2>Sem anexo, o coordenador trabalha no escuro</h2>
+        <p class="sub">
+            O modelo atual de demanda força o coordenador a tomar decisão administrativa baseada em um parágrafo de texto
+            livre. Para justificativa médica, isso é absurdo. Para aproveitamento de créditos, é impossível: ele precisa
+            ver a ementa da disciplina cursada antes. Hoje o aluno acaba mandando o documento pelo WhatsApp do coord — o
+            que mata o audit log e quebra o conceito de "tudo dentro do Clarify".
+        </p>
+        <div class="personas" style="margin-top: 4px;">
+            <div class="persona-card">
+                <div class="persona-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 13h6M9 17h4"/></svg>
+                </div>
+                <h3>Problema 1 — modelo de dados</h3>
+                <p style="margin:0; font-size: 0.9rem; color: var(--slate-500); line-height: 1.55;">
+                    <span class="mono">Clarify/src/data/demanda.js</span> só tem <span class="mono">descricao</span>. Não
+                    existe campo, schema ou validação para arquivos. O aluno literalmente não tem onde colocar.
+                </p>
+            </div>
+            <div class="persona-card">
+                <div class="persona-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                </div>
+                <h3>Problema 2 — modal sem upload</h3>
+                <p style="margin:0; font-size: 0.9rem; color: var(--slate-500); line-height: 1.55;">
+                    O modal de nova demanda em <span class="mono">modais.js</span> é só textarea. Não tem dropzone, não
+                    tem input de arquivo, nem feedback visual de "arquivo recebido".
+                </p>
+            </div>
+            <div class="persona-card">
+                <div class="persona-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
+                <h3>Problema 3 — fluxo paralelo no WhatsApp</h3>
+                <p style="margin:0; font-size: 0.9rem; color: var(--slate-500); line-height: 1.55;">
+                    Atestado vai pelo zap, ementa vai por e-mail, declaração vai por foto no Drive. O Clarify não vira o
+                    sistema-de-registro do processo — fica como um post-it digital.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5.4 PERSONAS -->
+    <section class="block" data-reveal>
+        <span class="eyebrow">Personas impactadas</span>
+        <h2>Quem ganha o quê</h2>
+        <p class="sub">Aluno, coordenador e instituição cada um tem uma dor distinta hoje. A feature endereça os três.</p>
+        <div class="personas">
+            <div class="persona-card">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="persona-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+                    <h3>Aluno</h3>
+                </div>
+                <div class="ba-row">
+                    <div class="ba-cell ba-before">
+                        <span class="ba-label">Antes</span>
+                        Carla Pereira tira foto do atestado, joga no WhatsApp do coord, fica esperando. Se o coord pedir
+                        de novo, ela manda outra foto sem saber se a primeira foi vista.
+                    </div>
+                    <div class="ba-cell ba-after">
+                        <span class="ba-label">Depois</span>
+                        Arrasta o PDF no modal de nova demanda, vê o thumb e o tamanho, confirma. Se precisar reenviar
+                        por estar borrado, mantém histórico de v1 → v2 sem perder o anterior.
+                    </div>
+                </div>
+                <p class="persona-impact">Carla vê o atestado dela na timeline da demanda — é prova de que entregou.</p>
+            </div>
+
+            <div class="persona-card">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="persona-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <h3>Coordenador</h3>
+                </div>
+                <div class="ba-row">
+                    <div class="ba-cell ba-before">
+                        <span class="ba-label">Antes</span>
+                        Bruno Almeida abre Clarify, lê "atesto que faltei dia 03/05", abre WhatsApp para procurar o PDF
+                        que a aluna mandou ontem. Decide aprovar e fica sem ata do arquivo no sistema.
+                    </div>
+                    <div class="ba-cell ba-after">
+                        <span class="ba-label">Depois</span>
+                        Vê o atestado direto na demanda, clica preview, lê CRM, aprova. Pode anexar de volta a "declaração
+                        de aproveitamento" assinada — o aluno baixa pelo próprio Clarify.
+                    </div>
+                </div>
+                <p class="persona-impact">Decisão e prova ficam no mesmo lugar. Aceitação no fluxo dispara em ~3x.</p>
+            </div>
+
+            <div class="persona-card">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="persona-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+                    </div>
+                    <h3>Instituição</h3>
+                </div>
+                <div class="ba-row">
+                    <div class="ba-cell ba-before">
+                        <span class="ba-label">Antes</span>
+                        Auditoria interna pede prova de que tal aluno entregou tal documento. Coord vasculha WhatsApp,
+                        Drive, e-mail. Em alguns casos, a prova simplesmente sumiu.
+                    </div>
+                    <div class="ba-cell ba-after">
+                        <span class="ba-label">Depois</span>
+                        Cada anexo tem hash SHA-256, autoria, timestamp e versão. Export PDF da demanda inclui os anexos.
+                        Documento sensível tem flag e log de acesso (cruza com Feature 04 — Audit Log).
+                    </div>
+                </div>
+                <p class="persona-impact">Compliance LGPD vira tangível, não papo.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5.5 FLUXO -->
+    <section class="block" data-reveal>
+        <span class="eyebrow">Como funcionaria</span>
+        <h2>Fluxo do upload, do preview e da versão</h2>
+        <p class="sub">Cinco passos que cobrem o caminho feliz, o reenvio e o caso do coord respondendo com documento.</p>
+        <div class="flow">
+            <div class="flow-step">
+                <span class="flow-num">1</span>
+                <div>
+                    <h4>Aluno arrasta o arquivo na dropzone do modal</h4>
+                    <p>Modal de nova demanda passa a ter uma zona tracejada laranja. Drag-and-drop ou clique abre o file picker.
+                    Tipos aceitos: <span class="mono">.pdf, .jpg, .jpeg, .png, .docx</span>. Tamanho máx: 5MB por arquivo.</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <span class="flow-num">2</span>
+                <div>
+                    <h4>Validação no client antes de salvar</h4>
+                    <p>Checa MIME real (não só extensão), tamanho, e nome (sanitiza caracteres inválidos, acentos viram
+                    forma NFD). Imagens HEIC do iPhone disparam aviso explícito de incompatibilidade.</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <span class="flow-num">3</span>
+                <div>
+                    <h4>Preview inline + flag sensível</h4>
+                    <p>Imagens viram thumb 80x80. PDFs e DOCX viram cards com ícone do tipo, nome e tamanho. Se for atestado
+                    médico (heurística por tipo de demanda), aparece badge "documento sensível" e ícone de cadeado.</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <span class="flow-num">4</span>
+                <div>
+                    <h4>Salva no localStorage como base64 + hash</h4>
+                    <p>Cada arquivo é convertido com <span class="mono">FileReader.readAsDataURL</span>, hashado com SHA-256
+                    (Web Crypto API) e gravado dentro de <span class="mono">demanda.anexos[]</span>. Limite total de 8MB
+                    por demanda — barra de uso mostra "3,2 / 8 MB".</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <span class="flow-num">5</span>
+                <div>
+                    <h4>Reenvio cria nova versão, não sobrescreve</h4>
+                    <p>Se aluno faz upload de outro arquivo com mesmo "papel" (ex: já existe atestado, sobe atestado de novo),
+                    nova versão recebe v2, aponta <span class="mono">anexo_anterior_id</span> e fica visível para o coord
+                    como "atualizado em 13/05 às 16:00". V1 continua acessível para auditoria.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5.6 MOCKUP -->
+    <section class="block" data-reveal>
+        <span class="eyebrow">Mockup conceitual</span>
+        <h2>Aluno arrastando o atestado · coord vendo o documento</h2>
+        <p class="sub">Dois estados: o aluno subindo na criação da demanda, e o coordenador abrindo o preview na timeline.</p>
+
+        <div class="mockup-stack two-col" style="margin-top: 8px;">
+            <!-- Mockup 1 — modal nova demanda com dropzone -->
+            <div>
+                <div class="mockup-window">
+                    <div class="mockup-bar">
+                        <span class="mockup-dot"></span>
+                        <span class="mockup-dot"></span>
+                        <span class="mockup-dot"></span>
+                        <span style="margin-left: 12px; font-size: 0.75rem; color: var(--slate-500); font-weight: 600;">Clarify · Nova demanda</span>
+                    </div>
+                    <div class="mockup-body">
+                        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px;">
+                            <div>
+                                <div style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--brand-primary);">Justificativa de falta</div>
+                                <div style="font-size: 1.05rem; font-weight: 700; color: var(--slate-900); margin-top: 2px;">Carla Pereira · 20240003</div>
+                            </div>
+                            <span class="pill">Rascunho</span>
+                        </div>
+
+                        <label style="font-size: 0.78rem; font-weight: 700; color: var(--slate-700); letter-spacing: 0.04em;">Descrição</label>
+                        <div style="border: 1px solid var(--slate-200); border-radius: 10px; padding: 10px 12px; font-size: 0.85rem; color: var(--slate-700); margin-top: 6px; margin-bottom: 16px; line-height: 1.5; background: #fff;">
+                            Faltei à aula de Cálculo II do dia 03/05 por consulta médica. Segue atestado em anexo.
+                        </div>
+
+                        <label style="font-size: 0.78rem; font-weight: 700; color: var(--slate-700); letter-spacing: 0.04em;">Anexos · até 8MB total</label>
+                        <div class="dropzone" style="margin-top: 8px;">
+                            <div class="dz-icon">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            </div>
+                            <h5>Arraste arquivos aqui ou <span style="color: var(--brand-primary); text-decoration: underline;">clique para selecionar</span></h5>
+                            <div class="dz-sub">PDF, JPG, PNG ou DOCX · até 5MB cada</div>
+                            <div class="dz-action">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                                Adicionar mais
+                            </div>
+                        </div>
+
+                        <div class="anexo-list">
+                            <div class="anexo-card">
+                                <div class="anexo-thumb">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                    <span style="position: absolute; bottom: 4px; right: 4px; font-size: 0.55rem;">PDF</span>
+                                </div>
+                                <div class="anexo-meta">
+                                    <p class="name">atestado_carla_03-05-2026.pdf</p>
+                                    <div class="sub">
+                                        <span>240 KB</span>
+                                        <span style="color: var(--slate-300);">·</span>
+                                        <span class="badge-sensivel">
+                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                            sensível
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="anexo-actions">
+                                    <button class="icon-btn" title="Pré-visualizar">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    </button>
+                                    <button class="icon-btn danger" title="Remover">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 16px; font-size: 0.75rem; color: var(--slate-500);">
+                            <span>Uso: 240 KB / 8 MB</span>
+                            <div class="progress" style="width: 60%;"><div class="progress-bar" style="width: 3%;"></div></div>
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px;">
+                            <span class="btn-ghost" style="padding: 9px 14px;">Cancelar</span>
+                            <span class="btn-primary" style="padding: 9px 16px;">Abrir demanda</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="mockup-caption">Modal de nova demanda · visão do aluno</p>
+            </div>
+
+            <!-- Mockup 2 — preview na timeline do coord -->
+            <div>
+                <div class="mockup-window">
+                    <div class="mockup-bar">
+                        <span class="mockup-dot"></span>
+                        <span class="mockup-dot"></span>
+                        <span class="mockup-dot"></span>
+                        <span style="margin-left: 12px; font-size: 0.75rem; color: var(--slate-500); font-weight: 600;">Clarify · Demanda #1284 · visão Bruno (coord)</span>
+                    </div>
+                    <div class="mockup-body">
+                        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px;">
+                            <div>
+                                <div style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--brand-primary);">#1284 · Justificativa de falta</div>
+                                <div style="font-size: 1.05rem; font-weight: 700; color: var(--slate-900); margin-top: 2px;">Carla Pereira → Cálculo II</div>
+                            </div>
+                            <span class="pill pill-warm">em análise</span>
+                        </div>
+
+                        <div style="font-size: 0.78rem; font-weight: 700; color: var(--slate-700); letter-spacing: 0.04em; margin-bottom: 8px;">Anexos da demanda</div>
+
+                        <!-- Anexo v2 -->
+                        <div class="anexo-card" style="border-color: rgba(202, 95, 21, 0.30); background: linear-gradient(180deg, #fff, rgba(202, 95, 21, 0.03));">
+                            <div class="anexo-thumb">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                <span style="position: absolute; bottom: 4px; right: 4px; font-size: 0.55rem;">PDF</span>
+                            </div>
+                            <div class="anexo-meta">
+                                <p class="name">atestado_carla_03-05-2026.pdf</p>
+                                <div class="sub">
+                                    <span>240 KB</span>
+                                    <span style="color: var(--slate-300);">·</span>
+                                    <span class="badge-version">v2 · 13/05 16:00</span>
+                                    <span class="badge-sensivel">
+                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                        sensível
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="anexo-actions">
+                                <button class="icon-btn" title="Baixar">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Preview do PDF aberto -->
+                        <div class="pdf-frame" style="margin-top: 14px;">
+                            <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <span style="font-size: 0.7rem; color: var(--slate-500); font-weight: 600;">Pré-visualização · pág 1 de 1</span>
+                                <span class="badge-version" style="background: rgba(202, 95, 21, 0.10); color: var(--brand-primary);">v2 ativa</span>
+                            </div>
+                            <div class="pdf-page">
+                                <div class="header-doc">Atestado Médico</div>
+                                Atesto, para os devidos fins, que <b>Carla Pereira</b> (CPF 000.***.***-00) esteve sob meus
+                                cuidados profissionais em 03/05/2026, necessitando afastamento de suas atividades pelo
+                                período de 1 (um) dia.<br/><br/>
+                                CID 10: J06.9 — Infecção das vias aéreas superiores.<br/><br/>
+                                <div style="text-align: right;">Dr. Felipe Andrade · CRM/SP 154.328</div>
+                                <div class="stamp">CRM 154328 · São Paulo</div>
+                            </div>
+                        </div>
+
+                        <!-- Versionamento -->
+                        <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--slate-200);">
+                            <div style="font-size: 0.72rem; font-weight: 700; color: var(--slate-400); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 6px;">Histórico de versões</div>
+                            <div class="version-row">
+                                <div class="version-dot"></div>
+                                <div>
+                                    <div style="font-size: 0.85rem; font-weight: 700; color: var(--slate-900);">v2 — Carla reenviou (atual)</div>
+                                    <div style="font-size: 0.76rem; color: var(--slate-500);">13/05 16:00 · "primeira versão estava borrada"</div>
+                                </div>
+                            </div>
+                            <div class="version-line">
+                                <div style="font-size: 0.85rem; font-weight: 600; color: var(--slate-700); display: flex; align-items: center; gap: 6px;">
+                                    <span class="version-dot muted" style="display: inline-block; margin-top: 0; transform: translateY(2px);"></span>
+                                    v1 — upload original
+                                </div>
+                                <div style="font-size: 0.76rem; color: var(--slate-500); margin-top: 2px;">13/05 09:12 · 198 KB · ainda acessível</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="mockup-caption">Timeline da demanda · visão do coord com preview + versões</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5.7 MODELO DE DADOS -->
+    <section class="block" data-reveal>
+        <span class="eyebrow">Modelo de dados</span>
+        <h2>Schema da demanda com array de anexos</h2>
+        <p class="sub">
+            O array <span class="mono">anexos[]</span> é novo. <span class="mono">descricao</span> continua existindo
+            como texto livre — atendendo casos sem documento. Hash SHA-256 viabiliza export PDF auditável depois (cruza
+            com Feature 04).
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr; gap: 16px;">
+            <div>
+                <div style="font-size: 0.7rem; font-weight: 700; color: var(--slate-400); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 6px;">Antes — hoje</div>
+<pre><code>{
+  protocolo: "#1284",
+  tipo: "Justificativa de Falta",
+  status: "em_analise",
+  descricao: "Faltei dia 03/05, segue atestado em anexo.",
+  matriculaAluno: "20240003",
+  dataCriacao: "2026-05-13T09:12:00Z",
+  dataAtualizacao: "2026-05-13T09:12:00Z",
+  feedback: null
+  <span style="color:#dc2626;">// ❌ não existe campo para arquivos</span>
+}</code></pre>
+            </div>
+
+            <div>
+                <div style="font-size: 0.7rem; font-weight: 700; color: var(--brand-primary); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 6px;">Depois — proposto</div>
+<pre><code>{
+  protocolo: "#1284",
+  tipo: "Justificativa de Falta",
+  status: "em_analise",
+  descricao: "Faltei dia 03/05, segue atestado em anexo.",
+  matriculaAluno: "20240003",
+  dataCriacao: "2026-05-13T09:12:00Z",
+  dataAtualizacao: "2026-05-13T16:00:00Z",
+  feedback: null,
+
+  <span style="color:#22d3a4;">anexos: [
+    {
+      id: "anx_001",
+      nome_original: "atestado_carla_03-05-2026.pdf",
+      mime: "application/pdf",
+      tamanho_bytes: 245678,
+      versao: 2,
+      anexo_anterior_id: "anx_000",
+      sensivel: true,
+      upload_por_matricula: "20240003",
+      upload_em: "2026-05-13T16:00:00Z",
+      conteudo_base64: "JVBERi0xLjQKJeLjz9MK...",
+      hash_sha256: "a3f2c8d4...e91b"
+    }
+  ]</span>
+}</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5.8 INSPIRAÇÃO DE MERCADO -->
+    <section class="block" data-reveal>
+        <span class="eyebrow">Inspiração de mercado</span>
+        <h2>O que copiamos (e o que adaptamos)</h2>
+        <p class="sub">Três referências consolidadas. Cada uma resolveu um pedaço — nossa contribuição é cuidar do que é sensível no contexto acadêmico.</p>
+
+        <div class="insp-table-wrap">
+            <table class="insp-table">
+                <thead>
+                    <tr>
+                        <th style="width: 18%;">Produto</th>
+                        <th style="width: 36%;">O que faz</th>
+                        <th style="width: 46%;">Como adaptamos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="https://support.zendesk.com/hc/en-us/articles/4408835093530" target="_blank" rel="noopener">Zendesk Attachments</a></td>
+                        <td>Drag-and-drop nativo, preview inline, limite por plano (até 50MB enterprise). Anexa em ticket e em macro.</td>
+                        <td>Mesma UX de dropzone tracejada, mas limite duro de 5MB/arquivo e 8MB/demanda — restrição do localStorage. Sem suporte a vídeo (sem demanda real).</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://www.intercom.com/help/en/articles/3380840-send-attachments-with-your-messages" target="_blank" rel="noopener">Intercom</a></td>
+                        <td>Preview rico de PDFs no inbox, viewer multi-página sem download. Anexos contam para SLA de mensagem.</td>
+                        <td>Viewer embed de PDF na timeline (com fallback de "abrir em nova aba"). Não usamos como gatilho de SLA — quem dita o SLA é o tipo da demanda (Feature 03).</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://www.helpscout.com/help-desk-software/attachments/" target="_blank" rel="noopener">Help Scout</a></td>
+                        <td>Anexos por mensagem, "replay" de versões — quando cliente reenvia o mesmo arquivo, mantém histórico ordenado.</td>
+                        <td>Versionamento por "papel" (atestado, comprovante, ementa) — não por nome. Aluno troca atestado borrado, v2 fica ativa, v1 fica acessível para auditoria.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 5.9 KPIs -->
+    <section class="block" data-reveal>
+        <span class="eyebrow">Métricas de sucesso</span>
+        <h2>O que olhar depois do release</h2>
+        <p class="sub">Quatro KPIs concretos. Os dois primeiros validam adoção; os dois últimos validam qualidade do upload.</p>
+
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <span class="kpi-label">Adesão</span>
+                <span class="kpi-value">≥ 60%</span>
+                <p class="kpi-desc">% de "Justificativa de Falta" com pelo menos um anexo (meta após 30 dias).</p>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Cobertura crítica</span>
+                <span class="kpi-value">100%</span>
+                <p class="kpi-desc">Aproveitamento de Créditos sempre com ementa anexada — bloqueio no formulário.</p>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Taxa de reenvio</span>
+                <span class="kpi-value">&lt; 15%</span>
+                <p class="kpi-desc">Reenvio acima disso indica problema de validação/preview (proxy de qualidade do upload original).</p>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Lag de anexo</span>
+                <span class="kpi-value">&lt; 2 min</span>
+                <p class="kpi-desc">Tempo mediano entre criar a demanda e o upload completar. Valores altos sugerem fluxo dividido em duas sessões.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5.10 ESFORÇO -->
+    <section class="block" data-reveal>
+        <span class="eyebrow">Esforço &amp; dependências</span>
+        <h2>O que toca, quanto custa, do que depende</h2>
+        <p class="sub">Tudo no client. Sem backend novo — limite é o próprio localStorage.</p>
+
+        <table class="effort-table">
+            <thead>
+                <tr>
+                    <th style="width: 36%;">Componente</th>
+                    <th style="width: 14%;">Tipo</th>
+                    <th style="width: 12%;">Esforço</th>
+                    <th>Notas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="mono">Clarify/src/components/structures/modais.js</span></td>
+                    <td>Modificar</td>
+                    <td><span class="effort-badge effort-m">M</span></td>
+                    <td>Adicionar dropzone, preview cards, barra de uso, integração com FileReader.</td>
+                </tr>
+                <tr>
+                    <td><span class="mono">Clarify/src/data/demanda.js</span></td>
+                    <td>Modificar</td>
+                    <td><span class="effort-badge effort-s">S</span></td>
+                    <td>Estender schema com <span class="mono">anexos[]</span>, manter retrocompat (campo opcional).</td>
+                </tr>
+                <tr>
+                    <td><span class="mono">Clarify/src/services/anexos.js</span></td>
+                    <td>Criar</td>
+                    <td><span class="effort-badge effort-m">M</span></td>
+                    <td>FileReader, validação MIME real, sanitização de nome, SHA-256 via Web Crypto, versionamento.</td>
+                </tr>
+                <tr>
+                    <td><span class="mono">Clarify/src/lib/funcoesAuxiliares.js</span></td>
+                    <td>Modificar</td>
+                    <td><span class="effort-badge effort-xs">XS</span></td>
+                    <td>Helpers <span class="mono">formatarTamanho()</span>, <span class="mono">eAtestadoMedico()</span>, <span class="mono">iconePorMime()</span>.</td>
+                </tr>
+                <tr>
+                    <td>Componente <span class="mono">&lt;PreviewAnexo&gt;</span> (novo)</td>
+                    <td>Criar</td>
+                    <td><span class="effort-badge effort-s">S</span></td>
+                    <td>Modal de preview com <span class="mono">&lt;embed&gt;</span> para PDF, <span class="mono">&lt;img&gt;</span> para imagem, fallback "abrir/baixar".</td>
+                </tr>
+                <tr>
+                    <td>Integração Feature 04 (Audit Log)</td>
+                    <td>Dependência</td>
+                    <td><span class="effort-badge effort-xs">XS</span></td>
+                    <td>Emit eventos <span class="mono">anexo.uploaded</span>, <span class="mono">anexo.versionado</span>, <span class="mono">anexo.acessado_sensivel</span>.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- 5.11 QUICK WINS -->
+    <section class="block" data-reveal>
+        <span class="eyebrow">Estratégia de entrega</span>
+        <h2>MVP em 2 dias · versão completa para o roadmap</h2>
+        <p class="sub">O MVP já elimina o fluxo paralelo do WhatsApp. A versão completa entrega a experiência que coord, instituição e LGPD agradecem.</p>
+
+        <div class="compare">
+            <div class="compare-card mvp">
+                <h4>MVP — apresentável em 2 dias</h4>
+                <p class="compare-sub">Suficiente para mostrar no TCC sem entregar promessa quebrada.</p>
+                <ul>
+                    <li><span class="check">✓</span> Upload único (1 arquivo por demanda)</li>
+                    <li><span class="check">✓</span> Só PDF e JPG aceitos</li>
+                    <li><span class="check">✓</span> Botão "Anexar" tradicional (sem drag-drop)</li>
+                    <li><span class="check">✓</span> Card-preview com nome + tamanho + remover</li>
+                    <li><span class="check">✓</span> Persistência em localStorage como base64</li>
+                    <li><span class="check">✓</span> Coordenador baixa pelo card na timeline</li>
+                </ul>
+            </div>
+            <div class="compare-card">
+                <h4>Versão completa</h4>
+                <p class="compare-sub">Aquilo que faz o produto ser comparável a Zendesk / Help Scout.</p>
+                <ul>
+                    <li><span class="check">✓</span> Drag-and-drop multi-arquivo na dropzone tracejada</li>
+                    <li><span class="check">✓</span> PDF, JPG, PNG, DOCX + validação MIME real</li>
+                    <li><span class="check">✓</span> Versionamento por papel com timeline v1/v2/...</li>
+                    <li><span class="check">✓</span> Preview inline (PDF embed, imagem ampliável)</li>
+                    <li><span class="check">✓</span> Badge "documento sensível" + log de acesso</li>
+                    <li><span class="check">✓</span> Hash SHA-256 + export PDF auditável da demanda</li>
+                    <li><span class="check">✓</span> Coord anexa documento de resposta (declaração assinada)</li>
+                    <li><span class="check">✓</span> Hook futuro: IA Copilot (Feature 01) lê atestado e extrai CRM/CID/data</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5.12 RISCOS -->
+    <section class="block" data-reveal>
+        <span class="eyebrow">Riscos &amp; armadilhas</span>
+        <h2>Onde isso pode dar ruim</h2>
+        <p class="sub">Cinco riscos concretos. Os dois primeiros são de viabilidade técnica; os três últimos são de UX, segurança e legibilidade.</p>
+
+        <div class="risk-grid">
+            <div class="risk-card">
+                <h4>Limite do localStorage <span class="risk-tag">alto</span></h4>
+                <p>Browser típico dá 5-10MB. Base64 ocupa ~33% mais que binário. Poucos atestados em PDF lotam o storage e travam o app inteiro.</p>
+                <div class="risk-mit">
+                    <b>Mitigação</b>
+                    Limite duro de 5MB/arquivo e 8MB total/demanda. Indicador visual de uso global ("4,2 de 8 MB usados"). Mensagem clara: "Para produção, este recurso exigirá backend de objetos".
+                </div>
+            </div>
+            <div class="risk-card">
+                <h4>Conversão base64 trava UI <span class="risk-tag med">médio</span></h4>
+                <p>PDF de 4MB convertido na main thread bloqueia o navegador por 1-2s. Aluno acha que travou e fecha o modal.</p>
+                <div class="risk-mit">
+                    <b>Mitigação</b>
+                    Mover <span class="mono">FileReader</span> + SHA-256 para Web Worker. Mostrar barra de progresso real durante a conversão. Cancelar permitido.
+                </div>
+            </div>
+            <div class="risk-card">
+                <h4>Documento sensível em claro <span class="risk-tag">alto</span></h4>
+                <p>Atestado médico (LGPD art. 5º, II) gravado em localStorage sem criptografia. Qualquer extensão maliciosa lê. Ferimento legal real se o produto sair do escopo TCC.</p>
+                <div class="risk-mit">
+                    <b>Mitigação</b>
+                    No TCC, badge "sensível" + disclaimer escrito. Para produção: cifragem AES-GCM com chave derivada da senha do usuário, OU migração obrigatória para backend antes do go-live institucional.
+                </div>
+            </div>
+            <div class="risk-card">
+                <h4>HEIC do iPhone falha silenciosa <span class="risk-tag med">médio</span></h4>
+                <p>Aluno tira foto do atestado no iPhone, sobe o .HEIC. Navegador não renderiza preview, mas o arquivo "parece" anexado.</p>
+                <div class="risk-mit">
+                    <b>Mitigação</b>
+                    Whitelist explícita de MIME. HEIC dispara aviso amigável: "Seu iPhone exportou em HEIC — ative HEIC→JPG em Configurações > Câmera > Formatos".
+                </div>
+            </div>
+            <div class="risk-card">
+                <h4>Nome com caracteres quebrados <span class="risk-tag low">baixo</span></h4>
+                <p>Aluno chama o arquivo de "atestado médico (2)/.pdf". Caracteres especiais quebram link de download em alguns browsers e podem causar problema no export PDF auditável.</p>
+                <div class="risk-mit">
+                    <b>Mitigação</b>
+                    Sanitização automática para slug ASCII no <span class="mono">nome_armazenado</span>, preservando <span class="mono">nome_original</span> para display.
+                </div>
+            </div>
+            <div class="risk-card">
+                <h4>Versionamento explosivo <span class="risk-tag low">baixo</span></h4>
+                <p>Aluno indeciso reenvia atestado 6 vezes. Demanda fica com 6 versões, cada uma ocupando espaço, sem que ninguém volte ao v1.</p>
+                <div class="risk-mit">
+                    <b>Mitigação</b>
+                    Manter no máximo 3 versões ativas (v_n, v_n-1, v_n-2). Versões mais antigas viram tombstones com metadados — mantém auditoria, libera espaço.
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer style="margin-top: 80px; padding: 32px 0; border-top: 1px solid var(--slate-200); text-align: center; color: var(--slate-400); font-size: 0.85rem;">
+    <div class="container">
+        <p>Feature 07 de 10 &middot; <a href="index.html" style="color: var(--brand-primary); text-decoration: none; font-weight: 600;">Voltar ao hub →</a></p>
+    </div>
+</footer>
+
+<script>
+    const els = document.querySelectorAll('[data-reveal]');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('is-revealed');
+                obs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

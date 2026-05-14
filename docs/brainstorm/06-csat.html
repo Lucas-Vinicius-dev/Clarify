@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FEATURE 06 — CSAT pós-resolução — Clarify Brainstorm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+    /* Estilos específicos da feature CSAT */
+    h1.hero-title {
+        font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+        font-weight: 700;
+        letter-spacing: -0.045em;
+        line-height: 1.04;
+        margin: 0 0 18px;
+        color: var(--slate-900);
+    }
+    .hero-sub {
+        font-size: 1.05rem;
+        color: var(--slate-500);
+        max-width: 720px;
+        margin: 0 0 24px;
+        line-height: 1.6;
+    }
+    .pill-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .grid-3 { display: grid; grid-template-columns: 1fr; gap: 18px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr; gap: 18px; }
+    @media (min-width: 760px) {
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .why-card {
+        padding: 22px;
+        border-radius: 14px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+    }
+    .why-card .label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+        margin-bottom: 8px;
+    }
+    .why-card .label.danger { color: #b8431b; }
+    .why-card .label.good { color: #1f7a4a; }
+    .why-card .code {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.78rem;
+        background: var(--slate-100);
+        color: var(--slate-700);
+        padding: 2px 6px;
+        border-radius: 5px;
+    }
+
+    .persona-card {
+        padding: 24px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    .persona-icon {
+        width: 44px; height: 44px;
+        border-radius: 12px;
+        display: grid; place-items: center;
+        background: rgba(202, 95, 21, 0.10);
+        color: var(--brand-primary);
+        font-weight: 700;
+    }
+    .persona-card h4 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        letter-spacing: -0.015em;
+    }
+    .before-after {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 0.88rem;
+    }
+    .before-after .before {
+        color: #94463a;
+        text-decoration: line-through;
+        text-decoration-color: rgba(148, 70, 58, 0.4);
+    }
+    .before-after .after {
+        color: #1f7a4a;
+        font-weight: 500;
+    }
+    .impact {
+        margin-top: auto;
+        padding-top: 12px;
+        border-top: 1px dashed var(--slate-200);
+        font-size: 0.85rem;
+        color: var(--slate-500);
+    }
+
+    .flow {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        counter-reset: step;
+    }
+    .flow-step {
+        position: relative;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        padding: 18px 20px 18px 64px;
+    }
+    .flow-step::before {
+        counter-increment: step;
+        content: counter(step);
+        position: absolute;
+        left: 18px; top: 18px;
+        width: 32px; height: 32px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #ca5f15, #e07a30);
+        color: #fff;
+        display: grid; place-items: center;
+        font-weight: 700;
+        font-size: 0.95rem;
+        box-shadow: 0 6px 14px -6px rgba(202, 95, 21, 0.55);
+    }
+    .flow-step h5 {
+        margin: 0 0 4px;
+        font-size: 0.98rem;
+        font-weight: 700;
+        color: var(--slate-900);
+    }
+    .flow-step p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--slate-500);
+        line-height: 1.55;
+    }
+    .flow-step .tip {
+        display: inline-block;
+        margin-top: 8px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        background: var(--slate-100);
+        color: var(--slate-700);
+        padding: 3px 7px;
+        border-radius: 6px;
+    }
+
+    /* MOCKUPS ----------------------------------------------------- */
+    .mockup-stack { display: grid; grid-template-columns: 1fr; gap: 24px; }
+    @media (min-width: 920px) {
+        .mockup-stack.cols-2 { grid-template-columns: 1fr 1fr; gap: 28px; }
+    }
+    .mockup-bar .url {
+        margin-left: 10px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.72rem;
+        color: var(--slate-400);
+    }
+    .mockup-content { padding: 22px; }
+
+    /* Modal aluno */
+    .modal-shell {
+        max-width: 460px;
+        margin: 8px auto;
+        background: #fff;
+        border-radius: 18px;
+        padding: 26px 26px 22px;
+        box-shadow: 0 24px 60px -20px rgba(15, 23, 42, 0.25);
+        border: 1px solid var(--slate-200);
+        position: relative;
+    }
+    .modal-shell::before {
+        content: '';
+        position: absolute;
+        inset: -18px;
+        border-radius: 26px;
+        background: radial-gradient(60% 60% at 50% 0%, rgba(202, 95, 21, 0.18), transparent 70%);
+        z-index: -1;
+    }
+    .modal-eyebrow {
+        font-size: 0.7rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--brand-primary);
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+    .modal-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--slate-900);
+        margin: 0 0 4px;
+    }
+    .modal-sub {
+        font-size: 0.85rem;
+        color: var(--slate-500);
+        margin: 0 0 18px;
+    }
+    .stars-row {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 16px;
+        font-size: 2.2rem;
+        line-height: 1;
+    }
+    .star {
+        cursor: pointer;
+        color: var(--slate-300);
+        transition: color 0.18s ease, transform 0.18s ease;
+    }
+    .star.active {
+        color: #f0a72a;
+        text-shadow: 0 4px 10px rgba(240, 167, 42, 0.4);
+        transform: translateY(-1px);
+    }
+    .field-label {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--slate-700);
+        margin: 12px 0 6px;
+    }
+    .textarea-mock {
+        background: var(--slate-100);
+        border: 1px solid var(--slate-200);
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 0.85rem;
+        color: var(--slate-700);
+        min-height: 64px;
+        line-height: 1.5;
+    }
+    .toggle-row {
+        display: flex;
+        gap: 8px;
+        margin-top: 6px;
+    }
+    .toggle {
+        flex: 1;
+        padding: 8px 10px;
+        text-align: center;
+        font-size: 0.82rem;
+        font-weight: 600;
+        border-radius: 10px;
+        border: 1px solid var(--slate-200);
+        background: #fff;
+        color: var(--slate-700);
+        cursor: pointer;
+    }
+    .toggle.on {
+        background: rgba(31, 122, 74, 0.10);
+        border-color: rgba(31, 122, 74, 0.35);
+        color: #1f7a4a;
+    }
+    .modal-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+    }
+    .skip-link {
+        font-size: 0.78rem;
+        color: var(--slate-400);
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    .send-btn {
+        background: linear-gradient(135deg, #ca5f15, #e07a30);
+        color: #fff;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        box-shadow: 0 10px 22px -10px rgba(202, 95, 21, 0.6);
+        cursor: pointer;
+    }
+
+    /* Dashboard coord */
+    .dash-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    @media (min-width: 620px) {
+        .dash-grid { grid-template-columns: 1.2fr 1fr; }
+    }
+    .stat-big {
+        padding: 18px;
+        background: linear-gradient(135deg, rgba(202, 95, 21, 0.08), rgba(255, 255, 255, 0.5));
+        border: 1px solid rgba(202, 95, 21, 0.15);
+        border-radius: 14px;
+    }
+    .stat-big .eyebrow-mini {
+        font-size: 0.66rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: var(--brand-primary);
+        margin-bottom: 4px;
+    }
+    .stat-big .val {
+        font-size: 2.2rem;
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        color: var(--slate-900);
+        line-height: 1;
+    }
+    .stat-big .delta {
+        color: #1f7a4a;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-top: 6px;
+    }
+    .stat-mini {
+        padding: 16px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 12px;
+    }
+    .stat-mini .lbl {
+        font-size: 0.7rem;
+        color: var(--slate-400);
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+    .stat-mini .v {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        letter-spacing: -0.02em;
+    }
+    .dist-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.82rem;
+        margin-bottom: 6px;
+    }
+    .dist-label { width: 38px; color: var(--slate-700); font-weight: 600; }
+    .dist-bar-bg {
+        flex: 1;
+        background: var(--slate-100);
+        border-radius: 999px;
+        height: 8px;
+        overflow: hidden;
+    }
+    .dist-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #ca5f15, #e07a30);
+        border-radius: 999px;
+    }
+    .dist-pct { width: 38px; color: var(--slate-500); text-align: right; font-variant-numeric: tabular-nums; }
+
+    .comment-card {
+        background: var(--brand-surface);
+        border: 1px solid rgba(202, 95, 21, 0.15);
+        border-radius: 12px;
+        padding: 12px 14px;
+        margin-top: 10px;
+        font-size: 0.85rem;
+    }
+    .comment-card .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 6px;
+    }
+    .comment-card .meta {
+        font-size: 0.72rem;
+        color: var(--slate-500);
+    }
+    .comment-card.alert {
+        background: rgba(184, 67, 27, 0.06);
+        border-color: rgba(184, 67, 27, 0.25);
+    }
+    .stars-mini { color: #f0a72a; font-size: 0.85rem; letter-spacing: 1px; }
+    .alert-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.66rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #b8431b;
+        background: rgba(184, 67, 27, 0.12);
+        padding: 3px 8px;
+        border-radius: 999px;
+    }
+
+    /* Heatmap fake */
+    .heatmap {
+        display: grid;
+        grid-template-columns: 32px repeat(12, 1fr);
+        gap: 3px;
+        margin-top: 8px;
+        font-size: 0.6rem;
+    }
+    .heatmap .dow {
+        color: var(--slate-400);
+        font-weight: 600;
+        align-self: center;
+        font-size: 0.65rem;
+    }
+    .heatmap .cell {
+        height: 16px;
+        border-radius: 3px;
+        background: var(--slate-100);
+    }
+    .heatmap .cell.h1 { background: rgba(202, 95, 21, 0.18); }
+    .heatmap .cell.h2 { background: rgba(202, 95, 21, 0.35); }
+    .heatmap .cell.h3 { background: rgba(202, 95, 21, 0.55); }
+    .heatmap .cell.h4 { background: rgba(202, 95, 21, 0.78); }
+    .heatmap .cell.low { background: rgba(184, 67, 27, 0.18); }
+    .heatmap .cell.low2 { background: rgba(184, 67, 27, 0.35); }
+
+    /* Banner aluno na demanda */
+    .demand-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        padding: 16px;
+        margin-bottom: 14px;
+    }
+    .demand-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+    .demand-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--slate-900);
+    }
+    .status-pill {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 3px 9px;
+        border-radius: 999px;
+        background: rgba(31, 122, 74, 0.12);
+        color: #1f7a4a;
+    }
+    .csat-banner {
+        background: linear-gradient(135deg, rgba(202, 95, 21, 0.08), rgba(224, 122, 48, 0.04));
+        border: 1px dashed rgba(202, 95, 21, 0.35);
+        border-radius: 10px;
+        padding: 10px 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.82rem;
+        color: var(--slate-700);
+    }
+    .csat-banner .stars-pill {
+        color: #f0a72a;
+        letter-spacing: 2px;
+    }
+    .csat-banner a {
+        font-weight: 700;
+        color: var(--brand-primary);
+        text-decoration: none;
+        font-size: 0.8rem;
+    }
+
+    /* Tables */
+    .ref-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+    .ref-table th {
+        text-align: left;
+        font-size: 0.66rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--slate-200);
+        background: #fafbfc;
+    }
+    .ref-table td {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--slate-100);
+        color: var(--slate-700);
+        font-size: 0.9rem;
+        vertical-align: top;
+    }
+    .ref-table tr:last-child td { border-bottom: none; }
+    .ref-table a { color: var(--brand-primary); text-decoration: none; font-weight: 600; }
+    .ref-table a:hover { text-decoration: underline; }
+
+    /* KPI cards */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 14px;
+    }
+    .kpi-card {
+        padding: 18px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+    }
+    .kpi-card .target {
+        font-size: 0.66rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+    }
+    .kpi-card .num {
+        font-size: 1.8rem;
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        color: var(--slate-900);
+        margin: 4px 0;
+    }
+    .kpi-card .num .unit { font-size: 0.95rem; color: var(--slate-500); font-weight: 500; }
+    .kpi-card .desc {
+        font-size: 0.82rem;
+        color: var(--slate-500);
+        line-height: 1.45;
+    }
+
+    /* MVP vs full */
+    .versions-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    @media (min-width: 760px) {
+        .versions-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .version-card {
+        padding: 24px;
+        border-radius: 16px;
+        border: 1px solid var(--slate-200);
+        background: #fff;
+    }
+    .version-card.mvp {
+        background: linear-gradient(180deg, rgba(202, 95, 21, 0.06), #fff);
+        border-color: rgba(202, 95, 21, 0.22);
+    }
+    .version-card h4 {
+        margin: 0 0 12px;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .version-card ul {
+        margin: 0;
+        padding: 0 0 0 18px;
+        color: var(--slate-700);
+        font-size: 0.9rem;
+        line-height: 1.7;
+    }
+    .version-card .effort {
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: var(--brand-primary);
+    }
+
+    /* Riscos */
+    .risk-card {
+        padding: 18px 20px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-left: 3px solid var(--brand-primary);
+        border-radius: 12px;
+        margin-bottom: 10px;
+    }
+    .risk-card h5 {
+        margin: 0 0 4px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--slate-900);
+    }
+    .risk-card p {
+        margin: 0;
+        font-size: 0.87rem;
+        color: var(--slate-500);
+        line-height: 1.55;
+    }
+    .risk-card .mitig {
+        margin-top: 8px;
+        font-size: 0.85rem;
+        color: var(--slate-700);
+    }
+    .risk-card .mitig strong { color: #1f7a4a; }
+
+    /* Section header */
+    .section-block { margin-top: 64px; }
+    .section-eyebrow {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--brand-primary);
+        margin-bottom: 6px;
+    }
+    .section-h2 {
+        font-size: 1.7rem;
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        color: var(--slate-900);
+        margin: 0 0 6px;
+    }
+    .section-lede {
+        color: var(--slate-500);
+        font-size: 0.98rem;
+        margin: 0 0 22px;
+        max-width: 720px;
+        line-height: 1.55;
+    }
+</style>
+</head>
+<body>
+
+<header style="position: sticky; top: 0; z-index: 10; background: rgba(255, 248, 246, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(15, 23, 42, 0.06);">
+    <div class="container" style="padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
+        <a href="index.html" style="display: inline-flex; align-items: center; gap: 8px; color: var(--slate-700); text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+            <span style="font-size: 1.1rem;">←</span> Hub de features
+        </a>
+        <span class="eyebrow eyebrow-muted">FEATURE 06 / 10</span>
+    </div>
+</header>
+
+<main class="container" style="max-width: 1080px; margin: 0 auto; padding: 48px 24px 0;">
+
+    <!-- HERO ----------------------------------------------------- -->
+    <section data-reveal>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+            <span class="tier-badge tier-a">Tier A — Polish profissional</span>
+            <span class="eyebrow eyebrow-muted">Feedback loop</span>
+        </div>
+        <h1 class="hero-title tracking-headline">
+            Quando a Carla aprova, a Ana<br/>
+            <span class="text-gradient-warm">finalmente fala se foi bom.</span>
+        </h1>
+        <p class="hero-sub">
+            Hoje a demanda vira <span class="mono">concluido</span> e o loop morre ali. A instituição nunca descobre se o atendimento foi bom, se demorou, se a Carla foi atenciosa ou rude. CSAT pós-resolução fecha o ciclo com três perguntas curtas e transforma cinco mil tickets em uma curva de melhoria contínua.
+        </p>
+        <div class="pill-row">
+            <span class="pill pill-warm">Satisfação</span>
+            <span class="pill">Feedback</span>
+            <span class="pill">Métrica</span>
+            <span class="pill">Zendesk-like</span>
+            <span class="pill">LGPD-aware</span>
+        </div>
+    </section>
+
+    <!-- POR QUE ISSO IMPORTA -------------------------------------- -->
+    <section class="section-block" data-reveal>
+        <div class="section-eyebrow">Por que isso importa</div>
+        <h2 class="section-h2">O loop hoje termina no silêncio</h2>
+        <p class="section-lede">
+            A demanda da Ana some da caixa dela quando a Carla muda o status. Não há sinal de retorno. Sem isso, o coordenador adivinha se foi bem atendido, a coordenação acadêmica não sabe quais tipos de demanda geram mais frustração, e o aluno nunca sente que sua voz foi ouvida.
+        </p>
+
+        <div class="grid-3" style="margin-top: 20px;">
+            <div class="why-card">
+                <div class="label danger">Sintoma 1</div>
+                <p style="margin: 0; color: var(--slate-700); font-size: 0.9rem; line-height: 1.55;">
+                    Em <span class="code">centralDemandas.js:55</span> o card de demanda concluída exibe só o feedback do coord. Aluno não tem CTA pra dizer se ficou satisfeito. Conversa morre.
+                </p>
+            </div>
+            <div class="why-card">
+                <div class="label danger">Sintoma 2</div>
+                <p style="margin: 0; color: var(--slate-700); font-size: 0.9rem; line-height: 1.55;">
+                    <span class="code">dashboardcoord.js</span> mostra contagem de demandas resolvidas, mas zero indicador qualitativo. 100 demandas mal feitas parecem iguais a 100 demandas excelentes.
+                </p>
+            </div>
+            <div class="why-card">
+                <div class="label danger">Sintoma 3</div>
+                <p style="margin: 0; color: var(--slate-700); font-size: 0.9rem; line-height: 1.55;">
+                    Modelo de <span class="code">demanda.js</span> não tem campo de avaliação. Não dá pra cruzar SLA vs satisfação — duas demandas resolvidas em 1h podem ter experiências opostas.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PERSONAS -------------------------------------------------- -->
+    <section class="section-block" data-reveal>
+        <div class="section-eyebrow">Personas impactadas</div>
+        <h2 class="section-h2">Três pontos de vista, um mesmo loop</h2>
+        <p class="section-lede">Aluno ganha voz, coordenador ganha calibração, instituição ganha métrica.</p>
+
+        <div class="grid-3">
+            <div class="persona-card">
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <div class="persona-icon">A</div>
+                    <h4>Ana — aluna do 4º semestre</h4>
+                </div>
+                <div class="before-after">
+                    <div class="before">Recebe "Concluído" e nunca mais ouve falar daquela demanda.</div>
+                    <div class="after">3 toques no celular: 5 estrelas, "Foi rápido", "sim, resolvido". Sente que a opinião conta.</div>
+                </div>
+                <div class="impact">Voz no processo, sem fadiga. Pesquisa em &lt; 20s.</div>
+            </div>
+
+            <div class="persona-card">
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <div class="persona-icon">C</div>
+                    <h4>Carla — coordenadora de Engenharia</h4>
+                </div>
+                <div class="before-after">
+                    <div class="before">Não sabe se a régua "Aproveitamento de Créditos" frustra alunos.</div>
+                    <div class="after">Vê CSAT 3.8 nesse tipo, comentários comuns ("formulário confuso") e ajusta o processo na fonte.</div>
+                </div>
+                <div class="impact">Dashboard pessoal, sem ranking público — calibra sem constrangimento.</div>
+            </div>
+
+            <div class="persona-card">
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <div class="persona-icon">I</div>
+                    <h4>Diretoria acadêmica</h4>
+                </div>
+                <div class="before-after">
+                    <div class="before">Mensura só volume. "Atendemos 2.300 demandas no semestre" diz pouco.</div>
+                    <div class="after">CSAT institucional 4.4, queda em setembro (matrículas), alerta em 6 comentários 1-2★ não tratados.</div>
+                </div>
+                <div class="impact">Visão sistêmica + alerta em comentários negativos para revisão da diretoria.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FLUXO ----------------------------------------------------- -->
+    <section class="section-block" data-reveal>
+        <div class="section-eyebrow">Como funcionaria</div>
+        <h2 class="section-h2">Cinco passos, sem fricção</h2>
+        <p class="section-lede">O loop completo, do toque "concluir" da Carla até o comentário aparecer no dashboard institucional.</p>
+
+        <div class="flow">
+            <div class="flow-step">
+                <h5>Bruno conclui a demanda da Ana</h5>
+                <p>Coordenador clica em "Concluir" no modal de detalhes da demanda. Status muda para <span class="mono">concluido</span> e dispara um evento <span class="mono">demanda:resolvida</span> no service.</p>
+                <span class="tip">Hook: csat.js → agenda survey</span>
+            </div>
+            <div class="flow-step">
+                <h5>Survey aparece 24h depois</h5>
+                <p>Tempo de respiro evita avaliação no calor do momento. Surge banner discreto no card da demanda concluída e badge "1" no sino de notificações da Ana.</p>
+                <span class="tip">localStorage: csat_queue[]</span>
+            </div>
+            <div class="flow-step">
+                <h5>Ana avalia em 3 toques</h5>
+                <p>Modal compacto: 5 estrelas (obrigatório), textarea opcional, toggle "Foi resolvido?" (sim/não/parcial). Botão "Prefiro não avaliar" sempre visível, sem culpa.</p>
+                <span class="tip">Máximo 20s de fricção</span>
+            </div>
+            <div class="flow-step">
+                <h5>Persistência e roteamento</h5>
+                <p>Avaliação gravada em <span class="mono">demanda.csat</span>. Se rating ≤ 2 com comentário, marca <span class="mono">alert_diretor: true</span>. Agregações recalculadas no service para coord e instituição.</p>
+                <span class="tip">Anonimização opcional aplicada aqui</span>
+            </div>
+            <div class="flow-step">
+                <h5>Carla vê tendência (não ranking)</h5>
+                <p>Widget no <span class="mono">dashboardcoord.js</span>: sua média, distribuição, últimos comentários e comparativo com o semestre anterior — sempre em tom positivo ("você melhorou 0.3pts em respostas de aproveitamento").</p>
+                <span class="tip">Sem ranking público entre coords</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- MOCKUP 1: MODAL DO ALUNO --------------------------------- -->
+    <section class="section-block" data-reveal>
+        <div class="section-eyebrow">Mockup conceitual · vista do aluno</div>
+        <h2 class="section-h2">Survey curta, sem culpa pra pular</h2>
+        <p class="section-lede">Três perguntas no máximo. Estrelas obrigatórias, resto opcional. Botão de skip explícito respeita o aluno que não quer avaliar.</p>
+
+        <div class="mockup-stack cols-2">
+
+            <!-- Modal -->
+            <div class="mockup">
+                <div class="mockup-window">
+                    <div class="mockup-bar">
+                        <span class="mockup-dot"></span>
+                        <span class="mockup-dot"></span>
+                        <span class="mockup-dot"></span>
+                        <span class="url">clarify.app / central-demandas</span>
+                    </div>
+                    <div class="mockup-content" style="background: rgba(15, 23, 42, 0.35); padding: 30px 18px;">
+                        <div class="modal-shell">
+                            <div class="modal-eyebrow">Avaliação · Demanda #1247</div>
+                            <h3 class="modal-title">Como foi seu atendimento?</h3>
+                            <p class="modal-sub">Justificativa de Falta — atendida por Bruno Almeida</p>
+
+                            <div class="stars-row" role="radiogroup" aria-label="Avalie de 1 a 5">
+                                <span class="star active">★</span>
+                                <span class="star active">★</span>
+                                <span class="star active">★</span>
+                                <span class="star active">★</span>
+                                <span class="star">★</span>
+                            </div>
+
+                            <div class="field-label">Conte mais (opcional)</div>
+                            <div class="textarea-mock">Bruno foi atencioso, mas demorou 3 dias pra responder a primeira vez. Tirando isso, processo claro.</div>
+
+                            <div class="field-label">Foi resolvido?</div>
+                            <div class="toggle-row">
+                                <div class="toggle on">Sim</div>
+                                <div class="toggle">Parcialmente</div>
+                                <div class="toggle">Não</div>
+                            </div>
+
+                            <div class="modal-actions">
+                                <span class="skip-link">Prefiro não avaliar</span>
+                                <button class="send-btn">Enviar avaliação →</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p style="margin: 12px 4px 0; font-size: 0.78rem; color: var(--slate-500); line-height: 1.5;">
+                    Modal acionado pelo banner da demanda concluída. Disponível por 14 dias e depois expira em silêncio — sem nag.
+                </p>
+            </div>
+
+            <!-- Lista de demandas concluídas com banner -->
+            <div class="mockup">
+                <div class="mockup-window">
+                    <div class="mockup-bar">
+                        <span class="mockup-dot"></span>
+                        <span class="mockup-dot"></span>
+                        <span class="mockup-dot"></span>
+                        <span class="url">clarify.app / minhas-demandas</span>
+                    </div>
+                    <div class="mockup-content" style="background: var(--brand-surface);">
+                        <div style="font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; color: var(--slate-400); margin-bottom: 10px;">Concluídas</div>
+
+                        <div class="demand-card">
+                            <div class="demand-head">
+                                <div>
+                                    <div class="demand-title">#1247 · Justificativa de Falta</div>
+                                    <div style="font-size: 0.75rem; color: var(--slate-500);">Atendida por Bruno · 11/05</div>
+                                </div>
+                                <span class="status-pill">Concluído</span>
+                            </div>
+                            <div class="csat-banner">
+                                <div>
+                                    <span class="stars-pill">★ ★ ★ ★ ★</span>
+                                    <span style="margin-left: 6px;">Avalie o atendimento</span>
+                                </div>
+                                <a href="#">Avaliar →</a>
+                            </div>
+                        </div>
+
+                        <div class="demand-card">
+                            <div class="demand-head">
+                                <div>
+                                    <div class="demand-title">#1198 · Trancamento de Matrícula</div>
+                                    <div style="font-size: 0.75rem; color: var(--slate-500);">Atendida por Carla · 02/05</div>
+                                </div>
+                                <span class="status-pill">Concluído</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px; font-size: 0.82rem; color: var(--slate-500);">
+                                <span class="stars-mini">★★★★★</span>
+                                <span>Avaliado · "Resolvido rapidamente"</span>
+                            </div>
+                        </div>
+
+                        <div class="demand-card" style="opacity: 0.7;">
+                            <div class="demand-head">
+                                <div>
+                                    <div class="demand-title">#1102 · Revisão de Nota</div>
+                                    <div style="font-size: 0.75rem; color: var(--slate-500);">Atendida por Diego · 18/03</div>
+                                </div>
+                                <span class="status-pill">Concluído</span>
+                            </div>
+                            <div style="font-size: 0.78rem; color: var(--slate-400); font-style: italic;">
+                                Janela de avaliação expirada.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p style="margin: 12px 4px 0; font-size: 0.78rem; color: var(--slate-500); line-height: 1.5;">
+                    Banner aparece no card 24h após a conclusão. Após avaliada, vira "selo discreto". Após 14 dias, desaparece.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- MOCKUP 2: DASHBOARD DA CARLA ----------------------------- -->
+    <section class="section-block" data-reveal>
+        <div class="section-eyebrow">Mockup conceitual · vista da coord</div>
+        <h2 class="section-h2">Dashboard da Carla — calibração, não ranking</h2>
+        <p class="section-lede">Visão pessoal do coordenador, com tendência, distribuição e comentários recentes. Em destaque: comentários negativos viram alerta de revisão.</p>
+
+        <div class="mockup">
+            <div class="mockup-window">
+                <div class="mockup-bar">
+                    <span class="mockup-dot"></span>
+                    <span class="mockup-dot"></span>
+                    <span class="mockup-dot"></span>
+                    <span class="url">clarify.app / dashboard-coord · CSAT</span>
+                </div>
+                <div class="mockup-content" style="background: #fafbfc;">
+
+                    <div class="dash-grid">
+                        <div class="stat-big">
+                            <div class="eyebrow-mini">Sua satisfação média · 30d</div>
+                            <div class="val">4,6 <span style="font-size: 1.1rem; font-weight: 500; color: var(--slate-500);">/ 5,0</span></div>
+                            <div class="delta">↑ 0,2 vs. semestre anterior</div>
+                            <div style="margin-top: 14px;">
+                                <div class="dist-row"><span class="dist-label">5★</span><div class="dist-bar-bg"><div class="dist-bar-fill" style="width: 62%"></div></div><span class="dist-pct">62%</span></div>
+                                <div class="dist-row"><span class="dist-label">4★</span><div class="dist-bar-bg"><div class="dist-bar-fill" style="width: 28%"></div></div><span class="dist-pct">28%</span></div>
+                                <div class="dist-row"><span class="dist-label">3★</span><div class="dist-bar-bg"><div class="dist-bar-fill" style="width: 8%"></div></div><span class="dist-pct">8%</span></div>
+                                <div class="dist-row"><span class="dist-label">2★</span><div class="dist-bar-bg"><div class="dist-bar-fill" style="width: 2%"></div></div><span class="dist-pct">2%</span></div>
+                                <div class="dist-row"><span class="dist-label">1★</span><div class="dist-bar-bg"><div class="dist-bar-fill" style="width: 0%"></div></div><span class="dist-pct">0%</span></div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; gap: 12px;">
+                            <div class="stat-mini">
+                                <div class="lbl">Taxa de resposta</div>
+                                <div class="v">47%</div>
+                                <div style="font-size: 0.78rem; color: var(--slate-500);">22 de 47 demandas concluídas avaliadas</div>
+                            </div>
+                            <div class="stat-mini">
+                                <div class="lbl">Tipo com pior CSAT</div>
+                                <div class="v" style="font-size: 1rem;">Aproveitamento de Créditos</div>
+                                <div style="font-size: 0.78rem; color: #b8431b;">3,8 média · 7 avaliações</div>
+                            </div>
+                            <div class="stat-mini">
+                                <div class="lbl">Foi resolvido?</div>
+                                <div class="v">94%</div>
+                                <div style="font-size: 0.78rem; color: var(--slate-500);">Sim · 6% parcial · 0% não</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 22px; padding: 16px; background: #fff; border: 1px solid var(--slate-200); border-radius: 12px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <div style="font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: var(--brand-primary);">Heatmap · estresse por hora</div>
+                            <div style="font-size: 0.75rem; color: var(--slate-400);">CSAT médio por dia/hora · últimos 90 dias</div>
+                        </div>
+                        <div class="heatmap" aria-label="Heatmap de satisfação por dia da semana e hora do dia">
+                            <span class="dow">SEG</span>
+                            <span class="cell h3"></span><span class="cell h4"></span><span class="cell h4"></span><span class="cell h3"></span><span class="cell h3"></span><span class="cell h2"></span><span class="cell h2"></span><span class="cell h1"></span><span class="cell low"></span><span class="cell low"></span><span class="cell h1"></span><span class="cell h2"></span>
+                            <span class="dow">TER</span>
+                            <span class="cell h3"></span><span class="cell h4"></span><span class="cell h4"></span><span class="cell h4"></span><span class="cell h3"></span><span class="cell h3"></span><span class="cell h2"></span><span class="cell h2"></span><span class="cell low"></span><span class="cell low2"></span><span class="cell h1"></span><span class="cell h2"></span>
+                            <span class="dow">QUA</span>
+                            <span class="cell h4"></span><span class="cell h4"></span><span class="cell h4"></span><span class="cell h3"></span><span class="cell h3"></span><span class="cell h3"></span><span class="cell h2"></span><span class="cell h1"></span><span class="cell h1"></span><span class="cell h2"></span><span class="cell h3"></span><span class="cell h3"></span>
+                            <span class="dow">QUI</span>
+                            <span class="cell h3"></span><span class="cell h4"></span><span class="cell h4"></span><span class="cell h3"></span><span class="cell h3"></span><span class="cell h2"></span><span class="cell low"></span><span class="cell low"></span><span class="cell low"></span><span class="cell h1"></span><span class="cell h2"></span><span class="cell h3"></span>
+                            <span class="dow">SEX</span>
+                            <span class="cell h3"></span><span class="cell h3"></span><span class="cell h3"></span><span class="cell h2"></span><span class="cell h2"></span><span class="cell h1"></span><span class="cell h1"></span><span class="cell h2"></span><span class="cell h2"></span><span class="cell h3"></span><span class="cell h3"></span><span class="cell h4"></span>
+                        </div>
+                        <div style="font-size: 0.78rem; color: var(--slate-500); margin-top: 8px;">
+                            Sextas pré-prova e quintas de matrícula caem de cor — sinal de carga, não de qualidade. Use para escalonar plantão, não para julgar coord.
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 22px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div style="font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: var(--brand-primary);">Comentários recentes</div>
+                            <span style="font-size: 0.78rem; color: var(--slate-400);">Anonimizados no painel institucional</span>
+                        </div>
+
+                        <div class="comment-card">
+                            <div class="top">
+                                <div>
+                                    <span class="stars-mini">★★★★★</span>
+                                    <span style="margin-left: 8px; color: var(--slate-700); font-weight: 600;">Ana S.</span>
+                                </div>
+                                <span class="meta">#1247 · Justificativa · há 2h</span>
+                            </div>
+                            <div style="color: var(--slate-700);">"Bruno foi atencioso, mas demorou 3 dias pra responder. Tirando isso, processo claro."</div>
+                        </div>
+
+                        <div class="comment-card">
+                            <div class="top">
+                                <div>
+                                    <span class="stars-mini">★★★★</span><span style="color: var(--slate-300);">★</span>
+                                    <span style="margin-left: 8px; color: var(--slate-700); font-weight: 600;">Diego S.</span>
+                                </div>
+                                <span class="meta">#1198 · Trancamento · ontem</span>
+                            </div>
+                            <div style="color: var(--slate-700);">"Tudo certo, só faltou explicar antes que precisava do comprovante de pagamento."</div>
+                        </div>
+
+                        <div class="comment-card alert">
+                            <div class="top">
+                                <div>
+                                    <span class="stars-mini">★★</span><span style="color: var(--slate-300);">★★★</span>
+                                    <span style="margin-left: 8px; color: var(--slate-700); font-weight: 600;">Anônimo</span>
+                                </div>
+                                <span class="alert-pill">⚠ Em revisão</span>
+                            </div>
+                            <div style="color: var(--slate-700);">"Formulário de aproveitamento confuso. Mandei a ementa errada duas vezes, ninguém avisou direito o que faltava."</div>
+                            <div style="margin-top: 6px; font-size: 0.74rem; color: var(--slate-500);">
+                                Encaminhado automaticamente à diretoria · sinaliza melhoria de processo, não de pessoa.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODELO DE DADOS ------------------------------------------- -->
+    <section class="section-block" data-reveal>
+        <div class="section-eyebrow">Modelo de dados</div>
+        <h2 class="section-h2">Schema atual vs. proposto</h2>
+        <p class="section-lede">Campo <span class="mono">csat</span> opcional dentro de <span class="mono">demanda</span>, mais um cache de agregações em <span class="mono">localStorage</span> separado.</p>
+
+<pre><code>// ANTES — Clarify/src/data/demanda.js (estado atual)
+{
+  protocolo: "#1247",
+  tipo: "Justificativa de Falta",
+  status: "concluido",
+  matriculaAluno: "20240003",
+  feedback: "Atestado aceito. Faltas justificadas."
+}
+
+// DEPOIS — proposta
+{
+  protocolo: "#1247",
+  tipo: "Justificativa de Falta",
+  status: "concluido",
+  matriculaAluno: "20240003",
+  feedback: "Atestado aceito. Faltas justificadas.",
+
+  csat: {
+    rating: 4,                                  // 1..5 — obrigatório
+    comentario: "Bruno foi atencioso, mas...",  // opcional
+    foi_resolvido: "sim",                       // sim | nao | parcial
+    respondida_em: "2026-05-15T10:00:00Z",
+    anonima: false,                             // anonimizar no painel institucional
+    idioma: "pt-BR",                            // pt-BR | en-US
+    alert_diretor: false,                       // true se rating &lt;= 2 + comentario
+    survey_dispatched_at: "2026-05-14T10:00:00Z" // T+24h após "concluido"
+  }
+}
+
+// NOVO storage — Clarify/src/services/csat.js
+csat_aggregations = {
+  atualizado_em: "2026-05-13T09:00:00Z",
+  global_30dias: 4.4,
+  response_rate_30dias: 0.41,
+
+  por_coordenador: {
+    "20240002": { media: 4.6, n: 47, tendencia: "+0.2" }   // Carla
+  },
+
+  por_tipo: {
+    "justificativa_falta":     { media: 4.7, n: 120 },
+    "aproveitamento_creditos": { media: 3.8, n: 23  },     // alerta
+    "trancamento_matricula":   { media: 4.5, n: 54  }
+  },
+
+  heatmap: {
+    "seg-9":  4.6, "seg-14": 3.9,   // [dow]-[hora] → média
+    "ter-15": 4.2, "qui-16": 3.4    // estresse de matrícula
+  }
+}</code></pre>
+    </section>
+
+    <!-- INSPIRAÇÃO ------------------------------------------------ -->
+    <section class="section-block" data-reveal>
+        <div class="section-eyebrow">Inspiração de mercado</div>
+        <h2 class="section-h2">O que copiar (e o que adaptar)</h2>
+        <p class="section-lede">Três referências fortes. Nenhuma resolve o caso acadêmico sozinha — pegamos o melhor de cada.</p>
+
+        <table class="ref-table">
+            <thead>
+                <tr><th>Produto</th><th>O que faz</th><th>Adaptação Clarify</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="https://www.eesel.ai/blog/zendesk-csat-reporting" target="_blank" rel="noopener">Zendesk CSAT</a></td>
+                    <td>Survey Good/Bad por e-mail 24h após "solved". Dashboard com média, tendência e segmentação por agente, marca e canal.</td>
+                    <td>Mantemos T+24h e segmentação por coord/tipo. Trocamos thumbs por 5 estrelas (cultura BR de "avaliação institucional"). Sem ranking público de coords.</td>
+                </tr>
+                <tr>
+                    <td><a href="https://www.intercom.com/" target="_blank" rel="noopener">Intercom CSAT</a></td>
+                    <td>Survey inline no Messenger logo após fechar a conversa. 1 clique → emoji. Follow-up textual opcional.</td>
+                    <td>Mockup do banner pós-conclusão imita a "leveza Intercom": 1 toque entra no modal. Pulamos o "logo após" para evitar viés de calor do momento.</td>
+                </tr>
+                <tr>
+                    <td><a href="https://www.helpscout.com/" target="_blank" rel="noopener">Help Scout Ratings</a></td>
+                    <td>Great/OK/Not Good. Comentários negativos disparam alerta para o gerente. Página pública opcional de "Happiness Report".</td>
+                    <td>Adotamos o alerta de comentário negativo (vai pra diretoria, não pro coord direto). Página pública é descartada — risco de exposição em ambiente acadêmico.</td>
+                </tr>
+                <tr>
+                    <td><a href="https://www.customerthermometer.com/" target="_blank" rel="noopener">Customer Thermometer</a></td>
+                    <td>Micro-pesquisa de 1 clique embutida em e-mail (4 emojis). Foco em zero fricção.</td>
+                    <td>Inspiração de UX para o banner: passar do clique direto às 5 estrelas (estrelas como botões grandes, sem tela intermediária).</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- KPIS ------------------------------------------------------ -->
+    <section class="section-block" data-reveal>
+        <div class="section-eyebrow">Métricas de sucesso</div>
+        <h2 class="section-h2">KPIs que validam a feature</h2>
+        <p class="section-lede">Cinco indicadores para a banca, a diretoria e a coordenação acadêmica.</p>
+
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="target">CSAT institucional</div>
+                <div class="num">4,2<span class="unit"> / 5</span></div>
+                <div class="desc">Meta inicial conservadora; benchmark Zendesk industry-wide gira em 4,3.</div>
+            </div>
+            <div class="kpi-card">
+                <div class="target">Response rate</div>
+                <div class="num">40<span class="unit">%</span></div>
+                <div class="desc">% de demandas concluídas que recebem avaliação. Saudável em help desks B2C.</div>
+            </div>
+            <div class="kpi-card">
+                <div class="target">Tempo médio até resposta</div>
+                <div class="num">&lt; 7<span class="unit"> dias</span></div>
+                <div class="desc">Janela de 14 dias com lembrete único no dia 7. Após isso, expira sem nag.</div>
+            </div>
+            <div class="kpi-card">
+                <div class="target">Follow-up de negativos</div>
+                <div class="num">100<span class="unit">%</span></div>
+                <div class="desc">Toda avaliação ≤ 2★ com comentário é revisada pela diretoria em até 5 dias.</div>
+            </div>
+            <div class="kpi-card">
+                <div class="target">Correlação CSAT × SLA</div>
+                <div class="num">r &gt; 0,5</div>
+                <div class="desc">Validação cruzada: SLA dentro do prazo deve correlacionar com CSAT alto. Se não, há problema de qualidade além do tempo.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ESFORÇO --------------------------------------------------- -->
+    <section class="section-block" data-reveal>
+        <div class="section-eyebrow">Esforço & dependências</div>
+        <h2 class="section-h2">Onde toca no código</h2>
+        <p class="section-lede">Cinco arquivos modificados, um novo service. Sem dependência forte de outras features, mas brilha mais com SLA (03) e Audit Log (04) instalados.</p>
+
+        <table class="ref-table">
+            <thead>
+                <tr><th>Arquivo</th><th>O que muda</th><th>Esforço</th><th>Dependência</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="mono">Clarify/src/services/csat.js</span> <span style="font-size: 0.7rem; color: var(--brand-primary); font-weight: 700;">novo</span></td>
+                    <td>Service central: agenda survey, persiste, calcula agregações, dispara alerta de comentário negativo.</td>
+                    <td><span class="pill pill-warm">M</span></td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td><span class="mono">Clarify/src/data/demanda.js</span></td>
+                    <td>Adicionar bloco <span class="mono">csat</span> opcional ao schema. Migração silenciosa de demandas antigas (campo ausente = não avaliada).</td>
+                    <td><span class="pill">XS</span></td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td><span class="mono">Clarify/src/components/structures/modais.js</span></td>
+                    <td>Novo modal <span class="mono">modalAvaliacaoCSAT</span> reaproveitando padrão do feat/modais-demanda em curso.</td>
+                    <td><span class="pill pill-warm">S</span></td>
+                    <td>Branch atual <span class="mono">feat/modais-demanda</span></td>
+                </tr>
+                <tr>
+                    <td><span class="mono">Clarify/src/pages/centralDemandas.js</span></td>
+                    <td>Banner "Avaliar atendimento" no card de demanda concluída. Estado "expirada" após 14d.</td>
+                    <td><span class="pill">S</span></td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td><span class="mono">Clarify/src/pages/dashboardcoord.js</span></td>
+                    <td>Widget CSAT (média, distribuição, comentários recentes). Aba dedicada "Satisfação".</td>
+                    <td><span class="pill pill-warm">M</span></td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td><span class="mono">Clarify/src/pages/dashboardAdmin.js</span> <span style="font-size: 0.7rem; color: var(--brand-primary); font-weight: 700;">novo widget</span></td>
+                    <td>Painel institucional anonimizado: CSAT global, tipos críticos, alertas pendentes.</td>
+                    <td><span class="pill">M</span></td>
+                    <td>Roles bem definidos (auth)</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- MVP vs FULL ----------------------------------------------- -->
+    <section class="section-block" data-reveal>
+        <div class="section-eyebrow">Quick wins vs versão completa</div>
+        <h2 class="section-h2">O que entra na apresentação, o que fica no roadmap</h2>
+        <p class="section-lede">MVP cabe em 1-2 dias e já gera dado real. Versão completa entrega o ciclo institucional inteiro.</p>
+
+        <div class="versions-grid">
+            <div class="version-card mvp">
+                <h4>MVP — apresentação<span class="effort">1-2 dias</span></h4>
+                <ul>
+                    <li>Modal pós-conclusão: 5 estrelas + comentário opcional</li>
+                    <li>Pergunta "Foi resolvido?" (sim/não/parcial)</li>
+                    <li>Persistência em <span class="mono">demanda.csat</span></li>
+                    <li>Widget simples no dashboard do coord: média + últimos 3 comentários</li>
+                    <li>Banner no card da demanda concluída</li>
+                </ul>
+            </div>
+            <div class="version-card">
+                <h4>Versão completa<span class="effort">2-3 semanas</span></h4>
+                <ul>
+                    <li>Agendamento T+24h com expiração T+14d</li>
+                    <li>Painel institucional anonimizado (CSAT global + por tipo)</li>
+                    <li>Comparativo entre coords por percentil (sem nomes)</li>
+                    <li>Heatmap por dia/hora (detecção de estresse de matrícula)</li>
+                    <li>NPS opcional (0-10) a cada 3 meses, não a cada demanda</li>
+                    <li>Alerta automático na diretoria para 1-2★ com comentário</li>
+                    <li>Tendência semestral em tom positivo no dashboard do coord</li>
+                    <li>Internacionalização PT/EN para alunos estrangeiros</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- RISCOS ---------------------------------------------------- -->
+    <section class="section-block" data-reveal>
+        <div class="section-eyebrow">Riscos & armadilhas</div>
+        <h2 class="section-h2">O que pode dar errado</h2>
+        <p class="section-lede">CSAT mal implementado vira instrumento de pressão. Quatro armadilhas concretas e mitigação proposta.</p>
+
+        <div class="risk-card">
+            <h5>1. Survey fatigue</h5>
+            <p>Aluno cansado de avaliar começa a ignorar (ou pior, marca 5★ sem ler para se livrar).</p>
+            <div class="mitig"><strong>Mitigação:</strong> uma única survey por demanda. Sem reenvio. Janela curta de 14 dias. Botão "Prefiro não avaliar" sempre visível.</div>
+        </div>
+
+        <div class="risk-card">
+            <h5>2. Manipulação pelo coordenador</h5>
+            <p>Coord pede informalmente ao aluno: "depois lembra de dar 5 estrelinhas pra mim, viu?". Quebra a métrica.</p>
+            <div class="mitig"><strong>Mitigação:</strong> texto explícito no modal — "sua avaliação é confidencial e o coordenador só vê médias agregadas". Comentários negativos vão direto à diretoria, não passam pelo coord avaliado.</div>
+        </div>
+
+        <div class="risk-card">
+            <h5>3. Viés de extremos</h5>
+            <p>Só alunos muito satisfeitos ou muito irritados respondem. A média some no meio.</p>
+            <div class="mitig"><strong>Mitigação:</strong> aceitar como limitação metodológica. Reportar response rate junto com média ("4,6 sobre 47% de resposta"). Não usar CSAT isolado como decisão punitiva.</div>
+        </div>
+
+        <div class="risk-card">
+            <h5>4. Cultura de comparação punitiva</h5>
+            <p>Direção começa a ranquear coords publicamente. Vira fonte de constrangimento e gaming, não melhoria.</p>
+            <div class="mitig"><strong>Mitigação:</strong> dashboard institucional mostra distribuição em percentil, sem identificação individual. Coordenador só vê o próprio. Direção vê o todo, mas precisa abrir card individual para investigar (gesto explícito).</div>
+        </div>
+
+        <div class="risk-card">
+            <h5>5. LGPD e identificação por comentário</h5>
+            <p>Aluno cita o nome do filho, doença ou conta um caso específico — comentário publicado, mesmo "anônimo", pode reidentificá-lo.</p>
+            <div class="mitig"><strong>Mitigação:</strong> painel institucional só exibe rating + tags, comentário fica restrito ao coord direto e à diretoria sob solicitação. Aviso explícito antes do envio: "evite dados pessoais — você pode ser identificado".</div>
+        </div>
+    </section>
+
+    <!-- FECHO ----------------------------------------------------- -->
+    <section class="section-block" data-reveal>
+        <div class="divider"></div>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 12px; max-width: 720px;">
+            <div style="font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--brand-primary);">Resumindo</div>
+            <p style="margin: 0; font-size: 1.05rem; color: var(--slate-700); line-height: 1.6;">
+                Três perguntas, T+24h, sem ranking público, com alerta automático em negativos: o CSAT do Clarify é deliberadamente curto e politicamente cuidadoso. É a feature que transforma o coordenador em alguém que <em>aprende com cada caso</em>, sem virar alvo de planilha trimestral.
+            </p>
+            <p class="quote" style="margin: 8px 0 0;">
+                "A pergunta certa não é 'quem é o melhor coordenador'. É 'que tipo de demanda está deixando nossos alunos frustrados — e por quê?'"
+            </p>
+        </div>
+    </section>
+
+</main>
+
+<footer style="margin-top: 80px; padding: 32px 0; border-top: 1px solid var(--slate-200); text-align: center; color: var(--slate-400); font-size: 0.85rem;">
+    <div class="container">
+        <p>Feature 06 de 10 &middot; <a href="index.html" style="color: var(--brand-primary); text-decoration: none; font-weight: 600;">Voltar ao hub →</a></p>
+    </div>
+</footer>
+
+<script>
+    const els = document.querySelectorAll('[data-reveal]');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('is-revealed');
+                obs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

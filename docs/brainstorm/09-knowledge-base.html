@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Feature 09 — Knowledge Base & FAQ — Clarify Brainstorm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+    /* ---------------- Hero ---------------- */
+    .hero-feature {
+        position: relative;
+        padding: 64px 0 32px;
+        overflow: hidden;
+    }
+    .hero-feature::before {
+        content: '';
+        position: absolute;
+        inset: -10% -10% 0 -10%;
+        background: radial-gradient(40% 50% at 70% 0%, rgba(202, 95, 21, 0.18) 0%, rgba(202, 95, 21, 0) 70%);
+        pointer-events: none;
+    }
+    .hero-row {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+    }
+    h1.feature-title {
+        font-size: clamp(2.2rem, 5.4vw, 3.8rem);
+        font-weight: 700;
+        line-height: 1.04;
+        margin: 0 0 18px;
+        color: var(--slate-900);
+    }
+    .feature-lede {
+        font-size: 1.125rem;
+        color: var(--slate-700);
+        max-width: 760px;
+        line-height: 1.6;
+        margin: 0 0 22px;
+    }
+    .feature-pills {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    /* ---------------- Section frames ---------------- */
+    section.block { margin-top: 72px; }
+    .section-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+    .block h2 {
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        margin: 0 0 14px;
+        color: var(--slate-900);
+    }
+    .block .lede {
+        font-size: 1rem;
+        color: var(--slate-500);
+        max-width: 720px;
+        line-height: 1.6;
+        margin: 0 0 28px;
+    }
+
+    /* ---------------- Why ---------------- */
+    .why-grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: 1fr;
+    }
+    @media (min-width: 720px) { .why-grid { grid-template-columns: repeat(3, 1fr); } }
+    .why-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        padding: 22px;
+    }
+    .why-card .num {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--brand-primary);
+        letter-spacing: 0.14em;
+    }
+    .why-card h3 {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin: 8px 0 8px;
+        color: var(--slate-900);
+        letter-spacing: -0.02em;
+    }
+    .why-card p {
+        font-size: 0.9rem;
+        color: var(--slate-500);
+        line-height: 1.55;
+        margin: 0;
+    }
+
+    /* ---------------- Personas ---------------- */
+    .persona-grid {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: 1fr;
+    }
+    @media (min-width: 820px) { .persona-grid { grid-template-columns: repeat(3, 1fr); } }
+    .persona-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 18px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+    .persona-card .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+        color: #fff;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.95rem;
+        box-shadow: 0 6px 16px -8px rgba(202, 95, 21, 0.5);
+    }
+    .persona-card h3 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        letter-spacing: -0.015em;
+    }
+    .persona-card .role {
+        font-size: 0.75rem;
+        color: var(--slate-400);
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+    .ba-block { display: grid; gap: 10px; }
+    .ba-row {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        font-size: 0.88rem;
+        line-height: 1.5;
+    }
+    .ba-tag {
+        flex-shrink: 0;
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-top: 2px;
+    }
+    .ba-tag.before { background: rgba(15, 23, 42, 0.08); color: var(--slate-500); }
+    .ba-tag.after  { background: rgba(202, 95, 21, 0.12); color: var(--brand-primary); }
+    .persona-impact {
+        font-size: 0.85rem;
+        color: var(--brand-primary);
+        font-weight: 600;
+        padding-top: 12px;
+        border-top: 1px solid var(--slate-100);
+    }
+
+    /* ---------------- Flow ---------------- */
+    .flow-steps { display: flex; flex-direction: column; gap: 14px; }
+    .flow-step {
+        display: grid;
+        grid-template-columns: 48px 1fr;
+        gap: 18px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        padding: 20px 22px;
+    }
+    .flow-step .step-num {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 6px 18px -8px rgba(202, 95, 21, 0.55);
+    }
+    .flow-step h4 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        margin: 4px 0 6px;
+        letter-spacing: -0.015em;
+    }
+    .flow-step p {
+        font-size: 0.92rem;
+        color: var(--slate-500);
+        line-height: 1.55;
+        margin: 0;
+    }
+
+    /* ---------------- Mockups ---------------- */
+    .mockup-shell {
+        background: linear-gradient(180deg, var(--brand-surface) 0%, #fff 100%);
+        border: 1px solid rgba(202, 95, 21, 0.18);
+        border-radius: 20px;
+        padding: 22px;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 32px 60px -24px rgba(202, 95, 21, 0.18);
+    }
+    .mockup-shell + .mockup-shell { margin-top: 22px; }
+
+    .kb-home {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+    .kb-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 18px;
+        background: #f8fafc;
+        border-bottom: 1px solid var(--slate-200);
+    }
+    .kb-topbar .crumbs {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.72rem;
+        color: var(--slate-500);
+    }
+    .kb-topbar .crumbs a { color: var(--brand-primary); text-decoration: none; }
+    .kb-topbar .pill { font-size: 0.7rem; }
+
+    .kb-hero {
+        padding: 36px 24px 28px;
+        background: linear-gradient(135deg, #fff8f6 0%, #fff 80%);
+        text-align: center;
+        border-bottom: 1px solid var(--slate-100);
+    }
+    .kb-hero h3 {
+        font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+        font-weight: 700;
+        margin: 0 0 6px;
+        color: var(--slate-900);
+        letter-spacing: -0.025em;
+    }
+    .kb-hero p {
+        margin: 0 0 18px;
+        font-size: 0.88rem;
+        color: var(--slate-500);
+    }
+    .kb-search {
+        max-width: 520px;
+        margin: 0 auto;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 14px 30px -18px rgba(202, 95, 21, 0.30);
+        text-align: left;
+    }
+    .kb-search .icon {
+        width: 22px;
+        height: 22px;
+        border-radius: 8px;
+        background: rgba(202, 95, 21, 0.12);
+        color: var(--brand-primary);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        flex-shrink: 0;
+        font-size: 0.85rem;
+    }
+    .kb-search input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-size: 0.95rem;
+        color: var(--slate-900);
+        font-family: inherit;
+        background: transparent;
+    }
+    .kb-search .kbd { font-size: 0.7rem; }
+    .kb-suggest {
+        max-width: 520px;
+        margin: 6px auto 0;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 12px;
+        text-align: left;
+        overflow: hidden;
+        box-shadow: 0 14px 28px -18px rgba(15, 23, 42, 0.18);
+    }
+    .kb-suggest li {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px;
+        font-size: 0.85rem;
+        color: var(--slate-700);
+        border-bottom: 1px solid var(--slate-100);
+    }
+    .kb-suggest li:last-child { border-bottom: none; }
+    .kb-suggest li strong { color: var(--brand-primary); }
+    .kb-suggest .cat {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7rem;
+        color: var(--slate-400);
+    }
+
+    .kb-grid {
+        padding: 24px;
+        display: grid;
+        gap: 14px;
+        grid-template-columns: 1fr;
+    }
+    @media (min-width: 720px) { .kb-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 980px) { .kb-grid { grid-template-columns: repeat(4, 1fr); } }
+    .kb-cat {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 12px;
+        padding: 16px;
+        transition: border-color 0.18s ease, transform 0.18s ease;
+    }
+    .kb-cat:hover {
+        border-color: rgba(202, 95, 21, 0.30);
+        transform: translateY(-2px);
+    }
+    .kb-cat .ic {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #fff8f6, #ead6cd);
+        color: var(--brand-primary);
+        font-weight: 800;
+        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+    .kb-cat h4 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin: 0 0 4px;
+        color: var(--slate-900);
+        letter-spacing: -0.015em;
+    }
+    .kb-cat p {
+        font-size: 0.78rem;
+        color: var(--slate-500);
+        margin: 0 0 10px;
+        line-height: 1.5;
+    }
+    .kb-cat .count {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7rem;
+        color: var(--brand-primary);
+        font-weight: 700;
+    }
+
+    .kb-popular {
+        padding: 6px 24px 24px;
+    }
+    .kb-popular h4 {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+        margin: 0 0 12px;
+    }
+    .kb-popular ul {
+        margin: 0; padding: 0; list-style: none;
+        display: flex; flex-direction: column; gap: 6px;
+    }
+    .kb-popular li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 10px;
+        font-size: 0.88rem;
+        color: var(--slate-700);
+    }
+    .kb-popular li .views {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.72rem;
+        color: var(--slate-400);
+    }
+
+    /* Article view */
+    .kb-article {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    @media (min-width: 880px) {
+        .kb-article { grid-template-columns: 220px minmax(0, 1fr); }
+    }
+    .kb-toc {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        padding: 16px 18px;
+        position: relative;
+    }
+    .kb-toc h5 {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+        margin: 0 0 10px;
+    }
+    .kb-toc ol {
+        margin: 0; padding: 0; list-style: none;
+        display: flex; flex-direction: column; gap: 6px;
+    }
+    .kb-toc li {
+        font-size: 0.82rem;
+        color: var(--slate-500);
+        padding-left: 12px;
+        border-left: 2px solid var(--slate-100);
+        line-height: 1.5;
+    }
+    .kb-toc li.active {
+        color: var(--brand-primary);
+        border-left-color: var(--brand-primary);
+        font-weight: 600;
+    }
+
+    .kb-body {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        padding: 24px 26px;
+    }
+    .kb-body .crumbs {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.72rem;
+        color: var(--slate-400);
+        margin-bottom: 10px;
+    }
+    .kb-body .crumbs a { color: var(--brand-primary); text-decoration: none; }
+    .kb-body h3.art-title {
+        font-size: 1.45rem;
+        font-weight: 700;
+        margin: 0 0 8px;
+        color: var(--slate-900);
+        letter-spacing: -0.025em;
+    }
+    .kb-body .art-meta {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        font-size: 0.72rem;
+        color: var(--slate-400);
+        margin-bottom: 18px;
+    }
+    .kb-body .art-meta span { display: inline-flex; align-items: center; gap: 4px; }
+    .kb-body h4.h-sec {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        letter-spacing: -0.015em;
+        margin: 22px 0 8px;
+    }
+    .kb-body p {
+        font-size: 0.92rem;
+        line-height: 1.65;
+        color: var(--slate-700);
+        margin: 0 0 12px;
+    }
+    .kb-body ol.steps {
+        margin: 0 0 12px;
+        padding-left: 18px;
+        color: var(--slate-700);
+        font-size: 0.9rem;
+        line-height: 1.7;
+    }
+    .kb-callout {
+        background: #fff8f6;
+        border: 1px solid rgba(202, 95, 21, 0.25);
+        border-left: 3px solid var(--brand-primary);
+        border-radius: 10px;
+        padding: 12px 14px;
+        font-size: 0.85rem;
+        color: var(--slate-700);
+        margin: 14px 0;
+        line-height: 1.55;
+    }
+    .kb-callout strong { color: var(--brand-primary); }
+
+    .kb-feedback {
+        margin-top: 22px;
+        padding: 16px;
+        border: 1px dashed rgba(202, 95, 21, 0.30);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        background: #fff8f6;
+    }
+    .kb-feedback strong {
+        font-size: 0.9rem;
+        color: var(--slate-900);
+    }
+    .kb-feedback .btns { display: flex; gap: 8px; }
+    .kb-feedback button {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        color: var(--slate-700);
+        font-weight: 700;
+        font-size: 0.78rem;
+        padding: 7px 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: inherit;
+    }
+    .kb-feedback button.up { color: #047857; border-color: rgba(16, 185, 129, 0.30); }
+    .kb-feedback button.down { color: #b91c1c; border-color: rgba(239, 68, 68, 0.30); }
+
+    .kb-related {
+        margin-top: 18px;
+        padding-top: 16px;
+        border-top: 1px solid var(--slate-100);
+    }
+    .kb-related h5 {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+        margin: 0 0 10px;
+    }
+    .kb-related ul {
+        margin: 0; padding: 0; list-style: none;
+        display: grid; gap: 8px;
+    }
+    .kb-related li {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 0.85rem;
+        color: var(--slate-700);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .kb-related li a { color: var(--slate-900); text-decoration: none; font-weight: 600; }
+    .kb-related .cat {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7rem;
+        color: var(--slate-400);
+    }
+
+    /* Deflection modal */
+    .deflect-shell {
+        background: rgba(15, 23, 42, 0.45);
+        border-radius: 14px;
+        padding: 32px;
+        backdrop-filter: blur(4px);
+    }
+    .deflect-modal {
+        max-width: 560px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 18px;
+        border: 1px solid var(--slate-200);
+        overflow: hidden;
+        box-shadow: 0 28px 60px -20px rgba(15, 23, 42, 0.40);
+    }
+    .deflect-head {
+        padding: 18px 22px;
+        border-bottom: 1px solid var(--slate-100);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .deflect-head .orb {
+        width: 32px; height: 32px; border-radius: 10px;
+        background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 0.85rem;
+        box-shadow: 0 8px 18px -10px rgba(202, 95, 21, 0.6);
+    }
+    .deflect-head .ts {
+        font-size: 0.78rem;
+        color: var(--slate-400);
+        font-weight: 600;
+        letter-spacing: 0.04em;
+    }
+    .deflect-head strong {
+        display: block;
+        font-size: 1rem;
+        color: var(--slate-900);
+        margin-bottom: 2px;
+        letter-spacing: -0.015em;
+    }
+    .deflect-body {
+        padding: 18px 22px 22px;
+    }
+    .deflect-body .intro {
+        font-size: 0.92rem;
+        color: var(--slate-700);
+        line-height: 1.55;
+        margin: 0 0 16px;
+    }
+    .deflect-body .intro strong { color: var(--brand-primary); }
+    .deflect-cards { display: flex; flex-direction: column; gap: 10px; }
+    .deflect-card {
+        background: #fff8f6;
+        border: 1px solid rgba(202, 95, 21, 0.25);
+        border-radius: 12px;
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        transition: transform 0.18s ease, border-color 0.18s ease;
+    }
+    .deflect-card:hover {
+        transform: translateY(-1px);
+        border-color: var(--brand-primary);
+    }
+    .deflect-card .meta {
+        font-size: 0.7rem;
+        color: var(--brand-primary);
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+    }
+    .deflect-card .ttl {
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: var(--slate-900);
+        letter-spacing: -0.015em;
+    }
+    .deflect-card .sub {
+        font-size: 0.78rem;
+        color: var(--slate-500);
+        margin-top: 3px;
+        line-height: 1.5;
+    }
+    .deflect-card .arrow {
+        font-weight: 800;
+        color: var(--brand-primary);
+        font-size: 1.1rem;
+    }
+    .deflect-foot {
+        margin-top: 18px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .deflect-foot button {
+        flex: 1 1 auto;
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 11px 14px;
+        border-radius: 12px;
+        cursor: pointer;
+        border: none;
+        font-family: inherit;
+    }
+    .deflect-foot button.primary {
+        background: var(--brand-primary);
+        color: #fff;
+        box-shadow: 0 10px 22px -10px rgba(202, 95, 21, 0.55);
+    }
+    .deflect-foot button.ghost {
+        background: #fff;
+        color: var(--slate-700);
+        border: 1px solid var(--slate-200);
+    }
+    .deflect-tracker {
+        margin-top: 14px;
+        font-size: 0.7rem;
+        color: var(--slate-400);
+        text-align: center;
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ---------------- Inspiration ---------------- */
+    .inspo-table {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        overflow: hidden;
+    }
+    .inspo-table table { width: 100%; border-collapse: collapse; }
+    .inspo-table th {
+        text-align: left;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--slate-200);
+        background: #f8fafc;
+    }
+    .inspo-table td {
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--slate-100);
+        color: var(--slate-700);
+        font-size: 0.9rem;
+        line-height: 1.55;
+        vertical-align: top;
+    }
+    .inspo-table tr:last-child td { border-bottom: none; }
+    .inspo-table a {
+        color: var(--brand-primary);
+        text-decoration: none;
+        font-weight: 700;
+    }
+    .inspo-table a:hover { text-decoration: underline; }
+
+    /* ---------------- KPIs ---------------- */
+    .kpi-grid {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: 1fr;
+    }
+    @media (min-width: 640px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 920px) { .kpi-grid { grid-template-columns: repeat(4, 1fr); } }
+    .kpi-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .kpi-card .label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+    }
+    .kpi-card .value {
+        font-size: 1.6rem;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        color: var(--slate-900);
+    }
+    .kpi-card .hint {
+        font-size: 0.78rem;
+        color: var(--slate-500);
+        line-height: 1.5;
+    }
+
+    /* ---------------- 2-col ---------------- */
+    .two-col {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: 1fr;
+    }
+    @media (min-width: 820px) { .two-col { grid-template-columns: 1fr 1fr; } }
+    .col-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        padding: 22px;
+    }
+    .col-card.warm {
+        border-color: rgba(202, 95, 21, 0.25);
+        background: linear-gradient(180deg, #fff 0%, #fff8f6 100%);
+    }
+    .col-card h3 {
+        margin: 0 0 4px;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        letter-spacing: -0.015em;
+    }
+    .col-card .sub {
+        font-size: 0.78rem;
+        color: var(--slate-400);
+        margin: 0 0 14px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+    .col-card ul {
+        margin: 0; padding: 0; list-style: none;
+        display: flex; flex-direction: column; gap: 8px;
+    }
+    .col-card ul li {
+        font-size: 0.9rem;
+        color: var(--slate-700);
+        line-height: 1.55;
+        padding-left: 18px;
+        position: relative;
+    }
+    .col-card ul li::before {
+        content: '';
+        position: absolute;
+        left: 0; top: 8px;
+        width: 6px; height: 6px;
+        border-radius: 999px;
+        background: var(--brand-primary);
+    }
+
+    /* ---------------- Risks ---------------- */
+    .risks-list { display: flex; flex-direction: column; gap: 12px; }
+    .risk-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        padding: 18px 20px;
+        border-left: 3px solid var(--brand-primary);
+    }
+    @media (min-width: 820px) {
+        .risk-row { grid-template-columns: 1.1fr 1.6fr; gap: 24px; align-items: start; }
+    }
+    .risk-row h4 {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        letter-spacing: -0.015em;
+    }
+    .risk-row h4 small {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--slate-400);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+    }
+    .risk-row p {
+        margin: 0;
+        font-size: 0.88rem;
+        color: var(--slate-500);
+        line-height: 1.6;
+    }
+    .risk-row p strong { color: var(--slate-900); font-weight: 700; }
+
+    /* ---------------- Effort table ---------------- */
+    .effort-table {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        overflow: hidden;
+    }
+    .effort-table table { width: 100%; border-collapse: collapse; }
+    .effort-table th {
+        text-align: left;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+        padding: 14px 18px;
+        background: #f8fafc;
+        border-bottom: 1px solid var(--slate-200);
+    }
+    .effort-table td {
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--slate-100);
+        color: var(--slate-700);
+        font-size: 0.88rem;
+    }
+    .effort-table tr:last-child td { border-bottom: none; }
+    .effort-tag {
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.7rem;
+        font-weight: 800;
+        padding: 3px 8px;
+        border-radius: 6px;
+        letter-spacing: 0.05em;
+    }
+    .effort-tag.xs { background: rgba(16, 185, 129, 0.10); color: #047857; }
+    .effort-tag.s  { background: rgba(59, 130, 246, 0.10); color: #1d4ed8; }
+    .effort-tag.m  { background: rgba(202, 95, 21, 0.12); color: var(--brand-primary); }
+    .effort-tag.l  { background: rgba(239, 68, 68, 0.10); color: #b91c1c; }
+
+    footer.feature-footer {
+        margin-top: 96px;
+        padding: 32px 0;
+        border-top: 1px solid var(--slate-200);
+        text-align: center;
+        color: var(--slate-400);
+        font-size: 0.85rem;
+    }
+    footer.feature-footer a {
+        color: var(--brand-primary);
+        text-decoration: none;
+        font-weight: 600;
+    }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header style="position: sticky; top: 0; z-index: 10; background: rgba(255, 248, 246, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(15, 23, 42, 0.06);">
+    <div class="container" style="max-width: 1080px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
+        <a href="index.html" style="display: inline-flex; align-items: center; gap: 8px; color: var(--slate-700); text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+            <span style="font-size: 1.1rem;">&larr;</span> Hub de features
+        </a>
+        <span class="eyebrow eyebrow-muted">FEATURE 09 / 10</span>
+    </div>
+</header>
+
+<main class="container" style="max-width: 1080px; margin: 0 auto; padding: 48px 24px 0;">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero-feature">
+        <div class="hero-row">
+            <span class="tier-badge tier-b">Tier B &middot; Boas, opcionais</span>
+            <span class="eyebrow eyebrow-muted">Feature 09</span>
+        </div>
+        <h1 class="feature-title tracking-headline">
+            Knowledge Base <span class="text-gradient-warm">& FAQ</span>
+        </h1>
+        <p class="feature-lede">
+            Metade das demandas do Clarify é a mesma pergunta repetida em texto diferente. Um help center bem feito, com busca decente e <strong>deflection antes do form</strong>, evita 30 a 50% dos tickets — e os que sobram chegam mais maduros. Inspirado em Zendesk Guide, Intercom Articles e Stripe Docs.
+        </p>
+        <div class="feature-pills">
+            <span class="pill pill-warm">Self-service</span>
+            <span class="pill">Deflection</span>
+            <span class="pill">Help Center</span>
+            <span class="pill">Versionado por semestre</span>
+        </div>
+    </section>
+
+    <!-- ============ POR QUE ISSO IMPORTA ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Por que isso importa</span>
+        <h2>Demanda repetida é trabalho que nunca deveria virar ticket</h2>
+        <p class="lede">
+            Hoje a única forma do aluno descobrir "como faço pra trancar" é abrir uma demanda e esperar. O coordenador responde a mesma coisa pela 40ª vez no semestre. Knowledge base é o lugar onde essa resposta vive uma vez, atualizada, com base no regimento — e disponível antes de o aluno chegar ao <span class="mono">centralDemandas.js</span>.
+        </p>
+        <div class="why-grid">
+            <div class="why-card">
+                <span class="num">01</span>
+                <h3>Não existe lugar pra "ler antes de pedir"</h3>
+                <p>
+                    O fluxo de <span class="mono">modais.js</span> hoje vai direto pro form. Não há sequer um link de "antes de abrir, dá uma olhada nisso aqui". O aluno é empurrado pra criar ticket mesmo quando a resposta cabe em três bullets.
+                </p>
+            </div>
+            <div class="why-card">
+                <span class="num">02</span>
+                <h3>Coord redigita a mesma coisa</h3>
+                <p>
+                    No campo <span class="mono">feedback</span> em <span class="mono">dashboardcoord.js</span>, o coord escreve "o prazo para trancar é até 30 dias antes do término do semestre" toda santa semana. Macros (F05) ajudam, mas o aluno continua sem fonte canônica.
+                </p>
+            </div>
+            <div class="why-card">
+                <span class="num">03</span>
+                <h3>Conhecimento vive na cabeça do coord</h3>
+                <p>
+                    Quando muda o coordenador — fim de semestre, licença — todo o regimento implícito sai junto. Não há base institucional consultável. KB resolve isso e dá ao novo coord uma fonte para apontar.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ PERSONAS ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Quem é impactado</span>
+        <h2>Aluno encontra sozinho, coord para de repetir, instituição padroniza</h2>
+        <p class="lede">
+            Não é "menos suporte" — é suporte que chega só quando precisa de gente. O resto vira leitura.
+        </p>
+        <div class="persona-grid">
+
+            <div class="persona-card">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span class="avatar">AS</span>
+                    <div>
+                        <h3>Ana Silva</h3>
+                        <span class="role">Aluna &middot; 4º semestre</span>
+                    </div>
+                </div>
+                <div class="ba-block">
+                    <div class="ba-row">
+                        <span class="ba-tag before">Antes</span>
+                        <span>Abre demanda às 23h perguntando "qual o prazo pra trancar matrícula?". Espera 2 dias por uma resposta que cabe em uma frase.</span>
+                    </div>
+                    <div class="ba-row">
+                        <span class="ba-tag after">Depois</span>
+                        <span>Digita "trancar" na busca do help center, encontra o artigo <em>Como trancar matrícula</em> com prazo embedado do calendário 2026/1. Resolve em 90 segundos, sem abrir ticket.</span>
+                    </div>
+                </div>
+                <p class="persona-impact">Tempo até resposta: 2 dias &rarr; 90 segundos.</p>
+            </div>
+
+            <div class="persona-card">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span class="avatar" style="background: linear-gradient(135deg, #334155, #64748b);">BA</span>
+                    <div>
+                        <h3>Bruno Almeida</h3>
+                        <span class="role">Coordenador de curso</span>
+                    </div>
+                </div>
+                <div class="ba-block">
+                    <div class="ba-row">
+                        <span class="ba-tag before">Antes</span>
+                        <span>Responde "qual prazo pra aproveitamento" 12 vezes por semestre. Texto difere a cada vez, gera divergência de informação.</span>
+                    </div>
+                    <div class="ba-row">
+                        <span class="ba-tag after">Depois</span>
+                        <span>Quando precisa explicar, manda link <span class="mono">/kb/aproveitamento-de-creditos</span> na resposta da demanda. Aluno lê o canônico, fim. Coord publica atualização e a próxima resposta já reflete.</span>
+                    </div>
+                </div>
+                <p class="persona-impact">Demandas repetidas por semana: ~15 &rarr; ~4.</p>
+            </div>
+
+            <div class="persona-card">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span class="avatar" style="background: linear-gradient(135deg, #b04e0a, #ca5f15);">IN</span>
+                    <div>
+                        <h3>Instituição</h3>
+                        <span class="role">Diretoria acadêmica</span>
+                    </div>
+                </div>
+                <div class="ba-block">
+                    <div class="ba-row">
+                        <span class="ba-tag before">Antes</span>
+                        <span>Regimento vive em PDF de 80 páginas que ninguém abre. Cada coordenação interpreta um pouco diferente — risco de processo.</span>
+                    </div>
+                    <div class="ba-row">
+                        <span class="ba-tag after">Depois</span>
+                        <span>Cada artigo da KB cita base regimental (<em>"conforme art. 38"</em>) e versão de semestre. Comunicação institucional fica auditável, idêntica para todos os alunos.</span>
+                    </div>
+                </div>
+                <p class="persona-impact">Fonte única da verdade + rastreabilidade legal.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============ COMO FUNCIONARIA ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Como funcionaria</span>
+        <h2>Fluxo em 5 passos, do hub à deflection</h2>
+        <p class="lede">
+            O aluno entra pela home, ou é interceptado no meio do fluxo de nova demanda. Coord e admin publicam. Tudo registra o que foi lido e o que evitou ticket.
+        </p>
+        <div class="flow-steps">
+
+            <div class="flow-step">
+                <span class="step-num">1</span>
+                <div>
+                    <h4>Hub da KB acessível pelo aluno</h4>
+                    <p>
+                        Nova página <span class="mono">src/pages/kb/index.js</span> com busca grande, 4 categorias (Matrícula, Aproveitamento, Frequência, Avaliação) e "mais lidos da semana". Acessível também por <span class="kbd">?</span> no canto do app.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flow-step">
+                <span class="step-num">2</span>
+                <div>
+                    <h4>Busca com sugestão enquanto digita</h4>
+                    <p>
+                        Token-based + tolerância a typos. "trancar matricula" e "como tranco a matrícula" caem no mesmo artigo. Vive em <span class="mono">src/services/kb.js</span> e roda 100% local sobre o índice em memória.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flow-step">
+                <span class="step-num">3</span>
+                <div>
+                    <h4>Artigo estruturado e versionado</h4>
+                    <p>
+                        Markdown renderizado: título, resumo, passos numerados, callouts de prazo, base regimental ("conforme art. X"). Mostra versão <strong>2026/1</strong> automaticamente quando o semestre vigente muda.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flow-step">
+                <span class="step-num">4</span>
+                <div>
+                    <h4>Deflection no modal de nova demanda</h4>
+                    <p>
+                        Em <span class="mono">modais.js</span>, depois do aluno selecionar o tipo ("Justificativa de Falta"), o sistema busca artigos linkados a esse tipo via <span class="mono">tipos_demanda_relacionados</span> e exibe um step intermediário: <em>"Antes de abrir, talvez isso ajude."</em> Aluno escolhe <strong>"Achei o que queria"</strong> ou <strong>"Abrir mesmo assim"</strong>.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flow-step">
+                <span class="step-num">5</span>
+                <div>
+                    <h4>Tracking de deflection + útil/não útil</h4>
+                    <p>
+                        Cada artigo conta <span class="mono">deflection_count</span> (clicou e fechou sem abrir demanda), <span class="mono">util_count</span>, <span class="mono">nao_util_count</span>. Coord ordena artigos por "razão útil/total" para priorizar atualização. Buscas sem resultado viram <em>backlog de conteúdo</em>.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============ MOCKUP 1 — HOME ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Mockup &middot; Home da KB</span>
+        <h2>Vista do aluno entrando pela primeira vez</h2>
+        <p class="lede">
+            Busca grande, categorias claras, "artigos mais lidos" — em vez de um portal genérico cheio de FAQ aleatório. O ponto é: em 5 segundos o aluno sabe se há resposta antes de abrir ticket.
+        </p>
+
+        <div class="mockup-shell">
+            <div class="mockup-window" style="border: none; box-shadow: none; background: transparent;">
+                <div class="mockup-bar" style="background: rgba(255, 255, 255, 0.6); border-radius: 12px 12px 0 0;">
+                    <span class="mockup-dot"></span>
+                    <span class="mockup-dot"></span>
+                    <span class="mockup-dot"></span>
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--slate-400); margin-left: 14px;">clarify.app / aluno / ajuda</span>
+                </div>
+            </div>
+
+            <div class="kb-home" style="margin-top: 16px;">
+
+                <div class="kb-topbar">
+                    <span class="crumbs"><a href="#">clarify.app</a> / <strong>ajuda</strong></span>
+                    <span class="pill pill-warm">Semestre 2026/1</span>
+                </div>
+
+                <div class="kb-hero">
+                    <h3>Como podemos ajudar você?</h3>
+                    <p>Procure uma resposta antes de abrir uma demanda &mdash; cobre 80% das dúvidas.</p>
+                    <div class="kb-search">
+                        <span class="icon">Q</span>
+                        <input value="como justificar falta" readonly />
+                        <span class="kbd">/</span>
+                    </div>
+                    <ul class="kb-suggest">
+                        <li>
+                            <span><strong>Como</strong> <strong>justificar</strong> uma <strong>falta</strong> &mdash; passo a passo</span>
+                            <span class="cat">/frequencia</span>
+                        </li>
+                        <li>
+                            <span>Justificativa por motivo médico: o que aceitamos</span>
+                            <span class="cat">/frequencia</span>
+                        </li>
+                        <li>
+                            <span>Faltei na prova &mdash; como pedir segunda chamada</span>
+                            <span class="cat">/avaliacao</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="kb-grid">
+                    <div class="kb-cat">
+                        <span class="ic">M</span>
+                        <h4>Matrícula</h4>
+                        <p>Inscrição em disciplinas, trancamento, reabertura.</p>
+                        <span class="count">18 artigos</span>
+                    </div>
+                    <div class="kb-cat">
+                        <span class="ic">A</span>
+                        <h4>Aproveitamento</h4>
+                        <p>Disciplinas cursadas, validação de ementas, equivalência.</p>
+                        <span class="count">11 artigos</span>
+                    </div>
+                    <div class="kb-cat">
+                        <span class="ic">F</span>
+                        <h4>Frequência</h4>
+                        <p>Justificativa de falta, abono, regime especial.</p>
+                        <span class="count">9 artigos</span>
+                    </div>
+                    <div class="kb-cat">
+                        <span class="ic">V</span>
+                        <h4>Avaliação</h4>
+                        <p>Segunda chamada, revisão de nota, prazos.</p>
+                        <span class="count">14 artigos</span>
+                    </div>
+                </div>
+
+                <div class="kb-popular">
+                    <h4>Mais lidos esta semana</h4>
+                    <ul>
+                        <li>
+                            <span>Como solicitar aproveitamento de créditos</span>
+                            <span class="views">432 leituras</span>
+                        </li>
+                        <li>
+                            <span>Justificativa de falta &mdash; atestado e prazos</span>
+                            <span class="views">389 leituras</span>
+                        </li>
+                        <li>
+                            <span>Trancamento de matrícula: até quando posso?</span>
+                            <span class="views">211 leituras</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ MOCKUP 2 — ARTIGO ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Mockup &middot; Vista de artigo</span>
+        <h2>Conteúdo escrito como guia, não como regulamento</h2>
+        <p class="lede">
+            Sumário lateral fixo, conteúdo passo a passo, callout do prazo vigente no calendário, e o feedback "isso foi útil?" no rodapé. Tom acessível, base regimental citada onde precisa ser citada.
+        </p>
+
+        <div class="mockup-shell">
+            <div class="mockup-window" style="border: none; box-shadow: none; background: transparent;">
+                <div class="mockup-bar" style="background: rgba(255, 255, 255, 0.6); border-radius: 12px 12px 0 0;">
+                    <span class="mockup-dot"></span>
+                    <span class="mockup-dot"></span>
+                    <span class="mockup-dot"></span>
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--slate-400); margin-left: 14px;">clarify.app / kb / frequencia / justificativa-de-falta</span>
+                </div>
+            </div>
+
+            <div class="kb-article" style="margin-top: 16px;">
+
+                <aside class="kb-toc">
+                    <h5>Nesta página</h5>
+                    <ol>
+                        <li class="active">Quando posso justificar</li>
+                        <li>Documentos aceitos</li>
+                        <li>Passo a passo</li>
+                        <li>Prazo vigente</li>
+                        <li>Base regimental</li>
+                    </ol>
+                </aside>
+
+                <article class="kb-body">
+                    <div class="crumbs">
+                        <a href="#">ajuda</a> / <a href="#">frequência</a> / <strong>justificativa de falta</strong>
+                    </div>
+
+                    <h3 class="art-title">Como justificar uma falta</h3>
+                    <div class="art-meta">
+                        <span>Versão <strong style="color: var(--brand-primary);">2026/1</strong></span>
+                        <span>&middot; Atualizado em 15/04/2026</span>
+                        <span>&middot; Autor: Carla Pereira</span>
+                        <span>&middot; 4 min de leitura</span>
+                    </div>
+
+                    <p>
+                        Faltou em uma aula ou prova por motivo previsto no regimento? Você tem até <strong>5 dias úteis</strong> para registrar a justificativa pelo Clarify. Aqui o passo a passo.
+                    </p>
+
+                    <h4 class="h-sec">Quando posso justificar</h4>
+                    <p>
+                        São aceitos como motivo justo: atestado médico, falecimento de familiar de primeiro grau, convocação para atividade institucional, serviço militar e licença gestante. Outros casos podem ser analisados pela coordenação pedagógica.
+                    </p>
+
+                    <h4 class="h-sec">Documentos aceitos</h4>
+                    <ol class="steps">
+                        <li>Atestado médico com CID, assinatura e CRM legíveis.</li>
+                        <li>Declaração de óbito ou certidão (parente de 1º grau).</li>
+                        <li>Ofício institucional em caso de representação.</li>
+                    </ol>
+
+                    <div class="kb-callout">
+                        <strong>Atenção ao prazo:</strong> calendário 2026/1 marca <strong>até 22/05/2026</strong> para justificativas de faltas ocorridas em maio. Após essa data, é necessário pedido formal de reabertura.
+                    </div>
+
+                    <h4 class="h-sec">Passo a passo</h4>
+                    <ol class="steps">
+                        <li>Na central de demandas, clique em <strong>Nova demanda</strong> e selecione <em>"Justificativa de Falta"</em>.</li>
+                        <li>Informe disciplina e data da falta (a IA do app pode pré-preencher a partir da descrição).</li>
+                        <li>Anexe o documento em PDF, JPG ou PNG (máx. 5 MB).</li>
+                        <li>Acompanhe o status na sua central &mdash; resposta típica em até 48h úteis.</li>
+                    </ol>
+
+                    <h4 class="h-sec">Base regimental</h4>
+                    <p>
+                        <em>Conforme art. 38 do Regimento Interno e Resolução CONSEPE 14/2024</em>, a justificativa deve ser apresentada em até 5 dias úteis a partir da data da falta. Casos especiais são tratados pela Comissão de Frequência.
+                    </p>
+
+                    <div class="kb-feedback">
+                        <strong>Este artigo foi útil?</strong>
+                        <div class="btns">
+                            <button class="up">Sim &middot; 47</button>
+                            <button class="down">Não &middot; 3</button>
+                        </div>
+                    </div>
+
+                    <div class="kb-related">
+                        <h5>Artigos relacionados</h5>
+                        <ul>
+                            <li>
+                                <a href="#">Faltei na prova &mdash; como pedir segunda chamada</a>
+                                <span class="cat">/avaliacao</span>
+                            </li>
+                            <li>
+                                <a href="#">Regime especial domiciliar (gestantes, doença prolongada)</a>
+                                <span class="cat">/frequencia</span>
+                            </li>
+                            <li>
+                                <a href="#">Reabertura de prazo &mdash; quando posso solicitar</a>
+                                <span class="cat">/frequencia</span>
+                            </li>
+                        </ul>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ MOCKUP 3 — DEFLECTION ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Mockup &middot; Deflection no fluxo de nova demanda</span>
+        <h2>Step intermediário antes do form &mdash; com escape claro</h2>
+        <p class="lede">
+            Quando a Ana seleciona <em>"Justificativa de Falta"</em> no modal de nova demanda, antes de ver os campos ela vê isso. Não bloqueia &mdash; só pergunta. Se ela achou a resposta, o ticket nunca existe.
+        </p>
+
+        <div class="mockup-shell">
+            <div class="deflect-shell">
+
+                <div class="deflect-modal">
+                    <div class="deflect-head">
+                        <span class="orb">i</span>
+                        <div>
+                            <strong>Antes de abrir uma demanda</strong>
+                            <span class="ts">passo 2 de 3 &middot; Justificativa de Falta</span>
+                        </div>
+                    </div>
+
+                    <div class="deflect-body">
+                        <p class="intro">
+                            Vimos que <strong>80% das dúvidas</strong> sobre justificativa de falta são respondidas por estes guias. Dá uma olhada &mdash; pode te poupar 2 dias de espera.
+                        </p>
+
+                        <div class="deflect-cards">
+                            <a class="deflect-card" href="#">
+                                <div>
+                                    <div class="meta">Frequência &middot; 4 min</div>
+                                    <div class="ttl">Como justificar uma falta</div>
+                                    <div class="sub">Documentos aceitos, prazo de 5 dias úteis, passo a passo no Clarify.</div>
+                                </div>
+                                <span class="arrow">&rarr;</span>
+                            </a>
+                            <a class="deflect-card" href="#">
+                                <div>
+                                    <div class="meta">Avaliação &middot; 3 min</div>
+                                    <div class="ttl">Faltei na prova &mdash; segunda chamada</div>
+                                    <div class="sub">Quando a falta vira pedido de segunda chamada em vez de justificativa.</div>
+                                </div>
+                                <span class="arrow">&rarr;</span>
+                            </a>
+                            <a class="deflect-card" href="#">
+                                <div>
+                                    <div class="meta">Frequência &middot; 2 min</div>
+                                    <div class="ttl">Atestado sem CID &mdash; o que fazer</div>
+                                    <div class="sub">Como pedir reemissão e o que acontece se mandar incompleto.</div>
+                                </div>
+                                <span class="arrow">&rarr;</span>
+                            </a>
+                        </div>
+
+                        <div class="deflect-foot">
+                            <button class="ghost">Achei o que queria</button>
+                            <button class="primary">Abrir demanda mesmo assim &rarr;</button>
+                        </div>
+
+                        <div class="deflect-tracker">
+                            esta tela esta semana &middot; 142 alunos vistos &middot; 47% saíram sem ticket
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ MODELO DE DADOS ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Modelo de dados</span>
+        <h2>Schema da KB &mdash; novo, sem mexer no de Demanda</h2>
+        <p class="lede">
+            A KB vive em um array próprio. A única ponte com a Demanda é o campo <span class="mono">tipos_demanda_relacionados</span>, que casa com o <span class="mono">tipo</span> da F08 (formulário dinâmico).
+        </p>
+
+        <div style="display: grid; gap: 16px;">
+            <div>
+                <h3 style="font-size: 0.85rem; font-weight: 700; color: var(--slate-400); letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 8px;">Schema atual (data/demanda.js)</h3>
+<pre><code>{
+  "protocolo": "#2317",
+  "tipo": "Justificativa de Falta",
+  "status": "em_analise",
+  "descricao": "faltei na prova...",
+  "matriculaAluno": "20240003",
+  "feedback": null
+}
+
+<span style="color: #94a3b8;">// não existe nenhuma KB hoje &mdash; o aluno descobre tudo
+// abrindo ticket ou perguntando no WhatsApp da turma.</span></code></pre>
+            </div>
+
+            <div>
+                <h3 style="font-size: 0.85rem; font-weight: 700; color: var(--brand-primary); letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 8px;">Schema proposto &mdash; novo recurso `kb_artigos`</h3>
+<pre><code>{
+  <span style="color: #fdba74;">"kb_artigos"</span>: [
+    {
+      "id": "art_001",
+      "slug": "justificativa-de-falta",
+      "titulo": "Como justificar uma falta",
+      "resumo": "Passo-a-passo para registrar justificativa válida...",
+      "categoria": "frequencia",
+      "tipos_demanda_relacionados": ["justificativa_falta"],
+      "idioma": "pt-BR",
+      "versao_semestre": "2026/1",
+      "base_regimental": "art. 38 do Regimento Interno",
+      "conteudo_md": "# Como justificar uma falta\n\n## Quando...",
+
+      <span style="color: #fdba74;">"metricas": {
+        "util_count": 47,
+        "nao_util_count": 3,
+        "view_count": 389,
+        "deflection_count": 28
+      }</span>,
+
+      "publicado_em": "2026-02-01T09:00:00Z",
+      "ultima_atualizacao": "2026-04-15T14:22:00Z",
+      "autor_matricula": "20240002",
+      "status_publicacao": "publicado" <span style="color: #94a3b8;">// rascunho | publicado | arquivado</span>
+    }
+  ],
+
+  <span style="color: #fdba74;">"kb_searches_sem_resultado"</span>: [
+    { "q": "abono de falta paternidade", "em": "2026-05-10T...", "count": 7 }
+  ]
+}
+
+<span style="color: #94a3b8;">// Demanda ganha 1 campo opcional, nada destrutivo:</span>
+{
+  ...campos atuais...,
+  <span style="color: #fdba74;">"originado_apos_kb"</span>: ["art_001"] <span style="color: #94a3b8;">// artigos que o aluno
+  // viu antes de decidir abrir mesmo assim &mdash; sinal de gap</span>
+}</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ INSPIRAÇÃO ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Inspiração de mercado</span>
+        <h2>O que copiamos, o que adaptamos</h2>
+        <p class="lede">
+            Três referências cobrem 95% do que precisamos. Cada uma tem uma boa ideia que adaptamos pro contexto acadêmico onde regulamento muda por semestre.
+        </p>
+
+        <div class="inspo-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Referência</th>
+                        <th>O que faz</th>
+                        <th>Como adaptamos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <a href="https://www.zendesk.com/service/help-center/" target="_blank" rel="noopener">Zendesk Guide</a>
+                            <div style="font-size: 0.75rem; color: var(--slate-400); margin-top: 4px;">Help center com busca, categorias, útil/não útil</div>
+                        </td>
+                        <td>
+                            Hub público de artigos, busca full-text, categorias hierárquicas, feedback útil/não útil por artigo, e métrica de deflection medida em tickets <em>não criados</em> após a leitura.
+                        </td>
+                        <td>
+                            Mesma estrutura, mas com <strong>versão por semestre</strong> (regimento muda em janeiro e julho) e base regimental obrigatória em todo artigo de processo. Sem comentários públicos &mdash; só feedback estruturado.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="https://www.intercom.com/help-center" target="_blank" rel="noopener">Intercom Articles</a>
+                            <div style="font-size: 0.75rem; color: var(--slate-400); margin-top: 4px;">Deflection inline antes do form</div>
+                        </td>
+                        <td>
+                            Quando o usuário começa a abrir um chat, o Messenger sugere artigos antes do form. Mede quantas conversas <em>não</em> aconteceram &mdash; deflection rate como KPI primário.
+                        </td>
+                        <td>
+                            Implementação direta no <span class="mono">modais.js</span> &mdash; step intermediário entre "selecionar tipo" e "preencher form". Botão de escape sempre visível, sem dark pattern. Tracking grava qual artigo viu antes de abrir.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="https://stripe.com/docs" target="_blank" rel="noopener">Stripe Docs</a>
+                            <div style="font-size: 0.75rem; color: var(--slate-400); margin-top: 4px;">UX de leitura, sumário fixo, exemplos reais</div>
+                        </td>
+                        <td>
+                            Sumário lateral sticky, hierarquia clara, exemplos de código embedados, busca instantânea com sugestão. Padrão-ouro de leitura técnica.
+                        </td>
+                        <td>
+                            Mesmo sumário sticky. Em vez de exemplos de código, mostramos <strong>callouts de prazo do calendário institucional vigente</strong> e citação do artigo do regimento &mdash; nosso equivalente a "código que funciona".
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ============ KPIs ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Métricas de sucesso</span>
+        <h2>Como saberemos que funciona</h2>
+        <p class="lede">
+            KB sem métrica vira cemitério de PDF. Esses quatro KPIs dizem se está viva, sendo lida, e evitando ticket de verdade.
+        </p>
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <span class="label">Deflection rate</span>
+                <span class="value"><span class="text-gradient-warm">&gt; 30%</span></span>
+                <span class="hint">% de fluxos de "nova demanda" que terminam sem ticket após o step de deflection. Abaixo de 15% &rarr; conteúdo ou busca ruim.</span>
+            </div>
+            <div class="kpi-card">
+                <span class="label">Razão útil / total</span>
+                <span class="value"><span class="text-gradient-warm">&gt; 85%</span></span>
+                <span class="hint">Por artigo. Abaixo de 70% acende flag <em>"revisar"</em> no painel admin. Proxy direto de qualidade.</span>
+            </div>
+            <div class="kpi-card">
+                <span class="label">Buscas sem resultado</span>
+                <span class="value"><span class="text-gradient-warm">&lt; 10%</span></span>
+                <span class="hint">Cada query sem hit vira item de backlog de conteúdo. Hoje seria 100% &mdash; KB não existe.</span>
+            </div>
+            <div class="kpi-card">
+                <span class="label">Tickets repetidos / tipo</span>
+                <span class="value"><span class="text-gradient-warm">-40%</span></span>
+                <span class="hint">Comparar tipo de demanda antes/depois de publicar o artigo correspondente. Medição clara de impacto.</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ ESFORÇO ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Esforço & dependências</span>
+        <h2>Onde no código isso toca</h2>
+        <p class="lede">
+            Página nova + serviço novo + um step extra no modal existente. Schema da demanda só ganha um campo opcional &mdash; nada quebra.
+        </p>
+        <div class="effort-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Componente</th>
+                        <th>Mudança</th>
+                        <th>Esforço</th>
+                        <th>Dependência</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="mono">src/pages/kb/</span> <em style="color: var(--slate-400);">(novo)</em></td>
+                        <td>Hub com listagem por categoria, página de artigo com sumário sticky, renderização markdown.</td>
+                        <td><span class="effort-tag m">M</span></td>
+                        <td>&mdash;</td>
+                    </tr>
+                    <tr>
+                        <td><span class="mono">src/services/kb.js</span> <em style="color: var(--slate-400);">(novo)</em></td>
+                        <td>Busca full-text local (tokenização + tolerância a typos), tracking de deflection/util/view, query log.</td>
+                        <td><span class="effort-tag s">S</span></td>
+                        <td>&mdash;</td>
+                    </tr>
+                    <tr>
+                        <td><span class="mono">src/data/artigos.js</span> <em style="color: var(--slate-400);">(novo)</em></td>
+                        <td>Array inicial com 8&ndash;10 artigos seed (os tipos de demanda existentes). Versão 2026/1.</td>
+                        <td><span class="effort-tag xs">XS</span></td>
+                        <td>&mdash;</td>
+                    </tr>
+                    <tr>
+                        <td><span class="mono">src/components/structures/modais.js</span></td>
+                        <td>Inserir step de deflection entre seleção de tipo e form. Tracking de "viu / abriu mesmo assim".</td>
+                        <td><span class="effort-tag s">S</span></td>
+                        <td><strong>F08 &mdash; formulário dinâmico</strong> (opcional)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="mono">src/pages/admin/kb-editor.js</span> <em style="color: var(--slate-400);">(novo)</em></td>
+                        <td>Editor markdown com preview lateral, versionamento por semestre, controle de publicação.</td>
+                        <td><span class="effort-tag m">M</span></td>
+                        <td>Versão completa &mdash; fora do MVP</td>
+                    </tr>
+                    <tr>
+                        <td>Dependência externa</td>
+                        <td><span class="mono">marked</span> ou <span class="mono">markdown-it</span> &mdash; só para renderizar artigos.</td>
+                        <td><span class="effort-tag xs">XS</span></td>
+                        <td>+~30kb gzipped no bundle</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ============ MVP vs VERSÃO COMPLETA ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Quick wins vs. versão completa</span>
+        <h2>O que cabe em 2 dias, o que pede 2 semanas</h2>
+        <p class="lede">
+            Para apresentar o conceito, 5 artigos hardcoded e um viewer já bastam. A versão completa vira ferramenta institucional.
+        </p>
+        <div class="two-col">
+
+            <div class="col-card">
+                <h3>MVP &mdash; 1 a 2 dias</h3>
+                <p class="sub">Suficiente para apresentação</p>
+                <ul>
+                    <li>5 artigos seed hardcoded em <span class="mono">src/data/artigos.js</span> (justificativa, aproveitamento, trancamento, segunda chamada, revisão de nota).</li>
+                    <li>Página de listagem por categoria + viewer markdown simples (com <span class="mono">marked</span>).</li>
+                    <li>Sem busca full-text &mdash; só listagem e clique direto.</li>
+                    <li>Deflection: step extra no modal mostrando 2&ndash;3 artigos do tipo selecionado, hardcoded por tipo.</li>
+                    <li>Tracking básico: incrementa <span class="mono">view_count</span> e <span class="mono">deflection_count</span> em localStorage.</li>
+                </ul>
+            </div>
+
+            <div class="col-card warm">
+                <h3>Versão completa &mdash; 2 semanas</h3>
+                <p class="sub">A feature em forma final</p>
+                <ul>
+                    <li>Busca full-text com tolerância a typos e sugestão enquanto digita.</li>
+                    <li>Editor admin com markdown + preview lateral, versionamento por semestre.</li>
+                    <li>Calendário institucional embed: callouts de prazo se atualizam automaticamente.</li>
+                    <li>Bilíngue PT/EN com fallback gracioso ("não traduzido ainda").</li>
+                    <li>Integração com IA Copilot (F01): IA resume o artigo na resposta do coord.</li>
+                    <li>Dashboard de KB: artigos com pior razão útil/total, queries sem resultado, gap de conteúdo.</li>
+                    <li>Cross-reference automática: ao publicar artigo com tag de tipo, deflection passa a oferecê-lo.</li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============ RISCOS ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Riscos & armadilhas</span>
+        <h2>O que pode dar errado, e como mitigar</h2>
+        <p class="lede">
+            KB desatualizada é pior que KB inexistente. O resto a gente conserta com bom processo.
+        </p>
+        <div class="risks-list">
+
+            <div class="risk-row">
+                <h4><small>Risco 01</small>Conteúdo desatualizado dá orientação errada</h4>
+                <p>
+                    Regimento muda em janeiro. Se o artigo de trancamento ficar com prazo do semestre passado, aluno perde o prazo real.
+                    <strong>Mitigação:</strong> campo <span class="mono">versao_semestre</span> obrigatório. Painel admin mostra <em>"artigos não atualizados há &gt; 180 dias"</em>. Processo formal de revisão a cada virada de semestre. Banner amarelo automático em artigos vencidos: <em>"este artigo é do semestre 2025/2 &mdash; pode estar desatualizado"</em>.
+                </p>
+            </div>
+
+            <div class="risk-row">
+                <h4><small>Risco 02</small>Aluno não lê (cultura de "pergunto antes de procurar")</h4>
+                <p>
+                    Se a deflection for fraca demais, o aluno clica direto em "abrir mesmo assim".
+                    <strong>Mitigação:</strong> step de deflection mostra <em>tempo médio de resposta da demanda</em> (~2 dias) vs <em>tempo do artigo</em> (~3 min). Incentivo claro. Mas <strong>nunca bloqueia</strong> &mdash; botão "abrir mesmo assim" sempre visível e equivalente em peso visual ao primário.
+                </p>
+            </div>
+
+            <div class="risk-row">
+                <h4><small>Risco 03</small>Busca ruim faz o aluno desistir</h4>
+                <p>
+                    Se "como tranco matricula" não devolve o artigo de trancamento, o aluno conclui que não existe e abre demanda.
+                    <strong>Mitigação:</strong> tokenização com remoção de acentos, sinônimos hardcoded (<span class="mono">{"matricula":["matricula","inscricao"]}</span>), e ranking por <span class="mono">view_count</span>. Toda busca sem resultado vai pro log <span class="mono">kb_searches_sem_resultado</span> &mdash; backlog de conteúdo automático.
+                </p>
+            </div>
+
+            <div class="risk-row">
+                <h4><small>Risco 04</small>Tom institucional formal demais</h4>
+                <p>
+                    Se o artigo começar com <em>"Em conformidade com a Resolução CONSEPE 14/2024, art. 38, parágrafo único..."</em>, o aluno fecha em 3 segundos.
+                    <strong>Mitigação:</strong> guia de redação: primeira frase em linguagem de aluno, base regimental sempre no rodapé do artigo. Callouts com prazo concreto ("até 22/05/2026"), não abstrato ("até 5 dias úteis após o evento gerador"). Revisão por um aluno antes de publicar.
+                </p>
+            </div>
+
+            <div class="risk-row">
+                <h4><small>Risco 05</small>Coord para de responder por achar que "tá na KB"</h4>
+                <p>
+                    Risco oposto: artigo existe, mas o caso é específico, e o coord só manda link sem ler a demanda.
+                    <strong>Mitigação:</strong> link a artigo é <strong>complemento</strong>, não substituto de resposta. Macros (F05) podem incluir o link, mas a resposta personalizada continua obrigatória. Audit log (F04) registra se a resposta tem só link &mdash; vira métrica de qualidade do coord.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="feature-footer">
+    <div class="container" style="max-width: 1080px; margin: 0 auto; padding: 0 24px;">
+        <p>Feature 09 de 10 &middot; <a href="index.html">Voltar ao hub &rarr;</a></p>
+    </div>
+</footer>
+
+<script>
+    const els = document.querySelectorAll('[data-reveal]');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('is-revealed');
+                obs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

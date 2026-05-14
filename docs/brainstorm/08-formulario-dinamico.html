@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FEATURE 08 — Formulário Dinâmico por Tipo de Demanda — Clarify Brainstorm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+    main.container { max-width: 1080px; margin: 0 auto; padding: 48px 24px 0; }
+
+    .feature-hero { padding: 32px 0 24px; }
+    .feature-hero h1 {
+        font-size: clamp(2rem, 4.5vw, 3.25rem);
+        font-weight: 700;
+        line-height: 1.04;
+        margin: 18px 0 16px;
+        color: var(--slate-900);
+    }
+    .feature-hero p.lead {
+        font-size: 1.125rem;
+        color: var(--slate-500);
+        margin: 0 0 22px;
+        max-width: 720px;
+        line-height: 1.55;
+    }
+    .pill-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .section { margin-top: 64px; }
+    .section h2.section-h {
+        font-size: 1.75rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        margin: 0 0 8px;
+        color: var(--slate-900);
+    }
+    .section p.section-lead {
+        color: var(--slate-500);
+        margin: 0 0 28px;
+        max-width: 720px;
+        line-height: 1.55;
+    }
+
+    /* Por que importa */
+    .why-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+        margin-top: 18px;
+    }
+    @media (min-width: 768px) {
+        .why-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .why-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        padding: 22px;
+    }
+    .why-card .num {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        color: var(--brand-primary);
+        font-weight: 700;
+    }
+    .why-card h4 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin: 8px 0 6px;
+        color: var(--slate-900);
+    }
+    .why-card p {
+        font-size: 0.9rem;
+        color: var(--slate-500);
+        line-height: 1.55;
+        margin: 0;
+    }
+
+    /* Personas */
+    .persona-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    @media (min-width: 900px) {
+        .persona-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .persona-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 18px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+    .persona-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .persona-avatar {
+        width: 38px; height: 38px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.95rem;
+    }
+    .persona-head h4 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--slate-900);
+    }
+    .persona-head span {
+        font-size: 0.72rem;
+        color: var(--slate-400);
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+    .ba-block {
+        font-size: 0.9rem;
+        line-height: 1.55;
+        padding: 12px 14px;
+        border-radius: 12px;
+    }
+    .before {
+        background: rgba(239, 68, 68, 0.06);
+        border: 1px solid rgba(239, 68, 68, 0.18);
+        color: #7f1d1d;
+    }
+    .before .tag, .after .tag {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        opacity: 0.7;
+        display: block;
+        margin-bottom: 4px;
+    }
+    .after {
+        background: rgba(202, 95, 21, 0.06);
+        border: 1px solid rgba(202, 95, 21, 0.22);
+        color: var(--brand-primary-deep);
+    }
+    .persona-impact {
+        font-size: 0.85rem;
+        color: var(--slate-700);
+        font-weight: 600;
+        line-height: 1.5;
+        border-top: 1px dashed var(--slate-200);
+        padding-top: 12px;
+    }
+
+    /* Fluxo */
+    .flow-list { counter-reset: flow; list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+    .flow-list li {
+        counter-increment: flow;
+        position: relative;
+        padding: 18px 20px 18px 64px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+    }
+    .flow-list li::before {
+        content: counter(flow, decimal-leading-zero);
+        position: absolute;
+        left: 18px; top: 18px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--brand-primary);
+        background: rgba(202, 95, 21, 0.10);
+        border: 1px solid rgba(202, 95, 21, 0.22);
+        border-radius: 8px;
+        padding: 3px 8px;
+    }
+    .flow-list h5 {
+        margin: 0 0 4px;
+        font-size: 0.98rem;
+        font-weight: 700;
+        color: var(--slate-900);
+    }
+    .flow-list p {
+        margin: 0;
+        font-size: 0.88rem;
+        color: var(--slate-500);
+        line-height: 1.55;
+    }
+
+    /* Mockups */
+    .mock-stack { display: grid; gap: 28px; }
+    @media (min-width: 980px) {
+        .mock-stack.mk2 { grid-template-columns: 1fr 1fr; align-items: start; }
+    }
+    .mock-title {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--brand-primary);
+        margin: 0 0 10px;
+    }
+    .mock-sub {
+        color: var(--slate-500);
+        font-size: 0.88rem;
+        margin: 0 0 14px;
+        line-height: 1.5;
+    }
+
+    /* Form mock */
+    .fm-modal {
+        background: #fff;
+        border-radius: 14px;
+        font-size: 0.85rem;
+    }
+    .fm-body { padding: 18px 20px 12px; }
+    .fm-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 14px;
+    }
+    .fm-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: var(--brand-primary);
+    }
+    .fm-eyebrow::before {
+        content: '';
+        width: 6px; height: 6px;
+        border-radius: 999px;
+        background: var(--brand-primary);
+        box-shadow: 0 0 0 3px rgba(202, 95, 21, 0.18);
+    }
+    .fm-close {
+        width: 26px; height: 26px;
+        border-radius: 8px;
+        background: var(--slate-100);
+        color: var(--slate-500);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+    }
+    .fm-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        line-height: 1.25;
+        color: var(--slate-900);
+        margin: 0 0 12px;
+    }
+    .fm-title .grad { background: linear-gradient(135deg, #ca5f15, #e07a30); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+    .fm-typesel {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        margin: 6px 0 16px;
+    }
+    .fm-type {
+        border: 1px solid var(--slate-200);
+        border-radius: 10px;
+        padding: 8px 10px;
+        font-size: 0.78rem;
+        color: var(--slate-700);
+        background: #fff;
+        line-height: 1.25;
+    }
+    .fm-type.active {
+        border-color: rgba(202, 95, 21, 0.55);
+        background: rgba(202, 95, 21, 0.06);
+        color: var(--brand-primary-deep);
+        font-weight: 700;
+        box-shadow: 0 0 0 2px rgba(202, 95, 21, 0.10);
+    }
+    .fm-type small {
+        display: block;
+        font-size: 0.66rem;
+        font-weight: 500;
+        color: var(--slate-400);
+        margin-top: 2px;
+    }
+    .fm-type.active small { color: var(--brand-primary); opacity: 0.85; }
+
+    .fm-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--slate-500);
+        margin: 0 0 4px;
+    }
+    .fm-label .req { color: var(--brand-primary); }
+    .fm-help {
+        font-size: 0.72rem;
+        color: var(--slate-400);
+        margin: 4px 0 0;
+    }
+    .fm-field { margin-bottom: 14px; }
+    .fm-input, .fm-select, .fm-area {
+        width: 100%;
+        border: 1px solid var(--slate-200);
+        border-radius: 10px;
+        padding: 8px 10px;
+        background: #fff;
+        font-family: inherit;
+        font-size: 0.85rem;
+        color: var(--slate-900);
+    }
+    .fm-area { min-height: 50px; }
+    .fm-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .fm-radio {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .fm-radio-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border: 1px solid var(--slate-200);
+        border-radius: 10px;
+        font-size: 0.82rem;
+        color: var(--slate-700);
+    }
+    .fm-radio-item .dot {
+        width: 14px; height: 14px;
+        border-radius: 999px;
+        border: 2px solid var(--slate-300);
+        flex-shrink: 0;
+    }
+    .fm-radio-item.checked {
+        background: rgba(202, 95, 21, 0.06);
+        border-color: rgba(202, 95, 21, 0.40);
+        color: var(--brand-primary-deep);
+        font-weight: 600;
+    }
+    .fm-radio-item.checked .dot {
+        border-color: var(--brand-primary);
+        background: radial-gradient(circle, var(--brand-primary) 40%, transparent 45%);
+    }
+
+    .fm-condicional {
+        margin-top: 6px;
+        padding: 10px 12px;
+        border-left: 3px solid var(--brand-primary);
+        background: rgba(202, 95, 21, 0.05);
+        border-radius: 0 10px 10px 0;
+        font-size: 0.78rem;
+        color: var(--brand-primary-deep);
+    }
+    .fm-condicional strong { display: block; margin-bottom: 4px; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; }
+
+    .fm-anexo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border: 1px dashed var(--slate-300);
+        border-radius: 10px;
+        padding: 10px 12px;
+        background: var(--brand-surface);
+        font-size: 0.78rem;
+        color: var(--slate-700);
+    }
+    .fm-anexo .icon {
+        width: 30px; height: 30px;
+        background: rgba(202, 95, 21, 0.10);
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--brand-primary);
+        font-weight: 700;
+    }
+    .fm-anexo small {
+        display: block;
+        color: var(--slate-400);
+        font-size: 0.7rem;
+        margin-top: 2px;
+    }
+
+    .fm-progress-bar {
+        margin: 12px 0 16px;
+        padding: 8px 12px;
+        background: var(--brand-surface);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.74rem;
+        color: var(--slate-500);
+    }
+    .fm-progress-track {
+        flex: 1;
+        height: 5px;
+        background: var(--slate-100);
+        border-radius: 999px;
+        overflow: hidden;
+    }
+    .fm-progress-track .fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--brand-primary), var(--brand-accent));
+        border-radius: 999px;
+    }
+    .fm-progress-bar strong {
+        color: var(--slate-900);
+        font-weight: 700;
+    }
+
+    .fm-footer {
+        padding: 12px 20px;
+        border-top: 1px solid var(--slate-100);
+        background: linear-gradient(180deg, #fff, var(--brand-surface));
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .fm-btn-ghost {
+        padding: 8px 14px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--slate-700);
+        border: 1px solid var(--slate-200);
+        border-radius: 10px;
+        background: #fff;
+    }
+    .fm-btn-primary {
+        padding: 8px 14px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #fff;
+        background: var(--brand-primary);
+        border-radius: 10px;
+        box-shadow: 0 8px 20px -10px rgba(202, 95, 21, 0.6);
+    }
+
+    /* Coord review fields */
+    .review-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        padding: 16px 18px;
+    }
+    .review-row {
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 16px;
+        padding: 10px 0;
+        border-bottom: 1px dashed var(--slate-100);
+        font-size: 0.85rem;
+    }
+    .review-row:last-child { border-bottom: none; }
+    .review-row .k {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+    }
+    .review-row .v { color: var(--slate-900); }
+    .review-row .v.attach {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--brand-surface);
+        border: 1px solid var(--brand-surface-dim);
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        color: var(--brand-primary-deep);
+        font-weight: 600;
+    }
+    .review-banner {
+        background: rgba(15, 23, 42, 0.04);
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 0.78rem;
+        color: var(--slate-500);
+        font-style: italic;
+    }
+
+    /* Schema editor mock */
+    .editor-mock {
+        display: grid;
+        grid-template-columns: 200px 1fr 220px;
+        gap: 0;
+        background: #fff;
+        font-size: 0.82rem;
+    }
+    @media (max-width: 880px) {
+        .editor-mock { grid-template-columns: 1fr; }
+    }
+    .editor-col { padding: 14px; border-right: 1px solid var(--slate-100); }
+    .editor-col:last-child { border-right: none; }
+    .editor-col h5 {
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--slate-400);
+        margin: 0 0 12px;
+    }
+    .editor-palette-item {
+        background: var(--brand-surface);
+        border: 1px solid var(--brand-surface-dim);
+        border-radius: 8px;
+        padding: 8px 10px;
+        font-size: 0.78rem;
+        color: var(--brand-primary-deep);
+        font-weight: 600;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: grab;
+    }
+    .editor-palette-item .grip {
+        color: var(--slate-400);
+        font-family: 'JetBrains Mono', monospace;
+    }
+    .editor-canvas-field {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 10px;
+        padding: 10px 12px;
+        margin-bottom: 8px;
+        position: relative;
+    }
+    .editor-canvas-field.dragging {
+        border-color: var(--brand-primary);
+        background: rgba(202, 95, 21, 0.05);
+        border-style: dashed;
+    }
+    .editor-canvas-field .name {
+        font-weight: 700;
+        color: var(--slate-900);
+        font-size: 0.85rem;
+    }
+    .editor-canvas-field .meta {
+        font-size: 0.7rem;
+        color: var(--slate-400);
+        margin-top: 2px;
+        font-family: 'JetBrains Mono', monospace;
+    }
+    .editor-canvas-field .req-tag {
+        position: absolute;
+        top: 8px; right: 10px;
+        font-size: 0.6rem;
+        font-weight: 700;
+        color: var(--brand-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+    .editor-inspector .ins-row {
+        margin-bottom: 12px;
+    }
+    .editor-inspector .ins-row label {
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--slate-500);
+        display: block;
+        margin-bottom: 4px;
+    }
+    .editor-inspector .ins-row .val {
+        font-size: 0.82rem;
+        color: var(--slate-900);
+        padding: 6px 10px;
+        background: var(--slate-100);
+        border-radius: 8px;
+    }
+    .editor-inspector .ins-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.78rem;
+        color: var(--slate-700);
+    }
+    .editor-inspector .ins-toggle .sw {
+        width: 26px; height: 14px;
+        background: var(--brand-primary);
+        border-radius: 999px;
+        position: relative;
+    }
+    .editor-inspector .ins-toggle .sw::after {
+        content: '';
+        position: absolute;
+        top: 2px; right: 2px;
+        width: 10px; height: 10px;
+        background: #fff;
+        border-radius: 999px;
+    }
+
+    /* Inspiração table */
+    .insp-table {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    /* KPI cards */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+    }
+    .kpi-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        padding: 22px;
+    }
+    .kpi-card .num {
+        font-size: 1.85rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        line-height: 1;
+    }
+    .kpi-card .label {
+        margin-top: 10px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--slate-900);
+    }
+    .kpi-card .desc {
+        font-size: 0.8rem;
+        color: var(--slate-500);
+        margin-top: 6px;
+        line-height: 1.5;
+    }
+
+    /* Effort + risks */
+    .two-col {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    @media (min-width: 880px) {
+        .two-col { grid-template-columns: 1fr 1fr; }
+    }
+    .col-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        padding: 24px;
+    }
+    .col-card h4 {
+        margin: 0 0 14px;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .col-card h4 .badge {
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--brand-primary);
+        background: rgba(202, 95, 21, 0.10);
+        border-radius: 999px;
+        padding: 3px 8px;
+    }
+    .col-card ul { padding-left: 18px; margin: 0; color: var(--slate-700); font-size: 0.9rem; line-height: 1.7; }
+    .col-card ul li::marker { color: var(--brand-primary); }
+
+    .risk-list { display: grid; gap: 12px; }
+    .risk-row {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        padding: 16px 18px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    @media (min-width: 720px) {
+        .risk-row { grid-template-columns: 240px 1fr; }
+    }
+    .risk-row .risk-name {
+        font-weight: 700;
+        color: var(--slate-900);
+        font-size: 0.92rem;
+    }
+    .risk-row .risk-name small {
+        display: block;
+        font-size: 0.7rem;
+        color: var(--brand-primary);
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-top: 2px;
+    }
+    .risk-row .mit {
+        font-size: 0.88rem;
+        color: var(--slate-700);
+        line-height: 1.55;
+    }
+    .risk-row .mit strong {
+        color: var(--brand-primary-deep);
+    }
+</style>
+</head>
+<body>
+
+<header style="position: sticky; top: 0; z-index: 10; background: rgba(255, 248, 246, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(15, 23, 42, 0.06);">
+    <div class="container" style="padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; max-width: 1080px; margin: 0 auto;">
+        <a href="index.html" style="display: inline-flex; align-items: center; gap: 8px; color: var(--slate-700); text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+            <span style="font-size: 1.1rem;">←</span> Hub de features
+        </a>
+        <span class="eyebrow eyebrow-muted">FEATURE 08 / 10</span>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- 5.2 HERO -->
+    <section class="feature-hero">
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span class="tier-badge tier-b">Tier B — Boas, opcionais</span>
+            <span class="eyebrow eyebrow-muted">Schema-driven UI</span>
+        </div>
+        <h1 class="tracking-headline">
+            Formulário <span class="text-gradient-warm">dinâmico</span><br/>
+            por tipo de demanda.
+        </h1>
+        <p class="lead">
+            Cada tipo de demanda acadêmica precisa de informações diferentes — justificativa de falta pede atestado e data, aproveitamento de créditos pede ementa e carga horária. Em vez de um <span class="mono">textarea</span> genérico, um schema declarativo descreve os campos exigidos e o modal monta o formulário certo na hora.
+        </p>
+        <div class="pill-row">
+            <span class="pill pill-warm">Schema</span>
+            <span class="pill">JSON</span>
+            <span class="pill">Conditional</span>
+            <span class="pill">ServiceNow-like</span>
+        </div>
+    </section>
+
+    <!-- 5.3 POR QUE IMPORTA -->
+    <section class="section" data-reveal>
+        <h2 class="section-h">Por que isso importa</h2>
+        <p class="section-lead">
+            Hoje, o modal de nova demanda em <span class="mono">Clarify/src/components/structures/modais.js</span> (linhas 74–158) pede só dois campos: <span class="mono">título</span> e <span class="mono">descrição</span> com mínimo de 10 caracteres. O coordenador recebe um parágrafo livre — e quase sempre precisa pedir os dados que faltam. Isso vira o status <span class="mono">requer_ajuste</span>, três mensagens a mais e dias de atraso. Um Google Form mal-feito tem mais estrutura que isso.
+        </p>
+        <div class="why-grid">
+            <div class="why-card">
+                <span class="num">01</span>
+                <h4>Descrição genérica gera retrabalho</h4>
+                <p>
+                    Em <span class="mono">templateNovaDemanda</span> existe um único <span class="mono">&lt;textarea&gt;</span> de descrição. Para uma justificativa de falta, o aluno esquece a data; para aproveitamento, esquece a carga horária. Coordenador devolve para complementar.
+                </p>
+            </div>
+            <div class="why-card">
+                <span class="num">02</span>
+                <h4>Vista de revisão é um blob</h4>
+                <p>
+                    <span class="mono">templateDetalhes</span> (linha 335) joga um <span class="mono">whitespace-pre-wrap</span> com tudo dentro. Coordenador tem que ler um parágrafo livre para extrair "qual disciplina? qual data? cadê o atestado?".
+                </p>
+            </div>
+            <div class="why-card">
+                <span class="num">03</span>
+                <h4>Tipo de demanda é apenas um título</h4>
+                <p>
+                    Hoje o "tipo" é só o conteúdo do campo <span class="mono">titulo</span> que o aluno escreve. Não existe taxonomia, não existe contrato de quais dados o tipo X exige. É texto livre disfarçado de categoria.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5.4 PERSONAS -->
+    <section class="section" data-reveal>
+        <h2 class="section-h">Personas impactadas</h2>
+        <p class="section-lead">
+            Os três lados ganham — mas o coordenador é quem mais sofre hoje com idas e voltas.
+        </p>
+        <div class="persona-grid">
+
+            <div class="persona-card">
+                <div class="persona-head">
+                    <div class="persona-avatar">C</div>
+                    <div>
+                        <h4>Carla Pereira</h4>
+                        <span>Aluna · 20240003</span>
+                    </div>
+                </div>
+                <div class="ba-block before">
+                    <span class="tag">Antes</span>
+                    Abre demanda "Justificativa de falta", escreve um parágrafo descrevendo. Dois dias depois recebe: "<em>precisamos da data exata, da disciplina e do atestado</em>". Reabre, completa, espera de novo.
+                </div>
+                <div class="ba-block after">
+                    <span class="tag">Depois</span>
+                    Seleciona "Justificativa de falta" e o form pede exatamente disciplina, data e atestado — com indicador "3/4 campos". Envia uma vez, completa.
+                </div>
+                <p class="persona-impact">Menos ansiedade, menos retrabalho. Vê desde o início o que precisa anexar.</p>
+            </div>
+
+            <div class="persona-card">
+                <div class="persona-head">
+                    <div class="persona-avatar">B</div>
+                    <div>
+                        <h4>Bruno Almeida</h4>
+                        <span>Coordenador · 20240002</span>
+                    </div>
+                </div>
+                <div class="ba-block before">
+                    <span class="tag">Antes</span>
+                    Abre a demanda e lê um parágrafo livre. Caça mentalmente: "data? disciplina? atestado?". 40% das demandas voltam com status <span class="mono">requer_ajuste</span> só por dados ausentes.
+                </div>
+                <div class="ba-block after">
+                    <span class="tag">Depois</span>
+                    Vê campos estruturados: Disciplina = Cálculo I · Data = 03/05/2026 · Atestado = anexado.pdf. Decide em segundos, sem precisar abrir thread para perguntar.
+                </div>
+                <p class="persona-impact">Tempo de revisão por demanda cai. Foco em julgar mérito, não em coletar dado.</p>
+            </div>
+
+            <div class="persona-card">
+                <div class="persona-head">
+                    <div class="persona-avatar">IF</div>
+                    <div>
+                        <h4>Instituto Federal</h4>
+                        <span>Instituição</span>
+                    </div>
+                </div>
+                <div class="ba-block before">
+                    <span class="tag">Antes</span>
+                    Cada coordenação inventa seus próprios critérios e exige documentos via mensagem. Auditar conformidade é manual e inconsistente.
+                </div>
+                <div class="ba-block after">
+                    <span class="tag">Depois</span>
+                    Schema versionado por tipo é o "contrato institucional". Pesquisas como "% de aproveitamentos com ementa anexa" viram queries triviais sobre <span class="mono">campos_preenchidos</span>.
+                </div>
+                <p class="persona-impact">Padronização sem rigidez. Coord coordena, instituição audita, dados ficam estruturados.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 5.5 FLUXO -->
+    <section class="section" data-reveal>
+        <h2 class="section-h">Como funcionaria — fluxo</h2>
+        <p class="section-lead">
+            Do clique em "Nova solicitação" até o coordenador ver dados estruturados, com schema versionado por trás.
+        </p>
+        <ol class="flow-list">
+            <li>
+                <h5>Aluno escolhe o tipo no topo do modal</h5>
+                <p>O atual campo único de título vira um seletor visual (radios) com os 5 tipos canônicos. Cada tipo carrega o schema correspondente de <span class="mono">formSchemas.js</span>.</p>
+            </li>
+            <li>
+                <h5>Renderer monta o form a partir do schema</h5>
+                <p>Um novo módulo <span class="mono">formRenderer.js</span> recebe a árvore JSON de campos e devolve HTML — substituindo o bloco fixo do <span class="mono">templateNovaDemanda</span>. Cada campo carrega seu tipo (<span class="mono">select / date / textarea / anexo / radio / number</span>), label, help text e regras.</p>
+            </li>
+            <li>
+                <h5>Campos condicionais aparecem conforme o aluno responde</h5>
+                <p>Trancamento de matrícula com motivo "saúde" revela campo "atestado médico" obrigatório. Regras de visibilidade são parte do schema (<span class="mono">visivel_se: {{ "motivo": "saude" }}</span>).</p>
+            </li>
+            <li>
+                <h5>Validação acontece antes de habilitar "Enviar"</h5>
+                <p>Substitui a regra atual <span class="mono">titulo &gt;= 4 && descricao &gt;= 10</span> por validação por campo (obrigatórios preenchidos, <span class="mono">min_len</span>, <span class="mono">max</span> em datas, tipos aceitos em anexos).</p>
+            </li>
+            <li>
+                <h5>Demanda persiste com <span class="mono">tipo_id + schema_versao + campos_preenchidos</span></h5>
+                <p>O modelo atual ganha duas chaves novas. <span class="mono">descricao</span> permanece como campo opcional dentro do schema, para casos que ainda precisam de texto livre.</p>
+            </li>
+            <li>
+                <h5>Coordenador vê os mesmos campos estruturados na revisão</h5>
+                <p>O bloco "Detalhes da solicitação" em <span class="mono">templateDetalhes</span> (linha 329) é substituído por uma renderização baseada no schema da época em que a demanda foi criada — mesmo que a instituição atualize depois.</p>
+            </li>
+        </ol>
+    </section>
+
+    <!-- 5.6 MOCKUPS -->
+    <section class="section" data-reveal>
+        <h2 class="section-h">Mockup conceitual</h2>
+        <p class="section-lead">
+            Três vistas: o modal do aluno preenchendo, o editor de schema do admin e a revisão estruturada do coordenador.
+        </p>
+
+        <p class="mock-title">Vista 01 · Modal de nova demanda (aluno)</p>
+        <p class="mock-sub">
+            Seletor de tipo no topo, depois o form correspondente. Aqui o aluno selecionou "Aproveitamento de Créditos" e está no meio do preenchimento — 4 de 6 campos.
+        </p>
+
+        <div class="mock-stack mk2">
+
+            <!-- MOCK 1A: Modal nova demanda com Aproveitamento -->
+            <div class="mockup-window">
+                <div class="mockup-bar">
+                    <span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span>
+                    <span style="margin-left: 12px; font-size: 0.72rem; color: var(--slate-500); font-family: 'JetBrains Mono', monospace;">clarify · nova demanda</span>
+                </div>
+                <div class="fm-modal">
+                    <div class="fm-body">
+                        <div class="fm-head">
+                            <span class="fm-eyebrow">Nova solicitação</span>
+                            <span class="fm-close">×</span>
+                        </div>
+                        <p class="fm-title">Conte para a coordenação<br/><span class="grad">o que precisa ser resolvido.</span></p>
+
+                        <p class="fm-label">Tipo de demanda <span class="req">*</span></p>
+                        <div class="fm-typesel">
+                            <div class="fm-type">Justificativa de Falta<small>4 campos</small></div>
+                            <div class="fm-type active">Aproveitamento de Créditos<small>6 campos · v2</small></div>
+                            <div class="fm-type">Trancamento de Matrícula<small>3 campos</small></div>
+                            <div class="fm-type">Revisão de Nota<small>5 campos</small></div>
+                        </div>
+
+                        <div class="fm-progress-bar">
+                            <div class="fm-progress-track"><div class="fill" style="width: 66%;"></div></div>
+                            <span><strong>4 de 6</strong> campos</span>
+                        </div>
+
+                        <div class="fm-field">
+                            <p class="fm-label">Disciplina cursada (origem) <span class="req">*</span></p>
+                            <input class="fm-input" value="Cálculo Diferencial I" />
+                        </div>
+                        <div class="fm-field">
+                            <p class="fm-label">Instituição de origem <span class="req">*</span></p>
+                            <input class="fm-input" value="UFPE — Universidade Federal de Pernambuco" />
+                        </div>
+                        <div class="fm-row">
+                            <div class="fm-field">
+                                <p class="fm-label">Disciplina destino <span class="req">*</span></p>
+                                <select class="fm-select"><option>Cálculo I (MAT-201)</option></select>
+                            </div>
+                            <div class="fm-field">
+                                <p class="fm-label">Carga horária <span class="req">*</span></p>
+                                <input class="fm-input" value="72 horas" />
+                                <p class="fm-help">Total da disciplina cursada na origem.</p>
+                            </div>
+                        </div>
+                        <div class="fm-field">
+                            <p class="fm-label">Ementa da disciplina cursada <span class="req">*</span></p>
+                            <div class="fm-anexo">
+                                <span class="icon">PDF</span>
+                                <div>
+                                    ementa-calculo-ufpe.pdf
+                                    <small>312 KB · pdf, jpg ou png</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fm-field">
+                            <p class="fm-label" style="color: var(--slate-400);">Histórico escolar <span class="req">*</span></p>
+                            <div class="fm-anexo" style="border-style: dashed;">
+                                <span class="icon" style="background: var(--slate-100); color: var(--slate-400);">＋</span>
+                                <div style="color: var(--slate-400);">
+                                    Anexar histórico
+                                    <small>Aceita pdf · obrigatório</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fm-footer">
+                        <button class="fm-btn-ghost">Cancelar</button>
+                        <button class="fm-btn-primary" style="opacity: 0.55;">Enviar solicitação →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MOCK 1B: Trancamento com campo condicional -->
+            <div class="mockup-window">
+                <div class="mockup-bar">
+                    <span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span>
+                    <span style="margin-left: 12px; font-size: 0.72rem; color: var(--slate-500); font-family: 'JetBrains Mono', monospace;">clarify · campo condicional</span>
+                </div>
+                <div class="fm-modal">
+                    <div class="fm-body">
+                        <div class="fm-head">
+                            <span class="fm-eyebrow">Trancamento · v1</span>
+                            <span class="fm-close">×</span>
+                        </div>
+                        <p class="fm-title">Motivo do trancamento</p>
+
+                        <div class="fm-field">
+                            <p class="fm-label">Motivo principal <span class="req">*</span></p>
+                            <div class="fm-radio">
+                                <div class="fm-radio-item"><span class="dot"></span> Pessoal</div>
+                                <div class="fm-radio-item"><span class="dot"></span> Financeiro</div>
+                                <div class="fm-radio-item checked"><span class="dot"></span> Saúde</div>
+                                <div class="fm-radio-item"><span class="dot"></span> Outro</div>
+                            </div>
+                        </div>
+
+                        <div class="fm-condicional">
+                            <strong>Campo condicional revelado</strong>
+                            Motivo = "Saúde" ativou o campo <span class="mono">atestado_medico</span> como obrigatório. Regra do schema: <span class="mono">visivel_se: motivo == "saude"</span>.
+                        </div>
+
+                        <div class="fm-field" style="margin-top: 12px;">
+                            <p class="fm-label">Atestado médico <span class="req">*</span></p>
+                            <div class="fm-anexo" style="border-style: dashed;">
+                                <span class="icon" style="background: var(--slate-100); color: var(--slate-400);">＋</span>
+                                <div style="color: var(--slate-400);">
+                                    Anexar atestado
+                                    <small>Aceita pdf, jpg, png</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fm-field">
+                            <p class="fm-label">Justificativa <span class="req">*</span></p>
+                            <textarea class="fm-area" placeholder="Descreva brevemente a situação. Mínimo 30 caracteres.">Acompanhamento médico contínuo desde abril, recomendação</textarea>
+                            <p class="fm-help">53 / 30 caracteres mínimos · ok</p>
+                        </div>
+
+                        <div class="fm-field">
+                            <p class="fm-label">Retorno previsto</p>
+                            <input class="fm-input" value="2026-08-01" type="text" />
+                            <p class="fm-help">Opcional · ajuda a coordenação a planejar reingresso.</p>
+                        </div>
+                    </div>
+                    <div class="fm-footer">
+                        <button class="fm-btn-ghost">Salvar rascunho</button>
+                        <button class="fm-btn-primary">Enviar solicitação →</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- MOCK 2: Editor de schema admin -->
+        <div style="margin-top: 36px;">
+            <p class="mock-title">Vista 02 · Editor visual de schema (admin)</p>
+            <p class="mock-sub">
+                Coordenação de curso arrasta tipos de campo da paleta para o canvas. À direita, edita propriedades do campo selecionado. Schema é salvo versionado: demandas antigas continuam exibindo a versão da época.
+            </p>
+
+            <div class="mockup-window">
+                <div class="mockup-bar">
+                    <span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span>
+                    <span style="margin-left: 12px; font-size: 0.72rem; color: var(--slate-500); font-family: 'JetBrains Mono', monospace;">clarify · admin · justificativa_falta_v2 (rascunho)</span>
+                </div>
+                <div class="editor-mock">
+
+                    <div class="editor-col">
+                        <h5>Paleta · arraste</h5>
+                        <div class="editor-palette-item"><span class="grip">⋮⋮</span> Texto curto</div>
+                        <div class="editor-palette-item"><span class="grip">⋮⋮</span> Área de texto</div>
+                        <div class="editor-palette-item"><span class="grip">⋮⋮</span> Select</div>
+                        <div class="editor-palette-item"><span class="grip">⋮⋮</span> Radio</div>
+                        <div class="editor-palette-item"><span class="grip">⋮⋮</span> Data</div>
+                        <div class="editor-palette-item"><span class="grip">⋮⋮</span> Número</div>
+                        <div class="editor-palette-item"><span class="grip">⋮⋮</span> Anexo</div>
+                        <div class="editor-palette-item"><span class="grip">⋮⋮</span> Condicional</div>
+                    </div>
+
+                    <div class="editor-col" style="background: var(--brand-surface);">
+                        <h5>Canvas · justificativa de falta</h5>
+                        <div class="editor-canvas-field">
+                            <div class="name">Disciplina</div>
+                            <div class="meta">select · fonte: disciplinas_aluno</div>
+                            <span class="req-tag">obrigatório</span>
+                        </div>
+                        <div class="editor-canvas-field" style="border-color: var(--brand-primary); box-shadow: 0 0 0 2px rgba(202,95,21,0.18);">
+                            <div class="name">Data da falta</div>
+                            <div class="meta">date · max=today</div>
+                            <span class="req-tag">obrigatório</span>
+                        </div>
+                        <div class="editor-canvas-field">
+                            <div class="name">Motivo da ausência</div>
+                            <div class="meta">textarea · min_len=30</div>
+                            <span class="req-tag">obrigatório</span>
+                        </div>
+                        <div class="editor-canvas-field">
+                            <div class="name">Atestado médico</div>
+                            <div class="meta">anexo · pdf, jpg, png</div>
+                            <span class="req-tag">obrigatório</span>
+                        </div>
+                        <div class="editor-canvas-field dragging">
+                            <div class="name" style="color: var(--brand-primary);">— solte aqui novo campo —</div>
+                            <div class="meta">arrastar da paleta</div>
+                        </div>
+                    </div>
+
+                    <div class="editor-col editor-inspector">
+                        <h5>Inspetor · Data da falta</h5>
+                        <div class="ins-row">
+                            <label>ID do campo</label>
+                            <div class="val mono" style="background: #0f172a; color: #e2e8f0; font-size: 0.75rem;">data_falta</div>
+                        </div>
+                        <div class="ins-row">
+                            <label>Label</label>
+                            <div class="val">Data da falta</div>
+                        </div>
+                        <div class="ins-row">
+                            <label>Help text</label>
+                            <div class="val" style="font-size: 0.78rem; color: var(--slate-500);">Em qual data você faltou?</div>
+                        </div>
+                        <div class="ins-row">
+                            <label>Validação</label>
+                            <div class="val mono" style="font-size: 0.72rem;">max = today</div>
+                        </div>
+                        <div class="ins-row">
+                            <label>Obrigatório</label>
+                            <span class="ins-toggle"><span class="sw"></span> sim</span>
+                        </div>
+                        <div class="ins-row" style="margin-top: 18px; border-top: 1px dashed var(--slate-200); padding-top: 14px;">
+                            <label>Versão</label>
+                            <div class="val mono" style="font-size: 0.72rem;">v2 · rascunho<br/>v1 está ativo</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- MOCK 3: Vista coord com campos estruturados -->
+        <div style="margin-top: 36px;">
+            <p class="mock-title">Vista 03 · Revisão pelo coordenador</p>
+            <p class="mock-sub">
+                Em vez de um parágrafo livre, o coordenador vê os dados estruturados — labels claros, valores semânticos, anexos identificados. Bruno toma decisão em segundos.
+            </p>
+            <div class="mockup-window">
+                <div class="mockup-bar">
+                    <span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span>
+                    <span style="margin-left: 12px; font-size: 0.72rem; color: var(--slate-500); font-family: 'JetBrains Mono', monospace;">clarify · coord · demanda #1842</span>
+                </div>
+                <div style="padding: 22px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <span class="eyebrow">Justificativa de Falta · schema v2</span>
+                            <h3 style="margin: 4px 0 2px; font-size: 1.2rem; color: var(--slate-900);">Carla Pereira · 20240003</h3>
+                            <p style="margin: 0; color: var(--slate-500); font-size: 0.85rem;">Aberta em 06/05/2026 · há 2 dias</p>
+                        </div>
+                        <span class="pill pill-warm">Pendente</span>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="review-row">
+                            <div class="k">Disciplina</div>
+                            <div class="v">Cálculo I · MAT-201 · Prof. Ana Silva</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="k">Data da falta</div>
+                            <div class="v">03 de maio de 2026 (sexta-feira)</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="k">Motivo</div>
+                            <div class="v">Estava com febre alta acompanhada de dor de cabeça intensa desde a noite anterior, fui ao pronto-atendimento e fui orientada a repouso domiciliar.</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="k">Atestado médico</div>
+                            <div class="v"><span class="attach">PDF · atestado-03-05.pdf · 218 KB</span></div>
+                        </div>
+                    </div>
+
+                    <p class="review-banner" style="margin-top: 14px;">
+                        Schema renderizado: <span class="mono">justificativa_falta_v2</span> · 4/4 campos preenchidos · sem retornos para complementar.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5.7 MODELO DE DADOS -->
+    <section class="section" data-reveal>
+        <h2 class="section-h">Modelo de dados</h2>
+        <p class="section-lead">
+            Dois conceitos novos: <span class="mono">form_schemas</span> (catálogo versionado) e duas chaves novas na demanda (<span class="mono">tipo_id</span>, <span class="mono">schema_versao</span>, <span class="mono">campos_preenchidos</span>). O <span class="mono">descricao</span> antigo deixa de ser obrigatório.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr; gap: 18px; margin-top: 8px;">
+
+            <div>
+                <p class="mock-title">Antes — como está hoje</p>
+                <pre><code>// criarDemanda em funcoesAuxiliares.js
+{
+  protocolo: "#1842",
+  tipo: "Justificativa de falta — Cálculo III",  // texto livre digitado
+  descricao: "Faltei dia 03/05 por motivo de saúde, segue atestado",
+  matriculaAluno: "20240003",
+  status: "pendente",
+  dataCriacao: "2026-05-06"
+}</code></pre>
+            </div>
+
+            <div>
+                <p class="mock-title">Depois — schema declarativo + demanda estruturada</p>
+                <pre><code>// src/data/formSchemas.js
+export const formSchemas = {
+  "justificativa_falta_v2": {
+    "tipo_id": "justificativa_falta",
+    "versao": 2,
+    "valida_de": "2026-01-01",
+    "rotulo": "Justificativa de Falta",
+    "campos": [
+      { "id": "disciplina", "tipo": "select",
+        "label": "Disciplina",
+        "fonte": "disciplinas_aluno",
+        "obrigatorio": true },
+      { "id": "data_falta", "tipo": "date",
+        "label": "Data da falta",
+        "max": "today",
+        "obrigatorio": true },
+      { "id": "motivo", "tipo": "textarea",
+        "label": "Motivo da ausência",
+        "min_len": 30,
+        "obrigatorio": true },
+      { "id": "atestado", "tipo": "anexo",
+        "label": "Atestado médico",
+        "tipos_aceitos": ["pdf", "jpg", "png"],
+        "obrigatorio": true,
+        "help_text": "Aceito até 5MB. Pode ser foto." }
+    ]
+  },
+  "trancamento_v1": {
+    "tipo_id": "trancamento",
+    "versao": 1,
+    "campos": [
+      { "id": "motivo", "tipo": "radio",
+        "opcoes": ["pessoal","financeiro","saude","outro"],
+        "obrigatorio": true },
+      { "id": "atestado", "tipo": "anexo",
+        "obrigatorio": true,
+        "visivel_se": { "motivo": "saude" } },
+      { "id": "justificativa", "tipo": "textarea",
+        "min_len": 30, "obrigatorio": true },
+      { "id": "retorno_previsto", "tipo": "date",
+        "obrigatorio": false }
+    ]
+  }
+};
+
+// demanda já criada — agora estruturada
+{
+  protocolo: "#1842",
+  tipo_id: "justificativa_falta",
+  schema_versao: 2,
+  rotulo: "Justificativa de Falta",         // snapshot para listagem
+  campos_preenchidos: {
+    "disciplina": "MAT-201",
+    "data_falta": "2026-05-03",
+    "motivo": "Estava com febre alta acompanhada...",
+    "atestado": "anx_001"
+  },
+  matriculaAluno: "20240003",
+  status: "pendente",
+  dataCriacao: "2026-05-06"
+}</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5.8 INSPIRAÇÕES -->
+    <section class="section" data-reveal>
+        <h2 class="section-h">Inspiração de mercado</h2>
+        <p class="section-lead">
+            Schema-driven forms são padrão fora do ensino: Zendesk faz isso com "ticket forms", ServiceNow gira em torno disso, e o ecossistema <span class="mono">JSON Schema</span> tem uma referência aberta.
+        </p>
+        <div class="insp-table">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Referência</th>
+                        <th>O que faz</th>
+                        <th>Adaptação para Clarify</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Zendesk Ticket Forms</strong><br/><span class="mono" style="font-size: 0.7rem;">desk365.io</span></td>
+                        <td>Cada tipo de ticket tem campos próprios; campos podem ser mostrados condicionalmente. Branding por tipo na customer-facing form.</td>
+                        <td>5 tipos canônicos de demanda acadêmica + schema condicional (saúde → atestado). Mesma ideia, vocabulário acadêmico.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ServiceNow Forms</strong><br/><span class="mono" style="font-size: 0.7rem;">platform-default</span></td>
+                        <td>UI inteiramente schema-driven. Form designer drag-and-drop. Versionamento de catálogos de serviço.</td>
+                        <td>Pegamos só o essencial: editor visual simples + versionamento. Sem o overhead enterprise.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>JSON Schema + react-jsonschema-form</strong><br/><span class="mono" style="font-size: 0.7rem;">json-schema.org</span></td>
+                        <td>Padrão aberto para validar JSON; bibliotecas que renderizam form a partir de schema.</td>
+                        <td>Inspiração técnica para o <span class="mono">formRenderer.js</span>. Não usamos a lib (peso desnecessário), mas seguimos o vocabulário (<span class="mono">type, required, minLength</span>).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Typeform / Tally</strong><br/><span class="mono" style="font-size: 0.7rem;">typeform.com</span></td>
+                        <td>Form em passos com indicador "3 de 7". Lógica condicional (jump logic).</td>
+                        <td>Indicador de progresso "4/6 campos" no header do modal. Reduz ansiedade de "quando isso acaba?".</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 5.9 KPIs -->
+    <section class="section" data-reveal>
+        <h2 class="section-h">Métricas de sucesso</h2>
+        <p class="section-lead">
+            Cinco indicadores que validariam a feature. O primeiro é o coração: se demanda chega completa, todo o resto melhora.
+        </p>
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="num">+50%</div>
+                <div class="label">Demandas completas na 1ª tentativa</div>
+                <p class="desc">% de demandas que não precisam voltar com <span class="mono">requer_ajuste</span> só por dado ausente. Baseline: medir hoje.</p>
+            </div>
+            <div class="kpi-card">
+                <div class="num">−40%</div>
+                <div class="label">Mensagens "preciso que você complete..."</div>
+                <p class="desc">Threads iniciadas pelo coordenador pedindo dado faltante. Tracking por classificação simples no audit log.</p>
+            </div>
+            <div class="kpi-card">
+                <div class="num">−2d</div>
+                <div class="label">Tempo médio de resolução</div>
+                <p class="desc">Por tipo. Cai porque coordenador para de esperar o aluno completar a demanda — decide de uma vez.</p>
+            </div>
+            <div class="kpi-card">
+                <div class="num">≤ +30s</div>
+                <div class="label">Tempo extra do aluno preenchendo</div>
+                <p class="desc">Não dá pra cansar o aluno. Form precisa demorar pouco mais que o genérico atual, ou desincentiva a usar.</p>
+            </div>
+            <div class="kpi-card">
+                <div class="num">100%</div>
+                <div class="label">Cobertura de schema por tipo</div>
+                <p class="desc">Demandas com <span class="mono">tipo_id</span> identificado e schema correspondente. Versão completa = todos os 5 tipos canônicos cobertos.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5.10 ESFORÇO -->
+    <section class="section" data-reveal>
+        <h2 class="section-h">Esforço & dependências</h2>
+        <p class="section-lead">
+            Mexe no coração da criação de demanda. Não dá pra fazer no canto — afeta o modal, a persistência e a vista do coord. Mas o renderer isolado limita o blast radius.
+        </p>
+        <div class="insp-table">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Componente</th>
+                        <th>Mudança</th>
+                        <th>Esforço</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="mono">Clarify/src/data/formSchemas.js</span></td>
+                        <td>Novo arquivo. Catálogo dos 5 tipos. JSON puro, sem lógica.</td>
+                        <td><span class="pill">S</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mono">Clarify/src/services/formRenderer.js</span></td>
+                        <td>Novo módulo. Recebe schema → devolve HTML + validador. Trata 7 tipos de campo + visibilidade condicional.</td>
+                        <td><span class="pill pill-warm">M</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mono">components/structures/modais.js</span></td>
+                        <td>Substituir <span class="mono">templateNovaDemanda</span> (l. 74) por seletor de tipo + renderer. Trocar regra de validação dos campos.</td>
+                        <td><span class="pill pill-warm">M</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mono">components/structures/modais.js</span></td>
+                        <td>Substituir bloco "Detalhes da solicitação" em <span class="mono">templateDetalhes</span> (l. 329–337) por renderização estruturada.</td>
+                        <td><span class="pill">S</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mono">pages/dashboardcoord.js</span></td>
+                        <td>Cards da lista mostram o <span class="mono">rotulo</span> do schema em vez do "tipo" digitado.</td>
+                        <td><span class="pill">XS</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mono">lib/funcoesAuxiliares.js</span></td>
+                        <td><span class="mono">criarDemanda</span> aceita novo payload (<span class="mono">tipo_id, schema_versao, campos_preenchidos</span>). Compat com schema v0 (demandas antigas).</td>
+                        <td><span class="pill">S</span></td>
+                    </tr>
+                    <tr>
+                        <td>Editor visual de schema (admin)</td>
+                        <td>Página nova de admin. Não bloqueia o MVP.</td>
+                        <td><span class="pill pill-warm">L</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="margin-top: 16px; color: var(--slate-500); font-size: 0.9rem;">
+            <strong>Depende de:</strong> Feature 07 (Anexos) — schemas com campo <span class="mono">tipo: "anexo"</span> precisam de upload real.
+            <strong>Bloqueia:</strong> Feature 01 (AI Copilot) ganha precisão de triagem porque o tipo passa a ser estruturado.
+        </p>
+    </section>
+
+    <!-- 5.11 QUICK WINS -->
+    <section class="section" data-reveal>
+        <h2 class="section-h">Quick wins vs. versão completa</h2>
+        <p class="section-lead">
+            MVP entrega valor real para 2 dos 5 tipos sem editor visual. Versão completa institucionaliza o conceito.
+        </p>
+        <div class="two-col">
+            <div class="col-card">
+                <h4>MVP · 1–2 dias <span class="badge">apresentação</span></h4>
+                <ul>
+                    <li>Schema hardcoded em <span class="mono">formSchemas.js</span> para 2 tipos (Justificativa de Falta + Aproveitamento de Créditos)</li>
+                    <li><span class="mono">formRenderer.js</span> com suporte a <span class="mono">text, textarea, select, date, anexo</span> (sem condicional)</li>
+                    <li>Modal nova demanda renderiza form a partir do schema escolhido</li>
+                    <li>Validação por campo (obrigatórios e <span class="mono">min_len</span>)</li>
+                    <li>Vista do coord exibe campos estruturados em vez de blob</li>
+                </ul>
+            </div>
+            <div class="col-card">
+                <h4>Versão completa <span class="badge">produto real</span></h4>
+                <ul>
+                    <li>5 tipos canônicos cobertos + "Outra" como escape</li>
+                    <li>Campos condicionais (<span class="mono">visivel_se</span>) e validação cruzada</li>
+                    <li>Editor visual drag-and-drop para coordenação de curso criar/editar schemas</li>
+                    <li>Versionamento real: <span class="mono">valida_de</span>, snapshot por demanda, migração transparente</li>
+                    <li>Override por curso (curso de Enfermagem pode pedir campo extra em Aproveitamento)</li>
+                    <li>Auto-save de rascunho a cada 5s no <span class="mono">localStorage</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5.12 RISCOS -->
+    <section class="section" data-reveal>
+        <h2 class="section-h">Riscos & armadilhas</h2>
+        <p class="section-lead">
+            Schema-driven UI tem armadilhas conhecidas. Lista os quatro mais prováveis neste contexto.
+        </p>
+        <div class="risk-list">
+            <div class="risk-row">
+                <div class="risk-name">
+                    Form cansa o aluno
+                    <small>UX · alto</small>
+                </div>
+                <div class="mit">
+                    Form de aproveitamento tem 6 campos vs. 2 atuais — pode parecer trabalho. <strong>Mitigação:</strong> indicador "4/6 campos" no header, salvar rascunho a cada 5s, campos opcionais visualmente diferentes, <span class="mono">help_text</span> em linguagem acessível ("em qual data você faltou?" em vez de "informe a data de ocorrência da ausência").
+                </div>
+            </div>
+            <div class="risk-row">
+                <div class="risk-name">
+                    Schema não cobre caso real
+                    <small>Cobertura · médio</small>
+                </div>
+                <div class="mit">
+                    Aluno tem situação atípica que não cabe em nenhum tipo. <strong>Mitigação:</strong> tipo "Outra solicitação" com schema mínimo (título + descrição livre) + campo "Observações adicionais" opcional em todos os tipos como escape sancionado.
+                </div>
+            </div>
+            <div class="risk-row">
+                <div class="risk-name">
+                    Manter schemas atualizados vira trabalho
+                    <small>Operacional · médio</small>
+                </div>
+                <div class="mit">
+                    Tipos de demanda são bem padronizados no contexto acadêmico (LDB define a maioria), então o catálogo é estável. <strong>Mitigação:</strong> versionamento por schema permite mudanças sem migração massiva. Demandas antigas continuam mostrando o schema da época.
+                </div>
+            </div>
+            <div class="risk-row">
+                <div class="risk-name">
+                    Migração das demandas existentes
+                    <small>Backwards-compat · baixo</small>
+                </div>
+                <div class="mit">
+                    Demandas antigas têm só <span class="mono">tipo</span> (texto livre) e <span class="mono">descricao</span>. <strong>Mitigação:</strong> adicionar <span class="mono">schema_versao: 0</span> como "schema legado" no renderer — renderiza como texto livre. Sem migração destrutiva. Demandas novas usam o schema novo, antigas continuam exibindo igual.
+                </div>
+            </div>
+            <div class="risk-row">
+                <div class="risk-name">
+                    Editor visual vira complexo demais
+                    <small>Scope creep · alto</small>
+                </div>
+                <div class="mit">
+                    Drag-and-drop com lógica condicional é um produto inteiro (vide Typeform). <strong>Mitigação:</strong> MVP só edita schemas em JSON via arquivo. Editor visual é V2 e pode ficar restrito a coord-master (não cada coord criando novos tipos).
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer style="margin-top: 80px; padding: 32px 0; border-top: 1px solid var(--slate-200); text-align: center; color: var(--slate-400); font-size: 0.85rem;">
+    <div class="container">
+        <p>Feature 08 de 10 &middot; <a href="index.html" style="color: var(--brand-primary); text-decoration: none; font-weight: 600;">Voltar ao hub →</a></p>
+    </div>
+</footer>
+
+<script>
+    const els = document.querySelectorAll('[data-reveal]');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('is-revealed');
+                obs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.08 });
+    els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

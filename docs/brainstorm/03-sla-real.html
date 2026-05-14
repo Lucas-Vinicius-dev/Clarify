@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FEATURE 03 — SLA Inteligente — Clarify Brainstorm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+    /* Feature-specific */
+    .hero-feature {
+        position: relative;
+        padding: 64px 0 48px;
+        overflow: hidden;
+    }
+    .hero-feature::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(70% 60% at 30% 0%, rgba(202, 95, 21, 0.15) 0%, rgba(202, 95, 21, 0) 65%);
+        pointer-events: none;
+    }
+    h1.feature-title {
+        font-size: clamp(2.2rem, 5vw, 3.6rem);
+        font-weight: 700;
+        letter-spacing: -0.045em;
+        line-height: 1.04;
+        margin: 14px 0 18px;
+        color: var(--slate-900);
+        max-width: 880px;
+    }
+    .feature-sub {
+        font-size: 1.075rem;
+        color: var(--slate-500);
+        max-width: 720px;
+        line-height: 1.55;
+        margin: 0 0 24px;
+    }
+    .section {
+        margin-top: 72px;
+    }
+    .section h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        color: var(--slate-900);
+        margin: 0 0 8px;
+    }
+    .section p.lead {
+        color: var(--slate-500);
+        margin: 0 0 28px;
+        max-width: 760px;
+        line-height: 1.6;
+    }
+
+    /* "Por que importa" bullets */
+    .why-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-top: 24px;
+    }
+    @media (min-width: 768px) {
+        .why-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .why-card {
+        padding: 22px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+    }
+    .why-card .why-tag {
+        display: inline-block;
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--brand-primary);
+        margin-bottom: 10px;
+    }
+    .why-card p {
+        margin: 0;
+        font-size: 0.92rem;
+        color: var(--slate-700);
+        line-height: 1.55;
+    }
+    .why-card code {
+        font-size: 0.78rem;
+    }
+
+    /* Personas */
+    .persona-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    @media (min-width: 880px) {
+        .persona-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .persona-card {
+        padding: 24px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+    .persona-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .persona-icon {
+        width: 36px; height: 36px;
+        border-radius: 10px;
+        background: rgba(202, 95, 21, 0.10);
+        color: var(--brand-primary);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+    }
+    .persona-head h3 {
+        margin: 0;
+        font-size: 1.0625rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--slate-900);
+    }
+    .persona-head .persona-name {
+        font-size: 0.75rem;
+        color: var(--slate-400);
+        font-weight: 500;
+    }
+    .before-after {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .ba-row {
+        font-size: 0.875rem;
+        line-height: 1.5;
+        padding: 10px 12px;
+        border-radius: 10px;
+    }
+    .ba-before {
+        background: rgba(15, 23, 42, 0.04);
+        color: var(--slate-700);
+        border-left: 3px solid var(--slate-300);
+    }
+    .ba-after {
+        background: rgba(202, 95, 21, 0.07);
+        color: var(--slate-900);
+        border-left: 3px solid var(--brand-primary);
+    }
+    .ba-tag {
+        font-size: 0.625rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        margin-right: 6px;
+    }
+    .ba-before .ba-tag { color: var(--slate-400); }
+    .ba-after .ba-tag { color: var(--brand-primary); }
+    .persona-impact {
+        font-size: 0.85rem;
+        color: var(--slate-500);
+        font-style: italic;
+        border-top: 1px dashed var(--slate-200);
+        padding-top: 12px;
+        margin: 0;
+    }
+
+    /* Flow */
+    .flow {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    .flow-step {
+        display: grid;
+        grid-template-columns: 48px 1fr;
+        gap: 18px;
+        padding: 18px 20px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+    }
+    .flow-num {
+        width: 36px; height: 36px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #ca5f15, #e07a30);
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 6px 14px -6px rgba(202, 95, 21, 0.55);
+    }
+    .flow-step h4 {
+        margin: 0 0 6px;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        letter-spacing: -0.015em;
+    }
+    .flow-step p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--slate-700);
+        line-height: 1.55;
+    }
+
+    /* Mockup specific */
+    .mockup-stack {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    @media (min-width: 980px) {
+        .mockup-stack {
+            grid-template-columns: 1.4fr 1fr;
+            align-items: start;
+        }
+    }
+    .sla-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 12px;
+        padding: 16px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    .sla-card + .sla-card { margin-top: 12px; }
+    .sla-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    .sla-protocolo {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.72rem;
+        color: var(--slate-400);
+        font-weight: 500;
+    }
+    .sla-titulo {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        margin: 2px 0;
+        letter-spacing: -0.01em;
+    }
+    .sla-aluno {
+        font-size: 0.8rem;
+        color: var(--slate-500);
+    }
+    .sla-prio {
+        font-size: 0.625rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        padding: 4px 8px;
+        border-radius: 999px;
+        white-space: nowrap;
+    }
+    .sla-prio.alta { background: rgba(220, 38, 38, 0.10); color: #b91c1c; border: 1px solid rgba(220, 38, 38, 0.20); }
+    .sla-prio.media { background: rgba(202, 138, 4, 0.12); color: #854d0e; border: 1px solid rgba(202, 138, 4, 0.25); }
+    .sla-prio.baixa { background: rgba(22, 163, 74, 0.10); color: #15803d; border: 1px solid rgba(22, 163, 74, 0.20); }
+
+    .sla-bar-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .sla-bar-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.75rem;
+        color: var(--slate-500);
+        font-weight: 500;
+    }
+    .sla-bar-meta .right-time {
+        font-weight: 700;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.78rem;
+    }
+    .right-time.green { color: #15803d; }
+    .right-time.amber { color: #854d0e; }
+    .right-time.red { color: #b91c1c; }
+
+    .sla-bar {
+        height: 8px;
+        background: var(--slate-100);
+        border-radius: 999px;
+        overflow: hidden;
+        position: relative;
+    }
+    .sla-bar > span {
+        display: block;
+        height: 100%;
+        border-radius: 999px;
+        position: relative;
+    }
+    .fill-green { background: linear-gradient(90deg, #22c55e, #16a34a); width: 22%; }
+    .fill-amber { background: linear-gradient(90deg, #facc15, #ea580c); width: 64%; }
+    .fill-red   { background: linear-gradient(90deg, #ef4444, #b91c1c); width: 100%; }
+    .fill-paused {
+        background: repeating-linear-gradient(
+            45deg,
+            #94a3b8,
+            #94a3b8 6px,
+            #cbd5e1 6px,
+            #cbd5e1 12px
+        );
+        width: 38%;
+    }
+
+    .sla-tooltip {
+        background: rgba(15, 23, 42, 0.95);
+        color: #e2e8f0;
+        font-size: 0.78rem;
+        line-height: 1.55;
+        padding: 14px 16px;
+        border-radius: 12px;
+        font-family: 'JetBrains Mono', monospace;
+        position: relative;
+    }
+    .sla-tooltip::before {
+        content: '';
+        position: absolute;
+        top: -7px;
+        left: 26px;
+        width: 12px; height: 12px;
+        background: rgba(15, 23, 42, 0.95);
+        transform: rotate(45deg);
+    }
+    .sla-tooltip strong { color: #fff; }
+
+    /* Semaforo legend */
+    .legend {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px dashed var(--slate-200);
+        font-size: 0.78rem;
+        color: var(--slate-500);
+    }
+    .legend-dot {
+        width: 10px; height: 10px;
+        border-radius: 999px;
+        display: inline-block;
+        margin-right: 6px;
+        vertical-align: middle;
+    }
+    .dot-green { background: #16a34a; }
+    .dot-amber { background: #d97706; }
+    .dot-red   { background: #b91c1c; }
+    .dot-paused {
+        background: repeating-linear-gradient(45deg, #94a3b8, #94a3b8 3px, #cbd5e1 3px, #cbd5e1 6px);
+    }
+
+    /* Config table */
+    .config-table-wrap {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+    .config-table-wrap header {
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--slate-200);
+        background: #fafafa;
+    }
+    .config-table-wrap header h4 {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--slate-900);
+    }
+    .config-table-wrap header p {
+        margin: 4px 0 0;
+        font-size: 0.78rem;
+        color: var(--slate-500);
+    }
+
+    /* Métricas panel */
+    .metric-panel {
+        background: linear-gradient(135deg, #fff 60%, #fff8f6 100%);
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        padding: 18px 20px;
+    }
+    .metric-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 10px 0;
+        border-bottom: 1px dashed var(--slate-200);
+        font-size: 0.88rem;
+    }
+    .metric-row:last-child { border-bottom: none; }
+    .metric-row .label { color: var(--slate-500); }
+    .metric-row .value {
+        font-weight: 700;
+        font-family: 'JetBrains Mono', monospace;
+        color: var(--slate-900);
+    }
+    .metric-row .value .delta-good { color: #15803d; font-size: 0.75rem; margin-left: 6px; font-weight: 600; }
+    .metric-row .value .delta-bad { color: #b91c1c; font-size: 0.75rem; margin-left: 6px; font-weight: 600; }
+
+    /* Inspiration table */
+    .insp-row {
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 18px;
+        padding: 16px 0;
+        border-bottom: 1px dashed var(--slate-200);
+    }
+    .insp-row:last-child { border-bottom: none; }
+    .insp-name {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: var(--slate-900);
+    }
+    .insp-name a {
+        color: var(--brand-primary);
+        text-decoration: none;
+        font-size: 0.78rem;
+        font-weight: 500;
+        display: block;
+        margin-top: 4px;
+    }
+    .insp-row .what {
+        font-size: 0.88rem;
+        color: var(--slate-700);
+        line-height: 1.55;
+    }
+    .insp-row .what strong {
+        color: var(--slate-900);
+        font-weight: 700;
+    }
+
+    /* KPIs */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    @media (min-width: 720px) {
+        .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1024px) {
+        .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .kpi-card {
+        padding: 22px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .kpi-name {
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+    }
+    .kpi-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        color: var(--slate-900);
+        font-family: 'Space Grotesk', sans-serif;
+    }
+    .kpi-value .unit {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--slate-400);
+    }
+    .kpi-card p {
+        margin: 0;
+        font-size: 0.82rem;
+        color: var(--slate-500);
+        line-height: 1.5;
+    }
+    .kpi-target {
+        font-size: 0.72rem;
+        color: var(--brand-primary);
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    /* Efforts */
+    .effort-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    @media (min-width: 880px) {
+        .effort-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .effort-col {
+        padding: 24px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+    }
+    .effort-col.mvp {
+        border-color: rgba(34, 197, 94, 0.30);
+        background: linear-gradient(180deg, #fff 60%, rgba(34, 197, 94, 0.04) 100%);
+    }
+    .effort-col.full {
+        border-color: rgba(202, 95, 21, 0.30);
+        background: linear-gradient(180deg, #fff 60%, rgba(202, 95, 21, 0.04) 100%);
+    }
+    .effort-col h4 {
+        margin: 0 0 12px;
+        font-size: 1.05rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--slate-900);
+    }
+    .effort-col h4 .badge {
+        font-size: 0.625rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        padding: 3px 8px;
+        border-radius: 999px;
+        margin-left: 8px;
+        vertical-align: middle;
+    }
+    .badge-mvp { background: rgba(34, 197, 94, 0.12); color: #15803d; }
+    .badge-full { background: rgba(202, 95, 21, 0.12); color: var(--brand-primary); }
+    .effort-col ul {
+        margin: 0;
+        padding-left: 20px;
+        color: var(--slate-700);
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+    .effort-col ul li { margin-bottom: 6px; }
+    .effort-col ul li code { font-size: 0.78rem; }
+
+    /* Risk cards */
+    .risk-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    @media (min-width: 880px) {
+        .risk-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .risk-card {
+        padding: 20px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .risk-head {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        letter-spacing: -0.015em;
+    }
+    .risk-head::before {
+        content: '!';
+        display: inline-block;
+        width: 22px; height: 22px;
+        border-radius: 999px;
+        background: rgba(202, 95, 21, 0.12);
+        color: var(--brand-primary);
+        font-weight: 800;
+        text-align: center;
+        line-height: 22px;
+        margin-right: 10px;
+    }
+    .risk-card p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--slate-700);
+        line-height: 1.55;
+    }
+    .risk-card .mitig {
+        background: rgba(34, 197, 94, 0.06);
+        border-left: 3px solid #16a34a;
+        padding: 10px 12px;
+        border-radius: 0 8px 8px 0;
+        font-size: 0.82rem;
+        color: var(--slate-700);
+    }
+    .risk-card .mitig strong {
+        color: #15803d;
+        font-size: 0.7rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 4px;
+    }
+</style>
+</head>
+<body>
+
+<header style="position: sticky; top: 0; z-index: 10; background: rgba(255, 248, 246, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(15, 23, 42, 0.06);">
+    <div class="container" style="max-width: 1080px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
+        <a href="index.html" style="display: inline-flex; align-items: center; gap: 8px; color: var(--slate-700); text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+            <span style="font-size: 1.1rem;">←</span> Hub de features
+        </a>
+        <span class="eyebrow eyebrow-muted">FEATURE 03 / 10</span>
+    </div>
+</header>
+
+<main class="container" style="max-width: 1080px; margin: 0 auto; padding: 48px 24px 0;">
+
+    <!-- HERO -->
+    <section class="hero-feature">
+        <div style="position: relative; z-index: 1;">
+            <div style="display: inline-flex; align-items: center; gap: 10px;">
+                <span class="tier-badge tier-s">Tier S — Mudam o jogo</span>
+                <span class="eyebrow eyebrow-muted">Feature 03</span>
+            </div>
+            <h1 class="feature-title">
+                SLA <span class="text-gradient-warm">de verdade</span>,<br/>
+                não um prazo escrito a mão no HTML.
+            </h1>
+            <p class="feature-sub">
+                Hoje o dashboard do coordenador mostra <span class="mono">04 horas</span>, <span class="mono">12 horas</span>, <span class="mono">19 horas</span> — números fixos. Não medem nada. Esta feature troca isso por SLAs configuráveis por tipo de demanda, semáforo visual, escalada automática e métrica institucional de "% dentro do prazo".
+            </p>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <span class="pill pill-warm">Prazos</span>
+                <span class="pill pill-warm">Semáforo</span>
+                <span class="pill">Zendesk</span>
+                <span class="pill">Freshdesk</span>
+                <span class="pill">Calendário acadêmico</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- POR QUE IMPORTA -->
+    <section class="section">
+        <h2>Por que isso importa</h2>
+        <p class="lead">
+            Um help desk sem SLA é uma caixa de entrada. Coordenador atende quem grita mais alto, aluno fica no escuro, instituição não sabe se está cumprindo prazos próprios. Em <code>dashboardcoord.js:240-310</code> os "Priority Deadlines" são literalmente strings hardcoded — não há nenhum cálculo por trás.
+        </p>
+        <div class="why-grid">
+            <div class="why-card">
+                <span class="why-tag">Problema 1</span>
+                <p><strong>Prazos fake.</strong> Os "04 horas" e "12 horas" em <code>dashboardcoord.js:269,286,303</code> nunca diminuem. Coordenador entra na semana seguinte, ainda diz "04 horas". A UI mente.</p>
+            </div>
+            <div class="why-card">
+                <span class="why-tag">Problema 2</span>
+                <p><strong>Nenhuma diferenciação por tipo.</strong> Justificativa de Falta e Trancamento de Matrícula têm urgências completamente diferentes — uma afeta a frequência, a outra afeta a matrícula do semestre — mas o sistema trata todas como linhas iguais.</p>
+            </div>
+            <div class="why-card">
+                <span class="why-tag">Problema 3</span>
+                <p><strong>Sem métrica institucional.</strong> A coord-mestre não consegue responder "estamos resolvendo 90% das demandas no prazo?" porque não existe um prazo. Sem dado, não há melhoria.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PERSONAS -->
+    <section class="section">
+        <h2>Personas impactadas</h2>
+        <p class="lead">Os três lados ganham clareza. O aluno sabe quando vai ter resposta; o coordenador sabe a quem atender primeiro; a instituição mede.</p>
+
+        <div class="persona-grid">
+
+            <div class="persona-card">
+                <div class="persona-head">
+                    <span class="persona-icon">A</span>
+                    <div>
+                        <h3>Aluno</h3>
+                        <span class="persona-name">Ana Silva — 20240003</span>
+                    </div>
+                </div>
+                <div class="before-after">
+                    <div class="ba-row ba-before">
+                        <span class="ba-tag">Antes</span>
+                        Abre demanda, vê <span class="mono">pendente</span>, espera. Não sabe se é 1 dia ou 1 mês. Manda WhatsApp pro coord toda terça.
+                    </div>
+                    <div class="ba-row ba-after">
+                        <span class="ba-tag">Depois</span>
+                        Vê "expira em 1d 4h". Sabe que tem direito a resposta até sexta. Se atrasar, vê motivo. Sem ansiedade, sem WhatsApp.
+                    </div>
+                </div>
+                <p class="persona-impact">Reduz canal informal. Aumenta confiança no sistema oficial.</p>
+            </div>
+
+            <div class="persona-card">
+                <div class="persona-head">
+                    <span class="persona-icon">C</span>
+                    <div>
+                        <h3>Coordenador</h3>
+                        <span class="persona-name">Bruno Almeida — Coord. CC</span>
+                    </div>
+                </div>
+                <div class="before-after">
+                    <div class="ba-row ba-before">
+                        <span class="ba-tag">Antes</span>
+                        Vê 14 demandas, atende a primeira da lista. Não sabe qual vai estourar amanhã, qual já estourou semana passada.
+                    </div>
+                    <div class="ba-row ba-after">
+                        <span class="ba-tag">Depois</span>
+                        Lista ordenada por urgência real. Vermelho primeiro, amarelo depois. Quando pausa pra esperar aluno, o relógio pausa. Sem cobrança injusta.
+                    </div>
+                </div>
+                <p class="persona-impact">Foco no que importa hoje. Sem sensação de estar sempre apagando incêndio.</p>
+            </div>
+
+            <div class="persona-card">
+                <div class="persona-head">
+                    <span class="persona-icon">I</span>
+                    <div>
+                        <h3>Instituição</h3>
+                        <span class="persona-name">Carla Pereira — Diretora</span>
+                    </div>
+                </div>
+                <div class="before-after">
+                    <div class="ba-row ba-before">
+                        <span class="ba-tag">Antes</span>
+                        Sem indicador. Reclamação chega pela ouvidoria. Não consegue justificar tempo de processo no MEC nem responder à diretoria.
+                    </div>
+                    <div class="ba-row ba-after">
+                        <span class="ba-tag">Depois</span>
+                        Dashboard com <strong>% dentro do SLA</strong>, p95 por tipo, ranking de coords. Auto-escalada quando um caso estoura — chega até ela antes da ouvidoria.
+                    </div>
+                </div>
+                <p class="persona-impact">Métrica de processo defensável. Compliance e melhoria contínua.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section class="section">
+        <h2>Como funcionaria — fluxo</h2>
+        <p class="lead">Do clique do aluno até a métrica do dashboard. Cinco passos, sem mágica.</p>
+
+        <div class="flow">
+            <div class="flow-step">
+                <span class="flow-num">1</span>
+                <div>
+                    <h4>Aluna abre demanda</h4>
+                    <p>Ana Silva abre uma "Justificativa de Falta". O sistema lê <code>sla_config.justificativa_falta</code>, encontra <code>{ primeira_resposta_horas: 48, resolucao_horas: 120 }</code> e grava <code>sla_iniciado_em: 2026-05-11T14:30:00Z</code> no objeto da demanda.</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <span class="flow-num">2</span>
+                <div>
+                    <h4>Relógio começa a correr</h4>
+                    <p>Cada render do dashboard (e a cada minuto via <code>setInterval</code> no <code>centralDemandas.js</code>) o serviço <code>sla.js</code> recalcula o tempo restante. Se a config diz <code>considera_dias_uteis: true</code>, pula sábados/domingos e feriados.</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <span class="flow-num">3</span>
+                <div>
+                    <h4>Coord pede ajuste — relógio pausa</h4>
+                    <p>Bruno muda status para <code>requer_ajuste</code>. <code>sla.js</code> registra <code>pausado_desde: now()</code>. Enquanto o status for esse, o tempo restante não diminui. Quando Ana responde, calcula <code>sla_pausado_total_minutos += delta</code> e retoma.</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <span class="flow-num">4</span>
+                <div>
+                    <h4>Semáforo muda de cor</h4>
+                    <p>Se sobram &gt;50% do prazo, badge verde. Entre 25% e 50%, amarelo. Abaixo de 25%, vermelho. Se zerou, vermelho piscando + flag <code>sla_breached_resolution: true</code> + notifica diretora via <code>notificacoes.js</code>.</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <span class="flow-num">5</span>
+                <div>
+                    <h4>Métrica institucional</h4>
+                    <p>Toda demanda concluída grava <code>concluido_em</code> e a flag de breach (ou não). Dashboard agrega: % dentro do SLA, tempo médio de primeira resposta, p95 de resolução por tipo, ranking de coordenadores (sem nome, só anônimo no MVP).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MOCKUP -->
+    <section class="section">
+        <h2>Mockup conceitual</h2>
+        <p class="lead">Dois ângulos: a visão da fila de demandas com semáforo e a tabela de configuração que o coord-mestre vê em "Admin → SLA".</p>
+
+        <div class="mockup mockup-stack" style="padding: 0; background: transparent; border: none; box-shadow: none;">
+
+            <!-- MOCKUP 1: fila com semáforo -->
+            <div class="mockup-window shadow-soft-md">
+                <div class="mockup-bar">
+                    <span class="mockup-dot"></span>
+                    <span class="mockup-dot"></span>
+                    <span class="mockup-dot"></span>
+                    <span style="margin-left: 14px; font-size: 0.78rem; color: var(--slate-500); font-weight: 500;">clarify.app / coordenador / fila</span>
+                </div>
+                <div style="padding: 20px; background: #fafafa;">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px;">
+                        <h4 style="margin: 0; font-size: 1rem; font-weight: 700; color: var(--slate-900); letter-spacing: -0.02em;">Fila por urgência</h4>
+                        <span style="font-size: 0.75rem; color: var(--slate-500);">14 demandas · ordenadas por SLA</span>
+                    </div>
+
+                    <!-- Card vermelho - estourado -->
+                    <div class="sla-card">
+                        <div class="sla-head">
+                            <div>
+                                <span class="sla-protocolo">#1247</span>
+                                <p class="sla-titulo">Trancamento de Matrícula</p>
+                                <span class="sla-aluno">Diego Santos · 20240017</span>
+                            </div>
+                            <span class="sla-prio alta">Crítica</span>
+                        </div>
+                        <div class="sla-bar-wrap">
+                            <div class="sla-bar-meta">
+                                <span>Resolução · 24h / 3d</span>
+                                <span class="right-time red">Atrasada há 3h 12m</span>
+                            </div>
+                            <div class="sla-bar"><span class="fill-red"></span></div>
+                        </div>
+                    </div>
+
+                    <!-- Card amarelo -->
+                    <div class="sla-card">
+                        <div class="sla-head">
+                            <div>
+                                <span class="sla-protocolo">#1251</span>
+                                <p class="sla-titulo">Justificativa de Falta</p>
+                                <span class="sla-aluno">Ana Silva · 20240003</span>
+                            </div>
+                            <span class="sla-prio media">Média</span>
+                        </div>
+                        <div class="sla-bar-wrap">
+                            <div class="sla-bar-meta">
+                                <span>1ª resposta · 48h</span>
+                                <span class="right-time amber">Expira em 14h 22m</span>
+                            </div>
+                            <div class="sla-bar"><span class="fill-amber"></span></div>
+                        </div>
+                    </div>
+
+                    <!-- Card verde -->
+                    <div class="sla-card">
+                        <div class="sla-head">
+                            <div>
+                                <span class="sla-protocolo">#1252</span>
+                                <p class="sla-titulo">Aproveitamento de Créditos</p>
+                                <span class="sla-aluno">Mariana Costa · 202100452</span>
+                            </div>
+                            <span class="sla-prio baixa">Tranquila</span>
+                        </div>
+                        <div class="sla-bar-wrap">
+                            <div class="sla-bar-meta">
+                                <span>1ª resposta · 5d</span>
+                                <span class="right-time green">Expira em 3d 18h</span>
+                            </div>
+                            <div class="sla-bar"><span class="fill-green"></span></div>
+                        </div>
+                    </div>
+
+                    <!-- Card pausado -->
+                    <div class="sla-card" style="border-style: dashed;">
+                        <div class="sla-head">
+                            <div>
+                                <span class="sla-protocolo">#1244</span>
+                                <p class="sla-titulo">Quebra de Pré-requisito</p>
+                                <span class="sla-aluno">Bruno Almeida · 20230112</span>
+                            </div>
+                            <span class="sla-prio media">Pausada</span>
+                        </div>
+                        <div class="sla-bar-wrap">
+                            <div class="sla-bar-meta">
+                                <span style="color: var(--slate-400);">Aguardando ajuste do aluno</span>
+                                <span class="right-time" style="color: var(--slate-400);">Pausada há 2h</span>
+                            </div>
+                            <div class="sla-bar"><span class="fill-paused"></span></div>
+                        </div>
+                    </div>
+
+                    <div class="legend">
+                        <span><span class="legend-dot dot-green"></span>&gt;50% do prazo</span>
+                        <span><span class="legend-dot dot-amber"></span>25–50%</span>
+                        <span><span class="legend-dot dot-red"></span>&lt;25% ou estourado</span>
+                        <span><span class="legend-dot dot-paused"></span>Aguardando aluno</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lado: tooltip + métricas -->
+            <div style="display: flex; flex-direction: column; gap: 18px;">
+                <div>
+                    <span class="eyebrow">Tooltip ao passar mouse</span>
+                    <div class="sla-tooltip" style="margin-top: 12px;">
+                        <strong>SLA: 48h primeira resposta</strong><br/>
+                        Iniciado em <strong>11/05 14:30</strong><br/>
+                        Pausado por 2h (aguardando aluno)<br/>
+                        Tempo útil decorrido: <strong>33h 38m</strong><br/>
+                        Restante: <strong>14h 22m</strong>
+                    </div>
+                </div>
+
+                <div>
+                    <span class="eyebrow">Painel da diretora</span>
+                    <div class="metric-panel" style="margin-top: 12px;">
+                        <div class="metric-row">
+                            <span class="label">Dentro do SLA (30d)</span>
+                            <span class="value">87,4% <span class="delta-good">+3,1pp</span></span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="label">1ª resposta (mediana)</span>
+                            <span class="value">11h 04m <span class="delta-good">-2h</span></span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="label">Resolução p95 · Justificativa</span>
+                            <span class="value">3d 12h</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="label">Breaches esta semana</span>
+                            <span class="value">7 <span class="delta-bad">+2</span></span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="label">Demandas pausadas</span>
+                            <span class="value">12</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- MOCKUP 2: tabela de config -->
+        <div style="margin-top: 28px;">
+            <span class="eyebrow">Admin · Configuração de SLA por tipo</span>
+            <div class="config-table-wrap" style="margin-top: 12px;">
+                <header>
+                    <h4>SLA por tipo de demanda</h4>
+                    <p>Editável pela coord-mestre. Versionada. "Modo emergencial" pode reduzir tudo em 50% durante matrícula.</p>
+                </header>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>1ª resposta</th>
+                            <th>Resolução</th>
+                            <th>Dias úteis?</th>
+                            <th>Pausa em "ajuste"?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Justificativa de Falta</strong></td>
+                            <td>48h</td>
+                            <td>5 dias</td>
+                            <td>Sim</td>
+                            <td>Sim</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Aproveitamento de Créditos</strong></td>
+                            <td>5 dias</td>
+                            <td>30 dias</td>
+                            <td>Sim</td>
+                            <td>Sim</td>
+                        </tr>
+                        <tr style="background: rgba(202, 95, 21, 0.04);">
+                            <td><strong>Trancamento de Matrícula</strong> <span class="pill pill-warm" style="margin-left: 6px;">Crítico</span></td>
+                            <td>24h</td>
+                            <td>3 dias</td>
+                            <td>Não</td>
+                            <td>Sim</td>
+                        </tr>
+                        <tr style="background: rgba(202, 95, 21, 0.04);">
+                            <td><strong>Quebra de Pré-requisito</strong> <span class="pill pill-warm" style="margin-left: 6px;">Crítico</span></td>
+                            <td>3 dias</td>
+                            <td>10 dias</td>
+                            <td>Sim</td>
+                            <td>Sim</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Revisão de Nota</strong></td>
+                            <td>24h</td>
+                            <td>7 dias</td>
+                            <td>Sim</td>
+                            <td>Sim</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODELO DE DADOS -->
+    <section class="section">
+        <h2>Modelo de dados</h2>
+        <p class="lead">Dois objetos novos: <code>sla_config</code> global e <code>sla_state</code> dentro de cada demanda. Schema atual da demanda (ver <code>data/demanda.js</code>) ganha 6 campos novos.</p>
+
+<pre><code>// localStorage["clarify.sla_config"] — global, editável pela coord-mestre
+{
+  "justificativa_falta": {
+    "primeira_resposta_horas": 48,
+    "resolucao_horas": 120,
+    "considera_dias_uteis": true,
+    "pausa_em_requer_ajuste": true,
+    "prioridade_base": "media"
+  },
+  "trancamento_matricula": {
+    "primeira_resposta_horas": 24,
+    "resolucao_horas": 72,
+    "considera_dias_uteis": false,   // afeta matrícula, conta fim de semana
+    "pausa_em_requer_ajuste": true,
+    "prioridade_base": "alta"
+  },
+  "_calendario": {
+    "feriados_2026": ["2026-04-21", "2026-05-01", "..."],
+    "pausa_institucional": [
+      { "inicio": "2026-07-01", "fim": "2026-07-31", "motivo": "Recesso de julho" }
+    ],
+    "modo_emergencial_ativo": false
+  }
+}
+
+// Campos ADICIONADOS ao schema atual de Demanda
+{
+  // ... protocolo, tipo, status, descricao já existem
+  "sla_iniciado_em": "2026-05-11T14:30:00Z",
+  "sla_pausado_desde": null,                    // ou ISO se pausado agora
+  "sla_pausado_total_minutos": 120,
+  "primeira_resposta_em": "2026-05-12T09:00:00Z",
+  "concluido_em": null,
+  "sla_breached_first_response": false,
+  "sla_breached_resolution": false,
+  "prioridade_calculada": "alta"                // recalculada a cada tick
+}</code></pre>
+    </section>
+
+    <!-- INSPIRAÇÃO DE MERCADO -->
+    <section class="section">
+        <h2>Inspiração de mercado</h2>
+        <p class="lead">Não inventamos SLA. Zendesk e Freshdesk têm décadas de prática. O que muda é o contexto acadêmico — feriados, recesso, períodos de matrícula.</p>
+
+        <div class="card" style="padding: 8px 22px;">
+            <div class="insp-row">
+                <div>
+                    <div class="insp-name">Zendesk SLA Policies</div>
+                    <a href="https://www.eesel.ai/blog/zendesk-sla-tracking" target="_blank" rel="noopener">eesel.ai/blog/zendesk-sla-tracking →</a>
+                </div>
+                <div class="what">
+                    Quatro métricas core: <strong>first response time</strong>, <strong>next response time</strong>, <strong>update time</strong> e <strong>total resolution time</strong>. Targets diferentes por prioridade (urgent/high/normal/low). Suporta business hours, pausa em status "pending" (esperando cliente). <strong>Adaptação:</strong> mapeamos "pending" para nosso <code>requer_ajuste</code>; trocamos prioridade por tipo de demanda + período letivo.
+                </div>
+            </div>
+            <div class="insp-row">
+                <div>
+                    <div class="insp-name">Freshdesk SLA</div>
+                    <a href="https://support.freshdesk.com/support/solutions/articles/37395-sla-management" target="_blank" rel="noopener">freshdesk SLA management →</a>
+                </div>
+                <div class="what">
+                    Pontos fortes: <strong>operating hours por timezone</strong>, escalação automática (notifica gestor X minutos antes do breach), e SLA policies condicionais (se cliente é VIP, regra A; senão regra B). <strong>Adaptação:</strong> "VIP" vira "aluno em risco de jubilamento" ou "demanda crítica para matrícula"; operating hours vira calendário acadêmico oficial.
+                </div>
+            </div>
+            <div class="insp-row">
+                <div>
+                    <div class="insp-name">Intercom — Response Time SLAs</div>
+                    <a href="https://www.intercom.com/help/en/articles/3866949-set-up-response-time-sla-rules" target="_blank" rel="noopener">intercom docs →</a>
+                </div>
+                <div class="what">
+                    Boa referência de UX de breach: barra de progresso colorida (verde→amarelo→vermelho) bem perto da conversa. Notificação in-app antes do breach, não só depois. <strong>Adaptação:</strong> copiamos a barra; o pré-alerta vira "expira em &lt;6h" piscando suave, sem som — coordenador não precisa de barulho de notificação.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KPIs -->
+    <section class="section">
+        <h2>Métricas de sucesso</h2>
+        <p class="lead">SLA sem medição é só decoração. Cinco indicadores para provar que a feature está funcionando — e que os números não estão sendo gaming-ados.</p>
+
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <span class="kpi-name">% no SLA</span>
+                <span class="kpi-value">90<span class="unit">%+</span></span>
+                <p>Demandas resolvidas dentro do prazo de resolução, média móvel 30d. Target ambicioso mas alcançável.</p>
+                <span class="kpi-target">Target inicial: 75% · meta ano 1: 90%</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-name">1ª resposta — mediana</span>
+                <span class="kpi-value">&lt; 12<span class="unit">h</span></span>
+                <p>Mediana (não média) do tempo até a primeira mensagem do coordenador. Mediana resiste a outliers.</p>
+                <span class="kpi-target">Target: -50% vs. baseline atual</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-name">Resolução p95</span>
+                <span class="kpi-value">&lt; 7<span class="unit">d</span></span>
+                <p>P95 por tipo. Pegar a cauda, não a média. Se 95% terminam em 7d, o sistema é previsível.</p>
+                <span class="kpi-target">Por tipo, com targets diferentes</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-name">Breach rate</span>
+                <span class="kpi-value">&lt; 10<span class="unit">%</span></span>
+                <p>Quantas demandas estouraram em algum momento, mesmo as recuperadas. Mede a qualidade do processo, não só do final.</p>
+                <span class="kpi-target">Acompanhado por tipo, não por pessoa</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-name">% pausada (saudável)</span>
+                <span class="kpi-value">15-25<span class="unit">%</span></span>
+                <p>Faixa saudável. Acima de 30% = coordenador empurrando carga pro aluno pra parar o relógio. Abaixo de 10% = não estamos pedindo dado faltante quando deveríamos.</p>
+                <span class="kpi-target">Sinal de processo, não de produtividade</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-name">Tempo até escalada</span>
+                <span class="kpi-value">&lt; 2<span class="unit">h</span></span>
+                <p>Quando estoura, em quanto tempo a diretora sabe? Se a notificação está chegando &gt;24h depois, o sistema falhou.</p>
+                <span class="kpi-target">Idealmente: na hora do breach</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ESFORÇO & DEPENDÊNCIAS -->
+    <section class="section">
+        <h2>Esforço & dependências</h2>
+        <p class="lead">Onde a feature toca o código. Paths reais, estimativa por componente.</p>
+
+        <div class="card" style="padding: 8px 0;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Componente</th>
+                        <th>Ação</th>
+                        <th>Esforço</th>
+                        <th>Depende de</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>src/services/sla.js</code></td>
+                        <td>Criar — cálculos puros (resta, breach, pausa, dias úteis)</td>
+                        <td><span class="pill pill-warm">M</span></td>
+                        <td>Nada · lib date-fns ou nativa</td>
+                    </tr>
+                    <tr>
+                        <td><code>src/data/demanda.js</code></td>
+                        <td>Estender schema com 6 campos novos + migração leve</td>
+                        <td><span class="pill">S</span></td>
+                        <td>Nada</td>
+                    </tr>
+                    <tr>
+                        <td><code>src/data/slaConfig.js</code></td>
+                        <td>Criar — config default + persistência em localStorage</td>
+                        <td><span class="pill">S</span></td>
+                        <td>Nada</td>
+                    </tr>
+                    <tr style="background: rgba(202, 95, 21, 0.05);">
+                        <td><code>src/pages/dashboardcoord.js</code> <strong>:240-310</strong></td>
+                        <td><strong>Substituir os 3 cards hardcoded</strong> por cards reativos com semáforo</td>
+                        <td><span class="pill pill-warm">M</span></td>
+                        <td><code>sla.js</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>src/pages/centralDemandas.js</code></td>
+                        <td>Mostrar SLA pro aluno (badge + barra simples, sem tooltip rico)</td>
+                        <td><span class="pill">S</span></td>
+                        <td><code>sla.js</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>src/pages/adminSla.js</code></td>
+                        <td>Criar — tabela editável de config para coord-mestre</td>
+                        <td><span class="pill pill-warm">M</span></td>
+                        <td><code>slaConfig.js</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>src/services/notificacoes.js</code></td>
+                        <td>Estender — disparar evento em breach</td>
+                        <td><span class="pill">XS</span></td>
+                        <td>Feature 04 (Audit log) facilita</td>
+                    </tr>
+                    <tr>
+                        <td>Tick de atualização</td>
+                        <td><code>setInterval(60_000)</code> + revalidação no load</td>
+                        <td><span class="pill">XS</span></td>
+                        <td>Nada</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- QUICK WIN vs FULL -->
+    <section class="section">
+        <h2>Quick win vs. versão completa</h2>
+        <p class="lead">Dá pra demonstrar a feature em 1 dia. A versão completa leva semanas — mas o aluno e o coord percebem o pulo já no MVP.</p>
+
+        <div class="effort-grid">
+            <div class="effort-col mvp">
+                <h4>MVP <span class="badge badge-mvp">1-2 dias</span></h4>
+                <ul>
+                    <li>SLA <strong>fixo de 48h</strong> pra tudo (sem config por tipo)</li>
+                    <li>Barra de progresso colorida no card de demanda</li>
+                    <li>Contador "expira em Xh" recalculado no <code>render()</code></li>
+                    <li><strong>Substituir</strong> os cards hardcoded de <code>dashboardcoord.js:240-310</code> por cards reais</li>
+                    <li>Sem pausa em <code>requer_ajuste</code>, sem dias úteis, sem feriados</li>
+                    <li>Console log quando estourar (sem notificação real)</li>
+                </ul>
+            </div>
+            <div class="effort-col full">
+                <h4>Versão completa <span class="badge badge-full">3-4 semanas</span></h4>
+                <ul>
+                    <li>SLA configurável por tipo de demanda (5 tipos + extensível)</li>
+                    <li>Pausa automática em <code>requer_ajuste</code> com motivo visível</li>
+                    <li>Calendário acadêmico (feriados, recesso de julho/dezembro)</li>
+                    <li>Modo emergencial (período de matrícula reduz SLAs em 50%)</li>
+                    <li>Auto-escalada → notificação real pra diretora + flag de atraso</li>
+                    <li>Dashboard institucional com p95, mediana, breach rate, ranking</li>
+                    <li>Admin page (<code>adminSla.js</code>) editável + versionada</li>
+                    <li>Tooltip rico com timeline ("iniciado 11/05, pausado 2h, restam 14h")</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- RISCOS -->
+    <section class="section">
+        <h2>Riscos & armadilhas</h2>
+        <p class="lead">Cinco coisas que podem dar errado. Tratadas explicitamente — porque "implementamos SLA" sem isso vira ferramenta de pressão e o time abandona.</p>
+
+        <div class="risk-grid">
+            <div class="risk-card">
+                <span class="risk-head">Aluno achar o SLA injusto</span>
+                <p>"Minha demanda é mais complexa que uma justificativa de falta normal." Verdade — e o coordenador pausou pra pedir documento, então o relógio congelou. Mas o aluno só vê "atrasada há 3h".</p>
+                <div class="mitig">
+                    <strong>Mitigação</strong>
+                    Motivo de pausa <strong>sempre visível</strong> pro aluno. Tooltip mostra "Pausado porque o coordenador pediu atestado em 12/05". Transparência mata 80% da reclamação.
+                </div>
+            </div>
+            <div class="risk-card">
+                <span class="risk-head">Coordenadores se sentirem vigiados</span>
+                <p>Métrica individual vira régua. Coordenador pode começar a gaming-ar: marca como <code>requer_ajuste</code> sem precisar, fecha demanda no limite sem revisar de verdade.</p>
+                <div class="mitig">
+                    <strong>Mitigação</strong>
+                    SLA <strong>institucional</strong>, não punitivo. Ranking só pra coord-mestre, anonimizado. Métrica primária no dashboard é "% no SLA do curso", não "% no SLA da Bruna".
+                </div>
+            </div>
+            <div class="risk-card">
+                <span class="risk-head">Dias úteis e feriados regionais</span>
+                <p>Feriado municipal de Belo Horizonte ≠ feriado de Recife. Recesso institucional muda ano a ano. Lib externa pode estar errada.</p>
+                <div class="mitig">
+                    <strong>Mitigação</strong>
+                    Tabela estática editável em <code>slaConfig._calendario.feriados_2026</code>. Coord-mestre revisa no início do ano. Sem dependência externa frágil.
+                </div>
+            </div>
+            <div class="risk-card">
+                <span class="risk-head">localStorage sem cron job</span>
+                <p>Se ninguém abre o app, como o SLA "estoura"? Quem dispara a notificação pra diretora? Em backend é um cron. Aqui, nada.</p>
+                <div class="mitig">
+                    <strong>Mitigação</strong>
+                    <code>setInterval(60_000)</code> enquanto a aba estiver aberta + <strong>revalidação on-load</strong> de toda a fila. No load, varremos todas as demandas, recalculamos, disparamos notificações pendentes. Não é tempo real, mas pra TCC + futuro backend, funciona.
+                </div>
+            </div>
+            <div class="risk-card">
+                <span class="risk-head">Demandas legadas sem <code>sla_iniciado_em</code></span>
+                <p>Demandas já existentes no localStorage não têm os campos novos. Quebra o cálculo. Erro silencioso = pior.</p>
+                <div class="mitig">
+                    <strong>Mitigação</strong>
+                    Migração leve no boot: se <code>!demanda.sla_iniciado_em</code>, usar <code>dataCriacao</code> como fallback. Loga no console. Sem isso, demanda velha aparece com SLA infinito ou <code>NaN</code> na barra.
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer style="margin-top: 80px; padding: 32px 0; border-top: 1px solid var(--slate-200); text-align: center; color: var(--slate-400); font-size: 0.85rem;">
+    <div class="container" style="max-width: 1080px; margin: 0 auto;">
+        <p>Feature 03 de 10 &middot; <a href="index.html" style="color: var(--brand-primary); text-decoration: none; font-weight: 600;">Voltar ao hub →</a></p>
+    </div>
+</footer>
+
+<script>
+    const els = document.querySelectorAll('[data-reveal]');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('is-revealed');
+                obs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

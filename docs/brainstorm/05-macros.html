@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Feature 05 — Macros & Respostas Rápidas — Clarify Brainstorm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+    main.container { max-width: 1080px; margin: 0 auto; padding: 48px 24px 0; }
+    .hero-block { padding: 56px 0 32px; position: relative; overflow: hidden; }
+    .hero-block::before {
+        content: ''; position: absolute; inset: -20% 0 0;
+        background: radial-gradient(60% 60% at 50% 0%, rgba(202,95,21,0.18) 0%, rgba(202,95,21,0) 70%);
+        pointer-events: none;
+    }
+    h1.feature-h1 {
+        font-size: clamp(2.2rem, 5.4vw, 3.4rem);
+        font-weight: 700; line-height: 1.04; letter-spacing: -0.045em;
+        margin: 16px 0 18px; color: var(--slate-900); max-width: 820px;
+    }
+    .feature-sub {
+        font-size: 1.05rem; color: var(--slate-500); line-height: 1.55;
+        max-width: 720px; margin: 0 0 22px;
+    }
+    .hero-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .persona-grid {
+        display: grid; gap: 18px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    .persona-card .row { display: grid; gap: 10px; margin-top: 14px; }
+    .persona-card .before, .persona-card .after {
+        padding: 10px 12px; border-radius: 10px; font-size: 0.85rem; line-height: 1.45;
+    }
+    .persona-card .before {
+        background: rgba(15,23,42,0.04); color: var(--slate-700);
+        border-left: 3px solid var(--slate-300);
+    }
+    .persona-card .after {
+        background: rgba(202,95,21,0.07); color: var(--slate-900);
+        border-left: 3px solid var(--brand-primary);
+    }
+    .persona-icon {
+        width: 36px; height: 36px; border-radius: 10px;
+        background: linear-gradient(135deg, rgba(202,95,21,0.14), rgba(224,122,48,0.06));
+        display: inline-flex; align-items: center; justify-content: center;
+        color: var(--brand-primary);
+    }
+    .impact-line {
+        margin-top: 14px; font-size: 0.85rem; font-weight: 600;
+        color: var(--brand-primary);
+    }
+    .step-list { display: grid; gap: 14px; counter-reset: step; }
+    .step {
+        display: grid; grid-template-columns: 36px 1fr; gap: 14px;
+        align-items: flex-start;
+    }
+    .step-num {
+        counter-increment: step;
+        width: 32px; height: 32px; border-radius: 10px;
+        background: rgba(202,95,21,0.1); color: var(--brand-primary);
+        font-weight: 700; font-size: 0.95rem;
+        display: inline-flex; align-items: center; justify-content: center;
+    }
+    .step-num::before { content: counter(step); }
+    .step h4 { margin: 4px 0 4px; font-size: 1rem; font-weight: 700; color: var(--slate-900); }
+    .step p { margin: 0; color: var(--slate-500); font-size: 0.92rem; line-height: 1.55; }
+
+    /* Mockup interno: split sidebar de macros + preview */
+    .macro-mockup {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 0;
+        background: #fff;
+        min-height: 460px;
+    }
+    @media (max-width: 720px) {
+        .macro-mockup { grid-template-columns: 1fr; }
+    }
+    .macro-sidebar {
+        border-right: 1px solid var(--slate-200);
+        background: #fbfaf9;
+        padding: 18px 16px;
+        display: flex; flex-direction: column; gap: 12px;
+    }
+    .macro-search {
+        background: #fff; border: 1px solid var(--slate-200);
+        border-radius: 10px; padding: 8px 12px;
+        display: flex; align-items: center; gap: 8px;
+        font-size: 0.85rem; color: var(--slate-400);
+    }
+    .macro-cat {
+        font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em;
+        text-transform: uppercase; color: var(--slate-400);
+        padding: 8px 4px 4px;
+    }
+    .macro-item {
+        padding: 10px 12px; border-radius: 10px;
+        font-size: 0.85rem; color: var(--slate-700);
+        cursor: pointer; display: flex; align-items: center; gap: 8px;
+        border: 1px solid transparent;
+    }
+    .macro-item.active {
+        background: rgba(202,95,21,0.08);
+        border-color: rgba(202,95,21,0.25);
+        color: var(--slate-900); font-weight: 600;
+    }
+    .macro-item .star { color: var(--brand-primary); font-size: 0.7rem; }
+    .macro-item .shortcut {
+        margin-left: auto; font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7rem; color: var(--slate-400);
+    }
+    .macro-preview {
+        padding: 22px 24px; display: flex; flex-direction: column; gap: 14px;
+    }
+    .preview-header {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 10px; flex-wrap: wrap;
+    }
+    .preview-header h4 {
+        margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--slate-900);
+    }
+    .preview-meta { display: flex; gap: 6px; flex-wrap: wrap; }
+    .preview-body {
+        background: var(--slate-100); border-radius: 12px; padding: 16px;
+        font-size: 0.88rem; line-height: 1.7; color: var(--slate-900);
+        white-space: pre-wrap;
+        border: 1px solid var(--slate-200);
+    }
+    .placeholder-hit {
+        background: rgba(202,95,21,0.18);
+        color: var(--brand-primary-deep);
+        padding: 0 4px; border-radius: 4px;
+        font-weight: 600;
+    }
+    .actions-row {
+        display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+        padding-top: 6px;
+    }
+    .combined-actions {
+        display: flex; flex-direction: column; gap: 6px;
+        background: rgba(202,95,21,0.05);
+        border: 1px dashed rgba(202,95,21,0.30);
+        border-radius: 10px; padding: 10px 12px;
+        font-size: 0.82rem; color: var(--slate-700);
+    }
+    .combined-actions strong { color: var(--brand-primary); font-weight: 700; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; }
+    .combined-actions ul { margin: 0; padding-left: 16px; }
+    .combined-actions li { margin: 2px 0; }
+
+    /* Admin editor mockup */
+    .admin-editor {
+        display: grid; grid-template-columns: 1fr 320px; gap: 0;
+        min-height: 360px;
+    }
+    @media (max-width: 720px) { .admin-editor { grid-template-columns: 1fr; } }
+    .editor-pane { padding: 20px 22px; }
+    .editor-textarea {
+        background: #0f172a; color: #e2e8f0;
+        border-radius: 10px; padding: 16px; font-family: 'JetBrains Mono', monospace;
+        font-size: 0.82rem; line-height: 1.65;
+        min-height: 220px;
+        white-space: pre-wrap;
+    }
+    .ph-syntax { color: #f59f5d; }
+    .editor-side {
+        background: #fbfaf9; border-left: 1px solid var(--slate-200);
+        padding: 20px; display: flex; flex-direction: column; gap: 12px;
+        font-size: 0.85rem;
+    }
+    .field-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate-400); margin-bottom: 4px; }
+    .field-value { color: var(--slate-700); }
+    .ph-chip {
+        font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+        background: rgba(202,95,21,0.10); color: var(--brand-primary);
+        border: 1px solid rgba(202,95,21,0.22);
+        padding: 3px 8px; border-radius: 999px; margin: 2px 4px 2px 0;
+        display: inline-block;
+    }
+
+    /* KPI cards */
+    .kpi-grid {
+        display: grid; gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .kpi-card {
+        background: #fff; border: 1px solid var(--slate-200);
+        border-radius: 14px; padding: 18px 18px 16px;
+        display: flex; flex-direction: column; gap: 6px;
+    }
+    .kpi-label {
+        font-size: 0.65rem; font-weight: 700; letter-spacing: 0.16em;
+        text-transform: uppercase; color: var(--slate-400);
+    }
+    .kpi-value {
+        font-size: 1.7rem; font-weight: 700; letter-spacing: -0.025em;
+        color: var(--slate-900); line-height: 1;
+    }
+    .kpi-value .trend { font-size: 0.85rem; color: var(--brand-primary); font-weight: 600; margin-left: 6px; }
+    .kpi-desc { font-size: 0.82rem; color: var(--slate-500); line-height: 1.45; }
+
+    /* Stats / bar chart */
+    .bar-row { display: grid; grid-template-columns: 220px 1fr 60px; gap: 12px; align-items: center; margin: 8px 0; font-size: 0.85rem; }
+    .bar-row .name { color: var(--slate-700); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .bar-row .count { color: var(--slate-500); text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; }
+    .bar-track { height: 10px; background: var(--slate-100); border-radius: 999px; overflow: hidden; }
+    .bar-fill { height: 100%; background: linear-gradient(90deg, var(--brand-primary), var(--brand-accent)); border-radius: 999px; }
+
+    /* Quick wins / completa */
+    .two-col {
+        display: grid; gap: 18px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    /* Risk row */
+    .risk-item {
+        display: grid; grid-template-columns: 1fr; gap: 6px;
+        padding: 14px 16px; border-radius: 12px;
+        background: #fff; border: 1px solid var(--slate-200);
+    }
+    .risk-item h4 {
+        margin: 0; font-size: 0.95rem; color: var(--slate-900);
+        display: flex; align-items: center; gap: 8px;
+    }
+    .risk-dot {
+        width: 8px; height: 8px; border-radius: 999px;
+        background: var(--brand-primary);
+        box-shadow: 0 0 0 3px rgba(202,95,21,0.18);
+    }
+    .risk-item p { margin: 0; font-size: 0.85rem; color: var(--slate-500); line-height: 1.5; }
+    .risk-item .mit { margin-top: 4px; font-size: 0.82rem; color: var(--slate-700); }
+    .risk-item .mit strong { color: var(--brand-primary); }
+
+    .ref-table { width: 100%; border-collapse: collapse; }
+    .ref-table th, .ref-table td { padding: 12px 14px; border-bottom: 1px solid var(--slate-100); text-align: left; font-size: 0.88rem; vertical-align: top; }
+    .ref-table th { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate-400); font-weight: 700; }
+    .ref-table td:first-child { font-weight: 700; color: var(--slate-900); width: 180px; }
+    .ref-table a { color: var(--brand-primary); text-decoration: none; font-weight: 600; }
+    .ref-table a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header style="position: sticky; top: 0; z-index: 10; background: rgba(255, 248, 246, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(15, 23, 42, 0.06);">
+    <div class="container" style="max-width: 1180px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
+        <a href="index.html" style="display: inline-flex; align-items: center; gap: 8px; color: var(--slate-700); text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+            <span style="font-size: 1.1rem;">←</span> Hub de features
+        </a>
+        <span class="eyebrow eyebrow-muted">FEATURE 05 / 10</span>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- 5.2 Hero da feature -->
+    <section class="hero-block" data-reveal>
+        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 6px;">
+            <span class="tier-badge tier-a">Tier A — Polish profissional</span>
+            <span class="eyebrow eyebrow-muted">Feature 05</span>
+        </div>
+        <h1 class="feature-h1">
+            Macros &amp; respostas rápidas para o coordenador<br/>
+            <span class="text-gradient-warm">parar de digitar a mesma justificativa 50 vezes.</span>
+        </h1>
+        <p class="feature-sub">
+            Templates pré-definidos com placeholders tipo <code>{{aluno_nome}}</code>, atalhos de teclado, ações combinadas (responder + mudar status + adicionar tag) e versão institucional vs. pessoal. Inspirado em Zendesk Macros e Help Scout Saved Replies, adaptado ao vocabulário acadêmico — com referência a artigo do regimento, variação por turno, e versão bilíngue.
+        </p>
+        <div class="hero-pills">
+            <span class="pill pill-warm">Produtividade</span>
+            <span class="pill">Zendesk</span>
+            <span class="pill">Templates</span>
+            <span class="pill">Atalhos</span>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 5.3 Por que isso importa -->
+    <section data-reveal>
+        <span class="eyebrow"><span class="eyebrow-dot"></span>Por que isso importa</span>
+        <h2 class="section-title" style="margin-top: 10px;">Hoje o coordenador é um escriba</h2>
+        <p style="color: var(--slate-500); line-height: 1.6; max-width: 760px;">
+            Em um semestre típico do IFRJ, o coordenador recebe ~50 justificativas de falta. A grande maioria tem o mesmo veredicto: aprovada com referência ao art. 38 do Regimento Interno. Mesmo assim, é tudo escrito à mão dentro do campo livre de feedback. Erros de digitação, inconsistência de tom entre coordenadores, demora — e zero ganho institucional disso.
+        </p>
+        <ul style="margin-top: 16px; padding-left: 0; list-style: none; display: grid; gap: 10px;">
+            <li style="display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: flex-start;">
+                <span class="eyebrow-dot" style="margin-top: 8px;"></span>
+                <span style="color: var(--slate-700); line-height: 1.55;">
+                    A função <code>reprovarDemanda</code> em <code>dashboardcoord.js:49-75</code> cria uma modal com um único <code>&lt;input&gt;</code> de texto livre. Sem template, sem placeholder, sem histórico — só um campo em branco e um botão "Enviar".
+                </span>
+            </li>
+            <li style="display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: flex-start;">
+                <span class="eyebrow-dot" style="margin-top: 8px;"></span>
+                <span style="color: var(--slate-700); line-height: 1.55;">
+                    O campo <code>feedback</code> da demanda é um blob de string solto, sem categorização. Não dá pra perguntar "quais foram as 5 razões mais comuns de reprovação neste semestre?".
+                </span>
+            </li>
+            <li style="display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: flex-start;">
+                <span class="eyebrow-dot" style="margin-top: 8px;"></span>
+                <span style="color: var(--slate-700); line-height: 1.55;">
+                    Aprovação (em <code>aprovarDemanda</code> linha 40) nem chega a pedir texto. O aluno recebe um status mudo. Macros transformam aprovação numa resposta humana automática.
+                </span>
+            </li>
+        </ul>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 5.4 Personas impactadas -->
+    <section data-reveal>
+        <span class="eyebrow"><span class="eyebrow-dot"></span>Personas impactadas</span>
+        <h2 class="section-title" style="margin-top: 10px;">Quem ganha o quê</h2>
+        <p class="section-subtitle">Mesma macro, três efeitos diferentes — produtividade, clareza e governança.</p>
+
+        <div class="persona-grid">
+            <article class="card persona-card card-hover">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span class="persona-icon" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                    </span>
+                    <div>
+                        <strong style="font-size: 0.95rem; color: var(--slate-900);">Aluno · Bruno Almeida</strong>
+                        <p style="margin: 2px 0 0; font-size: 0.8rem; color: var(--slate-400);">Justificou falta na quinta-feira</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="before">Recebe um "negada" seco ou um texto rabiscado às 23h por um coord cansado. Sem citação de artigo, sem nome de quem decidiu.</div>
+                    <div class="after">Resposta consistente, em 2 segundos, citando art. 38 do Regimento, com seu nome, sua disciplina, e o protocolo. Cara de instituição, não de WhatsApp.</div>
+                </div>
+                <div class="impact-line">Confiança no processo +↑</div>
+            </article>
+
+            <article class="card persona-card card-hover">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span class="persona-icon" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
+                    </span>
+                    <div>
+                        <strong style="font-size: 0.95rem; color: var(--slate-900);">Coordenador · Carla Pereira</strong>
+                        <p style="margin: 2px 0 0; font-size: 0.8rem; color: var(--slate-400);">23 demandas na fila hoje</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="before">Abre demanda, digita "Sua falta foi acatada conforme regimento", muda status manualmente, esquece de marcar tag, repete 22 vezes.</div>
+                    <div class="after">Abre demanda, <span class="kbd">Ctrl</span>+<span class="kbd">1</span>, preview, "Aplicar e enviar". 4 segundos. Status, tag e resposta aplicados juntos.</div>
+                </div>
+                <div class="impact-line">Tempo por demanda: 90s → 6s</div>
+            </article>
+
+            <article class="card persona-card card-hover">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span class="persona-icon" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 4v4"/><path d="M16 4v4"/></svg>
+                    </span>
+                    <div>
+                        <strong style="font-size: 0.95rem; color: var(--slate-900);">Instituição · Coordenação Pedagógica</strong>
+                        <p style="margin: 2px 0 0; font-size: 0.8rem; color: var(--slate-400);">3 coords ativos, 1 reitoria</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="before">Cada coord responde diferente. Aluno A recebe resposta amigável, aluno B recebe resposta seca. Risco jurídico de tratamento desigual.</div>
+                    <div class="after">Macros institucionais padronizam tom, citam regimento, alimentam relatório de "% respostas por macro". Tom é decisão de gestão, não de plantão.</div>
+                </div>
+                <div class="impact-line">Padronização institucional</div>
+            </article>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 5.5 Fluxo -->
+    <section data-reveal>
+        <span class="eyebrow"><span class="eyebrow-dot"></span>Como funcionaria</span>
+        <h2 class="section-title" style="margin-top: 10px;">Fluxo do coordenador respondendo</h2>
+        <p class="section-subtitle">Cinco passos. Quatro deles em ≤6 segundos quando vira hábito.</p>
+
+        <div class="step-list">
+            <div class="step">
+                <span class="step-num"></span>
+                <div>
+                    <h4>Abrir demanda na fila</h4>
+                    <p>Coord clica no card de Bruno Almeida — "Justificativa de Falta, protocolo #4821". A modal de detalhes (hoje em <code>modais.js</code>) carrega com um novo painel lateral: "Macros sugeridas".</p>
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-num"></span>
+                <div>
+                    <h4>Macros sugeridas pela IA (futuro) ou por tipo (MVP)</h4>
+                    <p>No MVP, o painel filtra por <code>tipo === 'Justificativa de Falta'</code>. Na versão com IA (cruza com a Feature 01), o Copilot lê a descrição e sugere a macro mais provável — coord só confirma.</p>
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-num"></span>
+                <div>
+                    <h4>Preview com placeholders já substituídos</h4>
+                    <p>Coord seleciona "Aprovação padrão de justificativa". O preview à direita já mostra <em>"Prezado(a) Bruno Almeida, sua justificativa para a ausência em Cálculo III no dia 08/05/2026..."</em> — placeholders em laranja, mostrando que vieram do contexto.</p>
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-num"></span>
+                <div>
+                    <h4>Decidir: aplicar e enviar, aplicar e editar, ou descartar</h4>
+                    <p>Três botões. "Aplicar e enviar" aciona também as <strong>ações combinadas</strong> da macro: muda status para <code>concluido</code>, adiciona tag <code>auto-aprovada</code>, dispara CSAT, escreve no audit log (cruza com Feature 04). "Aplicar e editar" abre o texto pré-preenchido para customização final.</p>
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-num"></span>
+                <div>
+                    <h4>Atalho de teclado para os top 3</h4>
+                    <p>Macros marcadas como favoritas ganham <span class="kbd">Ctrl</span>+<span class="kbd">1</span>, <span class="kbd">Ctrl</span>+<span class="kbd">2</span>, <span class="kbd">Ctrl</span>+<span class="kbd">3</span>. Sem clique, sem dropdown — coord vira piloto.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 5.6 Mockup conceitual -->
+    <section data-reveal>
+        <span class="eyebrow"><span class="eyebrow-dot"></span>Mockup conceitual</span>
+        <h2 class="section-title" style="margin-top: 10px;">Painel de macros dentro da modal de demanda</h2>
+        <p class="section-subtitle">Sidebar à esquerda, preview com placeholders substituídos à direita, ações combinadas em destaque.</p>
+
+        <div class="mockup">
+            <div class="mockup-window">
+                <div class="mockup-bar">
+                    <span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span>
+                    <span style="margin-left: 12px; font-size: 0.78rem; color: var(--slate-500);">Demanda #4821 — Justificativa de Falta — Bruno Almeida</span>
+                </div>
+                <div class="macro-mockup">
+                    <aside class="macro-sidebar">
+                        <div class="macro-search">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+                            Buscar macro...
+                        </div>
+                        <div class="macro-cat">Favoritas</div>
+                        <div class="macro-item active">
+                            <span class="star">★</span> Aprovação padrão
+                            <span class="shortcut">⌘1</span>
+                        </div>
+                        <div class="macro-item">
+                            <span class="star">★</span> Doc. incompleto
+                            <span class="shortcut">⌘2</span>
+                        </div>
+                        <div class="macro-item">
+                            <span class="star">★</span> Solicitar atestado
+                            <span class="shortcut">⌘3</span>
+                        </div>
+
+                        <div class="macro-cat">Justificativa de Falta</div>
+                        <div class="macro-item">Aprovação c/ atestado médico</div>
+                        <div class="macro-item">Aprovação por luto familiar</div>
+                        <div class="macro-item">Reprovar — fora do prazo</div>
+
+                        <div class="macro-cat">Aproveitamento</div>
+                        <div class="macro-item">Aprovação de crédito</div>
+                        <div class="macro-item">Pedir ementa adicional</div>
+                    </aside>
+
+                    <div class="macro-preview">
+                        <div class="preview-header">
+                            <h4>Aprovação padrão de justificativa</h4>
+                            <div class="preview-meta">
+                                <span class="pill pill-warm">Institucional</span>
+                                <span class="pill">Usada 47×</span>
+                            </div>
+                        </div>
+
+                        <div class="preview-body">Prezado(a) <span class="placeholder-hit">Bruno Almeida</span>,
+
+Sua justificativa para a ausência em <span class="placeholder-hit">Cálculo III</span> no dia <span class="placeholder-hit">08/05/2026</span> foi acatada conforme art. 38 do Regimento Interno. Sua frequência será corrigida em até 5 dias úteis.
+
+Atenciosamente,
+<span class="placeholder-hit">Carla Pereira</span>
+Coordenação Pedagógica
+Protocolo: <span class="placeholder-hit">#4821</span></div>
+
+                        <div class="combined-actions">
+                            <strong>Ações combinadas ao aplicar</strong>
+                            <ul>
+                                <li>Mudar status: <code>pendente</code> → <code>concluido</code></li>
+                                <li>Adicionar tag: <code>auto-aprovada</code></li>
+                                <li>Disparar CSAT (Feature 06)</li>
+                                <li>Registrar no audit log (Feature 04)</li>
+                            </ul>
+                        </div>
+
+                        <div class="actions-row">
+                            <button class="btn-primary">Aplicar e enviar</button>
+                            <button class="btn-ghost">Aplicar e editar</button>
+                            <button class="btn-ghost" style="color: var(--slate-500);">Cancelar</button>
+                            <span style="margin-left: auto; font-size: 0.78rem; color: var(--slate-400);">
+                                <span class="kbd">⌘</span> <span class="kbd">↵</span> envia
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title" style="margin-top: 48px;">Editor de macros (visão admin / coord-chefe)</h2>
+        <p class="section-subtitle">Textarea com syntax highlight de placeholders. Lateral lista variáveis disponíveis e configura as ações combinadas.</p>
+
+        <div class="mockup">
+            <div class="mockup-window">
+                <div class="mockup-bar">
+                    <span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span>
+                    <span style="margin-left: 12px; font-size: 0.78rem; color: var(--slate-500);">Admin · Editar macro · Aprovação padrão de justificativa</span>
+                </div>
+                <div class="admin-editor">
+                    <div class="editor-pane">
+                        <div class="field-label" style="margin-bottom: 8px;">Texto da macro</div>
+                        <div class="editor-textarea">Prezado(a) <span class="ph-syntax">{{aluno_nome}}</span>,
+
+Sua justificativa para a ausência em <span class="ph-syntax">{{disciplina}}</span> no dia <span class="ph-syntax">{{data_falta}}</span> foi acatada conforme art. 38 do Regimento Interno. Sua frequência será corrigida em até 5 dias úteis.
+
+Atenciosamente,
+<span class="ph-syntax">{{coordenador_nome}}</span>
+Coordenação Pedagógica
+Protocolo: <span class="ph-syntax">{{numero_protocolo}}</span></div>
+                        <div style="margin-top: 14px; display: flex; gap: 10px; align-items: center;">
+                            <button class="btn-primary">Salvar versão 3</button>
+                            <button class="btn-ghost">Preview com Bruno Almeida</button>
+                            <span style="font-size: 0.78rem; color: var(--slate-400); margin-left: auto;">Última edição: 02/04/2026 · Diego Santos</span>
+                        </div>
+                    </div>
+                    <aside class="editor-side">
+                        <div>
+                            <div class="field-label">Categoria</div>
+                            <div class="field-value">Justificativa de Falta</div>
+                        </div>
+                        <div>
+                            <div class="field-label">Escopo</div>
+                            <div class="field-value">Institucional · todos os coords</div>
+                        </div>
+                        <div>
+                            <div class="field-label">Atalho</div>
+                            <div class="field-value"><span class="kbd">⌘</span> + <span class="kbd">1</span></div>
+                        </div>
+                        <div>
+                            <div class="field-label">Placeholders disponíveis</div>
+                            <div style="margin-top: 4px;">
+                                <span class="ph-chip">{{aluno_nome}}</span>
+                                <span class="ph-chip">{{disciplina}}</span>
+                                <span class="ph-chip">{{data_falta}}</span>
+                                <span class="ph-chip">{{numero_protocolo}}</span>
+                                <span class="ph-chip">{{coordenador_nome}}</span>
+                                <span class="ph-chip">{{turno}}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="field-label">Ações combinadas</div>
+                            <div class="field-value" style="line-height: 1.6;">
+                                Mudar status → <code>concluido</code><br/>
+                                Tag → <code>auto-aprovada</code><br/>
+                                Disparar CSAT
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title" style="margin-top: 48px;">Stats — quais macros revelam o trabalho real</h2>
+        <p class="section-subtitle">Top macros aplicadas no semestre 2026.1 — atalho pra entender onde o fluxo institucional está mal desenhado.</p>
+
+        <div class="card">
+            <div class="bar-row">
+                <span class="name">Aprovação padrão de justificativa</span>
+                <div class="bar-track"><div class="bar-fill" style="width: 92%;"></div></div>
+                <span class="count">47</span>
+            </div>
+            <div class="bar-row">
+                <span class="name">Aprovação de aproveitamento de crédito</span>
+                <div class="bar-track"><div class="bar-fill" style="width: 56%;"></div></div>
+                <span class="count">28</span>
+            </div>
+            <div class="bar-row">
+                <span class="name">Solicitação de atestado adicional</span>
+                <div class="bar-track"><div class="bar-fill" style="width: 38%;"></div></div>
+                <span class="count">19</span>
+            </div>
+            <div class="bar-row">
+                <span class="name">Reprovação por documento incompleto</span>
+                <div class="bar-track"><div class="bar-fill" style="width: 24%;"></div></div>
+                <span class="count">12</span>
+            </div>
+            <div class="bar-row">
+                <span class="name">Aprovação c/ atestado médico — bilíngue</span>
+                <div class="bar-track"><div class="bar-fill" style="width: 12%;"></div></div>
+                <span class="count">6</span>
+            </div>
+            <p style="margin-top: 16px; font-size: 0.85rem; color: var(--slate-500); border-left: 2px solid var(--brand-primary); padding-left: 12px;">
+                47 aprovações padrão em 4 meses. Sinal claro: o fluxo de "Justificativa de Falta com atestado" merece <strong>auto-aprovação</strong> e talvez nem precise virar demanda — vira regra de regimento direto. Macros viraram observatório do processo institucional.
+            </p>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 5.7 Modelo de dados -->
+    <section data-reveal>
+        <span class="eyebrow"><span class="eyebrow-dot"></span>Modelo de dados</span>
+        <h2 class="section-title" style="margin-top: 10px;">Schema novo — <code>macros[]</code> em <code>localStorage</code></h2>
+        <p class="section-subtitle">A demanda continua igual. O que muda: novo store de macros + a demanda passa a registrar qual macro foi aplicada (para stats e audit).</p>
+
+<pre><code>// Hoje — só o feedback bruto
+{
+  protocolo: "#4821",
+  tipo: "Justificativa de Falta",
+  status: "negada",
+  feedback: "blob de texto digitado a mão"   // ← campo cego
+}
+
+// Proposto — store novo `macros` + campo `respostaOrigem` na demanda
+{
+  "macros": [
+    {
+      "id": "macro_001",
+      "nome": "Aprovação padrão de justificativa",
+      "categoria": "Justificativa de Falta",
+      "escopo": "institucional",            // "institucional" | "pessoal"
+      "criador_matricula": "20240002",      // Carla Pereira
+      "texto": "Prezado(a) {{aluno_nome}},\n\nSua justificativa para a ausência em {{disciplina}} no dia {{data_falta}} foi acatada conforme art. 38 do Regimento Interno...",
+      "acoes": [
+        { "tipo": "mudar_status", "valor": "concluido" },
+        { "tipo": "tag_adicionar", "valor": "auto-aprovada" },
+        { "tipo": "disparar_csat", "valor": true }
+      ],
+      "atalho": "Ctrl+1",
+      "uso_contagem": 47,
+      "ultima_aplicacao": "2026-05-08T14:22:00",
+      "criado_em": "2026-02-10T09:00:00",
+      "versao": 3
+    }
+  ],
+
+  // Na demanda, evolução do campo feedback:
+  "demanda": {
+    "protocolo": "#4821",
+    "respostaOrigem": {
+      "macroId": "macro_001",
+      "macroVersao": 3,
+      "aplicadaPor": "20240002",
+      "aplicadaEm": "2026-05-08T14:22:00",
+      "textoFinal": "...texto já com placeholders substituídos..."
+    }
+  }
+}</code></pre>
+        <p style="font-size: 0.85rem; color: var(--slate-500); margin-top: 14px;">
+            <strong>Versionamento</strong>: macros editadas incrementam <code>versao</code>. A demanda guarda a versão aplicada na época — auditoria preservada mesmo se a macro mudar depois.
+        </p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 5.8 Inspirações -->
+    <section data-reveal>
+        <span class="eyebrow"><span class="eyebrow-dot"></span>Inspiração de mercado</span>
+        <h2 class="section-title" style="margin-top: 10px;">O que o B2B já resolveu há 10 anos</h2>
+        <p class="section-subtitle">Pegamos os mecanismos comprovados de help desk e traduzimos para o léxico acadêmico.</p>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <table class="ref-table">
+                <thead>
+                    <tr>
+                        <th>Referência</th>
+                        <th>O que faz</th>
+                        <th>Adaptação acadêmica no Clarify</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="https://www.eesel.ai/blog/zendesk-automation-macros" target="_blank" rel="noopener">Zendesk Macros</a></td>
+                        <td>Templates 1-clique que combinam resposta + mudança de status + tag + atribuição. Placeholders <code>{{ticket.requester.name}}</code>.</td>
+                        <td>Macros institucionais com citação de artigo do regimento. Placeholders <code>{{aluno_nome}}</code>, <code>{{disciplina}}</code>. Ações combinadas + audit log automático.</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://www.helpscout.com/" target="_blank" rel="noopener">Help Scout Saved Replies</a></td>
+                        <td>Biblioteca compartilhada por time, busca rápida, atalho <code>/</code> dentro do editor de resposta. Variações de tom por canal.</td>
+                        <td>Variantes bilíngues PT/EN para alunos estrangeiros (IFRJ tem programa de intercâmbio). Variantes por turno (matutino/noturno).</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://support.google.com/mail/answer/6579" target="_blank" rel="noopener">Gmail Templates</a></td>
+                        <td>Templates pessoais simples, sem placeholders, sem combinação de ações. Bom UX de "salvar este texto".</td>
+                        <td>Macros pessoais do coordenador (escopo: pessoal) — frases que ele usa só dele, ao lado das institucionais.</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://front.com/" target="_blank" rel="noopener">Front Message Templates</a></td>
+                        <td>Templates com lógica condicional (<em>if cliente é VIP, então...</em>) e teclas de atalho.</td>
+                        <td>MVP sem condicional. Versão completa: variável de turno escolhe automaticamente a variante de texto correta — sem o coord pensar.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 5.9 KPIs -->
+    <section data-reveal>
+        <span class="eyebrow"><span class="eyebrow-dot"></span>Métricas de sucesso</span>
+        <h2 class="section-title" style="margin-top: 10px;">Como saberemos que funcionou</h2>
+        <p class="section-subtitle">Cinco KPIs — três de produtividade, dois de qualidade institucional.</p>
+
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <span class="kpi-label">Tempo médio de resposta</span>
+                <span class="kpi-value">−70% <span class="trend">↓</span></span>
+                <span class="kpi-desc">De ~90s digitando para ~6s aplicando macro favorita.</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">% respostas via macro</span>
+                <span class="kpi-value">≥ 60%</span>
+                <span class="kpi-desc">Meta no primeiro semestre. Se ficar abaixo de 30%, ou a biblioteca está incompleta ou o UX falhou.</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Erros de digitação</span>
+                <span class="kpi-value">→ 0</span>
+                <span class="kpi-desc">Nas demandas respondidas via macro pura (sem editar). Padronização real.</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Top 5 macros aplicadas</span>
+                <span class="kpi-value">Revela</span>
+                <span class="kpi-desc">Atalho pra descobrir quais fluxos institucionais merecem virar regra (não demanda).</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">CSAT macro vs. manual</span>
+                <span class="kpi-value">≥ paridade</span>
+                <span class="kpi-desc">Se cair vs. resposta manual, sinal de tom robótico — gatilho pra refinar texto.</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 5.10 Esforço & dependências -->
+    <section data-reveal>
+        <span class="eyebrow"><span class="eyebrow-dot"></span>Esforço &amp; dependências</span>
+        <h2 class="section-title" style="margin-top: 10px;">O que toca no código</h2>
+        <p class="section-subtitle">Arquivos reais do repo. Estimativas em t-shirt size.</p>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Arquivo / módulo</th>
+                        <th>Mudança</th>
+                        <th>Esforço</th>
+                        <th>Dependência</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Clarify/src/data/macros.js</code></td>
+                        <td>Novo. Seed de 5 macros institucionais hardcoded (aprovação padrão, doc incompleto, atestado adicional, aproveitamento de crédito, reprovação fora do prazo).</td>
+                        <td><span class="pill pill-warm">XS</span></td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td><code>Clarify/src/services/macros.js</code></td>
+                        <td>Novo. <code>aplicarMacro(macroId, demanda)</code> — substitui placeholders, executa ações combinadas, persiste em <code>localStorage</code>.</td>
+                        <td><span class="pill pill-warm">S</span></td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td><code>Clarify/src/components/structures/modais.js</code></td>
+                        <td>Adicionar painel lateral de macros na modal de detalhes da demanda. Dropdown + preview + botões de ação.</td>
+                        <td><span class="pill pill-warm">M</span></td>
+                        <td>Modal de demanda já existente</td>
+                    </tr>
+                    <tr>
+                        <td><code>Clarify/src/pages/dashboardcoord.js</code> (linhas 49–75)</td>
+                        <td>Substituir o <code>reprovarDemanda</code> que hoje cria modal raw com <code>&lt;input&gt;</code> de texto. Vira chamada a <code>aplicarMacro()</code>. <code>aprovarDemanda</code> também passa a aceitar macro.</td>
+                        <td><span class="pill pill-warm">S</span></td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td><code>Clarify/src/pages/admin-macros.js</code></td>
+                        <td>Novo (V2). Tela CRUD de macros institucionais. Só admin enxerga.</td>
+                        <td><span class="pill pill-warm">M</span></td>
+                        <td>Papel de admin (já existe parcialmente)</td>
+                    </tr>
+                    <tr>
+                        <td>Atalhos globais de teclado</td>
+                        <td>Listener em <code>main.js</code> que escuta <code>Ctrl/Cmd + 1..9</code> quando há modal de demanda aberta.</td>
+                        <td><span class="pill pill-warm">XS</span></td>
+                        <td>Modal aberta como sinal</td>
+                    </tr>
+                    <tr>
+                        <td>Audit log (Feature 04)</td>
+                        <td>Toda aplicação de macro vira evento no log: <code>macro_aplicada</code> + diff de status + tags.</td>
+                        <td>—</td>
+                        <td>Feature 04 desejável</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 5.11 Quick wins vs versão completa -->
+    <section data-reveal>
+        <span class="eyebrow"><span class="eyebrow-dot"></span>Quick wins vs. versão completa</span>
+        <h2 class="section-title" style="margin-top: 10px;">Caminho mínimo de apresentação → produto</h2>
+        <p class="section-subtitle">MVP cabe em 1–2 dias e já transforma a experiência. Versão completa é roadmap real.</p>
+
+        <div class="two-col">
+            <article class="card">
+                <span class="eyebrow" style="color: var(--slate-500);">MVP — 1 a 2 dias</span>
+                <h3 style="margin: 6px 0 12px; font-size: 1.15rem; color: var(--slate-900);">Mínimo demonstrável</h3>
+                <ul style="margin: 0; padding-left: 18px; color: var(--slate-700); line-height: 1.7; font-size: 0.9rem;">
+                    <li>5 macros institucionais hardcoded em <code>data/macros.js</code></li>
+                    <li>Placeholders simples: <code>{{aluno_nome}}</code>, <code>{{disciplina}}</code>, <code>{{numero_protocolo}}</code>, <code>{{coordenador_nome}}</code></li>
+                    <li>Dropdown "Aplicar macro..." dentro da modal de detalhes</li>
+                    <li>Preview com placeholders em laranja antes de aplicar</li>
+                    <li>Aplicar = preencher feedback + mudar status (1 ação combinada simples)</li>
+                    <li>Substitui o form bruto de <code>reprovarDemanda</code> hoje em <code>dashboardcoord.js:49-75</code></li>
+                </ul>
+            </article>
+
+            <article class="card" style="border-color: rgba(202,95,21,0.30); background: linear-gradient(180deg, #fff, rgba(202,95,21,0.03));">
+                <span class="eyebrow">Versão completa</span>
+                <h3 style="margin: 6px 0 12px; font-size: 1.15rem; color: var(--slate-900);">Sistema maduro</h3>
+                <ul style="margin: 0; padding-left: 18px; color: var(--slate-700); line-height: 1.7; font-size: 0.9rem;">
+                    <li>Editor CRUD de macros para admin (tela própria)</li>
+                    <li>Macros pessoais vs. institucionais (escopo controlado por papel)</li>
+                    <li>Atalhos de teclado <span class="kbd">⌘</span><span class="kbd">1..9</span> para favoritas</li>
+                    <li>Ações combinadas avançadas (tag, CSAT, atribuição, etc.)</li>
+                    <li>Variantes por turno e idioma (PT/EN)</li>
+                    <li>Stats: top macros, macros não usadas há 6 meses, gráfico semestral</li>
+                    <li>Versionamento + alerta "regulamento mudou, revise"</li>
+                    <li>Integração com Copilot (Feature 01): IA sugere macro</li>
+                </ul>
+            </article>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 5.12 Riscos -->
+    <section data-reveal>
+        <span class="eyebrow"><span class="eyebrow-dot"></span>Riscos &amp; armadilhas</span>
+        <h2 class="section-title" style="margin-top: 10px;">O que pode dar errado</h2>
+        <p class="section-subtitle">Macros são poderosas — e perigosas quando viram autopilot sem freio.</p>
+
+        <div style="display: grid; gap: 14px;">
+            <div class="risk-item">
+                <h4><span class="risk-dot"></span>Resposta robotizada — aluno se sente em URA</h4>
+                <p>Macros muito secas e formais geram a sensação de "ninguém leu meu pedido". Pior se o nome aparecer errado por placeholder mal preenchido.</p>
+                <p class="mit"><strong>Mitigação:</strong> macros podem ter marcadores <code>[completar caso]</code> que força o coord a editar antes de enviar. CSAT pós-macro acusa queda → texto vai pra revisão.</p>
+            </div>
+            <div class="risk-item">
+                <h4><span class="risk-dot"></span>Macros desatualizadas (regimento muda)</h4>
+                <p>"Conforme art. 38 do Regimento" continua na macro mesmo depois do regimento ter sido reescrito. Resposta institucional fica errada por meses.</p>
+                <p class="mit"><strong>Mitigação:</strong> versionamento (<code>versao: 3</code>) + alerta automático "esta macro não é editada há 12 meses" + admin assina toda mudança.</p>
+            </div>
+            <div class="risk-item">
+                <h4><span class="risk-dot"></span>Coord aplica macro errada com pressa</h4>
+                <p>Carla está no <span class="kbd">⌘</span>+<span class="kbd">1</span> automático, abre demanda de aproveitamento (que merece análise) e aplica aprovação de falta. Demanda errada concluída.</p>
+                <p class="mit"><strong>Mitigação:</strong> preview obrigatório antes do envio. Macro só sugere se <code>tipo_demanda === categoria_macro</code>. Aplicar fora de categoria pede confirmação extra.</p>
+            </div>
+            <div class="risk-item">
+                <h4><span class="risk-dot"></span>Combo "macro + auto-status" fecha demanda errada</h4>
+                <p>Ação combinada muda status pra <code>concluido</code> e dispara CSAT. Se a macro errada foi aplicada, o estrago é instantâneo e visível pro aluno.</p>
+                <p class="mit"><strong>Mitigação:</strong> macros que fecham demanda exibem confirmação extra ("isto vai concluir a demanda e enviar CSAT — confirma?"). Audit log permite reverter em 1 clique nas primeiras 24h.</p>
+            </div>
+            <div class="risk-item">
+                <h4><span class="risk-dot"></span>Proliferação descontrolada de macros pessoais</h4>
+                <p>Cada coord cria 30 macros suas, ninguém usa as institucionais, padronização morre. Vira gambiarra pessoal coletiva.</p>
+                <p class="mit"><strong>Mitigação:</strong> stats mensais mostram "% institucionais vs. pessoais por coord". Macro pessoal usada >10× sugere ser promovida a institucional via aprovação do admin.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section data-reveal style="text-align: center; padding: 24px 0 16px;">
+        <p class="quote" style="display: inline-block; text-align: left; max-width: 640px; margin: 0 auto;">
+            "A melhor macro é a que vira regra. Quando uma macro é aplicada 47× num semestre, ela é o sintoma de um fluxo que não devia nem ser uma demanda — devia ser automação no regimento."
+        </p>
+    </section>
+
+</main>
+
+<footer style="margin-top: 80px; padding: 32px 0; border-top: 1px solid var(--slate-200); text-align: center; color: var(--slate-400); font-size: 0.85rem;">
+    <div class="container">
+        <p>Feature 05 de 10 &middot; <a href="index.html" style="color: var(--brand-primary); text-decoration: none; font-weight: 600;">Voltar ao hub →</a></p>
+    </div>
+</footer>
+
+<script>
+    const els = document.querySelectorAll('[data-reveal]');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('is-revealed');
+                obs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Feature 01 — AI Copilot Acadêmico — Clarify Brainstorm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+    /* ---------------- Hero ---------------- */
+    .hero-feature {
+        position: relative;
+        padding: 64px 0 32px;
+        overflow: hidden;
+    }
+    .hero-feature::before {
+        content: '';
+        position: absolute;
+        inset: -10% -10% 0 -10%;
+        background: radial-gradient(40% 50% at 70% 0%, rgba(202, 95, 21, 0.18) 0%, rgba(202, 95, 21, 0) 70%);
+        pointer-events: none;
+    }
+    .hero-row {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+    }
+    h1.feature-title {
+        font-size: clamp(2.2rem, 5.4vw, 3.8rem);
+        font-weight: 700;
+        line-height: 1.04;
+        margin: 0 0 18px;
+        color: var(--slate-900);
+    }
+    .feature-lede {
+        font-size: 1.125rem;
+        color: var(--slate-700);
+        max-width: 760px;
+        line-height: 1.6;
+        margin: 0 0 22px;
+    }
+    .feature-pills {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    /* ---------------- Section frames ---------------- */
+    section.block {
+        margin-top: 72px;
+    }
+    .section-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+    .block h2 {
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        margin: 0 0 14px;
+        color: var(--slate-900);
+    }
+    .block .lede {
+        font-size: 1rem;
+        color: var(--slate-500);
+        max-width: 720px;
+        line-height: 1.6;
+        margin: 0 0 28px;
+    }
+
+    /* ---------------- Why-it-matters ---------------- */
+    .why-grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: 1fr;
+    }
+    @media (min-width: 720px) {
+        .why-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .why-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        padding: 22px;
+    }
+    .why-card .num {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--brand-primary);
+        letter-spacing: 0.14em;
+    }
+    .why-card h3 {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin: 8px 0 8px;
+        color: var(--slate-900);
+        letter-spacing: -0.02em;
+    }
+    .why-card p {
+        font-size: 0.9rem;
+        color: var(--slate-500);
+        line-height: 1.55;
+        margin: 0;
+    }
+
+    /* ---------------- Personas ---------------- */
+    .persona-grid {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: 1fr;
+    }
+    @media (min-width: 820px) {
+        .persona-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .persona-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 18px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+    .persona-card .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+        color: #fff;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.95rem;
+        box-shadow: 0 6px 16px -8px rgba(202, 95, 21, 0.5);
+    }
+    .persona-card h3 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        letter-spacing: -0.015em;
+    }
+    .persona-card .role {
+        font-size: 0.75rem;
+        color: var(--slate-400);
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+    .ba-block {
+        display: grid;
+        gap: 10px;
+    }
+    .ba-row {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        font-size: 0.88rem;
+        line-height: 1.5;
+    }
+    .ba-tag {
+        flex-shrink: 0;
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-top: 2px;
+    }
+    .ba-tag.before {
+        background: rgba(15, 23, 42, 0.08);
+        color: var(--slate-500);
+    }
+    .ba-tag.after {
+        background: rgba(202, 95, 21, 0.12);
+        color: var(--brand-primary);
+    }
+    .persona-impact {
+        font-size: 0.85rem;
+        color: var(--brand-primary);
+        font-weight: 600;
+        padding-top: 12px;
+        border-top: 1px solid var(--slate-100);
+    }
+
+    /* ---------------- Flow steps ---------------- */
+    .flow-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+    .flow-step {
+        display: grid;
+        grid-template-columns: 48px 1fr;
+        gap: 18px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        padding: 20px 22px;
+    }
+    .flow-step .step-num {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 6px 18px -8px rgba(202, 95, 21, 0.55);
+    }
+    .flow-step h4 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        margin: 4px 0 6px;
+        letter-spacing: -0.015em;
+    }
+    .flow-step p {
+        font-size: 0.92rem;
+        color: var(--slate-500);
+        line-height: 1.55;
+        margin: 0;
+    }
+
+    /* ---------------- Mockup ---------------- */
+    .mockup-shell {
+        background: linear-gradient(180deg, var(--brand-surface) 0%, #fff 100%);
+        border: 1px solid rgba(202, 95, 21, 0.18);
+        border-radius: 20px;
+        padding: 22px;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 32px 60px -24px rgba(202, 95, 21, 0.18);
+    }
+    .mockup-grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: 1fr;
+    }
+    @media (min-width: 920px) {
+        .mockup-grid {
+            grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+        }
+    }
+    /* Ticket pane */
+    .ticket-pane {
+        background: #fff;
+        border-radius: 14px;
+        border: 1px solid var(--slate-200);
+        overflow: hidden;
+    }
+    .ticket-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 18px;
+        background: #f8fafc;
+        border-bottom: 1px solid var(--slate-200);
+    }
+    .ticket-head .proto {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        color: var(--slate-500);
+    }
+    .ticket-head .title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        margin: 2px 0 0;
+        letter-spacing: -0.015em;
+    }
+    .ticket-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        background: rgba(234, 179, 8, 0.12);
+        color: #92722a;
+        padding: 4px 10px;
+        border-radius: 999px;
+    }
+    .ticket-status::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: #d4a017;
+    }
+    .ticket-body {
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+    .ticket-msg {
+        display: grid;
+        grid-template-columns: 36px 1fr;
+        gap: 12px;
+    }
+    .ticket-msg .av {
+        width: 32px;
+        height: 32px;
+        border-radius: 999px;
+        background: #f1f5f9;
+        color: var(--slate-700);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+    .ticket-msg .av.aluno {
+        background: rgba(202, 95, 21, 0.10);
+        color: var(--brand-primary);
+    }
+    .ticket-msg .meta {
+        font-size: 0.72rem;
+        color: var(--slate-400);
+        margin-bottom: 4px;
+    }
+    .ticket-msg .meta strong {
+        color: var(--slate-700);
+        font-weight: 600;
+    }
+    .ticket-msg .body {
+        font-size: 0.9rem;
+        line-height: 1.55;
+        color: var(--slate-700);
+        background: #f8fafc;
+        border: 1px solid var(--slate-100);
+        border-radius: 12px;
+        padding: 12px 14px;
+    }
+    .ticket-fields {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-top: 4px;
+    }
+    .field-cell {
+        background: #fff8f6;
+        border: 1px dashed rgba(202, 95, 21, 0.25);
+        border-radius: 10px;
+        padding: 10px 12px;
+    }
+    .field-cell label {
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: var(--brand-primary);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+    .field-cell .v {
+        font-size: 0.9rem;
+        color: var(--slate-900);
+        margin-top: 4px;
+        font-weight: 600;
+    }
+
+    /* Copilot pane */
+    .copilot-pane {
+        background: linear-gradient(180deg, #fff 0%, #fff8f6 100%);
+        border-radius: 14px;
+        border: 1px solid rgba(202, 95, 21, 0.25);
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .copilot-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(202, 95, 21, 0.15);
+    }
+    .copilot-orb {
+        width: 30px;
+        height: 30px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+        position: relative;
+        box-shadow: 0 6px 18px -8px rgba(202, 95, 21, 0.6);
+    }
+    .copilot-orb::after {
+        content: '';
+        position: absolute;
+        inset: 6px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.35);
+    }
+    .copilot-head .titles {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+    .copilot-head .titles strong {
+        font-size: 0.9rem;
+        color: var(--slate-900);
+        letter-spacing: -0.01em;
+    }
+    .copilot-head .titles span {
+        font-size: 0.7rem;
+        color: var(--slate-500);
+    }
+    .copilot-block {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .copilot-block .label {
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: var(--brand-primary);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+    .copilot-suggest {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 12px;
+        padding: 10px 12px;
+    }
+    .copilot-suggest .name {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--slate-900);
+    }
+    .confidence {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 999px;
+    }
+    .confidence.high {
+        background: rgba(16, 185, 129, 0.10);
+        color: #047857;
+    }
+    .confidence.med {
+        background: rgba(234, 179, 8, 0.14);
+        color: #92722a;
+    }
+    .confidence.low {
+        background: rgba(239, 68, 68, 0.10);
+        color: #b91c1c;
+    }
+    .checklist {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .checklist li {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.85rem;
+        color: var(--slate-700);
+    }
+    .checklist .ok { color: #047857; font-weight: 700; }
+    .checklist .miss { color: #b91c1c; font-weight: 700; }
+    .similar-chips {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+    .similar-chip {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.72rem;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        color: var(--slate-700);
+        padding: 4px 8px;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .similar-chip strong { color: var(--brand-primary); }
+    .reply-draft {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-size: 0.88rem;
+        line-height: 1.55;
+        color: var(--slate-700);
+    }
+    .reply-draft em {
+        color: var(--slate-400);
+        font-style: normal;
+        font-size: 0.72rem;
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+    .copilot-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    .copilot-btn {
+        flex: 1 1 auto;
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 8px 12px;
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer;
+        border: none;
+    }
+    .copilot-btn.primary {
+        background: var(--brand-primary);
+        color: #fff;
+        box-shadow: 0 8px 18px -10px rgba(202, 95, 21, 0.6);
+    }
+    .copilot-btn.ghost {
+        background: #fff;
+        color: var(--slate-700);
+        border: 1px solid var(--slate-200);
+    }
+    .copilot-foot {
+        font-size: 0.7rem;
+        color: var(--slate-400);
+        line-height: 1.5;
+    }
+
+    /* Mockup B (low confidence) */
+    .mockup-b {
+        margin-top: 22px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 18px;
+        padding: 18px 20px;
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+    }
+    .mockup-b .alert-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        background: rgba(234, 179, 8, 0.14);
+        color: #92722a;
+        font-weight: 800;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .mockup-b h4 {
+        margin: 0 0 4px;
+        font-size: 0.95rem;
+        color: var(--slate-900);
+    }
+    .mockup-b p {
+        margin: 0;
+        font-size: 0.88rem;
+        color: var(--slate-500);
+        line-height: 1.55;
+    }
+    .mockup-b small {
+        display: block;
+        margin-top: 8px;
+        font-size: 0.72rem;
+        color: var(--slate-400);
+    }
+
+    /* ---------------- Inspiration table ---------------- */
+    .inspo-table {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        overflow: hidden;
+    }
+    .inspo-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .inspo-table th {
+        text-align: left;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--slate-200);
+        background: #f8fafc;
+    }
+    .inspo-table td {
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--slate-100);
+        color: var(--slate-700);
+        font-size: 0.9rem;
+        line-height: 1.55;
+        vertical-align: top;
+    }
+    .inspo-table tr:last-child td { border-bottom: none; }
+    .inspo-table a {
+        color: var(--brand-primary);
+        text-decoration: none;
+        font-weight: 700;
+    }
+    .inspo-table a:hover { text-decoration: underline; }
+
+    /* ---------------- KPI cards ---------------- */
+    .kpi-grid {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: 1fr;
+    }
+    @media (min-width: 640px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 920px) { .kpi-grid { grid-template-columns: repeat(4, 1fr); } }
+    .kpi-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .kpi-card .label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+    }
+    .kpi-card .value {
+        font-size: 1.6rem;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        color: var(--slate-900);
+    }
+    .kpi-card .value .text-gradient-warm {
+        background-image: linear-gradient(135deg, #ca5f15 0%, #e07a30 45%, #b04e0a 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    .kpi-card .hint {
+        font-size: 0.78rem;
+        color: var(--slate-500);
+        line-height: 1.5;
+    }
+
+    /* ---------------- 2-col grid ---------------- */
+    .two-col {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: 1fr;
+    }
+    @media (min-width: 820px) { .two-col { grid-template-columns: 1fr 1fr; } }
+    .col-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        padding: 22px;
+    }
+    .col-card.warm {
+        border-color: rgba(202, 95, 21, 0.25);
+        background: linear-gradient(180deg, #fff 0%, #fff8f6 100%);
+    }
+    .col-card h3 {
+        margin: 0 0 4px;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        letter-spacing: -0.015em;
+    }
+    .col-card .sub {
+        font-size: 0.78rem;
+        color: var(--slate-400);
+        margin: 0 0 14px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+    .col-card ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .col-card ul li {
+        font-size: 0.9rem;
+        color: var(--slate-700);
+        line-height: 1.55;
+        padding-left: 18px;
+        position: relative;
+    }
+    .col-card ul li::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 8px;
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: var(--brand-primary);
+    }
+
+    /* ---------------- Risks ---------------- */
+    .risks-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    .risk-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        padding: 18px 20px;
+        border-left: 3px solid var(--brand-primary);
+    }
+    @media (min-width: 820px) {
+        .risk-row { grid-template-columns: 1.1fr 1.6fr; gap: 24px; align-items: start; }
+    }
+    .risk-row h4 {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        letter-spacing: -0.015em;
+    }
+    .risk-row h4 small {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--slate-400);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+    }
+    .risk-row p {
+        margin: 0;
+        font-size: 0.88rem;
+        color: var(--slate-500);
+        line-height: 1.6;
+    }
+    .risk-row p strong {
+        color: var(--slate-900);
+        font-weight: 700;
+    }
+
+    /* ---------------- Effort table ---------------- */
+    .effort-table {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        overflow: hidden;
+    }
+    .effort-table table { width: 100%; border-collapse: collapse; }
+    .effort-table th {
+        text-align: left;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+        padding: 14px 18px;
+        background: #f8fafc;
+        border-bottom: 1px solid var(--slate-200);
+    }
+    .effort-table td {
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--slate-100);
+        color: var(--slate-700);
+        font-size: 0.88rem;
+    }
+    .effort-table tr:last-child td { border-bottom: none; }
+    .effort-tag {
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.7rem;
+        font-weight: 800;
+        padding: 3px 8px;
+        border-radius: 6px;
+        letter-spacing: 0.05em;
+    }
+    .effort-tag.xs { background: rgba(16, 185, 129, 0.10); color: #047857; }
+    .effort-tag.s  { background: rgba(59, 130, 246, 0.10); color: #1d4ed8; }
+    .effort-tag.m  { background: rgba(202, 95, 21, 0.12); color: var(--brand-primary); }
+    .effort-tag.l  { background: rgba(239, 68, 68, 0.10); color: #b91c1c; }
+
+    footer.feature-footer {
+        margin-top: 96px;
+        padding: 32px 0;
+        border-top: 1px solid var(--slate-200);
+        text-align: center;
+        color: var(--slate-400);
+        font-size: 0.85rem;
+    }
+    footer.feature-footer a {
+        color: var(--brand-primary);
+        text-decoration: none;
+        font-weight: 600;
+    }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header style="position: sticky; top: 0; z-index: 10; background: rgba(255, 248, 246, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(15, 23, 42, 0.06);">
+    <div class="container" style="max-width: 1080px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
+        <a href="index.html" style="display: inline-flex; align-items: center; gap: 8px; color: var(--slate-700); text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+            <span style="font-size: 1.1rem;">&larr;</span> Hub de features
+        </a>
+        <span class="eyebrow eyebrow-muted">FEATURE 01 / 10</span>
+    </div>
+</header>
+
+<main class="container" style="max-width: 1080px; margin: 0 auto; padding: 48px 24px 0;">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero-feature">
+        <div class="hero-row">
+            <span class="tier-badge tier-s">Tier S &middot; Muda o jogo</span>
+            <span class="eyebrow eyebrow-muted">Feature 01</span>
+        </div>
+        <h1 class="feature-title tracking-headline">
+            AI Copilot <span class="text-gradient-warm">Acadêmico</span>
+        </h1>
+        <p class="feature-lede">
+            Um copiloto que vive ao lado da demanda — triagem automática para o aluno, sugestão fundamentada para o coordenador, e guardrails que respeitam o regimento. Inspirado em <strong>Sierra</strong> e <strong>Intercom Fin</strong>, calibrado para o universo acadêmico onde uma decisão errada vira pendência regulatória.
+        </p>
+        <div class="feature-pills">
+            <span class="pill pill-warm">IA</span>
+            <span class="pill">Sierra-like</span>
+            <span class="pill">Triagem</span>
+            <span class="pill">Sugestão</span>
+        </div>
+    </section>
+
+    <!-- ============ POR QUE ISSO IMPORTA ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Por que isso importa</span>
+        <h2>O coordenador hoje é um filtro humano repetitivo</h2>
+        <p class="lede">
+            Olhando o Clarify atual, a demanda nasce como blob de texto livre, vai pro coordenador, e ele toma a decisão na base do "já vi essa história 50 vezes". A IA aqui não substitui a decisão — ela elimina o trabalho de copiar, classificar e procurar precedentes que <strong>já está acontecendo na cabeça dele</strong>.
+        </p>
+        <div class="why-grid">
+            <div class="why-card">
+                <span class="num">01</span>
+                <h3>Descrição é texto livre</h3>
+                <p>
+                    Em <span class="mono">centralDemandas.js</span> o aluno digita em um <span class="mono">&lt;textarea&gt;</span> de descrição. Tipo, disciplina e data não são extraídos — o coord precisa reler tudo, mesmo quando é uma justificativa de falta padrão.
+                </p>
+            </div>
+            <div class="why-card">
+                <span class="num">02</span>
+                <h3>Cada caso é tratado do zero</h3>
+                <p>
+                    O <span class="mono">dashboardcoord.js</span> mostra a lista, mas não conecta "este caso da Ana" com "os 12 casos parecidos resolvidos este semestre". Precedente vive na memória do coordenador — e some quando ele troca.
+                </p>
+            </div>
+            <div class="why-card">
+                <span class="num">03</span>
+                <h3>Resposta em branco</h3>
+                <p>
+                    O campo <span class="mono">feedback</span> é um <span class="mono">&lt;textarea&gt;</span> vazio. Coord redigita "Justificativa aprovada conforme atestado anexo" pela milésima vez. Nenhuma sugestão, nenhum template baseado em quem foi aprovado antes.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ PERSONAS ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Quem é impactado</span>
+        <h2>Três personas, três conversões claras</h2>
+        <p class="lede">
+            Cada papel ganha um benefício diferente — e nenhum deles é "a IA decide por mim". A IA sempre propõe; quem decide é gente.
+        </p>
+        <div class="persona-grid">
+
+            <div class="persona-card">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span class="avatar">AS</span>
+                    <div>
+                        <h3>Ana Silva</h3>
+                        <span class="role">Aluna · 4º semestre</span>
+                    </div>
+                </div>
+                <div class="ba-block">
+                    <div class="ba-row">
+                        <span class="ba-tag before">Antes</span>
+                        <span>Abre demanda às 23h, esquece de anexar o atestado, e só descobre 3 dias depois quando o coord pede ajuste.</span>
+                    </div>
+                    <div class="ba-row">
+                        <span class="ba-tag after">Depois</span>
+                        <span>Descreve "faltei na prova de Cálculo em 03/05 por febre" — o copiloto já preenche tipo, disciplina e data, e avisa <em>"falta anexar atestado"</em> antes do envio.</span>
+                    </div>
+                </div>
+                <p class="persona-impact">Tempo médio para abrir uma demanda completa: ~4min → ~50s.</p>
+            </div>
+
+            <div class="persona-card">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span class="avatar" style="background: linear-gradient(135deg, #334155, #64748b);">BA</span>
+                    <div>
+                        <h3>Bruno Almeida</h3>
+                        <span class="role">Coordenador de curso</span>
+                    </div>
+                </div>
+                <div class="ba-block">
+                    <div class="ba-row">
+                        <span class="ba-tag before">Antes</span>
+                        <span>50 justificativas iguais por semana. Lê tudo, redigita resposta padrão, procura na cabeça se já viu caso parecido.</span>
+                    </div>
+                    <div class="ba-row">
+                        <span class="ba-tag after">Depois</span>
+                        <span>Painel lateral mostra "3 demandas similares aprovadas neste semestre" + rascunho de resposta. Aceita com 1 clique nos casos limpos, edita os duvidosos, escala os complexos.</span>
+                    </div>
+                </div>
+                <p class="persona-impact">Tempo médio por demanda padrão: ~6min → ~45s.</p>
+            </div>
+
+            <div class="persona-card">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span class="avatar" style="background: linear-gradient(135deg, #b04e0a, #ca5f15);">IN</span>
+                    <div>
+                        <h3>Instituição</h3>
+                        <span class="role">Diretoria acadêmica</span>
+                    </div>
+                </div>
+                <div class="ba-block">
+                    <div class="ba-row">
+                        <span class="ba-tag before">Antes</span>
+                        <span>Não tem visibilidade de "quantas demandas a IA classificou errado", "qual coord aceita sugestão sem revisar", ou padrão de risco.</span>
+                    </div>
+                    <div class="ba-row">
+                        <span class="ba-tag after">Depois</span>
+                        <span>Audit log com cada sugestão, cada aceite, cada edição. Dá pra mostrar pro MEC <em>quem</em> decidiu, <em>com que base</em>, e que a IA é assistiva — nunca autoritativa.</span>
+                    </div>
+                </div>
+                <p class="persona-impact">Compliance demonstrável + rastreabilidade ponta-a-ponta.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============ COMO FUNCIONARIA ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Como funcionaria</span>
+        <h2>Fluxo em 5 passos, sem vapor de IA</h2>
+        <p class="lede">
+            Tudo ancorado em sinais reais — descrição do aluno, anexos, histórico de demandas <em>resolvidas pelo próprio coordenador</em>. Nada de model conhecimento genérico falando de regimento institucional inventado.
+        </p>
+        <div class="flow-steps">
+
+            <div class="flow-step">
+                <span class="step-num">1</span>
+                <div>
+                    <h4>Aluno escreve em linguagem natural</h4>
+                    <p>
+                        Em <span class="mono">modais.js</span>, o modal de nova demanda continua aceitando texto livre. O copiloto roda <em>em paralelo</em>, sem bloquear, classificando enquanto a pessoa digita.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flow-step">
+                <span class="step-num">2</span>
+                <div>
+                    <h4>Triagem extrai campos estruturados</h4>
+                    <p>
+                        Tipo de demanda, disciplina, data, motivo. Confiança calculada por campo. Se ficar abaixo de 0,7, o copiloto pede confirmação ao aluno antes de enviar (não preenche silenciosamente).
+                    </p>
+                </div>
+            </div>
+
+            <div class="flow-step">
+                <span class="step-num">3</span>
+                <div>
+                    <h4>Detecção de completude</h4>
+                    <p>
+                        Se o aluno escreveu "vou anexar o atestado" mas não anexou, ou se a data não foi mencionada, o copiloto avisa antes do envio — <em>"você mencionou atestado mas não anexou nenhum arquivo. Anexar agora?"</em>
+                    </p>
+                </div>
+            </div>
+
+            <div class="flow-step">
+                <span class="step-num">4</span>
+                <div>
+                    <h4>Painel lateral do coordenador</h4>
+                    <p>
+                        Ao abrir a demanda em <span class="mono">dashboardcoord.js</span>, surge à direita o painel do Copilot: tipo sugerido + confiança, checklist de documentos, demandas similares <strong>resolvidas por ele mesmo</strong>, e um rascunho de resposta editável.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flow-step">
+                <span class="step-num">5</span>
+                <div>
+                    <h4>Decisão humana, sempre</h4>
+                    <p>
+                        Três botões: <strong>Aceitar sugestão</strong>, <strong>Editar</strong>, <strong>Ignorar</strong>. Toda escolha vai pro audit log com <span class="mono">ai_assist.modelo</span> e <span class="mono">gerado_em</span>. A IA não tem permissão de mudar status — só sugerir.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============ MOCKUP ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Mockup conceitual</span>
+        <h2>Como o coordenador vê</h2>
+        <p class="lede">
+            Lado esquerdo: a demanda como já existe hoje, com os campos estruturados destacados em laranja (extraídos pelo copiloto). Lado direito: o painel <strong>Copilot</strong> — sempre lateral, nunca modal, nunca invasivo.
+        </p>
+
+        <div class="mockup-shell">
+            <div class="mockup-window" style="border: none; box-shadow: none; background: transparent;">
+                <div class="mockup-bar" style="background: rgba(255, 255, 255, 0.6); border-radius: 12px 12px 0 0;">
+                    <span class="mockup-dot"></span>
+                    <span class="mockup-dot"></span>
+                    <span class="mockup-dot"></span>
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--slate-400); margin-left: 14px;">clarify.app / coord / demanda / #2317</span>
+                </div>
+            </div>
+
+            <div class="mockup-grid" style="margin-top: 16px;">
+
+                <!-- Ticket pane -->
+                <div class="ticket-pane">
+                    <div class="ticket-head">
+                        <div>
+                            <div class="proto">#2317 &middot; 13/05/2026 14:32</div>
+                            <div class="title">Justificativa de Falta — Cálculo I</div>
+                        </div>
+                        <span class="ticket-status">Em análise</span>
+                    </div>
+                    <div class="ticket-body">
+                        <div class="ticket-msg">
+                            <span class="av aluno">AS</span>
+                            <div>
+                                <div class="meta"><strong>Ana Silva</strong> &middot; aluna &middot; matrícula 20240003</div>
+                                <div class="body">
+                                    Oi prof, faltei na prova de Cálculo I no dia 03/05 porque tive febre alta. Vou anexar o atestado médico aqui. Posso fazer a segunda chamada?
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ticket-fields">
+                            <div class="field-cell">
+                                <label>Tipo (extraído)</label>
+                                <div class="v">Justificativa de Falta</div>
+                            </div>
+                            <div class="field-cell">
+                                <label>Disciplina</label>
+                                <div class="v">Cálculo I</div>
+                            </div>
+                            <div class="field-cell">
+                                <label>Data</label>
+                                <div class="v">03/05/2026</div>
+                            </div>
+                            <div class="field-cell">
+                                <label>Motivo</label>
+                                <div class="v">Febre / atestado médico</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Copilot pane -->
+                <div class="copilot-pane">
+                    <div class="copilot-head">
+                        <span class="copilot-orb"></span>
+                        <div class="titles">
+                            <strong>Copilot &middot; Clarify</strong>
+                            <span>baseado em demandas que <em>você</em> resolveu</span>
+                        </div>
+                    </div>
+
+                    <div class="copilot-block">
+                        <span class="label">Tipo sugerido</span>
+                        <div class="copilot-suggest">
+                            <span class="name">Justificativa de Falta</span>
+                            <span class="confidence high">95% &middot; alta</span>
+                        </div>
+                    </div>
+
+                    <div class="copilot-block">
+                        <span class="label">Documentos</span>
+                        <ul class="checklist">
+                            <li><span class="ok">&#10003;</span> Atestado médico (anexo_01.pdf, 432kb)</li>
+                            <li><span class="ok">&#10003;</span> Disciplina e data informadas</li>
+                            <li><span class="miss">!</span> Falta CID no atestado (revisar)</li>
+                        </ul>
+                    </div>
+
+                    <div class="copilot-block">
+                        <span class="label">Demandas similares aprovadas por você</span>
+                        <div class="similar-chips">
+                            <a class="similar-chip" href="#"><strong>#1234</strong> Bruno A.</a>
+                            <a class="similar-chip" href="#"><strong>#1289</strong> Carla P.</a>
+                            <a class="similar-chip" href="#"><strong>#1402</strong> Diego S.</a>
+                        </div>
+                    </div>
+
+                    <div class="copilot-block">
+                        <span class="label">Rascunho de resposta</span>
+                        <div class="reply-draft">
+                            <em>editável</em>
+                            Olá, Ana. Justificativa aprovada conforme atestado anexado em 13/05. A segunda chamada de Cálculo I será agendada pela secretaria — você receberá a data por e-mail em até 2 dias úteis.
+                        </div>
+                    </div>
+
+                    <div class="copilot-actions">
+                        <button class="copilot-btn primary">Aceitar sugestão</button>
+                        <button class="copilot-btn ghost">Editar</button>
+                        <button class="copilot-btn ghost">Ignorar</button>
+                    </div>
+
+                    <p class="copilot-foot">
+                        Gerado por <span class="mono">claude-sonnet-4-6</span> em 13/05 às 14:32. A decisão final é sua e fica registrada no audit log.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Mockup secundário: confiança baixa -->
+            <div class="mockup-b" style="margin-top: 20px;">
+                <span class="alert-icon">?</span>
+                <div>
+                    <h4>Quando o copiloto não tem certeza</h4>
+                    <p>
+                        Demanda <span class="mono">#2318</span> &middot; <strong>Aproveitamento de Créditos</strong> &middot; confiança <span class="confidence low" style="vertical-align: middle;">38% &middot; baixa</span> — o aluno descreveu disciplina cursada em outra IES com ementa não-padronizada. O copiloto se recusa a sugerir resposta e exibe: <em>"Não tenho confiança suficiente. Peça orientação à coordenação pedagógica antes de decidir."</em>
+                    </p>
+                    <small>Nada de chutar. Confiança baixa é resposta válida — Sierra chama isso de <strong>"deferred to human"</strong>.</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ MODELO DE DADOS ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Modelo de dados</span>
+        <h2>O que muda no schema da Demanda</h2>
+        <p class="lede">
+            Nada do schema atual é destruído. Adicionamos um novo namespace <span class="mono">ai_assist</span> — opcional, sempre auditável, nunca substitui um campo decisório existente.
+        </p>
+
+        <div style="display: grid; gap: 16px;">
+            <div>
+                <h3 style="font-size: 0.85rem; font-weight: 700; color: var(--slate-400); letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 8px;">Schema atual (data/demanda.js)</h3>
+<pre><code>{
+  "protocolo": "#2317",
+  "tipo": "Justificativa de Falta",
+  "status": "em_analise",
+  "descricao": "faltei na prova...",
+  "matriculaAluno": "20240003",
+  "dataCriacao": "2026-05-13T14:32:00Z",
+  "dataAtualizacao": "2026-05-13T14:32:00Z",
+  "feedback": null
+}</code></pre>
+            </div>
+
+            <div>
+                <h3 style="font-size: 0.85rem; font-weight: 700; color: var(--brand-primary); letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 8px;">Schema proposto (+ ai_assist)</h3>
+<pre><code>{
+  "protocolo": "#2317",
+  "tipo": "Justificativa de Falta",
+  "status": "em_analise",
+  "descricao": "faltei na prova...",
+  "matriculaAluno": "20240003",
+  "dataCriacao": "2026-05-13T14:32:00Z",
+  "dataAtualizacao": "2026-05-13T14:32:00Z",
+  "feedback": null,
+
+  <span style="color: #fdba74;">"ai_assist": {
+    "tipo_sugerido": "justificativa_falta",
+    "confianca": 0.94,
+    "campos_extraidos": {
+      "disciplina": "Cálculo I",
+      "data": "2026-05-03",
+      "motivo": "febre"
+    },
+    "documentos_faltantes": [],
+    "documentos_detectados": ["atestado_medico"],
+    "demandas_similares": ["1234", "1289", "1402"],
+    "resposta_sugerida": "Olá, Ana. Justificativa...",
+    "modelo": "claude-sonnet-4-6",
+    "gerado_em": "2026-05-13T14:32:00Z",
+    "decisao_humana": {
+      "acao": "aceito" | "editado" | "ignorado" | null,
+      "por": "coord_bruno_almeida",
+      "em": "2026-05-13T14:34:12Z",
+      "diff": "..."  // se editou, o diff do texto final
+    }
+  }</span>
+}</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ INSPIRAÇÃO ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Inspiração de mercado</span>
+        <h2>O que copiamos, o que adaptamos</h2>
+        <p class="lede">
+            Três referências centrais. Cada uma trouxe uma ideia — e cada uma foi traduzida pro contexto acadêmico, onde decisão errada vira processo regulatório, não só churn.
+        </p>
+
+        <div class="inspo-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Referência</th>
+                        <th>O que faz</th>
+                        <th>Como adaptamos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <a href="https://sierra.ai/" target="_blank" rel="noopener">Sierra AI</a>
+                            <div style="font-size: 0.75rem; color: var(--slate-400); margin-top: 4px;">"Agents authorized to take action"</div>
+                        </td>
+                        <td>
+                            Agentes que <em>resolvem</em> (não só deflectam), mas com guardrails determinísticos por cima do LLM. Mover suporte de <strong>deflection</strong> para <strong>resolution</strong>.
+                        </td>
+                        <td>
+                            Mantemos o "guardrails determinísticos" — mas nosso teto é <strong>sugestão</strong>, nunca ação. No mundo acadêmico, "agent authorized to take action" é o coordenador, não a IA.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="https://fin.ai/" target="_blank" rel="noopener">Intercom Fin 2</a>
+                            <div style="font-size: 0.75rem; color: var(--slate-400); margin-top: 4px;">99.9% accuracy claim</div>
+                        </td>
+                        <td>
+                            Vive dentro do inbox existente. Escala para humano quando ambíguo. Trabalha sobre fontes da própria empresa (KB), não sobre conhecimento genérico.
+                        </td>
+                        <td>
+                            Nossa "KB" é o conjunto de demandas resolvidas pelo próprio coordenador. Nunca usamos web aberta. Quando ambíguo, <em>deferred to human</em> — exatamente como o Fin faz.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="https://www.zendesk.com/service/ai/copilot/" target="_blank" rel="noopener">Zendesk Copilot</a>
+                            <div style="font-size: 0.75rem; color: var(--slate-400); margin-top: 4px;">Sugestão lateral ao agente</div>
+                        </td>
+                        <td>
+                            Painel ao lado do ticket sugerindo resposta baseada em macros + KB. Agente aceita, edita ou descarta. Sem autonomia.
+                        </td>
+                        <td>
+                            Forma do nosso painel é praticamente esta — mas adicionamos <strong>checklist de completude</strong> e <strong>nível de confiança visível</strong>, porque erro acadêmico é mais caro que erro de SaaS.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ============ KPIs ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Métricas de sucesso</span>
+        <h2>Como saberemos que funciona</h2>
+        <p class="lede">
+            Sem KPI claro, IA vira teatro. Esses quatro são suficientes pra defender (ou matar) a feature em 30 dias de uso real.
+        </p>
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <span class="label">Triagem correta</span>
+                <span class="value"><span class="text-gradient-warm">&gt; 90%</span></span>
+                <span class="hint">Tipo sugerido validado pelo coord ao aceitar. Abaixo de 80% → desligar auto-fill.</span>
+            </div>
+            <div class="kpi-card">
+                <span class="label">TTFR (tempo até 1ª resposta)</span>
+                <span class="value"><span class="text-gradient-warm">-60%</span></span>
+                <span class="hint">Medida do coord abrir até decidir. Hoje ~6min em casos padrão, alvo ~2min.</span>
+            </div>
+            <div class="kpi-card">
+                <span class="label">AR rate</span>
+                <span class="value"><span class="text-gradient-warm">35-50%</span></span>
+                <span class="hint">% de demandas onde o coord aceita sugestão <em>sem editar</em>. Sierra-style. Acima de 70% acende alerta de "aprovador de IA".</span>
+            </div>
+            <div class="kpi-card">
+                <span class="label">NPS Copilot (coord)</span>
+                <span class="value"><span class="text-gradient-warm">&gt; +40</span></span>
+                <span class="hint">Survey de 1 pergunta a cada 10 demandas processadas: <em>"o copiloto te ajudou nessa?"</em></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ ESFORÇO ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Esforço & dependências</span>
+        <h2>Onde no código isso toca</h2>
+        <p class="lede">
+            Três pontos no app + um serviço novo. Nada de reescrever — só estender.
+        </p>
+        <div class="effort-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Componente</th>
+                        <th>Mudança</th>
+                        <th>Esforço</th>
+                        <th>Dependência</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="mono">src/components/structures/modais.js</span></td>
+                        <td>Adicionar painel lateral no modal de nova demanda com tipo sugerido + checklist de completude.</td>
+                        <td><span class="effort-tag s">S</span></td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td><span class="mono">src/pages/dashboardcoord.js</span></td>
+                        <td>Painel "Copilot" lateral na view de demanda. Estado de loading enquanto sugestão é gerada.</td>
+                        <td><span class="effort-tag m">M</span></td>
+                        <td>F02 (thread) se quiser que o copiloto leia mensagens</td>
+                    </tr>
+                    <tr>
+                        <td><span class="mono">src/services/copilot.js</span> <em style="color: var(--slate-400);">(novo)</em></td>
+                        <td>Wrapper de chamada à API (Claude/GPT). Cache de sugestões. Cálculo de confiança. Mascaramento LGPD.</td>
+                        <td><span class="effort-tag m">M</span></td>
+                        <td>Chave de API + decisão self-host vs cloud</td>
+                    </tr>
+                    <tr>
+                        <td><span class="mono">src/data/demanda.js</span></td>
+                        <td>Estender schema com <span class="mono">ai_assist</span>. Migração opt-in (campo ausente = comportamento antigo).</td>
+                        <td><span class="effort-tag xs">XS</span></td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td>Audit log (futuro)</td>
+                        <td>Toda aceitação/edição/ignorar do copiloto vai pro log. Hoje não temos log — fica como dependência da F04.</td>
+                        <td><span class="effort-tag s">S</span></td>
+                        <td><strong>F04 — Audit Log</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ============ MVP vs VERSÃO COMPLETA ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Quick wins vs. versão completa</span>
+        <h2>O que cabe em 2 dias, o que pede 2 semanas</h2>
+        <p class="lede">
+            A versão de TCC pode ser apresentada com o MVP da esquerda. A versão da direita é o que vira produto.
+        </p>
+        <div class="two-col">
+
+            <div class="col-card">
+                <h3>MVP — 1 a 2 dias</h3>
+                <p class="sub">Suficiente pra apresentação</p>
+                <ul>
+                    <li>Triagem de tipo apenas (1 chamada à API Claude na criação da demanda).</li>
+                    <li>Mostra tipo sugerido + confiança no <span class="mono">dashboardcoord.js</span>, sem painel lateral completo.</li>
+                    <li>Sem cache, sem embeddings — pode custar alguns centavos por demanda.</li>
+                    <li>Sem detecção de completude. Sem rascunho de resposta.</li>
+                    <li>Botão único <em>"Aceitar tipo sugerido"</em> que só preenche o campo <span class="mono">tipo</span>.</li>
+                </ul>
+            </div>
+
+            <div class="col-card warm">
+                <h3>Versão completa — 1 a 2 semanas</h3>
+                <p class="sub">A feature em forma final</p>
+                <ul>
+                    <li>Todas as 4 capacidades (triagem, sugestão, resumo, completude).</li>
+                    <li>Embeddings das demandas resolvidas → busca semântica de similares.</li>
+                    <li>Cache por hash do prompt — sugestão idêntica não cobra duas vezes.</li>
+                    <li>Painel lateral completo com 3 botões e edição inline.</li>
+                    <li>Audit trail integrado (depende da F04).</li>
+                    <li>Mascaramento de PII no prompt (CPF, matrícula) antes de sair do servidor.</li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============ RISCOS ============ -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Riscos & armadilhas</span>
+        <h2>O que pode dar errado, e como mitigar</h2>
+        <p class="lede">
+            A pior versão dessa feature é a IA com voz autoritativa. O resto a gente conserta no roadmap.
+        </p>
+        <div class="risks-list">
+
+            <div class="risk-row">
+                <h4><small>Risco 01</small>Alucinação em decisão acadêmica</h4>
+                <p>
+                    IA pode sugerir "aprovar" para um caso que viola pré-requisito ou regimento.
+                    <strong>Mitigação:</strong> sugestão nunca toca o campo <span class="mono">status</span>; só preenche <span class="mono">resposta_sugerida</span>. Coord precisa clicar. Confiança &lt; 0,7 esconde a sugestão e exibe <em>"não sei, peça orientação"</em>.
+                </p>
+            </div>
+
+            <div class="risk-row">
+                <h4><small>Risco 02</small>Custo de API descontrolado</h4>
+                <p>
+                    Coord abre e fecha a mesma demanda 5x — 5 chamadas? Não.
+                    <strong>Mitigação:</strong> sugestão é gerada uma vez por demanda e cacheada em <span class="mono">ai_assist</span>. Re-geração só por ação explícita (botão "regerar"). Para triagem do aluno, usar modelo barato (Haiku/Mini), não Sonnet.
+                </p>
+            </div>
+
+            <div class="risk-row">
+                <h4><small>Risco 03</small>Coord vira "aprovador de IA"</h4>
+                <p>
+                    Se 100% das sugestões forem aceitas sem edição, perdemos o "human in the loop" — a feature deixa de assistir e passa a decidir.
+                    <strong>Mitigação:</strong> AR rate acima de 70% acende warning no dashboard institucional. UI introduz "pausa de 2s" antes de aceitar quando confiança &gt; 0,95 — fricção intencional pra forçar leitura.
+                </p>
+            </div>
+
+            <div class="risk-row">
+                <h4><small>Risco 04</small>LGPD / dados de aluno em prompt externo</h4>
+                <p>
+                    Mandar nome, matrícula e CID pra API de terceiro é zona cinza.
+                    <strong>Mitigação:</strong> camada de mascaramento em <span class="mono">services/copilot.js</span> substitui PII por tokens antes do envio (<em>"aluno_X faltou em disciplina_Y"</em>). Versão institucional usa modelo self-hosted (Llama 3 / Mistral) com mesmo schema. Cláusula de DPA com o provedor.
+                </p>
+            </div>
+
+            <div class="risk-row">
+                <h4><small>Risco 05</small>Banco de similares enviesado</h4>
+                <p>
+                    Se o coord históricamente aprovou tudo, a IA aprende a aprovar tudo. Se reprovou alunos de um curso específico, IA replica viés.
+                    <strong>Mitigação:</strong> filtro de similares respeita só os últimos 12 meses e exibe ratio aprovado/reprovado da amostra. Revisão trimestral do dataset de exemplos.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="feature-footer">
+    <div class="container" style="max-width: 1080px; margin: 0 auto; padding: 0 24px;">
+        <p>Feature 01 de 10 &middot; <a href="index.html">Voltar ao hub &rarr;</a></p>
+    </div>
+</footer>
+
+<script>
+    const els = document.querySelectorAll('[data-reveal]');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('is-revealed');
+                obs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FEATURE 10 — Engine de Automação — Clarify Brainstorm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+    /* Hero */
+    .hero-feature {
+        position: relative;
+        padding: 64px 0 48px;
+        overflow: hidden;
+    }
+    .hero-feature::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(70% 60% at 30% 0%, rgba(202, 95, 21, 0.15) 0%, rgba(202, 95, 21, 0) 65%);
+        pointer-events: none;
+    }
+    h1.feature-title {
+        font-size: clamp(2.2rem, 5vw, 3.6rem);
+        font-weight: 700;
+        letter-spacing: -0.045em;
+        line-height: 1.04;
+        margin: 14px 0 18px;
+        color: var(--slate-900);
+        max-width: 880px;
+    }
+    .feature-sub {
+        font-size: 1.075rem;
+        color: var(--slate-500);
+        max-width: 760px;
+        line-height: 1.55;
+        margin: 0 0 24px;
+    }
+    .section { margin-top: 72px; }
+    .section h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        color: var(--slate-900);
+        margin: 0 0 8px;
+    }
+    .section p.lead {
+        color: var(--slate-500);
+        margin: 0 0 28px;
+        max-width: 780px;
+        line-height: 1.6;
+    }
+
+    /* Triggers vs Automations callout (key insight) */
+    .vs-box {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+        margin-top: 12px;
+    }
+    @media (min-width: 880px) {
+        .vs-box { grid-template-columns: 1fr 1fr; }
+    }
+    .vs-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        padding: 22px;
+        position: relative;
+        overflow: hidden;
+    }
+    .vs-card.trigger {
+        border-top: 3px solid var(--brand-primary);
+    }
+    .vs-card.automation {
+        border-top: 3px solid #0ea5e9;
+    }
+    .vs-tag {
+        display: inline-block;
+        font-size: 0.6875rem;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        padding: 4px 10px;
+        border-radius: 999px;
+        margin-bottom: 12px;
+    }
+    .vs-tag.trigger { background: rgba(202, 95, 21, 0.12); color: var(--brand-primary); }
+    .vs-tag.automation { background: rgba(14, 165, 233, 0.12); color: #0369a1; }
+    .vs-card h3 {
+        margin: 0 0 6px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--slate-900);
+    }
+    .vs-card .vs-when {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.78rem;
+        color: var(--slate-500);
+        margin: 0 0 14px;
+    }
+    .vs-card p {
+        margin: 0 0 10px;
+        font-size: 0.9rem;
+        color: var(--slate-700);
+        line-height: 1.55;
+    }
+    .vs-card .ex {
+        font-size: 0.82rem;
+        color: var(--slate-500);
+        border-top: 1px dashed var(--slate-200);
+        padding-top: 12px;
+        margin-top: 6px;
+    }
+    .vs-card .ex strong { color: var(--slate-900); }
+
+    /* "Por que importa" */
+    .why-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-top: 24px;
+    }
+    @media (min-width: 768px) {
+        .why-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .why-card {
+        padding: 22px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+    }
+    .why-card .why-tag {
+        display: inline-block;
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--brand-primary);
+        margin-bottom: 10px;
+    }
+    .why-card p {
+        margin: 0;
+        font-size: 0.92rem;
+        color: var(--slate-700);
+        line-height: 1.55;
+    }
+    .why-card code { font-size: 0.78rem; }
+
+    /* Personas */
+    .persona-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    @media (min-width: 880px) {
+        .persona-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .persona-card {
+        padding: 24px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+    .persona-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .persona-icon {
+        width: 36px; height: 36px;
+        border-radius: 10px;
+        background: rgba(202, 95, 21, 0.10);
+        color: var(--brand-primary);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+    }
+    .persona-head h3 {
+        margin: 0;
+        font-size: 1.0625rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--slate-900);
+    }
+    .persona-head .persona-name {
+        font-size: 0.75rem;
+        color: var(--slate-400);
+        font-weight: 500;
+    }
+    .before-after {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .ba-row {
+        font-size: 0.875rem;
+        line-height: 1.5;
+        padding: 10px 12px;
+        border-radius: 10px;
+    }
+    .ba-before {
+        background: rgba(15, 23, 42, 0.04);
+        color: var(--slate-700);
+        border-left: 3px solid var(--slate-300);
+    }
+    .ba-after {
+        background: rgba(202, 95, 21, 0.07);
+        color: var(--slate-900);
+        border-left: 3px solid var(--brand-primary);
+    }
+    .ba-tag {
+        font-size: 0.625rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        margin-right: 6px;
+    }
+    .ba-before .ba-tag { color: var(--slate-400); }
+    .ba-after .ba-tag { color: var(--brand-primary); }
+    .persona-impact {
+        font-size: 0.85rem;
+        color: var(--slate-500);
+        font-style: italic;
+        border-top: 1px dashed var(--slate-200);
+        padding-top: 12px;
+        margin: 0;
+    }
+
+    /* Flow */
+    .flow {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    .flow-step {
+        display: grid;
+        grid-template-columns: 48px 1fr;
+        gap: 18px;
+        padding: 18px 20px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+    }
+    .flow-num {
+        width: 36px; height: 36px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #ca5f15, #e07a30);
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 6px 14px -6px rgba(202, 95, 21, 0.55);
+    }
+    .flow-step h4 {
+        margin: 0 0 6px;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        letter-spacing: -0.015em;
+    }
+    .flow-step p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--slate-700);
+        line-height: 1.55;
+    }
+
+    /* Builder mockup */
+    .builder {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    @media (min-width: 980px) {
+        .builder { grid-template-columns: 220px 1fr; align-items: start; }
+    }
+    .rule-list {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 12px;
+        padding: 8px;
+    }
+    .rule-list-head {
+        padding: 10px 12px 8px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+        border-bottom: 1px solid var(--slate-100);
+    }
+    .rule-item {
+        padding: 10px 12px;
+        border-radius: 8px;
+        font-size: 0.82rem;
+        color: var(--slate-700);
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        margin-top: 4px;
+    }
+    .rule-item:hover { background: var(--slate-100); }
+    .rule-item.active { background: rgba(202, 95, 21, 0.08); color: var(--slate-900); font-weight: 600; }
+    .rule-item .dot {
+        width: 8px; height: 8px;
+        border-radius: 999px;
+        flex-shrink: 0;
+    }
+    .dot-on { background: #16a34a; }
+    .dot-off { background: var(--slate-300); }
+
+    .toggle {
+        width: 26px;
+        height: 14px;
+        border-radius: 999px;
+        background: var(--slate-300);
+        position: relative;
+        flex-shrink: 0;
+    }
+    .toggle::after {
+        content: '';
+        position: absolute;
+        top: 2px; left: 2px;
+        width: 10px; height: 10px;
+        background: #fff;
+        border-radius: 999px;
+        transition: transform 0.2s ease;
+    }
+    .toggle.on { background: #16a34a; }
+    .toggle.on::after { transform: translateX(12px); }
+
+    .builder-canvas {
+        background: #fafafa;
+        border: 1px solid var(--slate-200);
+        border-radius: 12px;
+        padding: 20px;
+    }
+    .builder-canvas h4 {
+        margin: 0 0 4px;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        letter-spacing: -0.015em;
+    }
+    .builder-canvas .canvas-sub {
+        margin: 0 0 18px;
+        font-size: 0.82rem;
+        color: var(--slate-500);
+    }
+
+    .blk {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    .blk-label {
+        font-size: 0.6875rem;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+        min-width: 64px;
+    }
+    .blk.when { border-left: 3px solid var(--brand-primary); }
+    .blk.cond { border-left: 3px solid #0ea5e9; }
+    .blk.action { border-left: 3px solid #16a34a; }
+    .blk.when .blk-label { color: var(--brand-primary); }
+    .blk.cond .blk-label { color: #0369a1; }
+    .blk.action .blk-label { color: #15803d; }
+
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        background: var(--slate-100);
+        border: 1px solid var(--slate-200);
+        border-radius: 8px;
+        font-size: 0.82rem;
+        color: var(--slate-900);
+        font-weight: 500;
+    }
+    .chip .caret { color: var(--slate-400); font-size: 0.7rem; }
+    .chip.val { background: #fff; }
+    .chip.warm {
+        background: rgba(202, 95, 21, 0.08);
+        border-color: rgba(202, 95, 21, 0.20);
+        color: var(--brand-primary);
+        font-weight: 700;
+    }
+    .plus-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border: 1px dashed var(--slate-300);
+        border-radius: 8px;
+        font-size: 0.78rem;
+        color: var(--slate-500);
+        background: transparent;
+    }
+    .arrow-blk {
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--slate-400);
+        margin: -2px 0 8px;
+    }
+
+    /* Dry-run panel */
+    .dryrun {
+        background: linear-gradient(180deg, #fff 60%, rgba(202, 95, 21, 0.05) 100%);
+        border: 1px solid rgba(202, 95, 21, 0.25);
+        border-radius: 14px;
+        padding: 18px 20px;
+    }
+    .dryrun h5 {
+        margin: 0 0 6px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--slate-900);
+    }
+    .dryrun p {
+        margin: 0 0 12px;
+        font-size: 0.85rem;
+        color: var(--slate-700);
+        line-height: 1.5;
+    }
+    .dryrun-list {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.76rem;
+        background: #0f172a;
+        color: #e2e8f0;
+        padding: 12px 14px;
+        border-radius: 10px;
+        line-height: 1.7;
+    }
+    .dryrun-list span.match { color: #fbbf24; }
+    .dryrun-list span.id { color: #94a3b8; }
+
+    /* Execution log */
+    .exec-table {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+    .exec-table header {
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--slate-200);
+        background: #fafafa;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+    .exec-table header h4 {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--slate-900);
+    }
+    .exec-table header .filter {
+        font-size: 0.78rem;
+        color: var(--slate-500);
+    }
+    .exec-table td .stat {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+    .stat-ok { color: #15803d; }
+    .stat-skip { color: var(--slate-400); }
+    .stat-fail { color: #b91c1c; }
+    .stat-dot {
+        width: 7px; height: 7px;
+        border-radius: 999px;
+        background: currentColor;
+    }
+
+    /* Load balance cards */
+    .load-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    @media (min-width: 720px) {
+        .load-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1024px) {
+        .load-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .load-card {
+        padding: 16px 18px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 12px;
+    }
+    .load-card .name {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        margin: 0 0 2px;
+        letter-spacing: -0.01em;
+    }
+    .load-card .role {
+        font-size: 0.72rem;
+        color: var(--slate-400);
+        margin: 0 0 12px;
+    }
+    .load-card .load-bar {
+        height: 6px;
+        background: var(--slate-100);
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 10px;
+    }
+    .load-card .load-bar > span {
+        display: block;
+        height: 100%;
+        border-radius: 999px;
+    }
+    .load-card .load-fill-ok { background: linear-gradient(90deg, #22c55e, #16a34a); }
+    .load-card .load-fill-warn { background: linear-gradient(90deg, #facc15, #ea580c); }
+    .load-card .load-fill-over { background: linear-gradient(90deg, #ef4444, #b91c1c); }
+    .load-card .load-stat {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.78rem;
+        color: var(--slate-500);
+    }
+    .load-card .load-stat .num {
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: 700;
+        color: var(--slate-900);
+    }
+    .load-card.overload {
+        border-color: rgba(220, 38, 38, 0.30);
+        background: linear-gradient(180deg, #fff 60%, rgba(220, 38, 38, 0.04) 100%);
+    }
+
+    /* Inspiration */
+    .insp-row {
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 18px;
+        padding: 16px 0;
+        border-bottom: 1px dashed var(--slate-200);
+    }
+    .insp-row:last-child { border-bottom: none; }
+    .insp-name {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: var(--slate-900);
+    }
+    .insp-name a {
+        color: var(--brand-primary);
+        text-decoration: none;
+        font-size: 0.78rem;
+        font-weight: 500;
+        display: block;
+        margin-top: 4px;
+    }
+    .insp-row .what {
+        font-size: 0.88rem;
+        color: var(--slate-700);
+        line-height: 1.55;
+    }
+    .insp-row .what strong {
+        color: var(--slate-900);
+        font-weight: 700;
+    }
+
+    /* KPIs */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    @media (min-width: 720px) {
+        .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1024px) {
+        .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .kpi-card {
+        padding: 22px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .kpi-name {
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+    }
+    .kpi-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        color: var(--slate-900);
+    }
+    .kpi-value .unit {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--slate-400);
+    }
+    .kpi-card p {
+        margin: 0;
+        font-size: 0.82rem;
+        color: var(--slate-500);
+        line-height: 1.5;
+    }
+    .kpi-target {
+        font-size: 0.72rem;
+        color: var(--brand-primary);
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    /* Efforts */
+    .effort-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    @media (min-width: 880px) {
+        .effort-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .effort-col {
+        padding: 24px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+    }
+    .effort-col.mvp {
+        border-color: rgba(34, 197, 94, 0.30);
+        background: linear-gradient(180deg, #fff 60%, rgba(34, 197, 94, 0.04) 100%);
+    }
+    .effort-col.full {
+        border-color: rgba(202, 95, 21, 0.30);
+        background: linear-gradient(180deg, #fff 60%, rgba(202, 95, 21, 0.04) 100%);
+    }
+    .effort-col h4 {
+        margin: 0 0 12px;
+        font-size: 1.05rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--slate-900);
+    }
+    .effort-col h4 .badge {
+        font-size: 0.625rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        padding: 3px 8px;
+        border-radius: 999px;
+        margin-left: 8px;
+        vertical-align: middle;
+    }
+    .badge-mvp { background: rgba(34, 197, 94, 0.12); color: #15803d; }
+    .badge-full { background: rgba(202, 95, 21, 0.12); color: var(--brand-primary); }
+    .effort-col ul {
+        margin: 0;
+        padding-left: 20px;
+        color: var(--slate-700);
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+    .effort-col ul li { margin-bottom: 6px; }
+    .effort-col ul li code { font-size: 0.78rem; }
+
+    /* Risk */
+    .risk-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    @media (min-width: 880px) {
+        .risk-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .risk-card {
+        padding: 20px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .risk-head {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        letter-spacing: -0.015em;
+    }
+    .risk-head::before {
+        content: '!';
+        display: inline-block;
+        width: 22px; height: 22px;
+        border-radius: 999px;
+        background: rgba(202, 95, 21, 0.12);
+        color: var(--brand-primary);
+        font-weight: 800;
+        text-align: center;
+        line-height: 22px;
+        margin-right: 10px;
+    }
+    .risk-card p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--slate-700);
+        line-height: 1.55;
+    }
+    .risk-card .mitig {
+        background: rgba(34, 197, 94, 0.06);
+        border-left: 3px solid #16a34a;
+        padding: 10px 12px;
+        border-radius: 0 8px 8px 0;
+        font-size: 0.82rem;
+        color: var(--slate-700);
+    }
+    .risk-card .mitig strong {
+        color: #15803d;
+        font-size: 0.7rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 4px;
+    }
+</style>
+</head>
+<body>
+
+<header style="position: sticky; top: 0; z-index: 10; background: rgba(255, 248, 246, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(15, 23, 42, 0.06);">
+    <div class="container" style="max-width: 1080px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
+        <a href="index.html" style="display: inline-flex; align-items: center; gap: 8px; color: var(--slate-700); text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+            <span style="font-size: 1.1rem;">&larr;</span> Hub de features
+        </a>
+        <span class="eyebrow eyebrow-muted">FEATURE 10 / 10</span>
+    </div>
+</header>
+
+<main class="container" style="max-width: 1080px; margin: 0 auto; padding: 48px 24px 0;">
+
+    <!-- HERO -->
+    <section class="hero-feature">
+        <div style="position: relative; z-index: 1;">
+            <div style="display: inline-flex; align-items: center; gap: 10px;">
+                <span class="tier-badge tier-b">Tier B &mdash; Boas, opcionais</span>
+                <span class="eyebrow eyebrow-muted">Feature 10</span>
+            </div>
+            <h1 class="feature-title">
+                Engine de automação:<br/>
+                <span class="text-gradient-warm">quando isso acontecer, faça aquilo</span>.
+            </h1>
+            <p class="feature-sub">
+                Hoje toda demanda cai num bucket único, e o coordenador divide a carga "no olho". Em 50 alunos por coord isso é caos. A engine implementa duas coisas que o Zendesk separa de propósito: <strong>triggers</strong> (real-time, reagem ao evento na hora) e <strong>automations</strong> (varredura time-based de tempos em tempos). Mais round-robin com carga, builder visual e dry-run antes de ativar regra nova.
+            </p>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <span class="pill pill-warm">Triggers</span>
+                <span class="pill pill-warm">Roteamento</span>
+                <span class="pill">Zendesk</span>
+                <span class="pill">Workflow visual</span>
+                <span class="pill">Round-robin</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRIGGERS vs AUTOMATIONS — explicação fundamental -->
+    <section class="section">
+        <h2>Triggers vs. Automations &mdash; a distinção que importa</h2>
+        <p class="lead">
+            A diferença não é decorativa, é arquitetural. O Zendesk separa as duas porque elas têm gatilhos distintos e jeitos diferentes de falhar (<a href="https://www.eesel.ai/blog/zendesk-automations-explained-features-limitations-and-alternatives" target="_blank" rel="noopener" style="color: var(--brand-primary); text-decoration: none; font-weight: 600;">eesel.ai/blog/zendesk-automations</a>). Vale repetir aqui antes de qualquer mockup, porque metade dos bugs de regra vêm de confundir as duas.
+        </p>
+
+        <div class="vs-box">
+            <div class="vs-card trigger">
+                <span class="vs-tag trigger">Trigger</span>
+                <h3>Real-time, reativo</h3>
+                <p class="vs-when">Roda imediatamente quando: criar demanda · mudar status · adicionar mensagem · trocar atribuído</p>
+                <p>Reage a <strong>um evento que acabou de acontecer</strong>. Se a regra disser "atribuir Justificativa ao pedagógico", ela atua no exato instante em que o aluno aperta "Criar".</p>
+                <p class="ex"><strong>Exemplo:</strong> Ana Silva cria uma Justificativa de Falta &rarr; trigger atribui automaticamente a Bruno Almeida (coord pedagógico) &rarr; Ana vê o coord designado na tela de confirmação, sem espera.</p>
+            </div>
+            <div class="vs-card automation">
+                <span class="vs-tag automation">Automation</span>
+                <h3>Time-based, varredura</h3>
+                <p class="vs-when">Roda a cada N horas (hora em hora no MVP): "demandas em estado X há Y tempo"</p>
+                <p>Reage a <strong>uma condição que persiste no tempo</strong>. Nenhum evento dispara &mdash; a varredura encontra demandas que entraram em situação que precisa ação.</p>
+                <p class="ex"><strong>Exemplo:</strong> uma demanda em <code>em_analise</code> há 48h sem resposta. Ninguém clicou em nada nas últimas 48h, justamente por isso a regra precisa varrer e escalar pra diretora.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- POR QUE IMPORTA -->
+    <section class="section">
+        <h2>Por que isso importa</h2>
+        <p class="lead">
+            Em <code>dashboardcoord.js</code> tudo cai num único feed. O coord vê 14 demandas misturadas: justificativa, trancamento, revisão de nota &mdash; e decide quem atende com base em quem está mais à mão. Não escala. Mais um curso, mais um coord, e o sistema vira fila &uacute;nica de WhatsApp.
+        </p>
+        <div class="why-grid">
+            <div class="why-card">
+                <span class="why-tag">Problema 1</span>
+                <p><strong>Atribuição manual ou aleatória.</strong> Hoje não existe nenhum campo <code>demanda.atribuidoPara</code> em <code>data/demanda.js</code>. Quem pega cada demanda é resultado de quem abriu o dashboard antes. Sem regra, sem hist&oacute;rico de carga.</p>
+            </div>
+            <div class="why-card">
+                <span class="why-tag">Problema 2</span>
+                <p><strong>Demandas esquecidas.</strong> Sem varredura periódica, uma demanda em <code>em_analise</code> pode ficar 3 semanas parada porque o coord designado entrou de férias. Ninguém é notificado, ninguém escala. Aluno descobre quando reclama via WhatsApp.</p>
+            </div>
+            <div class="why-card">
+                <span class="why-tag">Problema 3</span>
+                <p><strong>Regras institucionais não codificadas.</strong> "Quebra de pré-requisito vai pro coord do curso", "financeiro pro adm". Hoje isso vive na cabeça da Carla Pereira. Quando ela sair de férias, ninguém sabe.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PERSONAS -->
+    <section class="section">
+        <h2>Personas impactadas</h2>
+        <p class="lead">Os três lados ganham, mas é o coord que sente mais &mdash; sai do "caixa única" pro "fila personalizada já filtrada e priorizada".</p>
+
+        <div class="persona-grid">
+
+            <div class="persona-card">
+                <div class="persona-head">
+                    <span class="persona-icon">A</span>
+                    <div>
+                        <h3>Aluno</h3>
+                        <span class="persona-name">Ana Silva &middot; 20240003</span>
+                    </div>
+                </div>
+                <div class="before-after">
+                    <div class="ba-row ba-before">
+                        <span class="ba-tag">Antes</span>
+                        Abre demanda. Tela mostra "pendente". Não sabe quem vai responder, nem quando. Tem que mandar mensagem pro coord pedindo update.
+                    </div>
+                    <div class="ba-row ba-after">
+                        <span class="ba-tag">Depois</span>
+                        Logo após criar, vê "Atribuído a <strong>Bruno Almeida</strong> &middot; coord pedagógico". Em 24h, se ainda <code>pendente</code>, recebe notificação automática "demanda escalada para revisão".
+                    </div>
+                </div>
+                <p class="persona-impact">Saber quem vai responder reduz ansiedade pela metade. O resto resolve a CSAT.</p>
+            </div>
+
+            <div class="persona-card">
+                <div class="persona-head">
+                    <span class="persona-icon">C</span>
+                    <div>
+                        <h3>Coordenador</h3>
+                        <span class="persona-name">Bruno Almeida &middot; Coord. Pedagógico</span>
+                    </div>
+                </div>
+                <div class="before-after">
+                    <div class="ba-row ba-before">
+                        <span class="ba-tag">Antes</span>
+                        Bruno abre o dashboard: 47 demandas misturadas, de 6 coords diferentes. Caça as que são dele "de olho", clica uma por uma. 15 minutos perdidos só pra começar.
+                    </div>
+                    <div class="ba-row ba-after">
+                        <span class="ba-tag">Depois</span>
+                        Bruno abre &mdash; vê só as 12 demandas que o roteador atribuiu a ele. Round-robin já balanceou com a Ana Silva (coord adm). Carga visível: "12 abertas &middot; 7 dentro do SLA".
+                    </div>
+                </div>
+                <p class="persona-impact">Trabalho começa no segundo certo. Sem caça-fantasma, sem ter que cuidar da carga dos outros.</p>
+            </div>
+
+            <div class="persona-card">
+                <div class="persona-head">
+                    <span class="persona-icon">D</span>
+                    <div>
+                        <h3>Diretora</h3>
+                        <span class="persona-name">Carla Pereira &middot; Diretora de Ensino</span>
+                    </div>
+                </div>
+                <div class="before-after">
+                    <div class="ba-row ba-before">
+                        <span class="ba-tag">Antes</span>
+                        Descobre que tinha demanda parada quando o aluno reclama na ouvidoria. Não consegue redistribuir carga &mdash; teria que ligar coord a coord.
+                    </div>
+                    <div class="ba-row ba-after">
+                        <span class="ba-tag">Depois</span>
+                        Painel de distribuição mostra "Diego: 22 abertas / Bruno: 8". Pode editar a regra de round-robin em 1 clique. Demandas paradas há 48h chegam por escalada automática, com motivo.
+                    </div>
+                </div>
+                <p class="persona-impact">Governança visível e ajustável. Para de apagar incêndio, começa a gerenciar processo.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section class="section">
+        <h2>Como funcionaria &mdash; fluxo</h2>
+        <p class="lead">Dois caminhos em paralelo: o reativo (trigger) e o periódico (automation). Mesma engine, dois gatilhos.</p>
+
+        <div class="flow">
+            <div class="flow-step">
+                <span class="flow-num">1</span>
+                <div>
+                    <h4>Ana cria a demanda (evento)</h4>
+                    <p>Em <code>centralDemandas.js</code> a função <code>criarDemanda()</code> faz <code>demandas.push(novaDemanda)</code> e, no fim, chama <code>automacao.dispararTriggers('demanda_criada', novaDemanda)</code>. A engine carrega as regras ativas com <code>evento === 'demanda_criada'</code> e avalia.</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <span class="flow-num">2</span>
+                <div>
+                    <h4>Engine avalia condições, em ordem</h4>
+                    <p>Para cada regra, percorre <code>condicoes[]</code> com AND lógico. <code>{ campo: 'tipo', op: 'igual', valor: 'justificativa_falta' }</code> casa &rarr; aplica as <code>acoes[]</code>: atribui a <code>matricula: "20240002"</code> (Bruno), adiciona tag <code>pedagogico</code>. Log de execução escrito no audit (feature 04).</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <span class="flow-num">3</span>
+                <div>
+                    <h4>Roteamento por carga (se a regra pedir)</h4>
+                    <p>Se a regra diz <code>{ tipo: 'atribuir_round_robin', grupo: 'pedagogico' }</code>, a engine consulta <code>automacao.cargaAtual()</code>, encontra Bruno: 12 abertas, Ana: 8 abertas. Atribui à Ana. Não é round-robin puro &mdash; pesa pela carga real, evitando jogar pra quem está sobrecarregado.</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <span class="flow-num">4</span>
+                <div>
+                    <h4>Tick horário das automations</h4>
+                    <p>A cada 60 minutos, <code>setInterval</code> em <code>App.js</code> chama <code>automacao.executarAutomations()</code>. A engine varre todas as demandas, calcula <code>tempo_no_status_horas</code> e roda as regras <code>tipo === 'automation'</code>. Aquela com 48h em <code>em_analise</code> escala pra Carla Pereira (diretora).</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <span class="flow-num">5</span>
+                <div>
+                    <h4>Dry-run antes de ativar</h4>
+                    <p>Ao salvar regra nova, o admin vê "Esta regra afetaria 23 demandas se rodasse agora &middot; ver lista". O Clarify mostra as 23 com matrícula, tipo e o que aconteceria com cada uma. Só depois disso o toggle <code>ativa: true</code> aparece.</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <span class="flow-num">6</span>
+                <div>
+                    <h4>Loop de auditoria &amp; ajuste</h4>
+                    <p>O painel de execução lista as últimas 200 execuções: regra X disparou em #1247, resultado "atribuído a Bruno". Diretora revisa toda sexta &mdash; se uma regra está disparando demais ou de menos, edita ou desativa. Reatribuir manual é 1 clique e gera evento <code>demanda_reatribuida_manual</code> (não dispara mais trigger, evita loop).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MOCKUP -->
+    <section class="section">
+        <h2>Mockup conceitual</h2>
+        <p class="lead">Três quadros do admin: o builder visual de regras (estilo Zapier), o dry-run antes de ativar, e a visão de distribuição de carga que a diretora usa.</p>
+
+        <!-- BUILDER -->
+        <div class="mockup-window shadow-soft-md" style="margin-bottom: 28px;">
+            <div class="mockup-bar">
+                <span class="mockup-dot"></span>
+                <span class="mockup-dot"></span>
+                <span class="mockup-dot"></span>
+                <span style="margin-left: 14px; font-size: 0.78rem; color: var(--slate-500); font-weight: 500;">clarify.app / admin / automa&ccedil;&otilde;es</span>
+            </div>
+            <div style="padding: 20px; background: #fafafa;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px;">
+                    <h4 style="margin: 0; font-size: 1rem; font-weight: 700; color: var(--slate-900); letter-spacing: -0.02em;">Builder de regras</h4>
+                    <span style="font-size: 0.75rem; color: var(--slate-500);">7 regras ativas &middot; 2 pausadas</span>
+                </div>
+
+                <div class="builder">
+                    <!-- Sidebar com lista de regras -->
+                    <div class="rule-list">
+                        <div class="rule-list-head">Regras</div>
+                        <div class="rule-item active">
+                            <span style="display: inline-flex; align-items: center; gap: 8px;"><span class="dot dot-on"></span>Justificativa &rarr; Bruno</span>
+                            <span class="toggle on"></span>
+                        </div>
+                        <div class="rule-item">
+                            <span style="display: inline-flex; align-items: center; gap: 8px;"><span class="dot dot-on"></span>Quebra pré-req &rarr; coord curso</span>
+                            <span class="toggle on"></span>
+                        </div>
+                        <div class="rule-item">
+                            <span style="display: inline-flex; align-items: center; gap: 8px;"><span class="dot dot-on"></span>Escalar 48h em análise</span>
+                            <span class="toggle on"></span>
+                        </div>
+                        <div class="rule-item">
+                            <span style="display: inline-flex; align-items: center; gap: 8px;"><span class="dot dot-on"></span>Round-robin pedagógico</span>
+                            <span class="toggle on"></span>
+                        </div>
+                        <div class="rule-item">
+                            <span style="display: inline-flex; align-items: center; gap: 8px;"><span class="dot dot-off"></span>CSAT após 24h concluído</span>
+                            <span class="toggle"></span>
+                        </div>
+                        <div class="rule-item">
+                            <span style="display: inline-flex; align-items: center; gap: 8px;"><span class="dot dot-off"></span>Encerrar requer_ajuste 5d</span>
+                            <span class="toggle"></span>
+                        </div>
+                        <div style="padding: 10px 12px; margin-top: 4px;">
+                            <span style="font-size: 0.78rem; color: var(--brand-primary); font-weight: 700;">+ Nova regra</span>
+                        </div>
+                    </div>
+
+                    <!-- Canvas com a regra selecionada -->
+                    <div class="builder-canvas">
+                        <h4>Justificativa de Falta &rarr; coord pedagógico</h4>
+                        <p class="canvas-sub">Trigger &middot; 87 execuções &middot; última: hoje 14:00</p>
+
+                        <div class="blk when">
+                            <span class="blk-label">Quando</span>
+                            <span class="chip warm">demanda_criada <span class="caret">&#9662;</span></span>
+                        </div>
+                        <div class="arrow-blk">&darr;</div>
+                        <div class="blk cond">
+                            <span class="blk-label">Se</span>
+                            <span class="chip">tipo <span class="caret">&#9662;</span></span>
+                            <span class="chip val">= <span style="font-weight: 700;">Justificativa de Falta</span></span>
+                        </div>
+                        <div class="blk cond" style="margin-top: -4px;">
+                            <span class="blk-label">E se</span>
+                            <span class="chip">turma_periodo <span class="caret">&#9662;</span></span>
+                            <span class="chip val">= <span style="font-weight: 700;">2026.1</span></span>
+                            <span class="plus-chip">+ condição</span>
+                        </div>
+                        <div class="arrow-blk">&darr;</div>
+                        <div class="blk action">
+                            <span class="blk-label">Faça</span>
+                            <span class="chip">atribuir a <span class="caret">&#9662;</span></span>
+                            <span class="chip val"><strong>Bruno Almeida</strong> &middot; 20240002</span>
+                        </div>
+                        <div class="blk action" style="margin-top: -4px;">
+                            <span class="blk-label">E</span>
+                            <span class="chip">adicionar tag <span class="caret">&#9662;</span></span>
+                            <span class="chip val">pedagogico</span>
+                            <span class="plus-chip">+ ação</span>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px;">
+                            <span class="pill" style="cursor: pointer;">Dry-run</span>
+                            <span class="pill pill-warm" style="cursor: pointer; font-weight: 700;">Salvar &amp; ativar</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DRY-RUN + LOG lado a lado -->
+        <div style="display: grid; grid-template-columns: 1fr; gap: 18px;">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 18px;">
+                <!-- Em telas largas: 2 col -->
+                <style>
+                    @media (min-width: 880px) {
+                        .dryrun-log-row { grid-template-columns: 1fr 1.2fr !important; }
+                    }
+                </style>
+                <div class="dryrun-log-row" style="display: grid; grid-template-columns: 1fr; gap: 18px;">
+
+                    <!-- DRY-RUN -->
+                    <div>
+                        <span class="eyebrow">Dry-run antes de ativar</span>
+                        <div class="dryrun" style="margin-top: 12px;">
+                            <h5>Esta regra afetaria <strong>23 demandas</strong> se rodasse agora</h5>
+                            <p>Você está prestes a ativar <em>"Round-robin pedagógico"</em>. A engine simulou contra o estado atual da fila &mdash; 23 demandas seriam reatribuídas. Revise antes de confirmar:</p>
+                            <div class="dryrun-list">
+                                <div><span class="id">#1247</span> Trancamento &middot; Diego Santos &rarr; <span class="match">Bruno (era Ana)</span></div>
+                                <div><span class="id">#1251</span> Justificativa &middot; Ana Silva &rarr; <span class="match">Ana (sem mudança)</span></div>
+                                <div><span class="id">#1252</span> Aproveitamento &middot; Mariana Costa &rarr; <span class="match">Bruno (era Ana)</span></div>
+                                <div><span class="id">#1255</span> Revisão de Nota &middot; João Pereira &rarr; <span class="match">Ana (era Diego)</span></div>
+                                <div style="color: var(--slate-400); margin-top: 4px;">&middot;&middot;&middot; +19 demandas afetadas</div>
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-top: 12px;">
+                                <span class="pill" style="cursor: pointer;">Cancelar</span>
+                                <span class="pill pill-warm" style="cursor: pointer; font-weight: 700;">Confirmar &amp; ativar</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LOG -->
+                    <div>
+                        <span class="eyebrow">Painel de execu&ccedil;&atilde;o</span>
+                        <div class="exec-table" style="margin-top: 12px;">
+                            <header>
+                                <h4>Últimas execuções</h4>
+                                <span class="filter">filtro: todas &middot; 200 últimas</span>
+                            </header>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Quando</th>
+                                        <th>Regra</th>
+                                        <th>Demanda</th>
+                                        <th>Resultado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">14:02</td>
+                                        <td>Justificativa &rarr; Bruno</td>
+                                        <td>#1283</td>
+                                        <td><span class="stat stat-ok"><span class="stat-dot"></span>Aplicada</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">13:00</td>
+                                        <td>Escalar 48h em análise</td>
+                                        <td>#1199</td>
+                                        <td><span class="stat stat-ok"><span class="stat-dot"></span>Escalada</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">12:48</td>
+                                        <td>Round-robin pedagógico</td>
+                                        <td>#1282</td>
+                                        <td><span class="stat stat-skip"><span class="stat-dot"></span>Sem match</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">12:30</td>
+                                        <td>Quebra pré-req &rarr; coord curso</td>
+                                        <td>#1281</td>
+                                        <td><span class="stat stat-ok"><span class="stat-dot"></span>Aplicada</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">11:14</td>
+                                        <td>Justificativa &rarr; Bruno</td>
+                                        <td>#1280</td>
+                                        <td><span class="stat stat-fail"><span class="stat-dot"></span>Loop bloqueado</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">10:00</td>
+                                        <td>Escalar 48h em análise</td>
+                                        <td>#1175</td>
+                                        <td><span class="stat stat-ok"><span class="stat-dot"></span>Escalada</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOAD BALANCE -->
+        <div style="margin-top: 28px;">
+            <span class="eyebrow">Distribuição de carga (vista da diretora)</span>
+            <div class="load-grid" style="margin-top: 12px;">
+                <div class="load-card">
+                    <p class="name">Bruno Almeida</p>
+                    <p class="role">Coord. Pedagógico</p>
+                    <div class="load-stat">
+                        <span>Abertas</span>
+                        <span class="num">12 / 20</span>
+                    </div>
+                    <div class="load-bar"><span class="load-fill-ok" style="width: 60%;"></span></div>
+                </div>
+                <div class="load-card">
+                    <p class="name">Ana Silva</p>
+                    <p class="role">Coord. Administrativo</p>
+                    <div class="load-stat">
+                        <span>Abertas</span>
+                        <span class="num">8 / 20</span>
+                    </div>
+                    <div class="load-bar"><span class="load-fill-ok" style="width: 40%;"></span></div>
+                </div>
+                <div class="load-card overload">
+                    <p class="name">Diego Santos</p>
+                    <p class="role">Coord. Curso CC</p>
+                    <div class="load-stat">
+                        <span>Abertas</span>
+                        <span class="num">22 / 20</span>
+                    </div>
+                    <div class="load-bar"><span class="load-fill-over" style="width: 100%;"></span></div>
+                </div>
+                <div class="load-card">
+                    <p class="name">Mariana Costa</p>
+                    <p class="role">Coord. Curso Info</p>
+                    <div class="load-stat">
+                        <span>Abertas</span>
+                        <span class="num">15 / 20</span>
+                    </div>
+                    <div class="load-bar"><span class="load-fill-warn" style="width: 75%;"></span></div>
+                </div>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--slate-500); margin: 12px 0 0;">
+                Diego está acima do teto. O round-robin já bloqueou novas atribuições pra ele &mdash; próximas vão pra Ana e Bruno. Direção pode reatribuir 4 demandas em 1 clique no card.
+            </p>
+        </div>
+    </section>
+
+    <!-- MODELO DE DADOS -->
+    <section class="section">
+        <h2>Modelo de dados</h2>
+        <p class="lead">Duas estruturas novas: <code>regras_automacao</code> (config global) e o campo <code>atribuidoPara</code> + tags na demanda. Schema atual de Demanda (<code>data/demanda.js</code>) ganha 3 campos novos.</p>
+
+<pre><code>// localStorage["clarify.regras_automacao"] &mdash; lista de regras
+{
+  "regras_automacao": [
+    {
+      "id": "rule_001",
+      "nome": "Atribuir justificativas ao pedagógico",
+      "tipo": "trigger",
+      "evento": "demanda_criada",
+      "condicoes": [
+        { "campo": "tipo", "op": "igual", "valor": "justificativa_falta" }
+      ],
+      "acoes": [
+        { "tipo": "atribuir", "matricula": "20240002" },     // Bruno
+        { "tipo": "adicionar_tag", "valor": "pedagogico" }
+      ],
+      "ativa": true,
+      "execucoes_total": 87,
+      "ultima_execucao": "2026-05-13T14:00:00Z"
+    },
+    {
+      "id": "rule_002",
+      "nome": "Escalar demandas paradas",
+      "tipo": "automation",
+      "intervalo_horas": 1,
+      "condicoes": [
+        { "campo": "status", "op": "igual", "valor": "em_analise" },
+        { "campo": "tempo_no_status_horas", "op": "maior", "valor": 48 }
+      ],
+      "acoes": [
+        { "tipo": "atribuir", "matricula": "diretor" },
+        { "tipo": "notificar", "destino": "diretor", "template": "escalada_automatica" }
+      ],
+      "ativa": true
+    },
+    {
+      "id": "rule_003",
+      "nome": "Round-robin pedagógico (com carga)",
+      "tipo": "trigger",
+      "evento": "demanda_criada",
+      "condicoes": [
+        { "campo": "tipo", "op": "in", "valor": ["justificativa_falta", "revisao_nota"] }
+      ],
+      "acoes": [
+        { "tipo": "atribuir_round_robin",
+          "grupo": "pedagogico",
+          "considerar_carga": true,
+          "teto_demandas_abertas": 20 }
+      ],
+      "ativa": true
+    }
+  ]
+}
+
+// Campos ADICIONADOS ao schema de Demanda
+{
+  // ... protocolo, tipo, status, descricao já existem
+  "atribuidoPara": "20240002",                  // matrícula do coord (novo)
+  "tags": ["pedagogico", "urgente"],            // novo
+  "historico_atribuicao": [                     // novo &mdash; pra auditoria
+    { "matricula": "20240002", "em": "2026-05-13T14:00:00Z", "por": "rule_001" },
+    { "matricula": "diretor",  "em": "2026-05-15T16:00:00Z", "por": "rule_002" }
+  ]
+}</code></pre>
+    </section>
+
+    <!-- INSPIRAÇÃO -->
+    <section class="section">
+        <h2>Inspiração de mercado</h2>
+        <p class="lead">A distinção trigger/automation é do Zendesk &mdash; assumida no doc. UX do builder visual é Zapier/Make. Carga real no round-robin é Salesforce. Cada um deu uma peça.</p>
+
+        <div class="card" style="padding: 8px 22px;">
+            <div class="insp-row">
+                <div>
+                    <div class="insp-name">Zendesk Triggers &amp; Automations</div>
+                    <a href="https://www.eesel.ai/blog/zendesk-automations-explained-features-limitations-and-alternatives" target="_blank" rel="noopener">eesel.ai/blog/zendesk-automations &rarr;</a>
+                </div>
+                <div class="what">
+                    A separação <strong>trigger (real-time)</strong> vs <strong>automation (time-based, hora em hora)</strong> é o core. Triggers reagem a eventos; automations varrem condições que persistem no tempo. Limitações conhecidas: máximo de execuções por hora, sem visualização gráfica. <strong>Adaptação:</strong> herdamos a distinção tal qual, adicionamos builder visual (Zendesk não tem) e dry-run obrigatório (Zendesk não tem por padrão).
+                </div>
+            </div>
+            <div class="insp-row">
+                <div>
+                    <div class="insp-name">Zapier / Make</div>
+                    <a href="https://zapier.com/" target="_blank" rel="noopener">zapier.com &rarr;</a>
+                </div>
+                <div class="what">
+                    UX de <strong>"quando X &rarr; faça Y"</strong> em blocos visuais com drop-downs. O usuário não-técnico monta fluxo complexo sem ler doc. <strong>Adaptação:</strong> copiamos a estrutura de blocos (Quando / Se / Faça) e os chips com drop-down. Mas em vez de catálogo de 5000 integrações, o Clarify tem ~15 eventos e ~10 ações fixas &mdash; espaço pequeno e finito, builder fica cognitivamente leve.
+                </div>
+            </div>
+            <div class="insp-row">
+                <div>
+                    <div class="insp-name">Salesforce Omni-Channel Routing</div>
+                    <a href="https://help.salesforce.com/s/articleView?id=service.omnichannel_intro_routing.htm" target="_blank" rel="noopener">help.salesforce.com &rarr;</a>
+                </div>
+                <div class="what">
+                    Round-robin <strong>pondera pela carga atual</strong> (não distribui pra quem já tem 50 tickets) e por <strong>skill-based routing</strong> (atendente X só pega categoria Y). <strong>Adaptação:</strong> "skill" vira "área do coord" (pedagógico / adm / curso). Carga é número de demandas abertas e não-pausadas. Teto configurável por coord &mdash; passou do teto, round-robin pula.
+                </div>
+            </div>
+            <div class="insp-row">
+                <div>
+                    <div class="insp-name">IFTTT</div>
+                    <a href="https://ifttt.com/" target="_blank" rel="noopener">ifttt.com &rarr;</a>
+                </div>
+                <div class="what">
+                    Modelo conceitual minimalista &mdash; literalmente "if this, then that". Fala com usuário não-técnico. <strong>Adaptação:</strong> a tela inicial do admin não-técnico (coord-mestre) usa esse linguajar puro, sem AND/OR aninhados. Quem quer condicional complexa entra no "modo avançado".
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KPIs -->
+    <section class="section">
+        <h2>Métricas de sucesso</h2>
+        <p class="lead">Engine de regras sem medição é "tela mágica que faz coisa". Cinco indicadores para provar que está distribuindo bem &mdash; e que ninguém está sendo punido por regra mal-escrita.</p>
+
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <span class="kpi-name">% atribuído automaticamente</span>
+                <span class="kpi-value">80<span class="unit">%+</span></span>
+                <p>Demandas que receberam <code>atribuidoPara</code> via regra (sem clique humano). Resto vai pra fila genérica e é puxado manualmente.</p>
+                <span class="kpi-target">Target: 80% no MVP, 95% versão completa</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-name">Tempo até 1ª atribuição</span>
+                <span class="kpi-value">&lt; 1<span class="unit">min</span></span>
+                <p>Da criação da demanda até <code>atribuidoPara !== null</code>. Com trigger síncrono, deve ser instantâneo. Métrica detecta regras travadas.</p>
+                <span class="kpi-target">Alarm se &gt; 5min em 1% das demandas</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-name">Desvio padr&atilde;o da carga</span>
+                <span class="kpi-value">&lt; 4<span class="unit">d</span></span>
+                <p>Std dev de demandas abertas entre coords. Quanto menor, mais justa a distribuição. Hoje (sem engine) o desvio é absurdo &mdash; 0 vs. 30.</p>
+                <span class="kpi-target">Indicador primário de fairness</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-name">Auto-escaladas efetivas</span>
+                <span class="kpi-value">&gt; 60<span class="unit">%</span></span>
+                <p>% das escaladas automáticas que viraram ação em &lt; 24h. Se baixo, a escalada está caindo no buraco &mdash; ninguém vê a notificação.</p>
+                <span class="kpi-target">Mede a qualidade do escalonamento</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-name">Regras pausadas pós-ativação</span>
+                <span class="kpi-value">&lt; 15<span class="unit">%</span></span>
+                <p>Regras ativadas que precisaram ser desligadas em &lt; 7 dias. Se alto, o dry-run não está sendo eficaz e regras quebradas vão pra produção.</p>
+                <span class="kpi-target">Sinal de qualidade do builder</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-name">Reatribui&ccedil;&otilde;es manuais</span>
+                <span class="kpi-value">&lt; 10<span class="unit">%</span></span>
+                <p>% de demandas reatribuídas à mão depois da regra agir. Se alto, as regras de roteamento estão erradas e o coord-mestre precisa ajustar.</p>
+                <span class="kpi-target">Indicador de regras desafinadas</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ESFORÇO -->
+    <section class="section">
+        <h2>Esforço &amp; dependências</h2>
+        <p class="lead">A engine é um serviço puro que escuta eventos &mdash; o trabalho pesado é instrumentar o app pra emitir os eventos certos nos lugares certos. Caminho de menor resistência: começar pelo trigger <code>demanda_criada</code>.</p>
+
+        <div class="card" style="padding: 8px 0;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Componente</th>
+                        <th>Ação</th>
+                        <th>Esforço</th>
+                        <th>Depende de</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>src/services/automacao.js</code></td>
+                        <td>Criar &mdash; engine pura: <code>dispararTriggers()</code>, <code>executarAutomations()</code>, <code>cargaAtual()</code>, <code>simular()</code></td>
+                        <td><span class="pill pill-warm">L</span></td>
+                        <td>Nada</td>
+                    </tr>
+                    <tr>
+                        <td><code>src/data/regras.js</code></td>
+                        <td>Criar &mdash; 3 regras padrão (justificativa, escalada 48h, round-robin) + persistência</td>
+                        <td><span class="pill">S</span></td>
+                        <td><code>automacao.js</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>src/data/demanda.js</code></td>
+                        <td>Estender schema: <code>atribuidoPara</code>, <code>tags</code>, <code>historico_atribuicao</code></td>
+                        <td><span class="pill">S</span></td>
+                        <td>Nada</td>
+                    </tr>
+                    <tr style="background: rgba(202, 95, 21, 0.05);">
+                        <td><code>src/pages/centralDemandas.js</code></td>
+                        <td><strong>Instrumentar</strong> &mdash; chamar <code>automacao.dispararTriggers('demanda_criada', ...)</code> no <code>criarDemanda()</code></td>
+                        <td><span class="pill">XS</span></td>
+                        <td><code>automacao.js</code></td>
+                    </tr>
+                    <tr style="background: rgba(202, 95, 21, 0.05);">
+                        <td><code>src/pages/dashboardcoord.js</code></td>
+                        <td><strong>Filtrar fila</strong> por <code>atribuidoPara === coordLogado</code> + emitir <code>demanda_status_alterado</code></td>
+                        <td><span class="pill pill-warm">M</span></td>
+                        <td><code>automacao.js</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>src/pages/adminAutomacao.js</code></td>
+                        <td>Criar &mdash; builder visual (sidebar de regras + canvas)</td>
+                        <td><span class="pill pill-warm">L</span></td>
+                        <td><code>automacao.js</code> · feature 04 (audit log)</td>
+                    </tr>
+                    <tr>
+                        <td><code>src/App.js</code></td>
+                        <td><code>setInterval(3_600_000)</code> chama <code>automacao.executarAutomations()</code> + revalida on-load</td>
+                        <td><span class="pill">XS</span></td>
+                        <td><code>automacao.js</code></td>
+                    </tr>
+                    <tr>
+                        <td>Integração com feature 03 (SLA)</td>
+                        <td>Evento <code>sla_breached</code> emitido por <code>sla.js</code> vira novo trigger possível</td>
+                        <td><span class="pill">S</span></td>
+                        <td>Feature 03</td>
+                    </tr>
+                    <tr>
+                        <td>Integração com feature 04 (Audit log)</td>
+                        <td>Cada execução de regra escreve no log: regra, demanda, resultado</td>
+                        <td><span class="pill">XS</span></td>
+                        <td>Feature 04</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- QUICK WIN vs FULL -->
+    <section class="section">
+        <h2>Quick win vs. versão completa</h2>
+        <p class="lead">Dá pra entregar uma versão hardcoded em 1-2 dias que já tira 80% do problema. O builder visual e o dry-run são o que separa "demo" de "produto institucional".</p>
+
+        <div class="effort-grid">
+            <div class="effort-col mvp">
+                <h4>MVP <span class="badge badge-mvp">1-2 dias</span></h4>
+                <ul>
+                    <li><strong>2 triggers hardcoded</strong> em <code>automacao.js</code>: "Justificativa &rarr; Bruno" e "CSAT após concluído"</li>
+                    <li><strong>Sem builder visual</strong> &mdash; regras vivem em <code>regras.js</code> como JS literal</li>
+                    <li>Adiciona <code>atribuidoPara</code> na demanda + filtro no dashboard do coord</li>
+                    <li>Instrumenta <code>criarDemanda()</code> com 1 linha: <code>automacao.dispararTriggers(...)</code></li>
+                    <li>Sem automations time-based &mdash; só triggers</li>
+                    <li>Log de execução no console (sem painel visual)</li>
+                    <li>Sem round-robin &mdash; só atribuição fixa por tipo</li>
+                </ul>
+            </div>
+            <div class="effort-col full">
+                <h4>Versão completa <span class="badge badge-full">4-6 semanas</span></h4>
+                <ul>
+                    <li>Builder visual completo (sidebar + canvas com chips e drop-downs)</li>
+                    <li>Automations time-based (<code>setInterval</code> horário + revalida on-load)</li>
+                    <li><strong>Dry-run obrigatório</strong> antes de ativar regra nova &mdash; mostra demandas afetadas</li>
+                    <li>Round-robin com carga real + teto de demandas abertas por coord</li>
+                    <li>Painel de distribuição de carga (vista da diretora) com reatribuição em 1 clique</li>
+                    <li>Painel de execução: últimas 200 execuções, filtro por regra</li>
+                    <li>Detecção de ciclos (regra A dispara B que dispara A &mdash; engine quebra com log claro)</li>
+                    <li>"Modo emergencial": regras temporárias ativáveis durante matrícula</li>
+                    <li>Integração com SLA (breach vira evento) e Audit log (cada execução gravada)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- RISCOS -->
+    <section class="section">
+        <h2>Riscos &amp; armadilhas</h2>
+        <p class="lead">Engine de regras é a feature que mais falha silenciosamente. Cinco coisas pra tratar com cuidado &mdash; "fizemos automação" sem isso vira "tela mágica que ninguém entende".</p>
+
+        <div class="risk-grid">
+            <div class="risk-card">
+                <span class="risk-head">Loop infinito de regras</span>
+                <p>Regra A: "se atribuído a Bruno, adiciona tag X". Regra B: "se tem tag X, atribui a Ana". Cada atribuição dispara a outra. Em 200ms, 1000 atribuições e o app trava.</p>
+                <div class="mitig">
+                    <strong>Mitigação</strong>
+                    Max-recursion de 3 níveis em <code>automacao.js</code>. Cada disparo carrega <code>profundidade</code> &mdash; passou de 3, aborta com log "loop detectado em rule_X &rarr; rule_Y &rarr; rule_X". Reatribuição manual emite evento <code>demanda_reatribuida_manual</code>, que <strong>não</strong> dispara triggers.
+                </div>
+            </div>
+            <div class="risk-card">
+                <span class="risk-head">Regra mal-escrita atribui tudo a um coord</span>
+                <p>Coord-mestre cria regra "se status pendente &rarr; atribuir a Bruno" sem perceber. Em 1h, Bruno tem 80 demandas e os outros têm zero. Burnout instantâneo.</p>
+                <div class="mitig">
+                    <strong>Mitigação</strong>
+                    Dry-run <strong>obrigatório</strong> antes do toggle "ativa" aparecer. Mostra quantas demandas seriam afetadas. Acima de um limiar (ex: 30% da fila), exige confirmação dupla com texto digitado.
+                </div>
+            </div>
+            <div class="risk-card">
+                <span class="risk-head">Sensação de "máquina decide"</span>
+                <p>Coord recebe demanda atribuída e não sabe por quê. Aluno vê "atribuído a Bruno" sem entender o critério. Confiança no sistema cai &mdash; "essa coisa atribui aleatório".</p>
+                <div class="mitig">
+                    <strong>Mitigação</strong>
+                    Cada demanda mostra <em>"Atribuído a Bruno pela regra 'Justificativa &rarr; pedagógico'"</em>. Tooltip explica a regra. Reverter é 1 clique. O <code>historico_atribuicao</code> guarda quem/quando/qual regra.
+                </div>
+            </div>
+            <div class="risk-card">
+                <span class="risk-head">localStorage n&atilde;o tem cron job</span>
+                <p>Automations time-based dependem de algo executando hora em hora. Se ninguém abre o app, nada roda. Demanda em <code>em_analise</code> há 5 dias nunca é escalada porque o app está fechado.</p>
+                <div class="mitig">
+                    <strong>Mitigação</strong>
+                    <code>setInterval(3_600_000)</code> enquanto a aba estiver aberta + <strong>revalidação on-load</strong> que executa todas as automations pendentes desde o último timestamp. No futuro, com backend, vira cron de verdade. Pra TCC, funciona.
+                </div>
+            </div>
+            <div class="risk-card">
+                <span class="risk-head">Performance da varredura</span>
+                <p>Automation "demandas há 48h em análise" precisa percorrer todas as demandas. Hoje são 50; em 2 anos, 10000. Sem índice, <code>filter()</code> roda a cada hora em 10000 itens.</p>
+                <div class="mitig">
+                    <strong>Mitigação</strong>
+                    Manter <code>indices.demandas_por_status</code> em memória (rebuild on-load), atualizar incrementalmente em cada change. Automation consulta o índice. Custo de manutenção do índice é O(1) por mudança.
+                </div>
+            </div>
+            <div class="risk-card">
+                <span class="risk-head">Hierarquia institucional ignorada</span>
+                <p>Engine genérica trata Bruno e Carla como iguais. Mas a escalada precisa subir <em>na cadeia</em>: coord curso &rarr; coord pedagógico &rarr; diretor &rarr; reitoria. Pular degraus ofende politicamente.</p>
+                <div class="mitig">
+                    <strong>Mitigação</strong>
+                    Ação <code>escalar_para_proximo_nivel</code> consulta <code>data/hierarquia.js</code> (novo arquivo). Cada usuário tem <code>superior</code>. A regra de escalada não atribui direto pra diretora &mdash; sobe um degrau só. Se ela não responde em 24h, sobe pro próximo.
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer style="margin-top: 80px; padding: 32px 0; border-top: 1px solid var(--slate-200); text-align: center; color: var(--slate-400); font-size: 0.85rem;">
+    <div class="container" style="max-width: 1080px; margin: 0 auto;">
+        <p>Feature 10 de 10 &middot; <a href="index.html" style="color: var(--brand-primary); text-decoration: none; font-weight: 600;">Voltar ao hub &rarr;</a></p>
+    </div>
+</footer>
+
+<script>
+    const els = document.querySelectorAll('[data-reveal]');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('is-revealed');
+                obs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

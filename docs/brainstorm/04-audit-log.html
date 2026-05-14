@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FEATURE 04 — Audit Log Imutável — Clarify Brainstorm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+    /* ====== Estilos específicos da feature 04 ====== */
+    .hero-feature {
+        position: relative;
+        padding: 56px 0 32px;
+    }
+    .hero-feature::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(60% 60% at 50% 0%, rgba(202, 95, 21, 0.16) 0%, rgba(202, 95, 21, 0) 70%);
+        pointer-events: none;
+    }
+    h1.feature-h1 {
+        font-size: clamp(2.2rem, 5vw, 3.6rem);
+        font-weight: 700;
+        letter-spacing: -0.045em;
+        line-height: 1.05;
+        margin: 18px 0 16px;
+        color: var(--slate-900);
+        max-width: 880px;
+    }
+    p.feature-sub {
+        font-size: 1.1rem;
+        color: var(--slate-500);
+        max-width: 720px;
+        margin: 0 0 24px;
+        line-height: 1.55;
+    }
+    .pill-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+    }
+
+    section.block {
+        margin: 64px 0;
+    }
+    section.block:first-of-type {
+        margin-top: 40px;
+    }
+    .block-eyebrow {
+        display: inline-block;
+        margin-bottom: 12px;
+    }
+    h2.block-title {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        margin: 0 0 12px;
+        color: var(--slate-900);
+    }
+    p.block-lede {
+        font-size: 1rem;
+        color: var(--slate-500);
+        max-width: 720px;
+        line-height: 1.6;
+        margin: 0 0 28px;
+    }
+
+    /* Why-it-matters bullets */
+    .why-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+        margin-top: 20px;
+    }
+    @media (min-width: 768px) {
+        .why-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .why-card {
+        padding: 22px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+    }
+    .why-card .num {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        color: var(--brand-primary);
+        font-weight: 600;
+        letter-spacing: 0.08em;
+    }
+    .why-card h4 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin: 6px 0 8px;
+        letter-spacing: -0.02em;
+    }
+    .why-card p {
+        font-size: 0.92rem;
+        color: var(--slate-500);
+        margin: 0;
+        line-height: 1.55;
+    }
+
+    /* Personas */
+    .persona-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    @media (min-width: 768px) {
+        .persona-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .persona-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 18px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    .persona-icon {
+        width: 40px; height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        background: rgba(202, 95, 21, 0.10);
+        color: var(--brand-primary);
+        font-size: 1.2rem;
+    }
+    .persona-name {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: -0.02em;
+    }
+    .persona-state {
+        padding: 12px 14px;
+        border-radius: 10px;
+        font-size: 0.88rem;
+        line-height: 1.5;
+    }
+    .persona-state.before {
+        background: rgba(239, 68, 68, 0.06);
+        border: 1px solid rgba(239, 68, 68, 0.16);
+        color: #7f1d1d;
+    }
+    .persona-state.after {
+        background: rgba(34, 197, 94, 0.06);
+        border: 1px solid rgba(34, 197, 94, 0.20);
+        color: #14532d;
+    }
+    .persona-state .label {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        opacity: 0.7;
+        display: block;
+        margin-bottom: 4px;
+    }
+    .persona-tagline {
+        font-size: 0.85rem;
+        color: var(--slate-700);
+        font-style: italic;
+        margin: 0;
+    }
+
+    /* Steps */
+    .steps {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        counter-reset: step;
+    }
+    .step {
+        display: grid;
+        grid-template-columns: 48px 1fr;
+        gap: 18px;
+        padding: 18px 20px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        align-items: start;
+    }
+    .step-num {
+        width: 36px; height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #ca5f15, #e07a30);
+        color: #fff;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.85rem;
+        font-weight: 700;
+    }
+    .step h4 {
+        margin: 0 0 6px;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+    }
+    .step p {
+        margin: 0;
+        font-size: 0.92rem;
+        color: var(--slate-500);
+        line-height: 1.55;
+    }
+
+    /* ====== TIMELINE MOCKUP ====== */
+    .mockup-shell {
+        background: linear-gradient(180deg, rgba(202,95,21,0.04), rgba(255,255,255,0));
+        padding: 24px;
+        border-radius: 22px;
+        border: 1px solid rgba(202,95,21,0.10);
+    }
+    .mockup-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+    @media (min-width: 960px) {
+        .mockup-grid { grid-template-columns: 1.15fr 0.85fr; }
+    }
+    .mock-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 8px 24px -10px rgba(15, 23, 42, 0.10);
+    }
+    .mock-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        background: #f8fafc;
+        border-bottom: 1px solid var(--slate-200);
+    }
+    .mock-header .dots {
+        display: inline-flex;
+        gap: 6px;
+        margin-right: 10px;
+    }
+    .mock-header .dots span {
+        width: 10px; height: 10px; border-radius: 999px;
+        background: var(--slate-300);
+    }
+    .mock-header .title {
+        font-size: 0.8rem;
+        color: var(--slate-500);
+        font-family: 'JetBrains Mono', monospace;
+    }
+    .mock-body { padding: 18px 20px; }
+
+    .demand-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+    .demand-title {
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin: 0;
+    }
+    .demand-protocol {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        color: var(--slate-500);
+        background: var(--slate-100);
+        padding: 3px 8px;
+        border-radius: 6px;
+    }
+    .demand-meta {
+        font-size: 0.78rem;
+        color: var(--slate-500);
+        margin-bottom: 16px;
+    }
+    .export-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--brand-primary);
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.78rem;
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: none;
+        cursor: default;
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.18),
+            0 6px 14px -6px rgba(202, 95, 21, 0.5);
+    }
+
+    .timeline {
+        position: relative;
+        margin-top: 18px;
+        padding-left: 22px;
+    }
+    .timeline::before {
+        content: '';
+        position: absolute;
+        top: 6px; bottom: 6px;
+        left: 7px;
+        width: 2px;
+        background: linear-gradient(180deg, rgba(202,95,21,0.45), rgba(202,95,21,0.08));
+        border-radius: 2px;
+    }
+    .event {
+        position: relative;
+        padding: 10px 0 18px;
+    }
+    .event::before {
+        content: '';
+        position: absolute;
+        left: -22px;
+        top: 16px;
+        width: 16px; height: 16px;
+        border-radius: 999px;
+        background: #fff;
+        border: 2px solid var(--brand-primary);
+        box-shadow: 0 0 0 3px rgba(202,95,21,0.10);
+    }
+    .event.internal::before {
+        border-color: var(--slate-400);
+        box-shadow: 0 0 0 3px rgba(100,116,139,0.10);
+    }
+    .event-ts {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.72rem;
+        color: var(--slate-400);
+        margin-bottom: 2px;
+        letter-spacing: 0.02em;
+    }
+    .event-line {
+        font-size: 0.9rem;
+        color: var(--slate-900);
+        line-height: 1.5;
+        margin: 0 0 6px;
+    }
+    .event-line strong {
+        color: var(--brand-primary);
+        font-weight: 600;
+    }
+    .event-line .actor {
+        color: var(--slate-900);
+        font-weight: 600;
+    }
+    .event-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.68rem;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 999px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+    .tag-create { background: rgba(34,197,94,0.10); color: #14532d; }
+    .tag-status { background: rgba(202,95,21,0.10); color: var(--brand-primary); }
+    .tag-internal { background: var(--slate-100); color: var(--slate-700); }
+    .tag-approve { background: rgba(34,197,94,0.10); color: #14532d; }
+    .tag-system { background: rgba(99,102,241,0.10); color: #312e81; }
+    .event-hash {
+        margin-top: 6px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.65rem;
+        color: var(--slate-400);
+    }
+    .event-hash code {
+        background: var(--slate-100);
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-size: 0.65rem;
+        color: var(--slate-700);
+    }
+    .event-changes {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.72rem;
+        color: var(--slate-500);
+        margin-top: 4px;
+    }
+    .event-changes .from {
+        text-decoration: line-through;
+        color: var(--slate-400);
+    }
+    .event-changes .to {
+        color: var(--brand-primary);
+        font-weight: 600;
+    }
+
+    /* PDF preview */
+    .pdf-preview {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 12px;
+        padding: 22px 24px;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.82rem;
+        color: var(--slate-700);
+        line-height: 1.55;
+        position: relative;
+        overflow: hidden;
+    }
+    .pdf-watermark {
+        position: absolute;
+        bottom: -10px;
+        right: -8px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 5rem;
+        font-weight: 700;
+        color: rgba(15, 23, 42, 0.04);
+        letter-spacing: -0.08em;
+        pointer-events: none;
+    }
+    .pdf-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--slate-900);
+        margin-bottom: 14px;
+    }
+    .pdf-institution {
+        font-size: 0.7rem;
+        line-height: 1.4;
+        color: var(--slate-700);
+        font-weight: 500;
+        letter-spacing: 0.02em;
+    }
+    .pdf-institution strong {
+        display: block;
+        font-size: 0.82rem;
+        color: var(--slate-900);
+        font-weight: 700;
+        margin-bottom: 2px;
+    }
+    .pdf-protocol-block {
+        text-align: right;
+        font-size: 0.7rem;
+        color: var(--slate-500);
+    }
+    .pdf-protocol-block .big {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--slate-900);
+        letter-spacing: -0.01em;
+        display: block;
+    }
+    .pdf-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin: 14px 0 4px;
+        color: var(--slate-900);
+    }
+    .pdf-sub {
+        font-size: 0.72rem;
+        color: var(--slate-500);
+        margin: 0 0 14px;
+    }
+    .pdf-events {
+        font-size: 0.72rem;
+        line-height: 1.5;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        border-top: 1px solid var(--slate-200);
+    }
+    .pdf-events li {
+        display: grid;
+        grid-template-columns: 96px 1fr;
+        gap: 10px;
+        padding: 8px 0;
+        border-bottom: 1px dashed var(--slate-200);
+    }
+    .pdf-events li .ts {
+        font-family: 'JetBrains Mono', monospace;
+        color: var(--slate-500);
+        font-size: 0.66rem;
+    }
+    .pdf-events li .desc {
+        color: var(--slate-900);
+    }
+    .pdf-events li .desc small {
+        display: block;
+        color: var(--slate-500);
+        font-size: 0.66rem;
+        margin-top: 1px;
+        font-family: 'JetBrains Mono', monospace;
+    }
+    .pdf-footer {
+        margin-top: 14px;
+        padding-top: 10px;
+        border-top: 1px solid var(--slate-300);
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 0.65rem;
+        color: var(--slate-500);
+    }
+    .pdf-footer .hash {
+        font-family: 'JetBrains Mono', monospace;
+        color: var(--slate-700);
+        font-weight: 500;
+    }
+    .pdf-footer .verify {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .pdf-footer .verify .dot {
+        width: 6px; height: 6px;
+        border-radius: 999px;
+        background: #22c55e;
+        box-shadow: 0 0 0 3px rgba(34,197,94,0.18);
+    }
+
+    /* Filter row */
+    .filter-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 14px 0 4px;
+    }
+    .filter-chip {
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 5px 10px;
+        border-radius: 999px;
+        background: var(--slate-100);
+        color: var(--slate-700);
+        border: 1px solid var(--slate-200);
+        cursor: default;
+    }
+    .filter-chip.active {
+        background: var(--brand-primary);
+        color: #fff;
+        border-color: var(--brand-primary);
+    }
+
+    /* Inspirations */
+    .inspirations {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    @media (min-width: 768px) {
+        .inspirations { grid-template-columns: repeat(2, 1fr); }
+    }
+    .inspiration {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .inspiration h4 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+    }
+    .inspiration h4 a {
+        color: var(--slate-900);
+        text-decoration: none;
+    }
+    .inspiration h4 a:hover { color: var(--brand-primary); }
+    .inspiration p {
+        margin: 0;
+        font-size: 0.88rem;
+        color: var(--slate-500);
+        line-height: 1.55;
+    }
+    .inspiration .adapt {
+        font-size: 0.85rem;
+        color: var(--slate-700);
+        background: rgba(202,95,21,0.06);
+        border-left: 2px solid var(--brand-primary);
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin-top: 6px;
+    }
+
+    /* KPI grid */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    @media (min-width: 600px) {
+        .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 960px) {
+        .kpi-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .kpi {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .kpi .value {
+        font-size: 1.6rem;
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        color: var(--brand-primary);
+        font-family: 'JetBrains Mono', monospace;
+    }
+    .kpi .label {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--slate-900);
+        letter-spacing: -0.01em;
+    }
+    .kpi .desc {
+        font-size: 0.78rem;
+        color: var(--slate-500);
+        line-height: 1.5;
+    }
+
+    /* Effort table */
+    .effort-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+    .effort-table th {
+        text-align: left;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--slate-500);
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--slate-200);
+        background: #f8fafc;
+    }
+    .effort-table td {
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--slate-100);
+        color: var(--slate-700);
+        vertical-align: top;
+    }
+    .effort-table tr:last-child td { border-bottom: none; }
+    .effort-table code {
+        background: rgba(15, 23, 42, 0.05);
+        padding: 1px 6px;
+        border-radius: 5px;
+        font-size: 0.78rem;
+    }
+    .badge-effort {
+        display: inline-flex;
+        align-items: center;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 3px 9px;
+        border-radius: 6px;
+        background: rgba(202,95,21,0.10);
+        color: var(--brand-primary);
+    }
+
+    /* MVP vs Completo */
+    .quickwin-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    @media (min-width: 768px) {
+        .quickwin-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .quickwin-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        padding: 24px;
+    }
+    .quickwin-card h4 {
+        margin: 0 0 4px;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+    }
+    .quickwin-card.full h4 {
+        color: var(--brand-primary);
+    }
+    .quickwin-card .meta {
+        font-size: 0.72rem;
+        color: var(--slate-400);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+    .quickwin-card ul {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--slate-700);
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+    .quickwin-card li { margin-bottom: 4px; }
+
+    /* Risks */
+    .risk-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    .risk {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        padding: 18px 20px;
+        border-left: 3px solid var(--brand-primary);
+    }
+    .risk h4 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin: 0 0 4px;
+        letter-spacing: -0.02em;
+    }
+    .risk p {
+        margin: 0;
+        font-size: 0.88rem;
+        color: var(--slate-500);
+        line-height: 1.55;
+    }
+    .risk .mitigation {
+        margin-top: 8px;
+        font-size: 0.85rem;
+        color: var(--slate-700);
+    }
+    .risk .mitigation strong {
+        color: var(--brand-primary);
+        font-weight: 600;
+    }
+</style>
+</head>
+<body>
+
+<header style="position: sticky; top: 0; z-index: 10; background: rgba(255, 248, 246, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(15, 23, 42, 0.06);">
+    <div class="container" style="max-width: 1080px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
+        <a href="index.html" style="display: inline-flex; align-items: center; gap: 8px; color: var(--slate-700); text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+            <span style="font-size: 1.1rem;">←</span> Hub de features
+        </a>
+        <span class="eyebrow eyebrow-muted">FEATURE 04 / 10</span>
+    </div>
+</header>
+
+<main class="container" style="max-width: 1080px; margin: 0 auto; padding: 48px 24px 0;">
+
+    <!-- ========== HERO ========== -->
+    <section class="hero-feature">
+        <div style="position: relative; z-index: 1;">
+            <div style="display: inline-flex; align-items: center; gap: 10px;">
+                <span class="tier-badge tier-a">Tier A — Polish profissional</span>
+                <span class="eyebrow eyebrow-muted">04 / 10</span>
+            </div>
+            <h1 class="feature-h1">
+                Audit log imutável<br/>
+                <span class="text-gradient-warm">com export em PDF e hash em cadeia</span>
+            </h1>
+            <p class="feature-sub">
+                Toda mudança numa demanda deixa rastro: quem fez, quando, valores antes e depois.
+                Append-only, com hash encadeado para evidenciar adulteração e PDF pronto para
+                anexar a processo administrativo.
+            </p>
+            <div class="pill-row">
+                <span class="pill pill-warm">Compliance</span>
+                <span class="pill pill-warm">PDF</span>
+                <span class="pill">Rastreabilidade</span>
+                <span class="pill">Append-only</span>
+                <span class="pill">SEI-like</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== POR QUE IMPORTA ========== -->
+    <section class="block">
+        <span class="eyebrow block-eyebrow">01 · Por que isso importa</span>
+        <h2 class="block-title">Decisão acadêmica sem rastro é problema institucional</h2>
+        <p class="block-lede">
+            Hoje, em <code>dashboardcoord.js:40-75</code>, a função <code>aprovarDemanda()</code> apenas
+            sobrescreve <code>demanda.status = 'aprovada'</code> e <code>reprovarDemanda()</code> grava um
+            <code>feedback</code> de texto livre. Nenhum dos dois registra autor, timestamp ou estado
+            anterior. Se um aluno contestar a decisão num colegiado, ninguém consegue reconstruir
+            o que aconteceu.
+        </p>
+        <div class="why-grid">
+            <div class="why-card">
+                <span class="num">PROBLEMA 01</span>
+                <h4>Decisões sem autor</h4>
+                <p>
+                    <code>aprovarDemanda()</code> não amarra a mudança ao coordenador logado.
+                    Em um cadastro com 3 coordenadores, ninguém sabe quem decidiu.
+                </p>
+            </div>
+            <div class="why-card">
+                <span class="num">PROBLEMA 02</span>
+                <h4>Estado anterior some</h4>
+                <p>
+                    <code>demanda.status = 'aprovada'</code> sobrescreve <code>'pendente'</code>
+                    sem guardar o valor antigo. Não dá pra mostrar o trajeto da demanda.
+                </p>
+            </div>
+            <div class="why-card">
+                <span class="num">PROBLEMA 03</span>
+                <h4>Sem prova institucional</h4>
+                <p>
+                    Recurso administrativo exige documento. Hoje o coordenador depende
+                    de print de tela, sem hash nem ordenação cronológica formal.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== PERSONAS ========== -->
+    <section class="block">
+        <span class="eyebrow block-eyebrow">02 · Personas impactadas</span>
+        <h2 class="block-title">Três beneficiários diretos</h2>
+        <p class="block-lede">
+            Compliance parece ser só sobre instituição, mas aluno e coordenador
+            ganham segurança no dia-a-dia também.
+        </p>
+        <div class="persona-grid">
+            <div class="persona-card">
+                <span class="persona-icon">A</span>
+                <h3 class="persona-name">Carla Pereira — aluna</h3>
+                <div class="persona-state before">
+                    <span class="label">Antes</span>
+                    "Reprovaram minha justificativa, mas não sei quem nem por quê.
+                    O sistema só mostra ‘negada’ com uma frase solta."
+                </div>
+                <div class="persona-state after">
+                    <span class="label">Depois</span>
+                    Carla vê linha do tempo completa: status mudado por Bruno Almeida em
+                    12/05 às 10:00, com o motivo registrado e timestamp imutável.
+                </div>
+                <p class="persona-tagline">Transparência reduz ansiedade e número de recursos.</p>
+            </div>
+
+            <div class="persona-card">
+                <span class="persona-icon">C</span>
+                <h3 class="persona-name">Bruno Almeida — coordenador</h3>
+                <div class="persona-state before">
+                    <span class="label">Antes</span>
+                    "Aprovei 30 demandas no semestre. Se contestarem qualquer uma,
+                    eu não tenho como provar que segui o protocolo."
+                </div>
+                <div class="persona-state after">
+                    <span class="label">Depois</span>
+                    Bruno exporta PDF assinado com hash. Anexa em ata de reunião.
+                    Coberto contra alegação de favorecimento ou erro arbitrário.
+                </div>
+                <p class="persona-tagline">Audit log também protege quem decide bem.</p>
+            </div>
+
+            <div class="persona-card">
+                <span class="persona-icon">I</span>
+                <h3 class="persona-name">Coordenação acadêmica</h3>
+                <div class="persona-state before">
+                    <span class="label">Antes</span>
+                    Em recurso administrativo, instituto depende de print
+                    e memória. Não cumpre exigência de rastreabilidade da LDB.
+                </div>
+                <div class="persona-state after">
+                    <span class="label">Depois</span>
+                    Documento oficial com cabeçalho institucional, lista cronológica
+                    e hash de integridade. Pronto para SEI ou processo interno.
+                </div>
+                <p class="persona-tagline">Sai do "achismo" e entra na cultura de processo.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== COMO FUNCIONARIA ========== -->
+    <section class="block">
+        <span class="eyebrow block-eyebrow">03 · Como funcionaria</span>
+        <h2 class="block-title">Append-only por padrão, em 5 passos</h2>
+        <p class="block-lede">
+            Toda ação relevante numa demanda passa por <code>audit.log(evento)</code>.
+            O array é estritamente append: editar não existe. Apagar não existe. Só somar.
+        </p>
+        <div class="steps">
+            <div class="step">
+                <span class="step-num">01</span>
+                <div>
+                    <h4>Captura no ponto de mudança</h4>
+                    <p>
+                        Cada mutação importante (criação, troca de status, nota interna, anexo,
+                        aprovação) é envolvida por <code>audit.log({ acao, antes, depois })</code>.
+                        Os pontos óbvios para começar: <code>dashboardcoord.js:40-75</code> e
+                        as funções de criação na <code>centralDemandas.js</code>.
+                    </p>
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-num">02</span>
+                <div>
+                    <h4>Hash em cadeia</h4>
+                    <p>
+                        Cada evento calcula <code>hash = sha256(payload + hash_anterior)</code>.
+                        Editar um evento antigo invalida toda a cadeia depois dele.
+                        Tamper-evident sem precisar de servidor.
+                    </p>
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-num">03</span>
+                <div>
+                    <h4>Renderização tipo timeline</h4>
+                    <p>
+                        Na modal de detalhe (hoje em <code>modais.js</code>), abaixo do bloco
+                        atual de metadados, aparece a timeline vertical com cada evento,
+                        autor, timestamp e diff de campos.
+                    </p>
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-num">04</span>
+                <div>
+                    <h4>Filtros + verificação de integridade</h4>
+                    <p>
+                        Coordenador pode filtrar por autor, tipo de ação ou intervalo de datas.
+                        Botão "verificar integridade" recalcula a cadeia inteira em < 50ms e
+                        marca eventos suspeitos em vermelho.
+                    </p>
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-num">05</span>
+                <div>
+                    <h4>Export para PDF institucional</h4>
+                    <p>
+                        Via <code>jsPDF</code>, gera um PDF com cabeçalho do instituto,
+                        número de protocolo, lista cronológica e hash final no rodapé.
+                        Pronto para anexar a processo SEI ou ata de colegiado.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== MOCKUP ========== -->
+    <section class="block">
+        <span class="eyebrow block-eyebrow">04 · Mockup conceitual</span>
+        <h2 class="block-title">Timeline na demanda + preview do PDF exportado</h2>
+        <p class="block-lede">
+            À esquerda, a timeline que aparece dentro da modal de detalhe da demanda.
+            À direita, o PDF que sai quando o coordenador clica em "Exportar log".
+        </p>
+
+        <div class="mockup-shell">
+            <div class="mockup-grid">
+
+                <!-- Timeline mockup -->
+                <div class="mock-card">
+                    <div class="mock-header">
+                        <div class="dots"><span></span><span></span><span></span></div>
+                        <span class="title">clarify.app/coord/demandas/1234</span>
+                    </div>
+                    <div class="mock-body">
+                        <div class="demand-header">
+                            <div>
+                                <p class="demand-title">Justificativa de Falta — Cálculo I</p>
+                                <p class="demand-meta">
+                                    <span class="demand-protocol">#1234</span>
+                                    &middot; Aluna: Carla Pereira (20240003)
+                                </p>
+                            </div>
+                            <button class="export-btn">
+                                <span style="font-weight:700;">PDF</span> · Exportar log
+                            </button>
+                        </div>
+
+                        <div class="filter-row">
+                            <span class="filter-chip active">Tudo</span>
+                            <span class="filter-chip">Status</span>
+                            <span class="filter-chip">Mensagens</span>
+                            <span class="filter-chip">Anexos</span>
+                            <span class="filter-chip">Apenas Bruno A.</span>
+                        </div>
+
+                        <div class="timeline">
+                            <div class="event">
+                                <div class="event-ts">11/05/2026 · 14:30:02 · UTC-3</div>
+                                <p class="event-line">
+                                    <span class="actor">Carla Pereira</span> (aluno, 20240003)
+                                    <strong>criou a demanda</strong>
+                                </p>
+                                <span class="event-tag tag-create">demanda_criada</span>
+                                <div class="event-hash">hash <code>a3f29c…7d1</code> · anterior <code>null</code></div>
+                            </div>
+
+                            <div class="event">
+                                <div class="event-ts">11/05/2026 · 14:30:03 · UTC-3</div>
+                                <p class="event-line">
+                                    <span class="actor">Sistema</span> aplicou
+                                    <strong>tipo: Justificativa de Falta</strong>
+                                </p>
+                                <span class="event-tag tag-system">tipo_atribuido</span>
+                                <div class="event-changes">
+                                    disciplina = <span class="to">Cálculo I</span>
+                                    &middot; data = <span class="to">03/05/2026</span>
+                                </div>
+                                <div class="event-hash">hash <code>b8c14a…f02</code> · prev <code>a3f29c…</code></div>
+                            </div>
+
+                            <div class="event">
+                                <div class="event-ts">12/05/2026 · 09:15:48 · UTC-3</div>
+                                <p class="event-line">
+                                    <span class="actor">Bruno Almeida</span> (coord, 20240002)
+                                    mudou <strong>status</strong>
+                                </p>
+                                <span class="event-tag tag-status">status_mudado</span>
+                                <div class="event-changes">
+                                    status = <span class="from">pendente</span>
+                                    → <span class="to">em_análise</span>
+                                </div>
+                                <div class="event-hash">hash <code>c19f8e…4ab</code> · prev <code>b8c14a…</code></div>
+                            </div>
+
+                            <div class="event internal">
+                                <div class="event-ts">12/05/2026 · 09:18:11 · UTC-3</div>
+                                <p class="event-line">
+                                    <span class="actor">Bruno Almeida</span>
+                                    adicionou <strong>nota interna</strong>
+                                </p>
+                                <span class="event-tag tag-internal">nota_interna · só coord</span>
+                                <div class="event-hash">hash <code>d22ab1…91c</code> · prev <code>c19f8e…</code></div>
+                            </div>
+
+                            <div class="event">
+                                <div class="event-ts">12/05/2026 · 10:00:27 · UTC-3</div>
+                                <p class="event-line">
+                                    <span class="actor">Bruno Almeida</span>
+                                    <strong>aprovou</strong> a demanda
+                                </p>
+                                <span class="event-tag tag-approve">demanda_aprovada</span>
+                                <div class="event-changes">
+                                    status = <span class="from">em_análise</span>
+                                    → <span class="to">concluído</span>
+                                </div>
+                                <div class="event-hash">hash <code>e91d3f…208</code> · prev <code>d22ab1…</code></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PDF Preview mockup -->
+                <div class="mock-card">
+                    <div class="mock-header">
+                        <div class="dots"><span></span><span></span><span></span></div>
+                        <span class="title">log-demanda-1234.pdf · preview</span>
+                    </div>
+                    <div class="mock-body" style="padding: 18px 18px;">
+                        <div class="pdf-preview">
+                            <div class="pdf-watermark">IF</div>
+                            <div class="pdf-head">
+                                <div class="pdf-institution">
+                                    <strong>Instituto Federal</strong>
+                                    Coordenação Acadêmica<br/>
+                                    Campus Central · Sistema Clarify
+                                </div>
+                                <div class="pdf-protocol-block">
+                                    Protocolo
+                                    <span class="big">#1234</span>
+                                    Emitido 12/05/2026
+                                </div>
+                            </div>
+                            <h4 class="pdf-title">Histórico de eventos — Justificativa de Falta</h4>
+                            <p class="pdf-sub">Carla Pereira · matrícula 20240003 · Cálculo I</p>
+                            <ul class="pdf-events">
+                                <li>
+                                    <span class="ts">11/05 14:30</span>
+                                    <span class="desc">
+                                        Carla Pereira criou demanda.
+                                        <small>evt_001 · a3f29c…7d1</small>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="ts">11/05 14:30</span>
+                                    <span class="desc">
+                                        Sistema atribuiu tipo "Justificativa de Falta".
+                                        <small>evt_002 · b8c14a…f02</small>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="ts">12/05 09:15</span>
+                                    <span class="desc">
+                                        Bruno Almeida: status pendente → em_análise.
+                                        <small>evt_003 · c19f8e…4ab</small>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="ts">12/05 10:00</span>
+                                    <span class="desc">
+                                        Bruno Almeida aprovou (em_análise → concluído).
+                                        <small>evt_005 · e91d3f…208</small>
+                                    </span>
+                                </li>
+                            </ul>
+                            <div class="pdf-footer">
+                                <span>
+                                    Integridade da cadeia:
+                                    <span class="hash">e91d3f04a7c2…208</span>
+                                </span>
+                                <span class="verify"><span class="dot"></span> verificada</span>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.72rem; color: var(--slate-400); margin: 10px 2px 0; line-height: 1.5;">
+                            Notas internas não aparecem no PDF público.
+                            Versão "interna" do export inclui tudo e é restrita ao coordenador.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== MODELO DE DADOS ========== -->
+    <section class="block">
+        <span class="eyebrow block-eyebrow">05 · Modelo de dados</span>
+        <h2 class="block-title">Schema atual vs. proposto</h2>
+        <p class="block-lede">
+            A demanda continua igual. O que muda é uma chave nova
+            <code>audit_log</code> (array append-only) e um <code>service</code> dedicado
+            em <code>src/services/audit.js</code> que centraliza a escrita.
+        </p>
+
+<pre><code>// ANTES (hoje, em dashboardcoord.js:40-75)
+{
+  protocolo: "#1234",
+  tipo: "Justificativa de Falta",
+  status: "aprovada",          // sobrescrito direto
+  descricao: "...",
+  matriculaAluno: "20240003",
+  dataCriacao, dataAtualizacao,
+  feedback: "blob de texto opcional"
+}
+
+// DEPOIS
+{
+  protocolo: "#1234",
+  tipo: "Justificativa de Falta",
+  status: "concluido",
+  descricao: "...",
+  matriculaAluno: "20240003",
+  dataCriacao, dataAtualizacao,
+  feedback: "...",
+
+  audit_log: [
+    {
+      id: "evt_001",
+      demanda_protocolo: "#1234",
+      timestamp: "2026-05-11T14:30:00-03:00",
+      actor_matricula: "20240003",
+      actor_nome:      "Carla Pereira",
+      actor_tipo:      "aluno",
+      acao: "demanda_criada",
+      detalhes: {
+        tipo: "justificativa_falta",
+        campos_iniciais: { disciplina: "Cálculo I", data: "2026-05-03" }
+      },
+      visibilidade: "publica",        // "publica" | "interna"
+      hash:          "a3f29c…7d1",
+      hash_anterior: null
+    },
+    {
+      id: "evt_003",
+      demanda_protocolo: "#1234",
+      timestamp: "2026-05-12T09:15:48-03:00",
+      actor_matricula: "20240002",
+      actor_nome:      "Bruno Almeida",
+      actor_tipo:      "coordenador",
+      acao: "status_mudado",
+      detalhes: { de: "pendente", para: "em_analise" },
+      visibilidade: "publica",
+      hash:          "c19f8e…4ab",
+      hash_anterior: "b8c14a…f02"
+    }
+    // … sempre append, nunca splice
+  ]
+}</code></pre>
+
+        <p style="font-size: 0.88rem; color: var(--slate-500); margin-top: 14px; line-height: 1.55;">
+            O serviço <code>audit.js</code> expõe três funções:
+            <code>log(demanda, evento)</code> (assina + encadeia),
+            <code>verificar(demanda)</code> (refaz cadeia e retorna OK/erro),
+            <code>exportarPDF(demanda, { incluirInternas })</code>.
+        </p>
+    </section>
+
+    <!-- ========== INSPIRAÇÕES ========== -->
+    <section class="block">
+        <span class="eyebrow block-eyebrow">06 · Inspiração de mercado</span>
+        <h2 class="block-title">Quatro referências, uma adaptação acadêmica</h2>
+        <p class="block-lede">
+            Ninguém precisa inventar audit log do zero. O que muda é o tom institucional
+            e a saída em PDF para processo administrativo.
+        </p>
+        <div class="inspirations">
+            <div class="inspiration">
+                <h4><a href="https://support.zendesk.com/hc/en-us/articles/4408886187930" target="_blank" rel="noopener">Zendesk · Audit logs ↗</a></h4>
+                <p>
+                    Enterprise feature: cada mudança em ticket, usuário, regra ou macro
+                    é registrada com autor, IP, timestamp. Filtros e export CSV.
+                </p>
+                <div class="adapt">
+                    <strong>Para o Clarify:</strong> mesmo modelo de evento, mas focado
+                    em ações pedagógicas (status, aprovação, anexo de atestado).
+                </div>
+            </div>
+            <div class="inspiration">
+                <h4><a href="https://confluence.atlassian.com/jirakb/how-to-view-history-of-changes-in-jira-744518338.html" target="_blank" rel="noopener">Jira · Issue history ↗</a></h4>
+                <p>
+                    Timeline visual dentro da issue. Cada campo alterado mostra valor
+                    anterior, novo valor, autor e data. Filtro por tipo de mudança.
+                </p>
+                <div class="adapt">
+                    <strong>Para o Clarify:</strong> visual da timeline na modal da demanda
+                    é referência direta — campo, antes, depois, autor.
+                </div>
+            </div>
+            <div class="inspiration">
+                <h4><a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects" target="_blank" rel="noopener">Git · Hash em cadeia ↗</a></h4>
+                <p>
+                    Cada commit referencia o hash do anterior. Alterar histórico
+                    quebra todos os hashes seguintes — tamper-evident por design.
+                </p>
+                <div class="adapt">
+                    <strong>Para o Clarify:</strong> mesma ideia, simplificada. SHA-256
+                    do payload + hash_anterior. Verificação roda no client.
+                </div>
+            </div>
+            <div class="inspiration">
+                <h4><a href="https://www.gov.br/economia/pt-br/assuntos/processo-eletronico-nacional/conteudo/sei" target="_blank" rel="noopener">SEI · Sistema Eletrônico de Informações ↗</a></h4>
+                <p>
+                    Padrão de processo administrativo no setor público brasileiro.
+                    Todo trâmite tem número, autor, timestamp, anexos versionados.
+                </p>
+                <div class="adapt">
+                    <strong>Para o Clarify:</strong> o PDF exportado segue layout
+                    próximo do SEI — header institucional, protocolo, eventos cronológicos.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== KPIs ========== -->
+    <section class="block">
+        <span class="eyebrow block-eyebrow">07 · Métricas de sucesso</span>
+        <h2 class="block-title">O que validaria a feature</h2>
+        <p class="block-lede">
+            KPIs olham para cobertura, integridade, performance e uso real.
+        </p>
+        <div class="kpi-grid">
+            <div class="kpi">
+                <div class="value">100%</div>
+                <div class="label">Cobertura de eventos</div>
+                <div class="desc">
+                    Toda ação em <code>aprovarDemanda</code>, <code>reprovarDemanda</code>
+                    e criação gera evento. Auditável.
+                </div>
+            </div>
+            <div class="kpi">
+                <div class="value">≥ 99%</div>
+                <div class="label">Cadeias íntegras</div>
+                <div class="desc">
+                    Demandas com hash chain válida em verificação automática semanal.
+                </div>
+            </div>
+            <div class="kpi">
+                <div class="value">&lt; 2s</div>
+                <div class="label">Tempo de export PDF</div>
+                <div class="desc">
+                    Geração no client com <code>jsPDF</code> para até 100 eventos.
+                </div>
+            </div>
+            <div class="kpi">
+                <div class="value">+10/mês</div>
+                <div class="label">PDFs exportados</div>
+                <div class="desc">
+                    Proxy de uso real do recurso (recursos, atas, processos).
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== ESFORÇO & DEPENDÊNCIAS ========== -->
+    <section class="block">
+        <span class="eyebrow block-eyebrow">08 · Esforço & Dependências</span>
+        <h2 class="block-title">O que precisa mudar no código</h2>
+        <p class="block-lede">
+            Mudança contida — sem refactor de outros fluxos. Reaproveita estrutura
+            existente da demanda no <code>localStorage</code>.
+        </p>
+        <table class="effort-table">
+            <thead>
+                <tr>
+                    <th>Componente</th>
+                    <th>Operação</th>
+                    <th>Esforço</th>
+                    <th>Dependências</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>src/services/audit.js</code></td>
+                    <td>Criar serviço com <code>log()</code>, <code>verificar()</code>, <code>exportarPDF()</code>.</td>
+                    <td><span class="badge-effort">M</span></td>
+                    <td>jsPDF (ou html2pdf.js)</td>
+                </tr>
+                <tr>
+                    <td><code>pages/dashboardcoord.js:40-75</code></td>
+                    <td>Envolver <code>aprovarDemanda</code> e <code>reprovarDemanda</code> em <code>audit.log()</code>. Capturar antes/depois.</td>
+                    <td><span class="badge-effort">S</span></td>
+                    <td>Usuário logado em <code>usuarioLogado</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>components/structures/modais.js</code></td>
+                    <td>Renderizar timeline vertical dentro da modal de detalhe da demanda.</td>
+                    <td><span class="badge-effort">M</span></td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td><code>pages/centralDemandas.js</code></td>
+                    <td>Logar evento <code>demanda_criada</code> quando aluno abre.</td>
+                    <td><span class="badge-effort">XS</span></td>
+                    <td>Service de audit.</td>
+                </tr>
+                <tr>
+                    <td><code>lib/funcoesAuxiliares.js</code></td>
+                    <td>Helper <code>sha256()</code> via <code>crypto.subtle.digest</code>.</td>
+                    <td><span class="badge-effort">XS</span></td>
+                    <td>Web Crypto API (nativo).</td>
+                </tr>
+                <tr>
+                    <td>Dependência nova</td>
+                    <td><code>jspdf</code> (~50KB gzip) para o export.</td>
+                    <td><span class="badge-effort">XS</span></td>
+                    <td>npm + Vite.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ========== MVP vs Versão completa ========== -->
+    <section class="block">
+        <span class="eyebrow block-eyebrow">09 · Quick wins vs. versão completa</span>
+        <h2 class="block-title">Dois marcos claros</h2>
+        <p class="block-lede">
+            Dá pra ter timeline funcional em 1-2 dias. Hash e PDF entram numa segunda
+            iteração — sem bloquear a percepção de valor.
+        </p>
+        <div class="quickwin-grid">
+            <div class="quickwin-card">
+                <span class="meta">MVP · 1-2 dias</span>
+                <h4>Suficiente para a próxima apresentação</h4>
+                <ul>
+                    <li>Array <code>audit_log</code> na demanda, append-only.</li>
+                    <li>Wrapping mínimo em <code>aprovar/reprovarDemanda</code>.</li>
+                    <li>Timeline vertical na modal — só tipo, autor, timestamp.</li>
+                    <li>Sem hash, sem PDF, sem filtros.</li>
+                </ul>
+            </div>
+            <div class="quickwin-card full">
+                <span class="meta">Versão completa</span>
+                <h4>Pronto para uso institucional real</h4>
+                <ul>
+                    <li>Hash SHA-256 encadeado com verificação no client.</li>
+                    <li>Export PDF com layout institucional via <code>jsPDF</code>.</li>
+                    <li>Filtros por autor, tipo de ação, intervalo de datas.</li>
+                    <li>Distinção pública / interna nos eventos.</li>
+                    <li>Painel "auditoria" no dashboard do coord com visão agregada.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== RISCOS ========== -->
+    <section class="block">
+        <span class="eyebrow block-eyebrow">10 · Riscos & Armadilhas</span>
+        <h2 class="block-title">O que pode dar errado</h2>
+        <p class="block-lede">
+            Audit log parece simples, mas tem armadilhas — sobretudo num front sem backend.
+        </p>
+        <div class="risk-list">
+            <div class="risk">
+                <h4>Volume de eventos</h4>
+                <p>
+                    Uma demanda madura pode gerar 20+ eventos. 50 demandas ativas viram 1000+
+                    entradas em <code>localStorage</code>, que tem limite de ~5MB.
+                </p>
+                <p class="mitigation">
+                    <strong>Mitigação:</strong> oferecer "arquivar demanda + export PDF"
+                    quando a demanda atinge status concluído + 90 dias.
+                </p>
+            </div>
+            <div class="risk">
+                <h4>Hash sem servidor é "na honra"</h4>
+                <p>
+                    Um atacante com acesso ao <code>localStorage</code> pode regenerar
+                    toda a cadeia. Não é prova criptográfica forte.
+                </p>
+                <p class="mitigation">
+                    <strong>Mitigação:</strong> documentar explicitamente. Mencionar que
+                    versão com backend (TCC v2 / produção) faria assinatura server-side.
+                </p>
+            </div>
+            <div class="risk">
+                <h4>Privacidade de notas internas</h4>
+                <p>
+                    Se o aluno vir o log inteiro, notas internas (uso só do coord) vazam.
+                    PDF "público" e "interno" precisam ser claramente separados.
+                </p>
+                <p class="mitigation">
+                    <strong>Mitigação:</strong> campo <code>visibilidade</code> em cada
+                    evento. Render filtra antes de mostrar ao aluno.
+                </p>
+            </div>
+            <div class="risk">
+                <h4>Escolha da lib de PDF</h4>
+                <p>
+                    <code>jsPDF</code> é mais leve e dá controle preciso de layout.
+                    <code>html2pdf.js</code> é mais rápido de implementar mas pesa ~150KB.
+                </p>
+                <p class="mitigation">
+                    <strong>Mitigação:</strong> começar com jsPDF nativo;
+                    layout do PDF é parecido com o mockup, sem CSS exótico.
+                </p>
+            </div>
+            <div class="risk">
+                <h4>Eventos "perdidos" em refactor</h4>
+                <p>
+                    Se alguém alterar a demanda fora de <code>audit.log()</code>,
+                    o log fica incompleto. Cobertura cai e perde sentido.
+                </p>
+                <p class="mitigation">
+                    <strong>Mitigação:</strong> wrapper <code>salvarDemanda(demanda, evento?)</code>
+                    obrigatório. Quem chamar sem evento recebe warning no console em dev.
+                </p>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer style="margin-top: 80px; padding: 32px 0; border-top: 1px solid var(--slate-200); text-align: center; color: var(--slate-400); font-size: 0.85rem;">
+    <div class="container" style="max-width: 1080px; margin: 0 auto; padding: 0 24px;">
+        <p>Feature 04 de 10 &middot; <a href="index.html" style="color: var(--brand-primary); text-decoration: none; font-weight: 600;">Voltar ao hub →</a></p>
+    </div>
+</footer>
+
+<script>
+    // Reveal on scroll
+    const els = document.querySelectorAll('[data-reveal]');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('is-revealed');
+                obs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

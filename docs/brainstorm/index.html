@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Brainstorm de Features — Clarify</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+    /* Hub-specific */
+    .hero {
+        position: relative;
+        padding: 88px 0 64px;
+        text-align: center;
+        overflow: hidden;
+    }
+    .hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(60% 60% at 50% 0%, rgba(202, 95, 21, 0.18) 0%, rgba(202, 95, 21, 0) 70%);
+        pointer-events: none;
+    }
+    .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--slate-700);
+        margin-bottom: 24px;
+    }
+    h1.hero-title {
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        font-weight: 700;
+        letter-spacing: -0.045em;
+        line-height: 1.02;
+        margin: 0 0 20px;
+        color: var(--slate-900);
+    }
+    .hero-sub {
+        font-size: 1.125rem;
+        color: var(--slate-500);
+        max-width: 640px;
+        margin: 0 auto 32px;
+        line-height: 1.55;
+    }
+    .container {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 0 24px;
+    }
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 20px;
+        margin-top: 32px;
+    }
+    .feature-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        padding: 28px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 18px;
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+        overflow: hidden;
+    }
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--brand-primary), var(--brand-accent));
+        opacity: 0;
+        transition: opacity 0.22s ease;
+    }
+    .feature-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(202, 95, 21, 0.30);
+        box-shadow: 0 24px 48px -16px rgba(202, 95, 21, 0.20);
+    }
+    .feature-card:hover::before { opacity: 1; }
+
+    .feature-number {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--slate-400);
+        letter-spacing: 0.18em;
+    }
+    .feature-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin: 0;
+        color: var(--slate-900);
+    }
+    .feature-desc {
+        font-size: 0.9rem;
+        color: var(--slate-500);
+        margin: 0;
+        line-height: 1.5;
+        flex: 1;
+    }
+    .feature-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 14px;
+        border-top: 1px solid var(--slate-100);
+    }
+    .feature-tier-row {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+    .feature-arrow {
+        color: var(--brand-primary);
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: transform 0.22s ease;
+    }
+    .feature-card:hover .feature-arrow {
+        transform: translateX(4px);
+    }
+
+    .tier-section {
+        margin-top: 64px;
+    }
+    .tier-header {
+        display: flex;
+        align-items: baseline;
+        gap: 16px;
+        margin-bottom: 8px;
+    }
+    .tier-header h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        margin: 0;
+        color: var(--slate-900);
+    }
+    .tier-header .tier-count {
+        color: var(--slate-400);
+        font-size: 1rem;
+        font-weight: 500;
+    }
+    .tier-tagline {
+        color: var(--slate-500);
+        margin: 0 0 28px;
+        max-width: 640px;
+    }
+
+    .context-strip {
+        margin-top: 56px;
+        padding: 32px;
+        background: linear-gradient(135deg, rgba(202, 95, 21, 0.04), rgba(255, 255, 255, 0.6));
+        border: 1px solid rgba(202, 95, 21, 0.15);
+        border-radius: 20px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    @media (min-width: 768px) {
+        .context-strip { grid-template-columns: repeat(3, 1fr); }
+    }
+    .context-cell h4 {
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--brand-primary);
+        margin: 0 0 8px;
+    }
+    .context-cell p {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--slate-700);
+        line-height: 1.55;
+    }
+
+    footer {
+        margin-top: 80px;
+        padding: 32px 0 48px;
+        border-top: 1px solid var(--slate-200);
+        text-align: center;
+        color: var(--slate-400);
+        font-size: 0.85rem;
+    }
+    footer a {
+        color: var(--brand-primary);
+        text-decoration: none;
+        font-weight: 600;
+    }
+    footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+    <div class="container" style="position: relative; z-index: 1;">
+        <span class="hero-eyebrow">
+            <span class="eyebrow-dot"></span>
+            Brainstorm de features &middot; Clarify
+        </span>
+        <h1 class="hero-title">
+            De ticket tracker para<br/>
+            <span class="text-gradient-warm">help desk acadêmico moderno</span>
+        </h1>
+        <p class="hero-sub">
+            Inspirado em Zendesk, Sierra AI, Intercom Fin e Help Scout — adaptado ao contexto de aluno, coordenador e instituição. Dez frentes de evolução exploradas em profundidade.
+        </p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <a href="#tier-s" class="btn-primary">Ver Tier S</a>
+            <a href="#contexto" class="btn-ghost">Por que isso agora</a>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+
+    <section id="contexto" class="context-strip">
+        <div class="context-cell">
+            <h4>Estado atual</h4>
+            <p>Demanda como ticket linear (request → response). Aluno abre, coordenador aprova ou reprova com feedback único. Sem thread, sem SLA real, sem audit log.</p>
+        </div>
+        <div class="context-cell">
+            <h4>Paralelo do professor</h4>
+            <p>Zendesk e Sierra como referências. Help desk clássico vs. agentes de IA que resolvem (não só deflectam). O Clarify pode adotar o melhor dos dois mundos.</p>
+        </div>
+        <div class="context-cell">
+            <h4>Tese desta exploração</h4>
+            <p>Coerência &gt; quantidade. Três features muito bem implementadas valem mais que dez pela metade. Mas é útil ver o mapa completo antes de escolher.</p>
+        </div>
+    </section>
+
+    <!-- TIER S -->
+    <section id="tier-s" class="tier-section">
+        <div class="tier-header">
+            <span class="tier-badge tier-s">Tier S</span>
+            <h2>Mudam o jogo</h2>
+            <span class="tier-count">3 features</span>
+        </div>
+        <p class="tier-tagline">
+            As três frentes que separam um Google Form com status de um help desk real. Sem elas, o Clarify continua parecendo um protótipo.
+        </p>
+
+        <div class="feature-grid">
+
+            <a href="01-ai-copilot.html" class="feature-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <span class="feature-number">FEATURE 01</span>
+                    <span class="tier-badge tier-s">S</span>
+                </div>
+                <h3 class="feature-title">AI Copilot Acadêmico</h3>
+                <p class="feature-desc">
+                    Triagem automática de demandas, sugestão de resposta para o coordenador baseada em histórico, resumo de threads longas e detecção de documentos faltantes. Inspirado em Sierra e Intercom Fin, com guardrails específicos do contexto acadêmico.
+                </p>
+                <div class="feature-meta">
+                    <div class="feature-tier-row">
+                        <span class="pill pill-warm">IA</span>
+                        <span class="pill">Sierra-like</span>
+                    </div>
+                    <span class="feature-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="02-thread-conversacao.html" class="feature-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <span class="feature-number">FEATURE 02</span>
+                    <span class="tier-badge tier-s">S</span>
+                </div>
+                <h3 class="feature-title">Conversação no Ticket</h3>
+                <p class="feature-desc">
+                    Thread completa de mensagens dentro da demanda. Notas internas visíveis só ao coordenador. Mentions com <span class="mono">@nome</span>. Status <span class="mono">requer_ajuste</span> deixa de ser blob estático e vira diálogo real.
+                </p>
+                <div class="feature-meta">
+                    <div class="feature-tier-row">
+                        <span class="pill pill-warm">Thread</span>
+                        <span class="pill">Help Scout</span>
+                    </div>
+                    <span class="feature-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="03-sla-real.html" class="feature-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <span class="feature-number">FEATURE 03</span>
+                    <span class="tier-badge tier-s">S</span>
+                </div>
+                <h3 class="feature-title">SLA Inteligente</h3>
+                <p class="feature-desc">
+                    Tempo de resposta e resolução configurável por tipo de demanda. Semáforo visual (verde → amarelo → vermelho). Auto-escalada quando o prazo estoura. Métrica institucional de "% dentro do SLA".
+                </p>
+                <div class="feature-meta">
+                    <div class="feature-tier-row">
+                        <span class="pill pill-warm">Prazos</span>
+                        <span class="pill">Zendesk</span>
+                    </div>
+                    <span class="feature-arrow">→</span>
+                </div>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- TIER A -->
+    <section id="tier-a" class="tier-section">
+        <div class="tier-header">
+            <span class="tier-badge tier-a">Tier A</span>
+            <h2>Polish profissional</h2>
+            <span class="tier-count">4 features</span>
+        </div>
+        <p class="tier-tagline">
+            Features que aluno e coordenador esperam intuitivamente, mas que hoje faltam. Alto retorno sobre esforço.
+        </p>
+
+        <div class="feature-grid">
+
+            <a href="04-audit-log.html" class="feature-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <span class="feature-number">FEATURE 04</span>
+                    <span class="tier-badge tier-a">A</span>
+                </div>
+                <h3 class="feature-title">Audit Log Imutável</h3>
+                <p class="feature-desc">
+                    Histórico cronológico de cada ação na demanda — quem mudou status, quando, por quê. Export em PDF com hash. Compliance acadêmico real.
+                </p>
+                <div class="feature-meta">
+                    <div class="feature-tier-row">
+                        <span class="pill">Compliance</span>
+                        <span class="pill">PDF</span>
+                    </div>
+                    <span class="feature-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="05-macros.html" class="feature-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <span class="feature-number">FEATURE 05</span>
+                    <span class="tier-badge tier-a">A</span>
+                </div>
+                <h3 class="feature-title">Macros & Respostas Rápidas</h3>
+                <p class="feature-desc">
+                    Templates pré-definidos com placeholders <span class="mono">{{aluno_nome}}</span>. Coordenador aprova 50 justificativas em segundos. Atalhos de teclado para os mais usados.
+                </p>
+                <div class="feature-meta">
+                    <div class="feature-tier-row">
+                        <span class="pill pill-warm">Produtividade</span>
+                        <span class="pill">Zendesk</span>
+                    </div>
+                    <span class="feature-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="06-csat.html" class="feature-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <span class="feature-number">FEATURE 06</span>
+                    <span class="tier-badge tier-a">A</span>
+                </div>
+                <h3 class="feature-title">CSAT pós-resolução</h3>
+                <p class="feature-desc">
+                    Após concluir uma demanda, o aluno avalia 1-5 estrelas + comentário opcional. Dashboard com CSAT médio por coordenador, por tipo de demanda, e tendência semanal.
+                </p>
+                <div class="feature-meta">
+                    <div class="feature-tier-row">
+                        <span class="pill">Satisfação</span>
+                        <span class="pill">Feedback</span>
+                    </div>
+                    <span class="feature-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="07-anexos.html" class="feature-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <span class="feature-number">FEATURE 07</span>
+                    <span class="tier-badge tier-a">A</span>
+                </div>
+                <h3 class="feature-title">Anexos & Documentos</h3>
+                <p class="feature-desc">
+                    Upload de atestado médico, comprovante, histórico escolar. Preview inline. Validação de tipo e tamanho. Versionamento quando o aluno reenvia.
+                </p>
+                <div class="feature-meta">
+                    <div class="feature-tier-row">
+                        <span class="pill">Upload</span>
+                        <span class="pill">Documentos</span>
+                    </div>
+                    <span class="feature-arrow">→</span>
+                </div>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- TIER B -->
+    <section id="tier-b" class="tier-section">
+        <div class="tier-header">
+            <span class="tier-badge tier-b">Tier B</span>
+            <h2>Boas, opcionais</h2>
+            <span class="tier-count">3 features</span>
+        </div>
+        <p class="tier-tagline">
+            Features que enriquecem o produto, mas dependem do core estar sólido. Roadmap pós-Tier S.
+        </p>
+
+        <div class="feature-grid">
+
+            <a href="08-formulario-dinamico.html" class="feature-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <span class="feature-number">FEATURE 08</span>
+                    <span class="tier-badge tier-b">B</span>
+                </div>
+                <h3 class="feature-title">Formulário Dinâmico por Tipo</h3>
+                <p class="feature-desc">
+                    Cada tipo de demanda tem schema próprio: justificativa pede disciplina+data+atestado; aproveitamento pede ementa. Reduz idas-e-vindas por dado faltante.
+                </p>
+                <div class="feature-meta">
+                    <div class="feature-tier-row">
+                        <span class="pill">Schema</span>
+                        <span class="pill">JSON</span>
+                    </div>
+                    <span class="feature-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="09-knowledge-base.html" class="feature-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <span class="feature-number">FEATURE 09</span>
+                    <span class="tier-badge tier-b">B</span>
+                </div>
+                <h3 class="feature-title">Knowledge Base & FAQ</h3>
+                <p class="feature-desc">
+                    Artigos navegáveis, busca, categorização. Antes de abrir demanda, o aluno é direcionado a um artigo relevante (deflection). Coordenador anexa link na resposta.
+                </p>
+                <div class="feature-meta">
+                    <div class="feature-tier-row">
+                        <span class="pill">Self-service</span>
+                        <span class="pill">Deflection</span>
+                    </div>
+                    <span class="feature-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="10-automation-engine.html" class="feature-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <span class="feature-number">FEATURE 10</span>
+                    <span class="tier-badge tier-b">B</span>
+                </div>
+                <h3 class="feature-title">Engine de Automação</h3>
+                <p class="feature-desc">
+                    Triggers (criar demanda → atribuir coord específico). Roteamento por tipo. Round-robin de carga. Workflows visuais com "quando X → faça Y".
+                </p>
+                <div class="feature-meta">
+                    <div class="feature-tier-row">
+                        <span class="pill pill-warm">Triggers</span>
+                        <span class="pill">Zendesk</span>
+                    </div>
+                    <span class="feature-arrow">→</span>
+                </div>
+            </a>
+
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <div class="container">
+        <p>
+            Brainstorm gerado para o projeto <strong>Clarify</strong> &middot;
+            Referências: <a href="https://www.desk365.io/blog/zendesk-features/" target="_blank" rel="noopener">Zendesk</a> ·
+            <a href="https://sierra.ai/" target="_blank" rel="noopener">Sierra AI</a> ·
+            <a href="https://fin.ai/" target="_blank" rel="noopener">Intercom Fin</a> ·
+            <a href="https://www.helpscout.com/" target="_blank" rel="noopener">Help Scout</a>
+        </p>
+    </div>
+</footer>
+
+<script>
+    // Subtle reveal on scroll
+    const els = document.querySelectorAll('[data-reveal]');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('is-revealed');
+                obs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

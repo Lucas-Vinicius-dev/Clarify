@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Feature 02 — Conversação no Ticket — Clarify Brainstorm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+    main.container { max-width: 1080px; margin: 0 auto; padding: 48px 24px 0; }
+
+    /* Hero */
+    .feature-hero {
+        position: relative;
+        padding: 56px 0 32px;
+    }
+    .feature-hero h1 {
+        font-size: clamp(2.25rem, 5vw, 3.75rem);
+        font-weight: 700;
+        line-height: 1.04;
+        margin: 16px 0 18px;
+        color: var(--slate-900);
+    }
+    .feature-hero p.lead {
+        font-size: 1.125rem;
+        color: var(--slate-500);
+        line-height: 1.6;
+        max-width: 720px;
+        margin: 0 0 24px;
+    }
+    .pill-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    /* Section heading */
+    .section { margin-top: 72px; }
+    .section h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        margin: 0 0 8px;
+        color: var(--slate-900);
+    }
+    .section p.lede {
+        color: var(--slate-500);
+        max-width: 760px;
+        margin: 0 0 28px;
+        line-height: 1.6;
+    }
+
+    /* Two-col before/after */
+    .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    @media (min-width: 760px) {
+        .grid-2 { grid-template-columns: 1fr 1fr; }
+    }
+
+    .grid-3 {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    @media (min-width: 820px) {
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* Persona card */
+    .persona {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 18px;
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    .persona-head {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .persona-icon {
+        width: 36px; height: 36px;
+        border-radius: 10px;
+        display: grid; place-items: center;
+        background: rgba(202, 95, 21, 0.10);
+        color: var(--brand-primary);
+        font-weight: 700;
+    }
+    .persona h3 {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--slate-900);
+    }
+    .ba-row { display: grid; grid-template-columns: 80px 1fr; gap: 12px; align-items: start; }
+    .ba-label {
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        padding-top: 3px;
+    }
+    .ba-label.before { color: #9ca3af; }
+    .ba-label.after { color: var(--brand-primary); }
+    .ba-text { font-size: 0.9rem; color: var(--slate-700); line-height: 1.5; }
+    .persona-impact {
+        margin-top: 4px;
+        padding-top: 12px;
+        border-top: 1px dashed var(--slate-200);
+        font-size: 0.85rem;
+        font-style: italic;
+        color: var(--slate-500);
+    }
+
+    /* Step list */
+    .steps {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+        counter-reset: step;
+    }
+    .step {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        padding: 18px 22px;
+        display: grid;
+        grid-template-columns: 36px 1fr;
+        gap: 16px;
+        align-items: start;
+    }
+    .step::before {
+        counter-increment: step;
+        content: counter(step, decimal-leading-zero);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--brand-primary);
+        background: rgba(202, 95, 21, 0.10);
+        border: 1px solid rgba(202, 95, 21, 0.20);
+        width: 36px; height: 36px;
+        border-radius: 10px;
+        display: grid; place-items: center;
+    }
+    .step h4 { margin: 0 0 4px; font-size: 1rem; font-weight: 700; color: var(--slate-900); }
+    .step p { margin: 0; font-size: 0.92rem; color: var(--slate-500); line-height: 1.55; }
+
+    /* Mockup conversation */
+    .conv-window {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 12px 32px -16px rgba(15, 23, 42, 0.18);
+    }
+    .conv-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        background: #f8fafc;
+        border-bottom: 1px solid var(--slate-200);
+        font-size: 0.85rem;
+        color: var(--slate-500);
+    }
+    .conv-bar .dots { display: flex; gap: 6px; }
+    .conv-bar .dot {
+        width: 10px; height: 10px; border-radius: 999px;
+        background: var(--slate-300);
+    }
+    .conv-bar .meta {
+        margin-left: auto;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        font-size: 0.75rem;
+    }
+    .conv-bar .protocolo {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        color: var(--slate-700);
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        padding: 2px 8px;
+        border-radius: 6px;
+    }
+    .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        background: rgba(202, 95, 21, 0.10);
+        color: var(--brand-primary);
+        border: 1px solid rgba(202, 95, 21, 0.20);
+    }
+    .status-pill::before {
+        content: '';
+        width: 6px; height: 6px; border-radius: 999px;
+        background: var(--brand-primary);
+        box-shadow: 0 0 0 3px rgba(202, 95, 21, 0.18);
+    }
+
+    .conv-body {
+        padding: 20px 22px;
+        background: linear-gradient(180deg, #fff 0%, #fffaf7 100%);
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+    .day-divider {
+        text-align: center;
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+        position: relative;
+        padding: 8px 0;
+    }
+    .day-divider::before, .day-divider::after {
+        content: '';
+        position: absolute; top: 50%;
+        width: 30%; height: 1px;
+        background: var(--slate-200);
+    }
+    .day-divider::before { left: 0; }
+    .day-divider::after { right: 0; }
+
+    .msg {
+        max-width: 78%;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    .msg-meta {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        font-size: 0.7rem;
+        color: var(--slate-400);
+    }
+    .msg-avatar {
+        width: 22px; height: 22px;
+        border-radius: 999px;
+        background: var(--brand-surface-dim);
+        color: var(--brand-primary);
+        font-size: 0.65rem;
+        font-weight: 700;
+        display: grid; place-items: center;
+    }
+    .msg-author { font-weight: 600; color: var(--slate-700); }
+    .msg-bubble {
+        padding: 10px 14px;
+        border-radius: 14px;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        color: var(--slate-900);
+    }
+
+    .msg.aluno { align-self: flex-start; }
+    .msg.aluno .msg-bubble {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-bottom-left-radius: 4px;
+    }
+
+    .msg.coord { align-self: flex-end; }
+    .msg.coord .msg-meta { justify-content: flex-end; }
+    .msg.coord .msg-bubble {
+        background: linear-gradient(135deg, #fff1e8, #ffe3d1);
+        border: 1px solid rgba(202, 95, 21, 0.20);
+        color: #5a2b08;
+        border-bottom-right-radius: 4px;
+    }
+
+    .msg.nota { align-self: stretch; max-width: 100%; }
+    .msg.nota .msg-bubble {
+        background: linear-gradient(180deg, #fff8d6, #fff3b8);
+        border: 1px dashed #d6b04a;
+        color: #4a3a08;
+        position: relative;
+    }
+    .nota-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #7c5a08;
+        background: rgba(214, 176, 74, 0.20);
+        border: 1px solid rgba(214, 176, 74, 0.45);
+        padding: 2px 8px;
+        border-radius: 6px;
+        margin-bottom: 6px;
+    }
+    .nota-eye {
+        width: 10px; height: 10px;
+        border-radius: 50%;
+        background: #d6b04a;
+        box-shadow: 0 0 0 2px rgba(214, 176, 74, 0.18);
+    }
+    .mention {
+        color: var(--brand-primary);
+        font-weight: 700;
+        background: rgba(202, 95, 21, 0.10);
+        padding: 0 4px;
+        border-radius: 4px;
+    }
+    .read-receipt {
+        font-size: 0.65rem;
+        color: var(--slate-400);
+        margin-top: 2px;
+        display: inline-flex;
+        gap: 4px;
+        align-items: center;
+    }
+    .read-receipt.read { color: var(--brand-primary); }
+    .typing {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.78rem;
+        color: var(--slate-500);
+        padding: 6px 14px;
+        background: rgba(15, 23, 42, 0.04);
+        border-radius: 999px;
+        align-self: flex-start;
+    }
+    .typing-dots {
+        display: inline-flex; gap: 3px;
+    }
+    .typing-dots span {
+        width: 5px; height: 5px; border-radius: 999px;
+        background: var(--slate-400);
+        animation: typing 1.2s infinite ease-in-out;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes typing {
+        0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+        30% { transform: translateY(-3px); opacity: 1; }
+    }
+
+    .collision-banner {
+        background: #fff8d6;
+        border: 1px solid #e6cb6a;
+        color: #5a4408;
+        font-size: 0.78rem;
+        padding: 8px 14px;
+        border-radius: 10px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        align-self: stretch;
+    }
+    .collision-banner::before {
+        content: '';
+        width: 8px; height: 8px; border-radius: 50%;
+        background: #d6b04a;
+        animation: pulse-glow 2s infinite ease-in-out;
+    }
+
+    .composer {
+        border-top: 1px solid var(--slate-200);
+        padding: 14px 18px;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .toggle-row {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+    }
+    .toggle-btn {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        padding: 6px 12px;
+        border-radius: 8px;
+        border: 1px solid var(--slate-200);
+        background: #fff;
+        color: var(--slate-500);
+        cursor: pointer;
+    }
+    .toggle-btn.active.public {
+        background: var(--brand-primary);
+        color: #fff;
+        border-color: var(--brand-primary);
+    }
+    .toggle-btn.active.note {
+        background: #fff8d6;
+        color: #5a4408;
+        border-color: #d6b04a;
+    }
+    .composer-area {
+        border: 1px solid var(--slate-200);
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 0.9rem;
+        color: var(--slate-500);
+        background: #f8fafc;
+        min-height: 56px;
+    }
+    .composer-area.note-mode {
+        background: #fff8d6;
+        border-color: #d6b04a;
+        color: #5a4408;
+    }
+    .composer-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .icon-row {
+        display: flex; gap: 8px; color: var(--slate-400); font-size: 0.78rem;
+    }
+    .send-btn {
+        background: var(--brand-primary);
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 8px 16px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+    }
+    .send-btn.note { background: #b48109; }
+
+    /* Tables */
+    .ref-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+    .ref-table th, .ref-table td {
+        text-align: left;
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--slate-100);
+        font-size: 0.88rem;
+        vertical-align: top;
+    }
+    .ref-table th {
+        background: #fbf3ee;
+        font-size: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--brand-primary);
+    }
+    .ref-table tr:last-child td { border-bottom: none; }
+    .ref-table a { color: var(--brand-primary); font-weight: 600; text-decoration: none; }
+    .ref-table a:hover { text-decoration: underline; }
+
+    /* KPI cards */
+    .kpi-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 14px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .kpi-card .num {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--brand-primary);
+        letter-spacing: -0.03em;
+    }
+    .kpi-card .label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--slate-700);
+    }
+    .kpi-card .desc {
+        font-size: 0.78rem;
+        color: var(--slate-500);
+        line-height: 1.45;
+    }
+
+    /* Effort table */
+    .effort-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .effort-table td, .effort-table th {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--slate-100);
+        text-align: left;
+    }
+    .effort-table th {
+        font-size: 0.7rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+        font-weight: 700;
+    }
+    .effort-table td:first-child { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
+    .effort-pill {
+        display: inline-block;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 6px;
+    }
+    .effort-pill.xs { background: #d1fae5; color: #065f46; }
+    .effort-pill.s { background: #dbeafe; color: #1e40af; }
+    .effort-pill.m { background: #fef3c7; color: #92400e; }
+    .effort-pill.l { background: #fecaca; color: #991b1b; }
+
+    /* Quick-wins columns */
+    .qw-col {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        padding: 22px;
+    }
+    .qw-col.full { border-color: rgba(202, 95, 21, 0.25); background: linear-gradient(180deg, #fff8f3, #fff); }
+    .qw-col h4 {
+        margin: 0 0 14px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--brand-primary);
+    }
+    .qw-col ul { margin: 0; padding-left: 18px; }
+    .qw-col li { font-size: 0.9rem; color: var(--slate-700); margin-bottom: 8px; line-height: 1.5; }
+
+    /* Risk cards */
+    .risk {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-left: 3px solid var(--brand-primary);
+        border-radius: 12px;
+        padding: 16px 20px;
+    }
+    .risk h4 {
+        margin: 0 0 6px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--slate-900);
+    }
+    .risk p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--slate-500);
+        line-height: 1.55;
+    }
+    .risk .mit {
+        margin-top: 8px;
+        font-size: 0.8rem;
+        color: var(--slate-700);
+    }
+    .risk .mit strong { color: var(--brand-primary); }
+
+    /* Code block tweaks */
+    pre.compact { padding: 18px; font-size: 0.78rem; }
+
+    /* Old vs new diff */
+    .diff-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    @media (min-width: 760px) {
+        .diff-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+    }
+    .diff-label {
+        font-size: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+        margin: 0 0 8px;
+    }
+    .diff-label.new { color: var(--brand-primary); }
+
+    .why-list { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+    .why-list .item {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 12px;
+        padding: 14px 18px;
+        font-size: 0.92rem;
+        color: var(--slate-700);
+        line-height: 1.55;
+    }
+    .why-list .item strong { color: var(--slate-900); }
+</style>
+</head>
+<body>
+
+<header style="position: sticky; top: 0; z-index: 10; background: rgba(255, 248, 246, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(15, 23, 42, 0.06);">
+    <div class="container" style="padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
+        <a href="index.html" style="display: inline-flex; align-items: center; gap: 8px; color: var(--slate-700); text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+            <span style="font-size: 1.1rem;">←</span> Hub de features
+        </a>
+        <span class="eyebrow eyebrow-muted">FEATURE 02 / 10</span>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- 5.2 Hero -->
+    <section class="feature-hero">
+        <div style="display: flex; gap: 8px; align-items: center;">
+            <span class="tier-badge tier-s">Tier S — Mudam o jogo</span>
+            <span class="eyebrow eyebrow-muted">Conversa, não formulário</span>
+        </div>
+        <h1>
+            A demanda vira <span class="text-gradient-warm">conversa real</span>,<br/>
+            não um campo de feedback único.
+        </h1>
+        <p class="lead">
+            Hoje uma demanda tem <span class="mono">feedback: "string"</span> — uma frase só do coord ao reprovar. É um Google Form com status. A Feature 02 transforma cada ticket em thread completa: mensagens datadas entre aluno e coord, notas internas visíveis só ao time, mentions, indicador de digitação e detecção de colisão estilo Help Scout.
+        </p>
+        <div class="pill-row">
+            <span class="pill pill-warm">Thread</span>
+            <span class="pill pill-warm">Notas internas</span>
+            <span class="pill">Help Scout</span>
+            <span class="pill">Zendesk Public/Internal</span>
+            <span class="pill">Mudança estrutural</span>
+        </div>
+    </section>
+
+    <!-- 5.3 Por que isso importa -->
+    <section class="section">
+        <h2>Por que isso importa</h2>
+        <p class="lede">
+            A Carla mandou atestado, o Bruno pediu "anexe novamente", a demanda virou <span class="mono">requer_ajuste</span> com uma string de 60 caracteres — e acabou. Se a Carla quer perguntar "qual foi o problema do atestado anterior?", não tem onde. Ela abre uma <em>nova</em> demanda. O processo trava no que deveria ser uma troca de duas mensagens.
+        </p>
+
+        <div class="why-list">
+            <div class="item">
+                <strong>O coord só pode "responder uma vez".</strong> Em <span class="mono">dashboardcoord.js:49</span>, <span class="mono">reprovarDemanda()</span> abre um <span class="mono">prompt</span> e grava <span class="mono">demanda.feedback = feedback</span>. Não há append, não há histórico. Reprovar duas vezes sobrescreve a observação anterior.
+            </div>
+            <div class="item">
+                <strong>O aluno só lê, nunca responde.</strong> <span class="mono">centralDemandas.js:82</span> renderiza <span class="mono">${demanda.feedback}</span> como bloco estático. Sem botão de réplica, sem campo de digitação. A demanda é write-only para o coord.
+            </div>
+            <div class="item">
+                <strong>Não existe espaço privado para discussão.</strong> Quando o caso da Carla é dúvido (atestado de pronto-socorro estranho, prazo de 5 dias), o Bruno precisa perguntar à Ana antes de responder. Hoje isso acontece no WhatsApp e some do registro institucional.
+            </div>
+            <div class="item">
+                <strong>O modal de detalhes (<span class="mono">modais.js:375-383</span>) tem uma única "Observação da coordenação".</strong> O design já reserva o espaço — falta torná-lo um feed cronológico em vez de um <span class="mono">break-words whitespace-pre-wrap</span> de texto único.
+            </div>
+        </div>
+    </section>
+
+    <!-- 5.4 Personas -->
+    <section class="section">
+        <h2>Personas impactadas</h2>
+        <p class="lede">
+            Três papéis, três jeitos diferentes de sentir a falta de uma thread. Nomes vêm de <span class="mono">data/usuarios.js</span>.
+        </p>
+
+        <div class="grid-3">
+
+            <div class="persona">
+                <div class="persona-head">
+                    <span class="persona-icon">CP</span>
+                    <div>
+                        <h3>Carla Pereira</h3>
+                        <span class="eyebrow eyebrow-muted" style="font-size: 0.65rem;">Aluna · 20240003</span>
+                    </div>
+                </div>
+                <div class="ba-row">
+                    <span class="ba-label before">Antes</span>
+                    <p class="ba-text">Lê "Faltou anexar atestado" e fica sem saber o quê: faltou ler legível? Faltou data? Abre uma nova demanda só pra perguntar.</p>
+                </div>
+                <div class="ba-row">
+                    <span class="ba-label after">Depois</span>
+                    <p class="ba-text">Responde dentro do próprio ticket: "Bruno, o atestado anterior estava cortado, segue versão completa." Vê confirmação de leitura.</p>
+                </div>
+                <p class="persona-impact">Fim das demandas-duplicadas-pra-perguntar.</p>
+            </div>
+
+            <div class="persona">
+                <div class="persona-head">
+                    <span class="persona-icon">BA</span>
+                    <div>
+                        <h3>Bruno Almeida</h3>
+                        <span class="eyebrow eyebrow-muted" style="font-size: 0.65rem;">Coord. de Curso · 20240002</span>
+                    </div>
+                </div>
+                <div class="ba-row">
+                    <span class="ba-label before">Antes</span>
+                    <p class="ba-text">Trava em casos limítrofes. Manda print no WhatsApp da Ana ("essa atestado vale?"), volta, escreve resposta. Conversa some.</p>
+                </div>
+                <div class="ba-row">
+                    <span class="ba-label after">Depois</span>
+                    <p class="ba-text">Marca <span class="mention">@ana.silva</span> em nota interna dentro do ticket. Ana responde no mesmo lugar. Decisão registrada e auditável.</p>
+                </div>
+                <p class="persona-impact">Conversa institucional sai do WhatsApp.</p>
+            </div>
+
+            <div class="persona">
+                <div class="persona-head">
+                    <span class="persona-icon">AS</span>
+                    <div>
+                        <h3>Ana Silva</h3>
+                        <span class="eyebrow eyebrow-muted" style="font-size: 0.65rem;">Professora · 20240001</span>
+                    </div>
+                </div>
+                <div class="ba-row">
+                    <span class="ba-label before">Antes</span>
+                    <p class="ba-text">Não tem visibilidade nas demandas dos alunos que orienta. Coord decide sozinho e ela só descobre quando o aluno comenta na aula.</p>
+                </div>
+                <div class="ba-row">
+                    <span class="ba-label after">Depois</span>
+                    <p class="ba-text">Entra como <em>observadora</em>: vê thread completa, pode adicionar nota interna ("dei retorno verbal pra Carla, contexto X"), não vira coord oficial.</p>
+                </div>
+                <p class="persona-impact">Professor deixa de ser cego no processo.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 5.5 Como funcionaria -->
+    <section class="section">
+        <h2>Como funcionaria — fluxo</h2>
+        <p class="lede">
+            Cenário: Carla abre uma justificativa de falta. Bruno acha o atestado ilegível. Ele consulta Ana antes de responder. Fluxo ponta a ponta.
+        </p>
+
+        <div class="steps">
+            <div class="step">
+                <div>
+                    <h4>Carla abre a demanda com mensagem</h4>
+                    <p>Em vez de <span class="mono">descricao: "string"</span> isolada, a abertura já é a primeira mensagem da thread. Anexa o atestado direto na mensagem. Status entra como <span class="mono">pendente</span>.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div>
+                    <h4>Bruno abre o ticket e começa a digitar uma nota interna</h4>
+                    <p>Toggle no campo de composição vira "Nota interna" (fundo amarelo). Ele escreve "<span class="mention">@ana.silva</span> esse atestado tá legível pra você?". Ana recebe notificação.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div>
+                    <h4>Ana responde também em nota interna</h4>
+                    <p>"O carimbo está borrado, peça reenvio." A Carla nunca vê essa troca — o campo <span class="mono">tipo: "nota_interna"</span> filtra na renderização. Cada mensagem tem timestamp.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div>
+                    <h4>Bruno troca para mensagem pública e responde</h4>
+                    <p>Toggle volta a "Mensagem pública" (fundo branco/laranja). Status muda automático para <span class="mono">requer_ajuste</span>, mas agora é uma mensagem datada na timeline, não um blob estático em <span class="mono">demanda.feedback</span>.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div>
+                    <h4>Collision detection avisa quando alguém mais digita</h4>
+                    <p>Se a Ana resolve responder pública (escalou pra coord. pedagógico), o Bruno vê um banner amarelo: "Ana Silva está respondendo agora." Evita resposta duplicada e contraditória — padrão do Help Scout.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div>
+                    <h4>Carla reenvia e a thread fecha</h4>
+                    <p>Ela vê "Bruno digitando…", recebe a resposta com indicador "lido às 14:32", anexa o atestado novo. Status volta a <span class="mono">em_analise</span>. Tudo na mesma demanda, sem protocolo novo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5.6 Mockup -->
+    <section class="section">
+        <h2>Mockup conceitual</h2>
+        <p class="lede">
+            Vista do ticket do lado do coordenador. Mensagens públicas em laranja claro (coord) e branco (aluno); nota interna em amarelo com badge; mentions destacados; composer com toggle público/interno.
+        </p>
+
+        <div class="conv-window">
+            <div class="conv-bar">
+                <div class="dots">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+                <span style="font-weight: 600; color: var(--slate-700);">Detalhes da demanda</span>
+                <div class="meta">
+                    <span class="protocolo">#A1F3-2026</span>
+                    <span class="status-pill">Aguardando ajuste</span>
+                </div>
+            </div>
+
+            <div class="conv-body">
+
+                <div class="day-divider">03 mai 2026</div>
+
+                <!-- Mensagem do aluno -->
+                <div class="msg aluno">
+                    <div class="msg-meta">
+                        <span class="msg-avatar">CP</span>
+                        <span class="msg-author">Carla Pereira</span>
+                        <span>· aluna · 10:30</span>
+                    </div>
+                    <div class="msg-bubble">
+                        Faltei na prova de Cálculo II do dia 28/04 porque tive febre alta. Segue atestado em anexo. Posso fazer a 2ª chamada na próxima semana?
+                        <div style="margin-top: 8px; padding: 6px 10px; background: rgba(15,23,42,0.04); border-radius: 8px; font-size: 0.78rem; display: inline-flex; gap: 8px; align-items: center;">
+                            <span style="font-weight: 700;">PDF</span>
+                            <span style="color: var(--slate-500);">atestado_28abr.pdf · 412 KB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nota interna -->
+                <div class="msg nota">
+                    <div class="msg-meta">
+                        <span class="nota-eye"></span>
+                        <span class="msg-author" style="color: #5a4408;">Bruno Almeida</span>
+                        <span style="color: #7c5a08;">· coord. de curso · 14:00</span>
+                    </div>
+                    <div class="msg-bubble">
+                        <span class="nota-badge">
+                            <span class="nota-eye"></span>
+                            Interna — visível só ao time
+                        </span><br/>
+                        <span class="mention">@ana.silva</span> o carimbo do atestado tá meio borrado, vc consegue ler a data de validade? Não quero rejeitar sem ter certeza.
+                    </div>
+                </div>
+
+                <!-- Resposta nota -->
+                <div class="msg nota">
+                    <div class="msg-meta">
+                        <span class="nota-eye"></span>
+                        <span class="msg-author" style="color: #5a4408;">Ana Silva</span>
+                        <span style="color: #7c5a08;">· professora · 14:08</span>
+                    </div>
+                    <div class="msg-bubble">
+                        <span class="nota-badge">
+                            <span class="nota-eye"></span>
+                            Interna — visível só ao time
+                        </span><br/>
+                        Confere com a Carla, mas pelo que vejo o carimbo tá ilegível mesmo. Peça uma foto melhor. Sou orientadora dela, posso conversar fora também se preferir.
+                    </div>
+                </div>
+
+                <!-- Mensagem pública do coord -->
+                <div class="msg coord">
+                    <div class="msg-meta">
+                        <span>14:12 · coord. de curso ·</span>
+                        <span class="msg-author">Bruno Almeida</span>
+                        <span class="msg-avatar">BA</span>
+                    </div>
+                    <div class="msg-bubble">
+                        Oi Carla, recebi o atestado. O carimbo do médico está borrado e não consigo ler a data de validade. Pode mandar uma foto melhor ou pedir uma 2ª via no posto? Assim que receber, libero a 2ª chamada.
+                    </div>
+                    <span class="read-receipt read">✓✓ Lido às 14:32</span>
+                </div>
+
+                <!-- Banner de colisão -->
+                <div class="collision-banner">
+                    <strong>Ana Silva</strong> está respondendo agora — aguarde antes de enviar para evitar resposta duplicada.
+                </div>
+
+                <!-- Typing indicator -->
+                <div class="typing">
+                    <span class="msg-avatar" style="background: #ead6cd;">CP</span>
+                    <span>Carla está digitando</span>
+                    <span class="typing-dots"><span></span><span></span><span></span></span>
+                </div>
+
+            </div>
+
+            <!-- Composer -->
+            <div class="composer">
+                <div class="toggle-row">
+                    <button class="toggle-btn active public">Mensagem pública</button>
+                    <button class="toggle-btn">Nota interna</button>
+                    <span style="font-size: 0.7rem; color: var(--slate-400); margin-left: 8px;">· Aluno vê esta mensagem</span>
+                </div>
+                <div class="composer-area">
+                    Digite uma resposta para Carla… use <span class="mono" style="font-size: 0.78rem;">@nome</span> para mencionar alguém do time.
+                </div>
+                <div class="composer-actions">
+                    <div class="icon-row">
+                        <span>📎 Anexar</span>
+                        <span>⌘ Macro</span>
+                        <span>🗒 Inserir KB</span>
+                    </div>
+                    <button class="send-btn">Enviar →</button>
+                </div>
+            </div>
+        </div>
+
+        <p style="font-size: 0.8rem; color: var(--slate-400); margin-top: 14px; text-align: center;">
+            Mockup conceitual · Toggle pública/interna inspirado no <em>agent workspace</em> do Zendesk · Banner de colisão estilo Help Scout
+        </p>
+    </section>
+
+    <!-- 5.7 Modelo de dados -->
+    <section class="section">
+        <h2>Modelo de dados</h2>
+        <p class="lede">
+            O schema atual está em <span class="mono">Clarify/src/data/demanda.js</span> e na criação implícita em <span class="mono">dashboardcoord.js:49-72</span>. A mudança é trocar o campo único <span class="mono">feedback</span> por um array <span class="mono">mensagens[]</span>.
+        </p>
+
+        <div class="diff-grid">
+            <div>
+                <p class="diff-label">Schema atual</p>
+                <pre class="compact"><code>{
+  protocolo: "#A1F3-2026",
+  tipo: "Justificativa de Falta",
+  status: "requer_ajuste",
+  descricao: "Faltei na prova...",
+  matriculaAluno: "20240003",
+  dataCriacao: "2026-05-03",
+  dataAtualizacao: "2026-05-03",
+  feedback: "Anexe o atestado novamente"
+  // ↑ string única.
+  //   sobrescrita a cada reprovação.
+}</code></pre>
+            </div>
+            <div>
+                <p class="diff-label new">Schema proposto</p>
+                <pre class="compact"><code>{
+  protocolo: "#A1F3-2026",
+  tipo: "Justificativa de Falta",
+  status: "requer_ajuste",
+  matriculaAluno: "20240003",
+  dataCriacao: "2026-05-03",
+  dataAtualizacao: "2026-05-03",
+  participantes: [
+    "20240003", // Carla
+    "20240002", // Bruno
+    "20240001"  // Ana (observadora)
+  ],
+  mensagens: [
+    {
+      id: "msg_001",
+      autor_matricula: "20240003",
+      autor_nome: "Carla Pereira",
+      autor_tipo: "aluno",
+      tipo: "publica",
+      texto: "Faltei na prova...",
+      timestamp: "2026-05-03T10:30:00Z",
+      lida_em: "2026-05-03T11:45:00Z",
+      anexos: ["arq_atestado_v1"],
+      mentions: []
+    },
+    {
+      id: "msg_002",
+      autor_matricula: "20240002",
+      autor_nome: "Bruno Almeida",
+      autor_tipo: "coordenador",
+      tipo: "nota_interna",
+      texto: "@ana.silva carimbo ilegível?",
+      timestamp: "2026-05-03T14:00:00Z",
+      lida_em: null,
+      anexos: [],
+      mentions: ["20240001"]
+    }
+  ]
+}</code></pre>
+            </div>
+        </div>
+
+        <p style="font-size: 0.85rem; color: var(--slate-500); margin-top: 16px;">
+            Mudança não-destrutiva: para demandas legadas, um migrator simples converte <span class="mono">feedback: "..."</span> em <span class="mono">mensagens: [{ tipo: "publica", autor_tipo: "coordenador", texto: feedback, ... }]</span>. Sem perda de dado.
+        </p>
+    </section>
+
+    <!-- 5.8 Inspiração -->
+    <section class="section">
+        <h2>Inspiração de mercado</h2>
+        <p class="lede">
+            Help desks resolveram este problema há 15 anos. A tarefa não é inventar — é adaptar ao contexto acadêmico.
+        </p>
+
+        <table class="ref-table">
+            <thead>
+                <tr>
+                    <th style="width: 18%;">Referência</th>
+                    <th style="width: 38%;">O que fazem</th>
+                    <th>Adaptação para o Clarify</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <a href="https://www.helpscout.com/inbox/" target="_blank" rel="noopener">Help Scout</a><br/>
+                        <span class="eyebrow eyebrow-muted" style="font-size: 0.6rem;">Shared inbox</span>
+                    </td>
+                    <td>Conversas por e-mail viram threads compartilhadas. Notas internas amarelas. Mentions com <span class="mono">@</span>. Collision detection: vê quem está digitando antes de você apertar enviar.</td>
+                    <td>Coord. de curso e coord. pedagógico operam na mesma "caixa" de demandas. Mention escala caso difícil. Indicador de colisão evita resposta dupla quando dois coords abrem o mesmo ticket.</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://www.zendesk.com/service/ticketing-system/" target="_blank" rel="noopener">Zendesk</a><br/>
+                        <span class="eyebrow eyebrow-muted" style="font-size: 0.6rem;">Agent workspace</span>
+                    </td>
+                    <td>Botões físicos separados: <em>Public reply</em> e <em>Internal note</em>. O agent precisa escolher conscientemente — fundo do composer muda de cor. Macros e KB embutidos.</td>
+                    <td>Toggle binário "Pública / Interna" no composer com mudança visual forte (fundo amarelo na nota). Reduz o risco de vazar uma nota interna pro aluno por engano.</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://www.freshworks.com/freshdesk/" target="_blank" rel="noopener">Freshdesk</a><br/>
+                        <span class="eyebrow eyebrow-muted" style="font-size: 0.6rem;">Internal threads</span>
+                    </td>
+                    <td>Conversa privada paralela à pública. Múltiplos agents discutem sem cliente ver. Trilha de discussão sobrevive ao caso encerrado.</td>
+                    <td>Histórico de discussão fica institucional. Quando a Carla pergunta no semestre seguinte "por que vocês negaram em 2026?", a thread interna está lá, datada, auditável.</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://www.intercom.com/inbox" target="_blank" rel="noopener">Intercom Inbox</a><br/>
+                        <span class="eyebrow eyebrow-muted" style="font-size: 0.6rem;">Hybrid view</span>
+                    </td>
+                    <td>Mostra mensagens públicas e internas na mesma timeline, com tratamento visual distinto. Receipts ("seen 2 min ago"), typing dots, presence indicator.</td>
+                    <td>Vista unificada do coord: nota e mensagem pública na mesma rolagem. Receipts para o aluno saber se a coordenação leu. Typing dots quando o coord está formulando resposta.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- 5.9 KPIs -->
+    <section class="section">
+        <h2>Métricas de sucesso (KPIs)</h2>
+        <p class="lede">
+            Como saber se a feature está pagando o esforço. Cinco KPIs concretos, mensuráveis em cima do schema novo.
+        </p>
+
+        <div class="grid-3" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+            <div class="kpi-card">
+                <span class="num">> 3</span>
+                <span class="label">Mensagens / demanda (média)</span>
+                <span class="desc">Hoje é ≈ 1 (descrição + feedback opcional). Subir pra 3 indica que a thread virou ferramenta real, não decoração.</span>
+            </div>
+            <div class="kpi-card">
+                <span class="num">↓ 50%</span>
+                <span class="label">Demandas duplicadas pelo mesmo aluno</span>
+                <span class="desc">Aluno que não consegue responder no ticket abre um novo. Thread real elimina esse padrão. Medir por <span class="mono">matriculaAluno + tipo</span> em janela de 30 dias.</span>
+            </div>
+            <div class="kpi-card">
+                <span class="num">FRT</span>
+                <span class="label">First Response Time mediano</span>
+                <span class="desc">Tempo entre <span class="mono">dataCriacao</span> e timestamp da primeira mensagem pública do coord. Alvo inicial: < 24h em dias úteis.</span>
+            </div>
+            <div class="kpi-card">
+                <span class="num">15–25%</span>
+                <span class="label">% de demandas com nota interna</span>
+                <span class="desc">Proxy de complexidade institucional. Acima de 40% indica que casos simples estão sendo "discutidos demais" — gatilho pra revisar política.</span>
+            </div>
+            <div class="kpi-card">
+                <span class="num">≥ 90%</span>
+                <span class="label">Read rate das respostas do coord</span>
+                <span class="desc">Quantas mensagens públicas têm <span class="mono">lida_em != null</span> em até 48h. Mede se o aluno está realmente acompanhando.</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5.10 Esforço & Dependências -->
+    <section class="section">
+        <h2>Esforço & dependências</h2>
+        <p class="lede">
+            Quatro arquivos do app são tocados. Nenhum precisa de backend novo — tudo continua em <span class="mono">localStorage</span>, com cuidado com volume (ver Riscos).
+        </p>
+
+        <table class="effort-table">
+            <thead>
+                <tr>
+                    <th>Arquivo</th>
+                    <th>O que muda</th>
+                    <th>Esforço</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>src/data/demanda.js</td>
+                    <td>Substituir campo <span class="mono">feedback</span> por <span class="mono">mensagens[]</span>. Adicionar <span class="mono">participantes[]</span>. Função migrate pra demandas antigas.</td>
+                    <td><span class="effort-pill xs">XS</span></td>
+                </tr>
+                <tr>
+                    <td>src/components/structures/modais.js</td>
+                    <td>Trocar a section "Observação da coordenação" (linhas 375-383) por um feed de mensagens. Adicionar composer com toggle público/interno.</td>
+                    <td><span class="effort-pill m">M</span></td>
+                </tr>
+                <tr>
+                    <td>src/pages/dashboardcoord.js</td>
+                    <td>Refatorar <span class="mono">reprovarDemanda()</span> (l. 49-74): em vez de salvar string em <span class="mono">demanda.feedback</span>, dar <span class="mono">push</span> em <span class="mono">demanda.mensagens</span>. Listar mentions para autocompletar.</td>
+                    <td><span class="effort-pill s">S</span></td>
+                </tr>
+                <tr>
+                    <td>src/pages/centralDemandas.js</td>
+                    <td>Cards do aluno (l. 82-86) ganham preview da última mensagem pública + badge "1 não lida". Permitir abrir e responder direto no modal.</td>
+                    <td><span class="effort-pill s">S</span></td>
+                </tr>
+                <tr>
+                    <td>src/data/usuarios.js + componente de mention</td>
+                    <td>Lookup de matrícula por handle (<span class="mono">ana.silva</span> → <span class="mono">20240001</span>). Sem novo arquivo, só helper.</td>
+                    <td><span class="effort-pill xs">XS</span></td>
+                </tr>
+                <tr>
+                    <td>(opcional) typing indicator + collision</td>
+                    <td>Polling local em <span class="mono">localStorage</span> com chave <span class="mono">typing:<protocolo>:<matricula></span>. Não tem WebSocket — simula presença.</td>
+                    <td><span class="effort-pill m">M</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p style="margin-top: 18px; font-size: 0.88rem; color: var(--slate-500);">
+            <strong>Dependências:</strong> nenhuma de outra feature do roadmap. Feature 04 (Audit Log) e Feature 07 (Anexos) ficam <em>melhores</em> com thread, mas thread não depende delas.<br/>
+            <strong>Bloqueadores:</strong> nenhum técnico. Decisão de produto: até onde vai o "professor como observador"? Lê só, ou pode escrever nota?
+        </p>
+    </section>
+
+    <!-- 5.11 Quick wins vs versão completa -->
+    <section class="section">
+        <h2>Quick wins vs. versão completa</h2>
+        <p class="lede">
+            O MVP cabe em 1–2 dias de trabalho e já é apresentável. A versão completa é o objetivo de médio prazo.
+        </p>
+
+        <div class="grid-2">
+            <div class="qw-col">
+                <h4>MVP — 1 a 2 dias</h4>
+                <ul>
+                    <li><strong>Array de mensagens</strong> com tipo público/interno e timestamp. Sem typing, sem read receipt, sem collision.</li>
+                    <li><strong>Render cronológico</strong> no modal de detalhes — substitui o bloco único de "Observação".</li>
+                    <li><strong>Composer com toggle</strong> Pública/Interna. Mudança de cor de fundo é o feedback visual.</li>
+                    <li><strong>Migrator</strong> para demandas legadas (<span class="mono">feedback</span> → primeira mensagem da thread).</li>
+                    <li><strong>Filtro de renderização</strong>: aluno só recebe <span class="mono">tipo === "publica"</span>.</li>
+                </ul>
+            </div>
+            <div class="qw-col full">
+                <h4>Versão completa</h4>
+                <ul>
+                    <li><strong>Mentions com autocomplete</strong> de <span class="mono">data/usuarios.js</span> e notificação visível ao mencionado.</li>
+                    <li><strong>Read receipts</strong> (<span class="mono">lida_em</span>) com ícone de check duplo, estilo Intercom.</li>
+                    <li><strong>Typing indicator</strong> e <strong>collision detection</strong> via polling em <span class="mono">localStorage</span> (presença simulada).</li>
+                    <li><strong>Anexos por mensagem</strong> (integra Feature 07) — Carla pode reenviar o atestado dentro da resposta.</li>
+                    <li><strong>Professor como observador</strong>: campo <span class="mono">participantes[]</span> permite que Ana veja a thread dos seus orientados.</li>
+                    <li><strong>Export auditável</strong>: ao concluir, gerar PDF da thread filtrada (sem notas internas) para o aluno.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5.12 Riscos -->
+    <section class="section">
+        <h2>Riscos &amp; armadilhas</h2>
+        <p class="lede">
+            Cinco perigos concretos. Mais grave: vazamento de nota interna. Menos grave mas mais provável: estourar o limite do <span class="mono">localStorage</span>.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+            <div class="risk">
+                <h4>Nota interna vazando para o aluno</h4>
+                <p>Se a renderização do modal do aluno (<span class="mono">centralDemandas.js</span>) usa o mesmo template do coord, basta um <span class="mono">if</span> esquecido para que o aluno veja "<span class="mention">@ana.silva</span> esse caso é boboca". Catástrofe institucional.</p>
+                <p class="mit"><strong>Mitigação:</strong> filtrar <span class="mono">tipo === "publica"</span> na camada de <em>dados</em>, não na de UI. Mesmo que o template renderize tudo, o array que chega ao aluno já vem peneirado. Adicionar testes que negam acesso à <span class="mono">nota_interna</span> a partir de <span class="mono">autor_tipo: "aluno"</span>. Em exports/PDF, mesma lógica.</p>
+            </div>
+
+            <div class="risk">
+                <h4>Volume estourando o localStorage</h4>
+                <p>Limite típico é 5–10 MB por origem. Com 500 demandas × 5 mensagens × 800 chars + anexos referenciados, dá pra encostar no teto rápido. App quebra silencioso.</p>
+                <p class="mit"><strong>Mitigação:</strong> paginar mensagens (carregar últimas 20, "ver anteriores" sob demanda) e mover demandas <span class="mono">status: "concluido"</span> com mais de 60 dias para um bucket de "arquivadas" comprimidas. Como é TCC sem backend, isso é workaround consciente — documentar.</p>
+            </div>
+
+            <div class="risk">
+                <h4>Spam de mentions</h4>
+                <p>Aluno descobre que pode escrever <span class="mention">@bruno.almeida</span> e marcar o coord a cada 5 minutos. Coord vira notification-zombie e desliga tudo.</p>
+                <p class="mit"><strong>Mitigação:</strong> aluno só pode mencionar coordenadores atribuídos à sua demanda (ou orientador via <span class="mono">participantes</span>). Coordenadores podem mencionar qualquer um. Rate-limit local: ignora mention repetido na mesma thread em < 30 min.</p>
+            </div>
+
+            <div class="risk">
+                <h4>Estética virando WhatsApp e perdendo seriedade</h4>
+                <p>Bolinhas verdes, "✓✓ azul", emojis de carinha — UI passa a parecer caixinha de bate-papo e mina a percepção de processo institucional. Coordenador para de levar a sério.</p>
+                <p class="mit"><strong>Mitigação:</strong> manter paleta Clarify (laranja queimado, slate, surface creme). Timestamps absolutos ("14:32 · 03 mai") e não relativos ("há 2 min"). Sem emojis de reação. Status oficial da demanda continua dominante no header do modal — não na conversa.</p>
+            </div>
+
+            <div class="risk">
+                <h4>Status "requer_ajuste" dessincronizando da última mensagem</h4>
+                <p>Coord escreve "anexe novamente" mas esquece de mudar o status. Aluno vê <span class="mono">em_analise</span>, não sabe que precisa agir. Pior do que hoje.</p>
+                <p class="mit"><strong>Mitigação:</strong> ao enviar mensagem pública, oferecer dropdown opcional "Marcar como…" (requer_ajuste / em_analise / concluido). Default empilhado em cima do botão Enviar — coord vê e escolhe consciente, não automático.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fecho -->
+    <section class="section">
+        <h2>Resumo executivo</h2>
+        <p class="lede" style="max-width: 760px;">
+            Trocar <span class="mono">feedback: "string"</span> por <span class="mono">mensagens[]</span> é a mudança mais barata e mais transformadora deste roadmap. Não exige IA, não exige backend, não exige nova tela — só refatorar o que já está em <span class="mono">modais.js</span> e <span class="mono">dashboardcoord.js</span>. Em troca, o Clarify deixa de ser ticket-tracker e passa a ser um help desk de verdade, com colaboração interna, histórico auditável e o aluno na ponta do diálogo, não na ponta de uma string.
+        </p>
+        <div style="margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap;">
+            <a href="01-ai-copilot.html" class="btn-ghost">← Feature 01 · AI Copilot</a>
+            <a href="03-sla-real.html" class="btn-ghost">Feature 03 · SLA Inteligente →</a>
+            <a href="index.html" class="btn-primary">Voltar ao hub</a>
+        </div>
+    </section>
+
+</main>
+
+<footer style="margin-top: 80px; padding: 32px 0; border-top: 1px solid var(--slate-200); text-align: center; color: var(--slate-400); font-size: 0.85rem;">
+    <div class="container">
+        <p>Feature 02 de 10 &middot; <a href="index.html" style="color: var(--brand-primary); text-decoration: none; font-weight: 600;">Voltar ao hub →</a></p>
+    </div>
+</footer>
+
+<script>
+    const els = document.querySelectorAll('[data-reveal]');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('is-revealed');
+                obs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
