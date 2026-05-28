@@ -1,0 +1,1097 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clarify — Catálogo de Componentes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Tokens do projeto ── */
+    :root {
+      --brand: #ca5f15;
+      --brand-dark: #b35211;
+      --brand-light: rgba(202,95,21,0.08);
+      --brand-ring: rgba(202,95,21,0.18);
+    }
+
+    body { font-family: 'Sora', sans-serif; background: #f5f4f2; }
+    code, .mono { font-family: 'IBM Plex Mono', monospace; }
+
+    /* ── Layout do catálogo ── */
+    .catalog-sidebar {
+      position: fixed; top: 0; left: 0; bottom: 0;
+      width: 220px; background: #fff;
+      border-right: 1px solid #e5e7eb;
+      overflow-y: auto; z-index: 40;
+      padding: 24px 0;
+    }
+    .catalog-main { margin-left: 220px; padding: 48px 40px; }
+
+    .nav-group-label {
+      font-size: 9px; font-weight: 800;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: #9ca3af; padding: 20px 20px 6px;
+    }
+    .nav-item {
+      display: block; padding: 7px 20px;
+      font-size: 13px; font-weight: 500; color: #374151;
+      text-decoration: none; border-left: 2px solid transparent;
+      transition: all .15s;
+    }
+    .nav-item:hover { color: var(--brand); background: var(--brand-light); border-left-color: var(--brand); }
+    .nav-item.active { color: var(--brand); background: var(--brand-light); border-left-color: var(--brand); font-weight: 700; }
+
+    /* ── Seções ── */
+    .section { margin-bottom: 72px; scroll-margin-top: 32px; }
+    .section-header { margin-bottom: 28px; }
+    .section-title {
+      font-size: 22px; font-weight: 800;
+      color: #0f172a; letter-spacing: -.03em;
+    }
+    .section-desc { font-size: 13px; color: #6b7280; margin-top: 4px; }
+    .origin-tag {
+      display: inline-block; margin-top: 8px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px; color: var(--brand);
+      background: var(--brand-light); border: 1px solid var(--brand-ring);
+      border-radius: 6px; padding: 2px 8px;
+    }
+
+    /* ── Preview box ── */
+    .preview {
+      background: #fff; border: 1px solid #e5e7eb;
+      border-radius: 16px; overflow: hidden;
+    }
+    .preview-bar {
+      background: #f9fafb; border-bottom: 1px solid #e5e7eb;
+      padding: 10px 16px; display: flex; align-items: center; gap: 6px;
+    }
+    .preview-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .preview-label {
+      font-size: 11px; font-weight: 600; color: #9ca3af;
+      letter-spacing: .08em; text-transform: uppercase; margin-left: auto;
+    }
+    .preview-body { padding: 28px 24px; }
+    .preview-body.dark { background: #0f172a; }
+    .preview-body.gray { background: #f3f4f6; }
+    .preview-body.compact { padding: 16px 20px; }
+
+    /* ── Variantes grid ── */
+    .variants { display: grid; gap: 16px; }
+    .variants.cols-2 { grid-template-columns: 1fr 1fr; }
+    .variants.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .variant-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: #9ca3af; margin-bottom: 10px;
+    }
+
+    /* ── Classes do projeto replicadas ── */
+    .text-gradient-warm {
+      background-image: linear-gradient(135deg, #ca5f15 0%, #e07a30 45%, #b04e0a 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .modal-backdrop {
+      animation: modal-fade-in 180ms ease-out both;
+      background-color: rgba(20,12,8,.42);
+      backdrop-filter: saturate(140%) blur(10px);
+    }
+    .modal-panel {
+      animation: modal-rise-in 260ms ease-out both;
+      box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 1px 2px rgba(15,23,42,.04),
+                  0 12px 32px -12px rgba(15,23,42,.18), 0 40px 80px -28px rgba(202,95,21,.22);
+    }
+    .modal-eyebrow-dot {
+      display: inline-block; width: 6px; height: 6px; border-radius: 999px;
+      background-color: #ca5f15; box-shadow: 0 0 0 3px rgba(202,95,21,.18);
+    }
+    .modal-label {
+      font-size: .6875rem; font-weight: 700; letter-spacing: .18em;
+      text-transform: uppercase; color: rgba(15,23,42,.45);
+    }
+    .modal-input {
+      width: 100%; background: transparent; border: 0;
+      border-bottom: 1.5px solid rgba(15,23,42,.10);
+      padding: 8px 0 10px; font-size: 1.125rem; line-height: 1.3;
+      letter-spacing: -.01em; color: #0f172a; transition: border-color 180ms ease;
+      font-family: 'Sora', sans-serif;
+    }
+    .modal-input:focus { outline: none; border-bottom-color: #ca5f15; }
+    .modal-textarea {
+      width: 100%; resize: none; border: 1px solid rgba(15,23,42,.10);
+      border-radius: 14px; padding: 14px 16px; font-size: .95rem; line-height: 1.55;
+      color: #0f172a; background-color: #fff; transition: border-color 180ms ease;
+      font-family: 'Sora', sans-serif;
+    }
+    .modal-textarea:focus { outline: none; border-color: #ca5f15; box-shadow: 0 0 0 4px rgba(202,95,21,.12); }
+    .modal-btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background-color: #ca5f15; color: #fff; font-weight: 700;
+      font-size: .875rem; padding: 12px 20px; border-radius: 12px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 10px 24px -10px rgba(202,95,21,.55);
+      transition: all .18s; cursor: pointer; font-family: 'Sora', sans-serif;
+    }
+    .modal-btn-primary:hover { background-color: #b35211; transform: translateY(-1px); }
+    .modal-btn-primary:disabled {
+      background: rgba(15,23,42,.10); color: rgba(15,23,42,.35);
+      box-shadow: none; cursor: not-allowed; transform: none;
+    }
+    .modal-btn-ghost {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: transparent; color: rgba(15,23,42,.65);
+      font-weight: 600; font-size: .875rem; padding: 12px 16px;
+      border-radius: 12px; transition: all .18s; cursor: pointer;
+      font-family: 'Sora', sans-serif;
+    }
+    .modal-btn-ghost:hover { background: rgba(15,23,42,.05); color: #0f172a; }
+    .modal-close {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 999px;
+      color: rgba(15,23,42,.50); transition: all .18s; cursor: pointer;
+    }
+    .modal-close:hover { background: rgba(15,23,42,.05); color: #0f172a; transform: rotate(90deg); }
+    .modal-timeline-step {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; flex: 1; min-width: 0;
+    }
+    .modal-timeline-step + .modal-timeline-step::before {
+      content: ''; position: absolute;
+      left: calc(-50% + 14px); right: calc(50% + 14px); top: 13px;
+      height: 2px; background: rgba(15,23,42,.10); border-radius: 999px;
+    }
+    .modal-timeline-step.is-done + .modal-timeline-step::before { background: #ca5f15; }
+    .modal-timeline-step.is-done + .modal-timeline-step.is-current::before {
+      background: linear-gradient(to right, #ca5f15 0%, #ca5f15 60%, rgba(202,95,21,.25) 100%);
+    }
+    .modal-timeline-dot {
+      width: 28px; height: 28px; border-radius: 999px;
+      background: #fff; border: 2px solid rgba(15,23,42,.15);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 220ms ease; position: relative; z-index: 1;
+    }
+    .modal-timeline-step.is-done .modal-timeline-dot {
+      background: #ca5f15; border-color: #ca5f15;
+      box-shadow: 0 4px 12px -2px rgba(202,95,21,.35);
+    }
+    .modal-timeline-step.is-current .modal-timeline-dot {
+      border-color: #ca5f15; background: #fff;
+      box-shadow: 0 0 0 5px rgba(202,95,21,.14), 0 4px 12px -2px rgba(202,95,21,.25);
+    }
+    .modal-timeline-step.is-current .modal-timeline-dot::after {
+      content: ''; width: 10px; height: 10px; border-radius: 999px; background: #ca5f15;
+    }
+    .modal-timeline-label {
+      font-size: .6875rem; font-weight: 700; letter-spacing: .14em;
+      text-transform: uppercase; color: rgba(15,23,42,.35);
+      margin-top: 12px; text-align: center; line-height: 1.2;
+    }
+    .modal-timeline-step.is-done .modal-timeline-label { color: rgba(202,95,21,.85); }
+    .modal-timeline-step.is-current .modal-timeline-label { color: #ca5f15; }
+    .modal-counter { font-variant-numeric: tabular-nums; font-size: .6875rem; color: rgba(15,23,42,.40); }
+    .modal-counter.is-near { color: #d97706; }
+    .modal-counter.is-over { color: #dc2626; }
+    .modal-stagger > * {
+      opacity: 0; animation: modal-stagger 380ms ease-out both;
+    }
+    .modal-stagger > *:nth-child(1) { animation-delay: 60ms; }
+    .modal-stagger > *:nth-child(2) { animation-delay: 110ms; }
+    .modal-stagger > *:nth-child(3) { animation-delay: 160ms; }
+    .modal-stagger > *:nth-child(4) { animation-delay: 210ms; }
+    .modal-stagger > *:nth-child(5) { animation-delay: 260ms; }
+    .brand-surface { background: rgba(202,95,21,.06); }
+
+    @keyframes modal-fade-in { from{opacity:0} to{opacity:1} }
+    @keyframes modal-rise-in { from{opacity:0;transform:translateY(14px) scale(.985)} to{opacity:1;transform:translateY(0) scale(1)} }
+    @keyframes modal-stagger { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes pulse-glow { 0%,100%{opacity:.55;transform:scale(1)} 50%{opacity:.85;transform:scale(1.03)} }
+
+    /* ── Header do catálogo ── */
+    .catalog-header {
+      background: #fff; border-bottom: 1px solid #e5e7eb;
+      padding: 0 40px; height: 56px;
+      display: flex; align-items: center; gap: 16px;
+      position: sticky; top: 0; z-index: 30;
+    }
+    .catalog-badge {
+      font-size: 10px; font-weight: 700; letter-spacing: .14em;
+      text-transform: uppercase; background: var(--brand-light);
+      color: var(--brand); border: 1px solid var(--brand-ring);
+      border-radius: 999px; padding: 3px 10px;
+    }
+
+    /* ── Divider ── */
+    hr.section-divider { border: none; border-top: 1px solid #e5e7eb; margin: 0 0 56px; }
+
+    @media (max-width: 768px) {
+      .catalog-sidebar { display: none; }
+      .catalog-main { margin-left: 0; padding: 24px 16px; }
+      .variants.cols-3 { grid-template-columns: 1fr; }
+      .variants.cols-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     SIDEBAR DE NAVEGAÇÃO
+════════════════════════════════════════ -->
+<nav class="catalog-sidebar">
+  <div style="padding:0 20px 20px; border-bottom:1px solid #f3f4f6; margin-bottom:8px;">
+    <p style="font-size:16px;font-weight:800;color:#ca5f15;letter-spacing:-.02em;">Clarify</p>
+    <p style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9ca3af;margin-top:2px;">Component Catalog</p>
+  </div>
+
+  <p class="nav-group-label">Estruturas</p>
+  <a class="nav-item" href="#sidebar-coord">Sidebar Coord</a>
+  <a class="nav-item" href="#sidebar-alunos">Sidebar Alunos</a>
+  <a class="nav-item" href="#chip-usuario">Chip Usuário</a>
+  <a class="nav-item" href="#topbar-mobile">TopBar Mobile</a>
+  <a class="nav-item" href="#topbar-desktop">TopBar Desktop</a>
+  <a class="nav-item" href="#drawer-mobile">Drawer Mobile</a>
+
+  <p class="nav-group-label">Modais</p>
+  <a class="nav-item" href="#modal-nova">Modal Nova Demanda</a>
+  <a class="nav-item" href="#modal-detalhes">Modal Detalhes</a>
+  <a class="nav-item" href="#timeline">Timeline Progresso</a>
+
+  <p class="nav-group-label">Cards</p>
+  <a class="nav-item" href="#card-demanda">Card Demanda</a>
+  <a class="nav-item" href="#card-nova">Card Nova Demanda</a>
+  <a class="nav-item" href="#card-historico">Card Histórico</a>
+  <a class="nav-item" href="#metricas">Cards Métricas</a>
+
+  <p class="nav-group-label">Dados / Filtros</p>
+  <a class="nav-item" href="#barra-filtros">Barra de Filtros</a>
+  <a class="nav-item" href="#linha-historico">Linha Histórico</a>
+  <a class="nav-item" href="#estado-vazio">Estado Vazio</a>
+  <a class="nav-item" href="#fab">FAB Mobile</a>
+</nav>
+
+<!-- ════════════════════════════════════════
+     CONTEÚDO PRINCIPAL
+════════════════════════════════════════ -->
+<div style="margin-left:220px;">
+
+  <!-- Header sticky -->
+  <header class="catalog-header" style="margin-left:0;">
+    <span style="font-size:14px;font-weight:700;color:#0f172a;">Component Catalog</span>
+    <span class="catalog-badge">JS puro · Tailwind</span>
+    <span style="margin-left:auto;font-size:12px;color:#9ca3af;" class="mono">18 componentes</span>
+  </header>
+
+  <main style="padding:48px 40px;max-width:960px;">
+
+    <!-- ══ INTRO ══ -->
+    <div style="margin-bottom:56px;">
+      <h1 style="font-size:32px;font-weight:800;letter-spacing:-.04em;color:#0f172a;">
+        Clarify — <span class="text-gradient-warm">Design Reference</span>
+      </h1>
+      <p style="font-size:14px;color:#6b7280;margin-top:8px;max-width:560px;">
+        Catálogo visual de todos os componentes do projeto. Referência de padrão, estado e código — sem necessidade de rodar o ambiente de desenvolvimento.
+      </p>
+    </div>
+
+    <!-- ════════════════ SIDEBAR COORD ════════════════ -->
+    <section class="section" id="sidebar-coord">
+      <div class="section-header">
+        <h2 class="section-title">Sidebar Coord</h2>
+        <p class="section-desc">Navegação lateral do coordenador — desktop only.</p>
+        <span class="origin-tag">components/structures/sidebar.js → renderSidebarCoord()</span>
+      </div>
+      <div class="preview">
+        <div class="preview-bar">
+          <div class="preview-dot" style="background:#ef4444;"></div>
+          <div class="preview-dot" style="background:#f59e0b;"></div>
+          <div class="preview-dot" style="background:#22c55e;"></div>
+          <span class="preview-label">Desktop</span>
+        </div>
+        <div class="preview-body" style="padding:0;background:#f9fafb;">
+          <aside style="display:flex;flex-direction:column;width:256px;background:#f9fafb;border-right:1px solid #e5e7eb;padding:20px;min-height:400px;">
+            <div style="margin-bottom:24px;display:flex;align-items:center;gap:12px;padding:0 8px;">
+              <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#ca5f15,#e07a30);display:flex;align-items:center;justify-content:center;">
+                <svg width="24" height="24" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              </div>
+              <h1 style="font-size:20px;font-weight:800;color:#ca5f15;">Clarify</h1>
+            </div>
+            <nav style="display:flex;flex-direction:column;gap:4px;">
+              <!-- item ativo -->
+              <button style="display:flex;align-items:center;gap:12px;border-radius:12px;padding:12px 16px;background:rgba(202,95,21,.08);color:#ca5f15;border:none;cursor:pointer;font-family:'Sora',sans-serif;font-weight:600;font-size:14px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Início
+              </button>
+              <button style="display:flex;align-items:center;gap:12px;border-radius:12px;padding:12px 16px;color:#6b7280;background:none;border:none;cursor:pointer;font-family:'Sora',sans-serif;font-size:14px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg>
+                Alunos
+              </button>
+              <button style="display:flex;align-items:center;gap:12px;border-radius:12px;padding:12px 16px;color:#6b7280;background:none;border:none;cursor:pointer;font-family:'Sora',sans-serif;font-size:14px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+                Adicionar aluno
+              </button>
+              <button style="display:flex;align-items:center;gap:12px;border-radius:12px;padding:12px 16px;color:#6b7280;background:none;border:none;cursor:pointer;font-family:'Sora',sans-serif;font-size:14px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/><path d="M15 3v5a1 1 0 0 0 1 1h5"/></svg>
+                Demandas
+              </button>
+              <button style="display:flex;align-items:center;gap:12px;border-radius:12px;padding:12px 16px;color:#6b7280;background:none;border:none;cursor:pointer;font-family:'Sora',sans-serif;font-size:14px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8 3-8-3v7c0 6 8 10 8 10z"/></svg>
+                Turmas
+              </button>
+            </nav>
+          </aside>
+        </div>
+      </div>
+    </section>
+    <hr class="section-divider"/>
+
+    <!-- ════════════════ CHIP USUÁRIO ════════════════ -->
+    <section class="section" id="chip-usuario">
+      <div class="section-header">
+        <h2 class="section-title">Chip Usuário</h2>
+        <p class="section-desc">Avatar + nome + botão de logout. Aparece na topbar.</p>
+        <span class="origin-tag">components/structures/topbar.js → renderChipUsuario()</span>
+      </div>
+      <div class="preview">
+        <div class="preview-bar">
+          <div class="preview-dot" style="background:#ef4444;"></div>
+          <div class="preview-dot" style="background:#f59e0b;"></div>
+          <div class="preview-dot" style="background:#22c55e;"></div>
+          <span class="preview-label">Variantes</span>
+        </div>
+        <div class="preview-body">
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:16px;">
+            <!-- Com nome -->
+            <div>
+              <p class="variant-label">Com nome</p>
+              <div style="display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:4px 4px 4px 8px;box-shadow:0 1px 4px rgba(15,23,42,.06);">
+                <div style="width:32px;height:32px;border-radius:50%;background:#ffedd5;color:#ca5f15;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">M</div>
+                <span style="font-size:13px;font-weight:600;color:#374151;">Maria Aparecida</span>
+                <button style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:none;border:none;color:#9ca3af;cursor:pointer;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                </button>
+              </div>
+            </div>
+            <!-- Só avatar -->
+            <div>
+              <p class="variant-label">Sem nome</p>
+              <div style="display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:4px 4px 4px 8px;box-shadow:0 1px 4px rgba(15,23,42,.06);">
+                <div style="width:32px;height:32px;border-radius:50%;background:#ffedd5;color:#ca5f15;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">J</div>
+                <button style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:none;border:none;color:#9ca3af;cursor:pointer;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <hr class="section-divider"/>
+
+    <!-- ════════════════ TOPBAR MOBILE ════════════════ -->
+    <section class="section" id="topbar-mobile">
+      <div class="section-header">
+        <h2 class="section-title">TopBar Mobile</h2>
+        <p class="section-desc">Header sticky com hamburger + logo + chip. Visível só em mobile.</p>
+        <span class="origin-tag">pages/centralDemandas.js → carregarCentralDemandas() header mobile</span>
+      </div>
+      <div class="preview">
+        <div class="preview-bar">
+          <div class="preview-dot" style="background:#ef4444;"></div>
+          <div class="preview-dot" style="background:#f59e0b;"></div>
+          <div class="preview-dot" style="background:#22c55e;"></div>
+          <span class="preview-label">Mobile · 390px</span>
+        </div>
+        <div class="preview-body" style="padding:0;background:#f3f4f6;">
+          <header style="background:rgba(255,255,255,.95);border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 16px;height:56px;max-width:390px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:#374151;border-radius:8px;background:none;border:none;cursor:pointer;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+              </button>
+              <h1 style="font-size:17px;font-weight:800;color:#ca5f15;">Clarify</h1>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <button style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#6b7280;background:none;border:none;cursor:pointer;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              </button>
+              <div style="display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:3px 3px 3px 6px;">
+                <div style="width:28px;height:28px;border-radius:50%;background:#ffedd5;color:#ca5f15;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;">M</div>
+                <button style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:none;border:none;color:#9ca3af;cursor:pointer;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                </button>
+              </div>
+            </div>
+          </header>
+        </div>
+      </div>
+    </section>
+    <hr class="section-divider"/>
+
+    <!-- ════════════════ TOPBAR DESKTOP ════════════════ -->
+    <section class="section" id="topbar-desktop">
+      <div class="section-header">
+        <h2 class="section-title">TopBar Desktop</h2>
+        <p class="section-desc">Logo + ações + chip. Inline no topo da página em desktop.</p>
+        <span class="origin-tag">pages/centralDemandas.js → carregarCentralDemandas() hidden md:flex</span>
+      </div>
+      <div class="preview">
+        <div class="preview-bar">
+          <div class="preview-dot" style="background:#ef4444;"></div>
+          <div class="preview-dot" style="background:#f59e0b;"></div>
+          <div class="preview-dot" style="background:#22c55e;"></div>
+          <span class="preview-label">Desktop</span>
+        </div>
+        <div class="preview-body">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+            <a href="#" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+              <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#ca5f15,#e07a30);display:flex;align-items:center;justify-content:center;">
+                <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              </div>
+              <div>
+                <p style="font-size:16px;font-weight:800;color:#0f172a;letter-spacing:-.02em;line-height:1;">Clarify</p>
+                <p style="font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#94a3b8;margin-top:2px;">Federal Institution</p>
+              </div>
+            </a>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button style="width:36px;height:36px;border-radius:50%;border:1px solid #e5e7eb;background:#fff;display:flex;align-items:center;justify-content:center;color:#6b7280;cursor:pointer;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              </button>
+              <button style="width:36px;height:36px;border-radius:50%;border:1px solid #e5e7eb;background:#fff;display:flex;align-items:center;justify-content:center;color:#6b7280;cursor:pointer;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </button>
+              <div style="display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:4px 4px 4px 8px;">
+                <div style="width:32px;height:32px;border-radius:50%;background:#ffedd5;color:#ca5f15;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">M</div>
+                <span style="font-size:13px;font-weight:600;color:#374151;">Maria</span>
+                <button style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:none;border:none;color:#9ca3af;cursor:pointer;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <hr class="section-divider"/>
+
+    <!-- ════════════════ DRAWER MOBILE ════════════════ -->
+    <section class="section" id="drawer-mobile">
+      <div class="section-header">
+        <h2 class="section-title">Drawer Mobile</h2>
+        <p class="section-desc">Menu lateral deslizante — abre sobre o conteúdo em mobile.</p>
+        <span class="origin-tag">pages/centralDemandas.js → div#drawerMobile</span>
+      </div>
+      <div class="preview">
+        <div class="preview-bar">
+          <div class="preview-dot" style="background:#ef4444;"></div>
+          <div class="preview-dot" style="background:#f59e0b;"></div>
+          <div class="preview-dot" style="background:#22c55e;"></div>
+          <span class="preview-label">Painel isolado</span>
+        </div>
+        <div class="preview-body" style="padding:0;background:#e5e7eb;min-height:280px;display:flex;">
+          <aside style="width:260px;background:#fff;box-shadow:8px 0 32px rgba(15,23,42,.12);display:flex;flex-direction:column;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:20px;border-bottom:1px solid #f3f4f6;">
+              <div>
+                <h1 style="font-size:16px;font-weight:800;color:#ca5f15;">Clarify</h1>
+                <p style="font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#9ca3af;margin-top:2px;">Federal Institution</p>
+              </div>
+              <button style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#9ca3af;background:none;border:none;cursor:pointer;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+            <nav style="flex:1;padding:16px;display:flex;flex-direction:column;gap:2px;">
+              <a href="#" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(202,95,21,.08);color:#ca5f15;font-size:13px;font-weight:700;text-decoration:none;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                Minhas Demandas
+              </a>
+              <a href="#" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:#6b7280;font-size:13px;text-decoration:none;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                Nova Demanda
+              </a>
+              <a href="#" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:#6b7280;font-size:13px;text-decoration:none;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                Configurações
+              </a>
+            </nav>
+          </aside>
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:12px;color:#9ca3af;">← overlay escurecido</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <hr class="section-divider"/>
+
+    <!-- ════════════════ TIMELINE ════════════════ -->
+    <section class="section" id="timeline">
+      <div class="section-header">
+        <h2 class="section-title">Timeline de Progresso</h2>
+        <p class="section-desc">4 passos do ciclo de vida de uma demanda. Usado dentro do modal de detalhes.</p>
+        <span class="origin-tag">components/structures/modais.js → montarTimeline()</span>
+      </div>
+      <div class="preview">
+        <div class="preview-bar">
+          <div class="preview-dot" style="background:#ef4444;"></div>
+          <div class="preview-dot" style="background:#f59e0b;"></div>
+          <div class="preview-dot" style="background:#22c55e;"></div>
+          <span class="preview-label">Todos os estados</span>
+        </div>
+        <div class="preview-body" style="display:flex;flex-direction:column;gap:24px;">
+          <!-- pendente -->
+          <div>
+            <p class="variant-label">Pendente (passo 1)</p>
+            <div style="background:linear-gradient(135deg,#fff,rgba(202,95,21,.04));border-radius:16px;border:1px solid #f3f4f6;padding:16px 24px;">
+              <div style="display:flex;align-items:flex-start;gap:0;">
+                <div class="modal-timeline-step is-current"><div class="modal-timeline-dot"></div><p class="modal-timeline-label">Recebida</p></div>
+                <div class="modal-timeline-step"><div class="modal-timeline-dot"></div><p class="modal-timeline-label">Em análise</p></div>
+                <div class="modal-timeline-step"><div class="modal-timeline-dot"></div><p class="modal-timeline-label">Resolução</p></div>
+                <div class="modal-timeline-step"><div class="modal-timeline-dot"></div><p class="modal-timeline-label">Concluída</p></div>
+              </div>
+            </div>
+          </div>
+          <!-- em_analise -->
+          <div>
+            <p class="variant-label">Em Análise (passo 2)</p>
+            <div style="background:linear-gradient(135deg,#fff,rgba(202,95,21,.04));border-radius:16px;border:1px solid #f3f4f6;padding:16px 24px;">
+              <div style="display:flex;align-items:flex-start;gap:0;">
+                <div class="modal-timeline-step is-done"><div class="modal-timeline-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><p class="modal-timeline-label">Recebida</p></div>
+                <div class="modal-timeline-step is-current"><div class="modal-timeline-dot"></div><p class="modal-timeline-label">Em análise</p></div>
+                <div class="modal-timeline-step"><div class="modal-timeline-dot"></div><p class="modal-timeline-label">Resolução</p></div>
+                <div class="modal-timeline-step"><div class="modal-timeline-dot"></div><p class="modal-timeline-label">Concluída</p></div>
+              </div>
+            </div>
+          </div>
+          <!-- concluido -->
+          <div>
+            <p class="variant-label">Concluído (passo 4)</p>
+            <div style="background:linear-gradient(135deg,#fff,rgba(202,95,21,.04));border-radius:16px;border:1px solid #f3f4f6;padding:16px 24px;">
+              <div style="display:flex;align-items:flex-start;gap:0;">
+                <div class="modal-timeline-step is-done"><div class="modal-timeline-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><p class="modal-timeline-label">Recebida</p></div>
+                <div class="modal-timeline-step is-done"><div class="modal-timeline-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><p class="modal-timeline-label">Em análise</p></div>
+                <div class="modal-timeline-step is-done"><div class="modal-timeline-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><p class="modal-timeline-label">Resolução</p></div>
+                <div class="modal-timeline-step is-current"><div class="modal-timeline-dot"></div><p class="modal-timeline-label">Concluída</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <hr class="section-divider"/>
+
+    <!-- ════════════════ CARDS DEMANDA ════════════════ -->
+    <section class="section" id="card-demanda">
+      <div class="section-header">
+        <h2 class="section-title">Card Demanda</h2>
+        <p class="section-desc">Card principal do grid de demandas em aberto. Um estado por status.</p>
+        <span class="origin-tag">services/demands.js → renderCardDemanda()</span>
+      </div>
+      <div class="preview">
+        <div class="preview-bar">
+          <div class="preview-dot" style="background:#ef4444;"></div>
+          <div class="preview-dot" style="background:#f59e0b;"></div>
+          <div class="preview-dot" style="background:#22c55e;"></div>
+          <span class="preview-label">4 estados</span>
+        </div>
+        <div class="preview-body gray">
+          <div class="variants cols-2">
+            <!-- pendente -->
+            <div>
+              <p class="variant-label">Pendente</p>
+              <article style="background:#fff;border-radius:12px;border:1px solid #e5e7eb;padding:20px;display:flex;flex-direction:column;gap:12px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                  <span style="font-size:11px;font-weight:600;color:#6b7280;letter-spacing:.06em;">#CLF-2024-001</span>
+                  <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;padding:4px 8px;border-radius:999px;background:#fef3c7;color:#92400e;border:1px solid #fde68a;">Pendente</span>
+                </div>
+                <div>
+                  <h3 style="font-size:15px;font-weight:700;color:#0f172a;">Justificativa de falta</h3>
+                  <p style="font-size:13px;color:#6b7280;margin-top:4px;line-clamp:2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">Estive doente na semana da prova de Cálculo III e preciso apresentar o atestado médico para a coordenação.</p>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:#9ca3af;padding-top:8px;border-top:1px solid #f3f4f6;">
+                  <span style="display:flex;align-items:center;gap:4px;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    15/05/2026
+                  </span>
+                  <span style="display:flex;align-items:center;gap:4px;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    15/05/2026
+                  </span>
+                </div>
+                <button style="font-size:11px;font-weight:700;color:#ca5f15;text-transform:uppercase;letter-spacing:.12em;background:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:0;">
+                  Ver Detalhes
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </article>
+            </div>
+            <!-- em_analise -->
+            <div>
+              <p class="variant-label">Em Análise</p>
+              <article style="background:#fff;border-radius:12px;border:1px solid #e5e7eb;padding:20px;display:flex;flex-direction:column;gap:12px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                  <span style="font-size:11px;font-weight:600;color:#6b7280;letter-spacing:.06em;">#CLF-2024-002</span>
+                  <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;padding:4px 8px;border-radius:999px;background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe;">Em Análise</span>
+                </div>
+                <div>
+                  <h3 style="font-size:15px;font-weight:700;color:#0f172a;">Revisão de nota — Estruturas</h3>
+                  <p style="font-size:13px;color:#6b7280;margin-top:4px;">Gostaria de solicitar revisão da nota da segunda avaliação da disciplina de Estruturas de Dados.</p>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:#9ca3af;padding-top:8px;border-top:1px solid #f3f4f6;">
+                  <span style="display:flex;align-items:center;gap:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>10/05/2026</span>
+                </div>
+                <button style="font-size:11px;font-weight:700;color:#ca5f15;text-transform:uppercase;letter-spacing:.12em;background:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:0;">Ver Detalhes <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+              </article>
+            </div>
+            <!-- requer_ajuste -->
+            <div>
+              <p class="variant-label">Requer Ajuste</p>
+              <article style="background:#fff;border-radius:12px;border:1px solid #e5e7eb;padding:20px;display:flex;flex-direction:column;gap:12px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                  <span style="font-size:11px;font-weight:600;color:#6b7280;letter-spacing:.06em;">#CLF-2024-003</span>
+                  <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;padding:4px 8px;border-radius:999px;background:#fee2e2;color:#991b1b;border:1px solid #fecaca;">Requer Ajuste</span>
+                </div>
+                <div>
+                  <h3 style="font-size:15px;font-weight:700;color:#0f172a;">Trancamento de disciplina</h3>
+                  <p style="font-size:13px;color:#6b7280;margin-top:4px;">Solicitação de trancamento da disciplina Álgebra Linear por motivos de saúde.</p>
+                </div>
+                <div style="font-size:11px;background:#f9fafb;border:1px solid #f3f4f6;border-radius:8px;padding:8px 10px;color:#374151;">
+                  <strong style="color:#0f172a;">Observação:</strong> Necessário apresentar documentação médica atualizada.
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:#9ca3af;padding-top:8px;border-top:1px solid #f3f4f6;">
+                  <span style="display:flex;align-items:center;gap:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>02/05/2026</span>
+                </div>
+                <button style="font-size:11px;font-weight:700;color:#ca5f15;text-transform:uppercase;letter-spacing:.12em;background:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:0;">Ver Detalhes <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+              </article>
+            </div>
+            <!-- concluido -->
+            <div>
+              <p class="variant-label">Concluído</p>
+              <article style="background:#fff;border-radius:12px;border:1px solid #e5e7eb;padding:20px;display:flex;flex-direction:column;gap:12px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                  <span style="font-size:11px;font-weight:600;color:#6b7280;letter-spacing:.06em;">#CLF-2024-004</span>
+                  <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;padding:4px 8px;border-radius:999px;background:#d1fae5;color:#065f46;border:1px solid #a7f3d0;">Concluído</span>
+                </div>
+                <div>
+                  <h3 style="font-size:15px;font-weight:700;color:#0f172a;">Atualização de dados cadastrais</h3>
+                  <p style="font-size:13px;color:#6b7280;margin-top:4px;">Solicitação de atualização de endereço e telefone de contato no sistema acadêmico.</p>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:#9ca3af;padding-top:8px;border-top:1px solid #f3f4f6;">
+                  <span style="display:flex;align-items:center;gap:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>28/04/2026</span>
+                </div>
+                <button style="font-size:11px;font-weight:700;color:#ca5f15;text-transform:uppercase;letter-spacing:.12em;background:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:0;">Ver Detalhes <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <hr class="section-divider"/>
+
+    <!-- ════════════════ CARD NOVA DEMANDA ════════════════ -->
+    <section class="section" id="card-nova">
+      <div class="section-header">
+        <h2 class="section-title">Card Nova Demanda</h2>
+        <p class="section-desc">Slot vazio no grid que convida o aluno a criar uma nova solicitação.</p>
+        <span class="origin-tag">pages/centralDemandas.js → renderCardNovaDemanda()</span>
+      </div>
+      <div class="preview">
+        <div class="preview-bar">
+          <div class="preview-dot" style="background:#ef4444;"></div>
+          <div class="preview-dot" style="background:#f59e0b;"></div>
+          <div class="preview-dot" style="background:#22c55e;"></div>
+        </div>
+        <div class="preview-body gray">
+          <div style="max-width:280px;">
+            <button style="width:100%;border:2px dashed #d1d5db;border-radius:12px;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#6b7280;background:none;cursor:pointer;min-height:180px;font-family:'Sora',sans-serif;transition:all .2s;" onmouseover="this.style.borderColor='#ca5f15';this.style.color='#ca5f15';this.style.background='#fff'" onmouseout="this.style.borderColor='#d1d5db';this.style.color='#6b7280';this.style.background='none'">
+              <span style="width:40px;height:40px;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </span>
+              <span style="font-size:13px;font-weight:700;">Nova Solicitação</span>
+              <span style="font-size:12px;">Abra uma nova demanda acadêmica</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <hr class="section-divider"/>
+
+    <!-- ════════════════ CARDS MÉTRICAS ════════════════ -->
+    <section class="section" id="metricas">
+      <div class="section-header">
+        <h2 class="section-title">Cards de Métricas</h2>
+        <p class="section-desc">Trio de cards no topo da Central de Demandas. Scroll horizontal em mobile.</p>
+        <span class="origin-tag">pages/centralDemandas.js → div métricas inline</span>
+      </div>
+      <div class="preview">
+        <div class="preview-bar">
+          <div class="preview-dot" style="background:#ef4444;"></div>
+          <div class="preview-dot" style="background:#f59e0b;"></div>
+          <div class="preview-dot" style="background:#22c55e;"></div>
+        </div>
+        <div class="preview-body gray">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+            <div style="background:#fff;border-radius:12px;border:1px solid #e5e7eb;padding:20px;">
+              <p style="font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.14em;">Total de Solicitações</p>
+              <div style="display:flex;align-items:flex-end;gap:12px;margin-top:8px;">
+                <span style="font-size:30px;font-weight:800;color:#0f172a;">7</span>
+                <span style="font-size:12px;color:#6b7280;padding-bottom:4px;">no semestre</span>
+              </div>
+            </div>
+            <div style="background:#fff;border-radius:12px;border:1px solid #e5e7eb;padding:20px;">
+              <p style="font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.14em;">Em Análise</p>
+              <div style="display:flex;align-items:flex-end;gap:12px;margin-top:8px;">
+                <span style="font-size:30px;font-weight:800;color:#0f172a;">02</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" style="margin-bottom:6px;"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>
+              </div>
+            </div>
+            <div style="background:#fff;border-radius:12px;border:1px solid #e5e7eb;padding:20px;">
+              <p style="font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.14em;">Eficiência</p>
+              <div style="display:flex;align-items:center;gap:12px;margin-top:8px;">
+                <span style="font-size:30px;font-weight:800;color:#0f172a;">71%</span>
+                <div style="flex:1;height:8px;background:#f3f4f6;border-radius:999px;overflow:hidden;">
+                  <div style="width:71%;height:100%;background:#ca5f15;border-radius:999px;"></div>
+                </div>
+              </div>
+              <p style="font-size:10px;color:#9ca3af;margin-top:4px;">Demandas concluídas sobre o total</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <hr class="section-divider"/>
+
+    <!-- ════════════════ BARRA DE FILTROS ════════════════ -->
+    <section class="section" id="barra-filtros">
+      <div class="section-header">
+        <h2 class="section-title">Barra de Filtros</h2>
+        <p class="section-desc">Busca por texto + dropdown de status + botão de limpar.</p>
+        <span class="origin-tag">pages/centralDemandas.js → div barra de filtros inline</span>
+      </div>
+      <div class="preview">
+        <div class="preview-bar">
+          <div class="preview-dot" style="background:#ef4444;"></div>
+          <div class="preview-dot" style="background:#f59e0b;"></div>
+          <div class="preview-dot" style="background:#22c55e;"></div>
+        </div>
+        <div class="preview-body">
+          <div style="background:#fff;border-radius:12px;border:1px solid #e5e7eb;padding:14px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+            <div style="flex:1;min-width:180px;position:relative;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Pesquisar protocolo ou tipo..." style="width:100%;padding:8px 12px 8px 32px;border:1px solid #e5e7eb;border-radius:8px;background:#f9fafb;font-size:13px;font-family:'Sora',sans-serif;outline:none;" />
+            </div>
+            <div style="position:relative;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none;"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+              <select style="padding:8px 28px 8px 30px;border:1px solid #e5e7eb;border-radius:8px;background:#f9fafb;font-size:13px;font-family:'Sora',sans-serif;appearance:none;cursor:pointer;outline:none;">
+                <option>Status: Todos</option>
+                <option>Pendente</option>
+                <option>Em Análise</option>
+                <option>Requer Ajuste</option>
+                <option>Concluído</option>
+              </select>
+            </div>
+            <button style="display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#ca5f15;background:none;border:none;cursor:pointer;padding:0 8px;font-family:'Sora',sans-serif;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Limpar Filtros
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <hr class="section-divider"/>
+
+    <!-- ════════════════ MODAL NOVA DEMANDA ════════════════ -->
+    <section class="section" id="modal-nova">
+      <div class="section-header">
+        <h2 class="section-title">Modal — Nova Demanda</h2>
+        <p class="section-desc">Formulário de criação. Botão "Enviar" habilita quando título ≥ 4 chars e descrição ≥ 10 chars.</p>
+        <span class="origin-tag">components/structures/modais.js → abrirModalNovaDemanda()</span>
+      </div>
+      <div class="preview">
+        <div class="preview-bar">
+          <div class="preview-dot" style="background:#ef4444;"></div>
+          <div class="preview-dot" style="background:#f59e0b;"></div>
+          <div class="preview-dot" style="background:#22c55e;"></div>
+          <span class="preview-label">Renderizado inline (sem backdrop)</span>
+        </div>
+        <div class="preview-body gray">
+          <div style="max-width:480px;background:#fff;border-radius:24px;box-shadow:0 12px 40px -12px rgba(15,23,42,.15),0 40px 80px -28px rgba(202,95,21,.18);overflow:hidden;">
+            <!-- Header -->
+            <div style="display:flex;align-items:start;justify-content:space-between;padding:24px 28px 0;">
+              <div style="display:inline-flex;align-items:center;gap:8px;">
+                <span class="modal-eyebrow-dot"></span>
+                <span class="modal-label">Nova solicitação</span>
+              </div>
+              <button class="modal-close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <!-- Corpo -->
+            <div class="modal-stagger" style="padding:20px 28px 8px;">
+              <header>
+                <h2 style="font-size:22px;font-weight:800;color:#0f172a;letter-spacing:-.03em;line-height:1.25;">
+                  Conte para a coordenação<br/>
+                  <span class="text-gradient-warm">o que precisa ser resolvido.</span>
+                </h2>
+                <p style="font-size:13px;color:#6b7280;margin-top:8px;">Quanto mais claro o pedido, mais rápido a análise.</p>
+              </header>
+              <section style="margin-top:20px;">
+                <label class="modal-label" for="catTitulo">Título</label>
+                <input id="catTitulo" class="modal-input" type="text" placeholder="Ex.: Justificativa de falta — Cálculo III" maxlength="80" oninput="catUpdateBtn()" />
+              </section>
+              <section style="margin-top:20px;">
+                <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:8px;">
+                  <label class="modal-label" for="catDesc">Descrição</label>
+                  <span id="catCounter" class="modal-counter">0 / 500</span>
+                </div>
+                <textarea id="catDesc" class="modal-textarea" rows="4" maxlength="500" placeholder="Descreva a situação e o que você espera como resolução." style="margin-top:8px;" oninput="catUpdateBtn();catUpdateCounter()"></textarea>
+              </section>
+              <section style="margin-top:16px;display:flex;align-items:center;gap:12px;background:rgba(202,95,21,.06);border-radius:16px;padding:10px 14px;border:1px solid rgba(202,95,21,.12);">
+                <div style="width:32px;height:32px;border-radius:50%;background:#ca5f15;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">M</div>
+                <div>
+                  <p class="modal-label" style="line-height:1;">Enviando como</p>
+                  <p style="font-size:13px;font-weight:700;color:#0f172a;margin-top:4px;">Maria Aparecida · Matrícula 2024003</p>
+                </div>
+              </section>
+            </div>
+            <!-- Footer -->
+            <footer style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 28px;margin-top:12px;border-top:1px solid #f3f4f6;background:linear-gradient(to bottom,#fff,rgba(202,95,21,.03));">
+              <button class="modal-btn-ghost">Cancelar</button>
+              <button id="catBtnEnviar" class="modal-btn-primary" disabled>
+                Enviar solicitação
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </footer>
+          </div>
+        </div>
+      </div>
+    </section>
+    <hr class="section-divider"/>
+
+    <!-- ════════════════ MODAL DETALHES ════════════════ -->
+    <section class="section" id="modal-detalhes">
+      <div class="section-header">
+        <h2 class="section-title">Modal — Detalhes da Demanda</h2>
+        <p class="section-desc">Visualização completa: status, timeline, descrição, remetente e feedback.</p>
+        <span class="origin-tag">components/structures/modais.js → abrirModalDetalhesDemanda()</span>
+      </div>
+      <div class="preview">
+        <div class="preview-bar">
+          <div class="preview-dot" style="background:#ef4444;"></div>
+          <div class="preview-dot" style="background:#f59e0b;"></div>
+          <div class="preview-dot" style="background:#22c55e;"></div>
+          <span class="preview-label">Renderizado inline (sem backdrop)</span>
+        </div>
+        <div class="preview-body gray">
+          <div style="max-width:560px;background:#fff;border-radius:24px;box-shadow:0 12px 40px -12px rgba(15,23,42,.15),0 40px 80px -28px rgba(202,95,21,.18);overflow:hidden;">
+            <div style="display:flex;align-items:start;justify-content:space-between;padding:24px 28px 0;">
+              <div style="display:inline-flex;align-items:center;gap:8px;">
+                <span class="modal-eyebrow-dot"></span>
+                <span class="modal-label">Solicitação · #CLF-2024-001</span>
+              </div>
+              <button class="modal-close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div style="padding:20px 28px 8px;">
+              <header style="display:flex;flex-direction:column;gap:12px;">
+                <div>
+                  <h2 style="font-size:22px;font-weight:800;color:#0f172a;letter-spacing:-.03em;line-height:1.25;">Justificativa de falta — Cálculo III</h2>
+                  <p style="font-size:13px;color:#6b7280;margin-top:6px;">Aberta em <strong style="color:#374151;">15/05/2026</strong> · há 12 dias</p>
+                </div>
+                <span style="align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;padding:6px 12px;border-radius:999px;border:1px solid #fde68a;background:#fef3c7;color:#92400e;white-space:nowrap;">
+                  <span style="width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.7;"></span>Pendente
+                </span>
+              </header>
+              <!-- Timeline -->
+              <section style="margin-top:24px;background:linear-gradient(135deg,#fff,rgba(202,95,21,.04));border-radius:16px;border:1px solid #f3f4f6;padding:16px 24px;">
+                <div style="display:flex;align-items:flex-start;gap:0;">
+                  <div class="modal-timeline-step is-current"><div class="modal-timeline-dot"></div><p class="modal-timeline-label">Recebida</p></div>
+                  <div class="modal-timeline-step"><div class="modal-timeline-dot"></div><p class="modal-timeline-label">Em análise</p></div>
+                  <div class="modal-timeline-step"><div class="modal-timeline-dot"></div><p class="modal-timeline-label">Resolução</p></div>
+                  <div class="modal-timeline-step"><div class="modal-timeline-dot"></div><p class="modal-timeline-label">Concluída</p></div>
+                </div>
+              </section>
+              <!-- Descrição -->
+              <section style="margin-top:24px;">
+                <p class="modal-label">Detalhes da solicitação</p>
+                <div style="margin-top:10px;background:rgba(202,95,21,.04);border:1px solid rgba(202,95,21,.10);border-radius:16px;padding:16px 20px;">
+                  <p style="font-size:14px;color:#374151;line-height:1.6;">Estive doente durante a semana da segunda avaliação da disciplina de Cálculo III. Tenho o atestado médico em mãos e gostaria de agendar uma conversa com a coordenação para entregar a documentação e discutir as opções disponíveis.</p>
+                </div>
+              </section>
+              <!-- Remetente -->
+              <section style="margin-top:24px;">
+                <p class="modal-label">Enviado por</p>
+                <div style="margin-top:10px;display:flex;align-items:center;gap:12px;background:rgba(202,95,21,.04);border-radius:16px;padding:12px 16px;border:1px solid #f3f4f6;">
+                  <div style="width:44px;height:44px;border-radius:50%;background:#ca5f15;color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">M</div>
+                  <div>
+                    <p style="font-size:13px;font-weight:700;color:#0f172a;">Maria Aparecida</p>
+                    <p style="font-size:12px;color:#6b7280;">#2024003 · maria@academico.edu.br</p>
+                  </div>
+                </div>
+              </section>
+              <!-- Grid meta -->
+              <section style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-bottom:4px;">
+                <div style="background:#fff;border-radius:16px;border:1px solid #e5e7eb;padding:12px 16px;">
+                  <p class="modal-label">Criada em</p>
+                  <p style="font-size:13px;font-weight:600;color:#0f172a;margin-top:4px;">15/05/2026</p>
+                </div>
+                <div style="background:#fff;border-radius:16px;border:1px solid #e5e7eb;padding:12px 16px;">
+                  <p class="modal-label">Status</p>
+                  <p style="font-size:13px;font-weight:600;color:#0f172a;margin-top:4px;">Pendente</p>
+                </div>
+              </section>
+            </div>
+            <footer style="display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:16px 28px;margin-top:12px;border-top:1px solid #f3f4f6;background:linear-gradient(to bottom,#fff,rgba(202,95,21,.03));">
+              <button class="modal-btn-ghost">Fechar</button>
+            </footer>
+          </div>
+        </div>
+      </div>
+    </section>
+    <hr class="section-divider"/>
+
+    <!-- ════════════════ LINHA + CARD HISTÓRICO ════════════════ -->
+    <section class="section" id="linha-historico">
+      <div class="section-header">
+        <h2 class="section-title">Linha de Histórico</h2>
+        <p class="section-desc">Linha da tabela desktop e card mobile do histórico de demandas concluídas.</p>
+        <span class="origin-tag">services/demands.js → renderLinhaHistorico() + renderCardHistorico()</span>
+      </div>
+      <div class="preview">
+        <div class="preview-bar">
+          <div class="preview-dot" style="background:#ef4444;"></div>
+          <div class="preview-dot" style="background:#f59e0b;"></div>
+          <div class="preview-dot" style="background:#22c55e;"></div>
+        </div>
+        <div class="preview-body" style="display:flex;flex-direction:column;gap:20px;">
+          <!-- Tabela desktop -->
+          <div>
+            <p class="variant-label">Desktop — tabela</p>
+            <div style="background:#fff;border-radius:12px;border:1px solid #e5e7eb;padding:20px;overflow-x:auto;">
+              <table style="width:100%;text-align:left;border-collapse:collapse;">
+                <thead>
+                  <tr style="font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.14em;">
+                    <th style="padding-bottom:8px;">Protocolo</th>
+                    <th style="padding-bottom:8px;">Assunto</th>
+                    <th style="padding-bottom:8px;">Status</th>
+                    <th style="padding-bottom:8px;">Última Modificação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-top:1px solid #f3f4f6;">
+                    <td style="padding:12px 0;font-size:11px;font-weight:600;color:#6b7280;">#CLF-2024-004</td>
+                    <td style="padding:12px 0;font-size:13px;color:#0f172a;">Atualização de dados cadastrais</td>
+                    <td style="padding:12px 0;"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;padding:4px 8px;border-radius:999px;background:#d1fae5;color:#065f46;border:1px solid #a7f3d0;">Concluído</span></td>
+                    <td style="padding:12px 0;font-size:12px;color:#6b7280;">12/05/2026</td>
+                  </tr>
+                  <tr style="border-top:1px solid #f3f4f6;">
+                    <td style="padding:12px 0;font-size:11px;font-weight:600;color:#6b7280;">#CLF-2024-005</td>
+                    <td style="padding:12px 0;font-size:13px;color:#0f172a;">Emissão de declaração de matrícula</td>
+                    <td style="padding:12px 0;"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;padding:4px 8px;border-radius:999px;background:#d1fae5;color:#065f46;border:1px solid #a7f3d0;">Concluído</span></td>
+                    <td style="padding:12px 0;font-size:12px;color:#6b7280;">05/05/2026</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- Cards mobile -->
+          <div>
+            <p class="variant-label">Mobile — cards</p>
+            <div style="display:flex;flex-direction:column;gap:8px;max-width:380px;">
+              <article style="background:#fff;border-radius:12px;border:1px solid #e5e7eb;padding:16px;display:flex;flex-direction:column;gap:8px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                  <span style="font-size:11px;font-weight:600;color:#6b7280;">#CLF-2024-004</span>
+                  <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;padding:4px 8px;border-radius:999px;background:#d1fae5;color:#065f46;border:1px solid #a7f3d0;">Concluído</span>
+                </div>
+                <h4 style="font-size:13px;font-weight:700;color:#0f172a;">Atualização de dados cadastrais</h4>
+                <span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#9ca3af;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Concluído em 12/05/2026
+                </span>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <hr class="section-divider"/>
+
+    <!-- ════════════════ ESTADO VAZIO ════════════════ -->
+    <section class="section" id="estado-vazio">
+      <div class="section-header">
+        <h2 class="section-title">Estado Vazio</h2>
+        <p class="section-desc">Exibido no grid quando não há demandas em aberto.</p>
+        <span class="origin-tag">services/demands.js → renderEstadoVazio()</span>
+      </div>
+      <div class="preview">
+        <div class="preview-bar">
+          <div class="preview-dot" style="background:#ef4444;"></div>
+          <div class="preview-dot" style="background:#f59e0b;"></div>
+          <div class="preview-dot" style="background:#22c55e;"></div>
+        </div>
+        <div class="preview-body gray">
+          <div style="background:#fff;border:2px dashed #d1d5db;border-radius:12px;padding:40px;text-align:center;">
+            <h3 style="font-size:14px;font-weight:700;color:#0f172a;">Você ainda não possui solicitações</h3>
+            <p style="font-size:13px;color:#6b7280;margin-top:4px;">Quando você abrir uma demanda, ela aparecerá aqui para acompanhamento.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <hr class="section-divider"/>
+
+    <!-- ════════════════ FAB ════════════════ -->
+    <section class="section" id="fab">
+      <div class="section-header">
+        <h2 class="section-title">FAB — Nova Demanda</h2>
+        <p class="section-desc">Botão flutuante de ação rápida. Visível só em mobile (sm:hidden).</p>
+        <span class="origin-tag">pages/centralDemandas.js → button#btnNovaDemandaMobile</span>
+      </div>
+      <div class="preview">
+        <div class="preview-bar">
+          <div class="preview-dot" style="background:#ef4444;"></div>
+          <div class="preview-dot" style="background:#f59e0b;"></div>
+          <div class="preview-dot" style="background:#22c55e;"></div>
+          <span class="preview-label">Mobile · posição simulada</span>
+        </div>
+        <div class="preview-body gray" style="min-height:140px;position:relative;">
+          <button style="position:absolute;bottom:20px;right:20px;width:56px;height:56px;border-radius:50%;background:#ca5f15;color:#fff;box-shadow:0 8px 24px -8px rgba(202,95,21,.55);display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;transition:all .2s;" onmouseover="this.style.background='#b35211';this.style.transform='scale(1.05)'" onmouseout="this.style.background='#ca5f15';this.style.transform='scale(1)'">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+    <hr class="section-divider"/>
+
+    <!-- Rodapé -->
+    <footer style="padding:32px 0;text-align:center;border-top:1px solid #e5e7eb;">
+      <p style="font-size:12px;color:#9ca3af;">
+        Clarify Component Catalog · <span class="mono">clarify-components.tsx</span> · 18 componentes
+      </p>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  // Interatividade mínima do formulário de demonstração
+  function catUpdateBtn() {
+    const t = document.getElementById('catTitulo').value.trim();
+    const d = document.getElementById('catDesc').value.trim();
+    document.getElementById('catBtnEnviar').disabled = !(t.length >= 4 && d.length >= 10);
+  }
+  function catUpdateCounter() {
+    const d = document.getElementById('catDesc');
+    const c = document.getElementById('catCounter');
+    c.textContent = d.value.length + ' / 500';
+    c.classList.toggle('is-near', d.value.length >= 425 && d.value.length < 500);
+    c.classList.toggle('is-over', d.value.length >= 500);
+  }
+
+  // Nav ativo ao scrollar
+  const sections = document.querySelectorAll('.section');
+  const navLinks = document.querySelectorAll('.nav-item');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const link = document.querySelector(`.nav-item[href="#${e.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
