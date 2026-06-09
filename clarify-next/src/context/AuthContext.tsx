@@ -76,11 +76,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     registro,
   };
 
-  // Não renderizar filhos até hidratação para evitar hydration mismatch
-  if (!isHidrated) {
-    return null;
-  }
-
   return (
     <AuthContext.Provider value={value}>
       {children}
