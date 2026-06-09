@@ -1,10 +1,275 @@
 'use client';
 
+import { useState, useMemo, useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { CardMetrica } from '@/components/coord/CardMetrica';
+import { CardAluno } from '@/components/coord/CardAluno';
+import { CardTurma } from '@/components/coord/CardTurma';
+import { ModalCriarTurma } from '@/components/coord/ModalCriarTurma';
+import { ModalFeedback } from '@/components/coord/ModalFeedback';
+import { CardDemanda } from '@/components/demandas/CardDemanda';
+import { useAuth } from '@/context/AuthContext';
+import { useDemandas } from '@/hooks/useDemandas';
+import { useUsuarios } from '@/hooks/useUsuarios';
+import { useTurmas } from '@/hooks/useTurmas';
+import { atualizarStatusDemanda } from '@/lib/demandas';
+import type { Demanda } from '@/types';
+
+type DashView = 'nome' | 'alunos' | 'demandas' | 'turmas';
+
+const VIEWS: DashView[] = ['nome', 'alunos', 'demandas', 'turmas'];
+
 export default function DashboardCoordPage() {
+  const { usuario } = useAuth();
+  const { demandas, recarregar } = useDemandas();
+  const usuariosHook = useUsuarios();
+  const turmasHook = useTurmas();
+  const searchParams = useSearchParams();
+
+  const rawView = searchParams.get('view') as DashView | null;
+  const view: DashView = rawView && VIEWS.includes(rawView) ? rawView : 'nome';
+  const [modalTurmaAberta, setModalTurmaAberta] = useState(false);
+  const [modalFeedbackAberta, setModalFeedbackAberta] = useState(false);
+  const [protocoloFeedback, setProtocoloFeedback] = useState<string | null>(null);
+  const [detalheDemanda, setDetalheDemanda] = useState<Demanda | null>(null);
+
+  const pendentes = useMemo(() => demandas.filter((d) => d.status !== 'concluido'), [demandas]);
+
+  const alunosDoCoord = useMemo(() => {
+    if (!usuario) return [];
+    const matriculas = usuariosHook.obterAlunosDoCoordenador(usuario.matricula);
+    return usuariosHook.usuarios.filter((u) => matriculas.includes(u.matricula));
+  }, [usuario, usuariosHook]);
+
+  const turmasDoCoord = useMemo(() => {
+    if (!usuario) return [];
+    return turmasHook.filtrar(usuario.matricula);
+  }, [usuario, turmasHook]);
+
+  const totalAlunos = alunosDoCoord.length;
+  const demandasAbertas = pendentes.length;
+  const demandasConcluidas = demandas.filter((d) => d.status === 'concluido').length;
+  const resolvidas = demandas.length > 0 ? Math.round((demandasConcluidas / demandas.length) * 100) : 0;
+
+  const handleCriarTurma = useCallback((dados: { nome: string; disciplina: string; alunos: string[] }) => {
+    if (!usuario) return;
+    turmasHook.criar({
+      nome: dados.nome,
+      disciplina: dados.disciplina,
+      alunos: dados.alunos,
+      coordenador: usuario.matricula,
+    });
+  }, [usuario, turmasHook]);
+
+  const handleReprovar = useCallback((protocolo: string) => {
+    setProtocoloFeedback(protocolo);
+    setModalFeedbackAberta(true);
+  }, []);
+
+  const handleFeedbackSubmit = useCallback((feedback: string) => {
+    if (!protocoloFeedback) return;
+    atualizarStatusDemanda(protocoloFeedback, 'requer_ajuste', feedback);
+    recarregar();
+  }, [protocoloFeedback, recarregar]);
+
+  const handleAprovar = useCallback((protocolo: string) => {
+    atualizarStatusDemanda(protocolo, 'concluido');
+    recarregar();
+  }, [recarregar]);
+
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">Dashboard Coordenador</h1>
-      <p className="text-gray-600 mt-2">Página do coordenador (em desenvolvimento)</p>
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto space-y-6">
+      {/* ── View: Início ── */}
+      {view === 'nome' && (
+        <div className="space-y-6">
+          <section className="relative overflow-hidden bg-gray-900 p-5 sm:p-8 text-white rounded-2xl">
+            <div className="relative z-10 space-y-3">
+              <span className="text-[10px] tracking-[0.2em] uppercase block opacity-70">
+                PORTAL DO COORDENADOR
+              </span>
+              <h1 className="text-3xl lg:text-4xl font-semibold">
+                Bem-vindo, {usuario?.nome?.split(' ')[0] || 'Coordenador'}
+              </h1>
+              <p className="text-gray-400 text-sm lg:text-base max-w-2xl">
+                Acompanhe as demandas e gerencie o fluxo de solicitações acadêmicas com precisão e clareza.
+              </p>
+            </div>
+          </section>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <CardMetrica titulo="Alunos Vinculados" valor={totalAlunos} label="total de alunos" />
+            <CardMetrica titulo="Demandas Abertas" valor={demandasAbertas} label="aguardando ação" />
+            <CardMetrica titulo="Resolução" valor={`${resolvidas}%`} label="demandas concluídas">
+              <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-full bg-brand-primary rounded-full" style={{ width: `${resolvidas}%` }} />
+              </div>
+            </CardMetrica>
+          </div>
+
+          {/* Demandas pendentes recentes */}
+          {pendentes.length > 0 && (
+            <section>
+              <h2 className="text-lg font-bold text-gray-900 mb-3">Demandas Pendentes</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {pendentes.slice(0, 6).map((d) => (
+                  <div key={d.protocolo} className="bg-white border border-gray-200 rounded-2xl p-5 shadow-lg hover:-translate-y-1 transition-transform duration-200 ease-out flex flex-col justify-between h-full">
+                    <div className="flex items-start justify-between gap-4 mb-4">
+                      <div className="space-y-2">
+                        <h3 className="text-lg font-semibold text-gray-900">{d.tipo}</h3>
+                        <p className="text-sm text-gray-500 line-clamp-2">{d.descricao}</p>
+                      </div>
+                      <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold shrink-0 ${
+                        d.status === 'pendente' ? 'bg-yellow-100 text-yellow-800' :
+                        d.status === 'em_analise' ? 'bg-blue-100 text-blue-800' :
+                        'bg-orange-100 text-orange-800'
+                      }`}>
+                        {d.status.replace('_', ' ').toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="grid gap-1 text-sm text-gray-500">
+                      <p><span className="font-semibold text-gray-800">Protocolo:</span> {d.protocolo}</p>
+                      <p><span className="font-semibold text-gray-800">Matrícula:</span> {d.matriculaAluno}</p>
+                    </div>
+                    <div className="mt-4 flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleAprovar(d.protocolo)}
+                        className="flex-1 bg-green-500 text-white py-2 px-3 rounded-lg text-xs font-semibold hover:bg-green-600 transition-colors cursor-pointer border-none"
+                      >
+                        Aprovar
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleReprovar(d.protocolo)}
+                        className="flex-1 bg-red-500 text-white py-2 px-3 rounded-lg text-xs font-semibold hover:bg-red-600 transition-colors cursor-pointer border-none"
+                      >
+                        Reprovar
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+      )}
+
+      {/* ── View: Alunos ── */}
+      {view === 'alunos' && (
+        <section>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Alunos</h2>
+          {alunosDoCoord.length === 0 ? (
+            <div className="text-center py-12 text-gray-400">
+              <p className="text-sm">Nenhum aluno cadastrado.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {alunosDoCoord.map((aluno) => (
+                <CardAluno
+                  key={aluno.matricula}
+                  aluno={aluno}
+                  demandasEmAberto={demandas.filter(
+                    (d) => d.matriculaAluno === aluno.matricula && d.status !== 'concluido'
+                  ).length}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* ── View: Demandas ── */}
+      {view === 'demandas' && (
+        <section>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Demandas</h2>
+          {pendentes.length === 0 ? (
+            <div className="text-center py-12 text-gray-400">
+              <p className="text-sm">Nenhuma demanda pendente.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {pendentes.map((d) => (
+                <div key={d.protocolo} className="bg-white border border-gray-200 rounded-2xl p-5 shadow-lg hover:-translate-y-1 transition-transform duration-200 ease-out flex flex-col justify-between h-full">
+                  <div className="flex items-start justify-between gap-4 mb-4">
+                    <div className="space-y-2">
+                      <h3 className="text-lg font-semibold text-gray-900">{d.tipo}</h3>
+                      <p className="text-sm text-gray-500 line-clamp-2">{d.descricao}</p>
+                    </div>
+                    <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold shrink-0 ${
+                      d.status === 'pendente' ? 'bg-yellow-100 text-yellow-800' :
+                      d.status === 'em_analise' ? 'bg-blue-100 text-blue-800' :
+                      'bg-orange-100 text-orange-800'
+                    }`}>
+                      {d.status.replace('_', ' ').toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="grid gap-1 text-sm text-gray-500">
+                    <p><span className="font-semibold text-gray-800">Protocolo:</span> {d.protocolo}</p>
+                    <p><span className="font-semibold text-gray-800">Matrícula:</span> {d.matriculaAluno}</p>
+                  </div>
+                  <div className="mt-4 flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleAprovar(d.protocolo)}
+                      className="flex-1 bg-green-500 text-white py-2 px-3 rounded-lg text-xs font-semibold hover:bg-green-600 transition-colors cursor-pointer border-none"
+                    >
+                      Aprovar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleReprovar(d.protocolo)}
+                      className="flex-1 bg-red-500 text-white py-2 px-3 rounded-lg text-xs font-semibold hover:bg-red-600 transition-colors cursor-pointer border-none"
+                    >
+                      Reprovar
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* ── View: Turmas ── */}
+      {view === 'turmas' && (
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-gray-900">Turmas</h2>
+            <button
+              type="button"
+              onClick={() => setModalTurmaAberta(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg font-semibold text-sm hover:bg-orange-600 transition-colors cursor-pointer border-none"
+            >
+              + Criar turma
+            </button>
+          </div>
+          {turmasDoCoord.length === 0 ? (
+            <div className="text-center py-12 text-gray-400">
+              <p className="text-sm">Nenhuma turma criada ainda.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {turmasDoCoord.map((turma) => (
+                <CardTurma key={turma.id} turma={turma} />
+              ))}
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* Modal criar turma */}
+      <ModalCriarTurma
+        open={modalTurmaAberta}
+        onClose={() => setModalTurmaAberta(false)}
+        onCreate={handleCriarTurma}
+      />
+
+      {/* Modal feedback */}
+      <ModalFeedback
+        open={modalFeedbackAberta}
+        onClose={() => { setModalFeedbackAberta(false); setProtocoloFeedback(null); }}
+        onSubmit={handleFeedbackSubmit}
+      />
     </div>
   );
 }

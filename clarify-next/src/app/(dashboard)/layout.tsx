@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { TopbarMobile } from '@/components/layout/TopbarMobile';
@@ -20,8 +20,16 @@ interface DashboardLayoutProps {
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const { isAuthenticated, usuario, logout } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [sidebarView, setSidebarView] = useState('nome');
+
+  // Sincroniza sidebarView com a query string
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setSidebarView(params.get('view') || 'nome');
+  }, [pathname]);
 
   // Espera hidratação antes de redirecionar
   useEffect(() => {
@@ -41,8 +49,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   }
 
   const handleNavigate = (view: string) => {
-    // Será usado pelas páginas do dashboard para mudar de seção
-    // Atualmente, as páginas gerenciam seu próprio estado de view
+    setDrawerOpen(false);
+    if (pathname === '/dashboardcoord') {
+      router.push(`/dashboardcoord?view=${view}`);
+    }
   };
 
   const handleLogout = () => {
@@ -55,6 +65,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Sidebar desktop */}
       <Sidebar
         cargo={usuario.cargo}
+        currentView={sidebarView}
         onNavigate={handleNavigate}
         onLogout={handleLogout}
       />
@@ -64,6 +75,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         cargo={usuario.cargo}
+        currentView={sidebarView}
         onNavigate={handleNavigate}
       />
 
