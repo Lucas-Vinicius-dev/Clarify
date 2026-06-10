@@ -39,11 +39,12 @@ export function Sidebar({
           { id: 'turmas', label: 'Turmas', icon: Shield },
         ]
       : [
+          { id: 'nome', label: 'Início', icon: User },
           { id: 'demandas', label: 'Minhas demandas', icon: FileText },
         ];
 
   return (
-    <aside className="hidden md:flex md:flex-col w-64 bg-gray-50 shadow border-r border-gray-200 p-5 shrink-0 h-screen overflow-y-auto">
+    <aside className="flex flex-col w-64 bg-gray-50 shadow border-r border-gray-200 p-5 shrink-0 h-screen overflow-y-auto">
       {/* Logo */}
       <div className="mb-6 flex items-center gap-3 px-2">
         <Image

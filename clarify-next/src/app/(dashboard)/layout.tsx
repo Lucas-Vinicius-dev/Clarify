@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useEffect, useState, Suspense } from 'react';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { TopbarMobile } from '@/components/layout/TopbarMobile';
@@ -23,13 +23,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
-  const [sidebarView, setSidebarView] = useState('nome');
-
-  // Sincroniza sidebarView com a query string
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    setSidebarView(params.get('view') || 'nome');
-  }, [pathname]);
 
   // Espera hidratação antes de redirecionar
   useEffect(() => {
@@ -40,8 +33,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     if (!isHydrated) return;
     if (!isAuthenticated) {
       router.replace('/login');
+      return;
     }
-  }, [isAuthenticated, isHydrated, router]);
+    // Proteção de rotas por cargo
+    if (usuario) {
+      if (pathname.startsWith('/dashboardcoord') && usuario.cargo !== 'coordenador') {
+        router.replace('/centraldemandas');
+      } else if (pathname.startsWith('/centraldemandas') && usuario.cargo !== 'aluno') {
+        router.replace('/dashboardcoord');
+      }
+    }
+  }, [isAuthenticated, isHydrated, router, pathname, usuario]);
 
   // Renderiza nada enquanto hidrata ou verifica autenticação
   if (!isHydrated || !isAuthenticated || !usuario) {
@@ -50,8 +52,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const handleNavigate = (view: string) => {
     setDrawerOpen(false);
-    if (pathname === '/dashboardcoord') {
+    if (pathname.startsWith('/dashboardcoord')) {
       router.push(`/dashboardcoord?view=${view}`);
+    } else {
+      router.push(`/centraldemandas?view=${view}`);
     }
   };
 
@@ -62,22 +66,16 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <div className="flex h-screen overflow-hidden bg-white">
-      {/* Sidebar desktop */}
-      <Sidebar
-        cargo={usuario.cargo}
-        currentView={sidebarView}
-        onNavigate={handleNavigate}
-        onLogout={handleLogout}
-      />
-
-      {/* Drawer mobile */}
-      <DrawerMobile
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        cargo={usuario.cargo}
-        currentView={sidebarView}
-        onNavigate={handleNavigate}
-      />
+      {/* Sidebar + Drawer com suporte a searchParams */}
+      <Suspense fallback={<div className="hidden md:block w-64 bg-gray-50 border-r border-gray-200" />}>
+        <SidebarNav
+          cargo={usuario.cargo}
+          drawerOpen={drawerOpen}
+          onCloseDrawer={() => setDrawerOpen(false)}
+          onNavigate={handleNavigate}
+          onLogout={handleLogout}
+        />
+      </Suspense>
 
       {/* Área principal (mobile + desktop) */}
       <div className="flex flex-col flex-1 overflow-hidden">
@@ -94,5 +92,49 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </main>
       </div>
     </div>
+  );
+}
+
+/**
+ * Componente aninhado que usa useSearchParams para manter a sidebarView sincronizada
+ * Separado para poder ser envolvido em Suspense (exigência do Next.js)
+ */
+function SidebarNav({
+  cargo,
+  drawerOpen,
+  onCloseDrawer,
+  onNavigate,
+  onLogout,
+}: {
+  cargo: 'aluno' | 'coordenador';
+  drawerOpen: boolean;
+  onCloseDrawer: () => void;
+  onNavigate: (view: string) => void;
+  onLogout: () => void;
+}) {
+  const searchParams = useSearchParams();
+  const sidebarView = searchParams.get('view') || 'nome';
+
+  return (
+    <>
+      {/* Sidebar desktop (oculta em mobile) */}
+      <div className="hidden md:block">
+        <Sidebar
+          cargo={cargo}
+          currentView={sidebarView}
+          onNavigate={onNavigate}
+          onLogout={onLogout}
+        />
+      </div>
+
+      {/* Drawer mobile */}
+      <DrawerMobile
+        open={drawerOpen}
+        onClose={onCloseDrawer}
+        cargo={cargo}
+        currentView={sidebarView}
+        onNavigate={onNavigate}
+      />
+    </>
   );
 }
