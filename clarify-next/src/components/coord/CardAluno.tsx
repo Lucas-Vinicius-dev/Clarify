@@ -25,7 +25,7 @@ export function CardAluno({ aluno, demandasEmAberto, onRemover }: CardAlunoProps
         </div>
       </div>
       <div className="grid gap-2 text-sm text-gray-600">
-        <p>
+        <p className="truncate">
           <span className="font-semibold text-gray-800">Nome:</span> {aluno.nome}
         </p>
         <p>

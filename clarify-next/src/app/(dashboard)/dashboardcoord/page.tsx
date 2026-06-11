@@ -12,6 +12,7 @@ import { ModalDetalhesDemanda } from '@/components/demandas/ModalDetalhesDemanda
 import { useAuth } from '@/context/AuthContext';
 import { useDemandas } from '@/hooks/useDemandas';
 import { useUsuarios } from '@/hooks/useUsuarios';
+import type { Demanda } from '@/types';
 import { useTurmas } from '@/hooks/useTurmas';
 import { atualizarStatusDemanda } from '@/lib/demandas';
 
@@ -32,7 +33,7 @@ export default function DashboardCoordPage() {
   const [modalFeedbackAberta, setModalFeedbackAberta] = useState(false);
   const [protocoloFeedback, setProtocoloFeedback] = useState<string | null>(null);
   const [modalDetalhesAberta, setModalDetalhesAberta] = useState(false);
-  const [demandaDetalhe, setDemandaDetalhe] = useState<ReturnType<typeof demandas.find> | null>(null);
+  const [demandaDetalhe, setDemandaDetalhe] = useState<Demanda | null>(null);
   const [adicionarErro, setAdicionarErro] = useState('');
   const [adicionarSucesso, setAdicionarSucesso] = useState('');
 
@@ -128,11 +129,11 @@ export default function DashboardCoordPage() {
     usuariosHook.deletar(matriculaAluno);
   }, [usuariosHook]);
 
-  const recentesOrdenadas = useMemo(
-    () => [...demandas].sort(
+  const demandasPendentesOrdenadas = useMemo(
+    () => [...demandasPendentes].sort(
       (a, b) => new Date(b.dataAtualizacao).getTime() - new Date(a.dataAtualizacao).getTime()
     ),
-    [demandas]
+    [demandasPendentes]
   );
 
   return (
@@ -169,11 +170,15 @@ export default function DashboardCoordPage() {
             <section>
               <h2 className="text-lg font-bold text-gray-900 mb-3">Demandas Pendentes</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {recentesOrdenadas.filter((d) => d.status !== 'concluido').slice(0, 6).map((d) => (
-                  <div key={d.protocolo} className="bg-white border border-gray-200 rounded-2xl p-5 shadow-lg hover:-translate-y-1 transition-transform duration-200 ease-out flex flex-col justify-between h-full">
+                {demandasPendentesOrdenadas.slice(0, 6).map((d) => (
+                  <div
+                    key={d.protocolo}
+                    onClick={() => handleVerDetalhes(d.protocolo)}
+                    className="bg-white border border-gray-200 rounded-2xl p-5 shadow-lg hover:-translate-y-1 transition-transform duration-200 ease-out flex flex-col justify-between h-full cursor-pointer"
+                  >
                     <div className="flex items-start justify-between gap-4 mb-4">
-                      <div className="space-y-2">
-                        <h3 className="text-lg font-semibold text-gray-900">{d.tipo}</h3>
+                      <div className="min-w-0 space-y-2">
+                        <h3 className="text-lg font-semibold text-gray-900 truncate">{d.tipo}</h3>
                         <p className="text-sm text-gray-500 line-clamp-2">{d.descricao}</p>
                       </div>
                       <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold shrink-0 ${
@@ -188,18 +193,18 @@ export default function DashboardCoordPage() {
                       <p><span className="font-semibold text-gray-800">Protocolo:</span> {d.protocolo}</p>
                       <p><span className="font-semibold text-gray-800">Matrícula:</span> {d.matriculaAluno}</p>
                     </div>
-                    <div className="mt-4 flex items-center gap-2">
+                    <div className="mt-4 flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
                       <button
                         type="button"
                         onClick={() => handleAprovar(d.protocolo)}
-                        className="flex-1 bg-green-500 text-white py-2 px-3 rounded-lg text-xs font-semibold hover:bg-green-600 transition-colors cursor-pointer border-none"
+                        className="flex-1 bg-brand-primary text-white py-2 px-3 rounded-lg text-xs font-semibold hover:bg-orange-700 transition-colors cursor-pointer border-none"
                       >
                         Aprovar
                       </button>
                       <button
                         type="button"
                         onClick={() => handleReprovar(d.protocolo)}
-                        className="flex-1 bg-red-500 text-white py-2 px-3 rounded-lg text-xs font-semibold hover:bg-red-600 transition-colors cursor-pointer border-none"
+                        className="flex-1 bg-gray-900 text-white py-2 px-3 rounded-lg text-xs font-semibold hover:bg-gray-800 transition-colors cursor-pointer border-none"
                       >
                         Reprovar
                       </button>
@@ -248,10 +253,14 @@ export default function DashboardCoordPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {demandasPendentes.map((d) => (
-                <div key={d.protocolo} className="bg-white border border-gray-200 rounded-2xl p-5 shadow-lg hover:-translate-y-1 transition-transform duration-200 ease-out flex flex-col justify-between h-full">
+                <div
+                  key={d.protocolo}
+                  onClick={() => handleVerDetalhes(d.protocolo)}
+                  className="bg-white border border-gray-200 rounded-2xl p-5 shadow-lg hover:-translate-y-1 transition-transform duration-200 ease-out flex flex-col justify-between h-full cursor-pointer"
+                >
                   <div className="flex items-start justify-between gap-4 mb-4">
-                    <div className="space-y-2">
-                      <h3 className="text-lg font-semibold text-gray-900">{d.tipo}</h3>
+                    <div className="min-w-0 space-y-2">
+                      <h3 className="text-lg font-semibold text-gray-900 truncate">{d.tipo}</h3>
                       <p className="text-sm text-gray-500 line-clamp-2">{d.descricao}</p>
                     </div>
                     <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold shrink-0 ${
@@ -266,27 +275,20 @@ export default function DashboardCoordPage() {
                     <p><span className="font-semibold text-gray-800">Protocolo:</span> {d.protocolo}</p>
                     <p><span className="font-semibold text-gray-800">Matrícula:</span> {d.matriculaAluno}</p>
                   </div>
-                  <div className="mt-4 flex items-center gap-2">
+                  <div className="mt-4 flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
                     <button
                       type="button"
                       onClick={() => handleAprovar(d.protocolo)}
-                      className="flex-1 bg-green-500 text-white py-2 px-3 rounded-lg text-xs font-semibold hover:bg-green-600 transition-colors cursor-pointer border-none"
+                      className="flex-1 bg-brand-primary text-white py-2 px-3 rounded-lg text-xs font-semibold hover:bg-orange-700 transition-colors cursor-pointer border-none"
                     >
                       Aprovar
                     </button>
                     <button
                       type="button"
                       onClick={() => handleReprovar(d.protocolo)}
-                      className="flex-1 bg-red-500 text-white py-2 px-3 rounded-lg text-xs font-semibold hover:bg-red-600 transition-colors cursor-pointer border-none"
-                    >
-                      Reprovar
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleVerDetalhes(d.protocolo)}
                       className="flex-1 bg-gray-900 text-white py-2 px-3 rounded-lg text-xs font-semibold hover:bg-gray-800 transition-colors cursor-pointer border-none"
                     >
-                      Detalhes
+                      Reprovar
                     </button>
                   </div>
                 </div>
@@ -397,7 +399,7 @@ export default function DashboardCoordPage() {
             <button
               type="button"
               onClick={() => setModalTurmaAberta(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg font-semibold text-sm hover:bg-orange-600 transition-colors cursor-pointer border-none"
+              className="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg font-semibold text-sm hover:bg-orange-700 transition-colors cursor-pointer border-none"
             >
               + Criar turma
             </button>
@@ -412,15 +414,6 @@ export default function DashboardCoordPage() {
                 <CardTurma key={turma.id} turma={turma} />
               ))}
 
-              <ModalDetalhesDemanda
-                open={modalDetalhesAberta}
-                onClose={() => {
-                  setModalDetalhesAberta(false);
-                  setDemandaDetalhe(null);
-                }}
-                demanda={demandaDetalhe}
-                remetente={demandaDetalhe ? usuariosHook.buscar(demandaDetalhe.matriculaAluno) ?? null : null}
-              />
             </div>
           )}
         </section>
@@ -438,6 +431,17 @@ export default function DashboardCoordPage() {
         open={modalFeedbackAberta}
         onClose={() => { setModalFeedbackAberta(false); setProtocoloFeedback(null); }}
         onSubmit={handleFeedbackSubmit}
+      />
+
+      {/* Modal detalhes demanda */}
+      <ModalDetalhesDemanda
+        open={modalDetalhesAberta}
+        onClose={() => {
+          setModalDetalhesAberta(false);
+          setDemandaDetalhe(null);
+        }}
+        demanda={demandaDetalhe}
+        remetente={demandaDetalhe ? usuariosHook.buscar(demandaDetalhe.matriculaAluno) ?? null : null}
       />
     </div>
   );

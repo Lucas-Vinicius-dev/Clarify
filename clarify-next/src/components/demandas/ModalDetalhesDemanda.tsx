@@ -1,6 +1,6 @@
 'use client';
 
-import { X, FileText, Calendar, Tag, Hash, Mail, MessageSquareQuote } from 'lucide-react';
+import { FileText, Calendar, Tag, Hash, Mail, MessageSquareQuote } from 'lucide-react';
 import { Modal } from '@/components/ui/Modal';
 import { TimelineProgresso } from './TimelineProgresso';
 import { obterLabelStatus, obterCorStatus, formatarData } from '@/lib/utils';
@@ -33,16 +33,13 @@ export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: Moda
   const emailRemetente = remetente?.email || '—';
 
   return (
-    <Modal open={open} onClose={onClose} maxWidth="max-w-xl">
+    <Modal open={open} onClose={onClose} maxWidth="max-w-xl" showCloseButton={false}>
       <article className="flex flex-col modal-scroll">
         <div className="flex items-start justify-between px-5 sm:px-7 pt-5 sm:pt-6">
           <div className="inline-flex items-center gap-2">
             <span className="modal-eyebrow-dot"></span>
             <span className="modal-label">Solicitação · #{demanda.protocolo}</span>
           </div>
-          <button type="button" className="modal-close" onClick={onClose} title="Fechar">
-            <X className="w-5 h-5" />
-          </button>
         </div>
 
         <div className="px-5 sm:px-7 pt-4 sm:pt-5 pb-2 modal-stagger">
