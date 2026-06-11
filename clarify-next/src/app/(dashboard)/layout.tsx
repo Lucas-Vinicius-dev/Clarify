@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Sidebar } from '@/components/layout/Sidebar';
+import { TopbarDesktop } from '@/components/layout/TopbarDesktop';
 import { TopbarMobile } from '@/components/layout/TopbarMobile';
 import { DrawerMobile } from '@/components/layout/DrawerMobile';
 
@@ -22,15 +23,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  // Espera hidratação antes de redirecionar
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
 
   useEffect(() => {
-    if (!isHydrated) return;
     if (!isAuthenticated) {
       router.replace('/login');
       return;
@@ -43,10 +37,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         router.replace('/dashboardcoord');
       }
     }
-  }, [isAuthenticated, isHydrated, router, pathname, usuario]);
+  }, [isAuthenticated, router, pathname, usuario]);
 
-  // Renderiza nada enquanto hidrata ou verifica autenticação
-  if (!isHydrated || !isAuthenticated || !usuario) {
+  // Renderiza nada enquanto verifica autenticação
+  if (!isAuthenticated || !usuario) {
     return null;
   }
 
@@ -85,6 +79,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           onLogout={handleLogout}
           onMenuClick={() => setDrawerOpen(true)}
         />
+
+        {/* Topbar desktop */}
+        <TopbarDesktop usuario={usuario} onLogout={handleLogout} />
 
         {/* Conteúdo da página */}
         <main className="flex-1 overflow-y-auto">

@@ -1,16 +1,16 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
-import { adicionarUsuario, chaveValida, usuarioExiste } from '@/lib/auth'
 
 export default function RegistroPage() {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const { login } = useAuth()
+  const { registro } = useAuth()
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -25,30 +25,19 @@ export default function RegistroPage() {
       const senha = formData.get('securityKey') as string
       const senhaAtivacao = formData.get('activationKey') as string
 
-      // Validações
-      const existe = usuarioExiste(matricula, email)
-      const chavValida = existe ? true : chaveValida(senhaAtivacao)
-
-      if (existe) {
-        setError('Usuário já cadastrado.')
-        return
-      }
-
-      if (!chavValida) {
-        setError('Chave de ativação inválida ou já utilizada.')
-        return
-      }
-
-      // Criar usuário
-      adicionarUsuario(nome, matricula, email, senha, 'coordenador')
-
-      // Fazer login automático
-      const resultado = login(matricula, senha)
+      const resultado = registro({
+        nome,
+        matricula,
+        email,
+        senha,
+        cargo: 'coordenador',
+        chaveAtivacao: senhaAtivacao,
+      })
 
       if (resultado.ok) {
         router.push('/dashboardcoord')
       } else {
-        setError('Erro ao fazer login após registro. Tente fazer login novamente.')
+        setError(resultado.mensagem || 'Erro ao criar a conta.')
       }
     } catch (err) {
       setError('Erro inesperado. Tente novamente.')
@@ -80,7 +69,7 @@ export default function RegistroPage() {
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 z-10 border border-brand-surface-dim">
         <div className="flex flex-col items-center mb-8">
           <div className="w-20 h-20 mb-4 bg-orange-50 rounded-xl p-2 flex items-center justify-center">
-            <img src="/next.svg" alt="Clarify Logo" className="w-full h-full object-contain" />
+            <Image src="/GATOGORDO.png" alt="Clarify Logo" width={72} height={72} className="w-full h-full object-contain" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900">Clarify</h1>
           <p className="text-sm font-medium text-gray-500 tracking-wider uppercase mt-1">Acesso - Instituto Federal</p>

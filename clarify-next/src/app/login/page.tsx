@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -22,7 +23,6 @@ export default function LoginPage() {
       const securityKey = formData.get('securityKey') as string
 
       const resultado = login(institutionalId, securityKey)
-      console.log('RESULTADO LOGIN', resultado)
 
       if (resultado.ok && resultado.usuarioLogado) {
         router.push(
@@ -31,7 +31,7 @@ export default function LoginPage() {
       } else {
         setError(resultado.mensagem || 'Erro ao autenticar. Verifique suas credenciais.')
       }
-    } catch (err) {
+    } catch {
       setError('Erro inesperado. Tente novamente.')
     } finally {
       setIsLoading(false)
@@ -60,7 +60,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 z-10 border border-brand-surface-dim">
         <div className="flex flex-col items-center mb-8">
           <div className="w-20 h-20 mb-4 bg-orange-50 rounded-xl p-2 flex items-center justify-center">
-            <img src="/next.svg" alt="Clarify Logo" className="w-full h-full object-contain" />
+            <Image src="/GATOGORDO.png" alt="Clarify Logo" width={72} height={72} className="w-full h-full object-contain" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900">Clarify</h1>
           <p className="text-sm font-medium text-gray-500 tracking-wider uppercase mt-1">Acesso - Instituto Federal</p>

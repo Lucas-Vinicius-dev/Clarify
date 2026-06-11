@@ -4,6 +4,7 @@
 // ═════════════════════════════════════════════════════════════════
 
 import { criarChaves } from './auth';
+import { normalizarDemandasStorage, normalizarUsuariosStorage } from './storageMigrations';
 import type { Usuario, Demanda } from '@/types';
 
 /**
@@ -16,6 +17,8 @@ const USUARIOS_TESTE: Usuario[] = [
     email: 'joao@academico.edu.br',
     senha: '123456',
     cargo: 'coordenador',
+    alunosCadastrados: ['003', '456'],
+    usuariosCadastrados: ['003', '456'],
   },
   {
     nome: 'Maria Aparecida',
@@ -23,6 +26,7 @@ const USUARIOS_TESTE: Usuario[] = [
     email: 'maria@academico.edu.br',
     senha: '123456',
     cargo: 'aluno',
+    coordenador: '123',
   },
   {
     nome: 'Carlos Eduardo',
@@ -30,6 +34,7 @@ const USUARIOS_TESTE: Usuario[] = [
     email: 'carlos@academico.edu.br',
     senha: '123456',
     cargo: 'aluno',
+    coordenador: '123',
   },
 ];
 
@@ -121,6 +126,8 @@ const DEMANDAS_TESTE: Demanda[] = [
 export function popularLocalStorage(): void {
   if (typeof window === 'undefined') return;
 
+  migrarLocalStorageLegado();
+
   // Só popular se ainda não foi
   if (localStorage.getItem('usuarios')) return;
 
@@ -137,6 +144,25 @@ export function popularDemandas(): void {
   if (typeof window === 'undefined') return;
 
   localStorage.setItem('demandas', JSON.stringify(DEMANDAS_TESTE));
+}
+
+/**
+ * Migra dados antigos para o schema atual sem apagar a sessão do usuário
+ */
+export function migrarLocalStorageLegado(): void {
+  if (typeof window === 'undefined') return;
+
+  const usuariosRaw = localStorage.getItem('usuarios');
+  if (usuariosRaw) {
+    const usuariosNormalizados = normalizarUsuariosStorage(JSON.parse(usuariosRaw));
+    localStorage.setItem('usuarios', JSON.stringify(usuariosNormalizados));
+  }
+
+  const demandasRaw = localStorage.getItem('demandas');
+  if (demandasRaw) {
+    const demandasNormalizadas = normalizarDemandasStorage(JSON.parse(demandasRaw));
+    localStorage.setItem('demandas', JSON.stringify(demandasNormalizadas));
+  }
 }
 
 /**

@@ -16,7 +16,7 @@ import { ModalDetalhesDemanda } from '@/components/demandas/ModalDetalhesDemanda
 import { useDemandas } from '@/hooks/useDemandas';
 import { useAuth } from '@/context/AuthContext';
 import { acharUsuario } from '@/lib/auth';
-import type { StatusDemanda } from '@/types';
+import type { StatusDemanda, TipoDemanda } from '@/types';
 
 type StudentView = 'nome' | 'demandas';
 const VIEWS: StudentView[] = ['nome', 'demandas'];
@@ -71,7 +71,7 @@ export default function CentralDemandasPage() {
   const handleCriarDemanda = useCallback((dados: { tipo: string; descricao: string }) => {
     criar({
       matriculaAluno: usuario?.matricula ?? '',
-      tipo: dados.tipo as any,
+      tipo: dados.tipo as TipoDemanda,
       descricao: dados.descricao,
     });
   }, [criar, usuario]);
@@ -81,7 +81,12 @@ export default function CentralDemandasPage() {
     setModalDetalhesAberta(true);
   }, []);
 
-  const recentes = useMemo(() => demandas.slice(0, 6), [demandas]);
+  const recentes = useMemo(
+    () => [...demandas].sort(
+      (a, b) => new Date(b.dataAtualizacao).getTime() - new Date(a.dataAtualizacao).getTime()
+    ).slice(0, 6),
+    [demandas]
+  );
 
   return (
     <div className="p-4 sm:p-6 max-w-6xl mx-auto space-y-6">

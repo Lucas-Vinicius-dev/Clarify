@@ -4,14 +4,73 @@
 // ═════════════════════════════════════════════════════════════════
 
 import type { Usuario, UsuarioLogado, AuthResponse, RegistroDados } from '@/types';
+import { normalizarDemandasStorage, normalizarUsuariosStorage } from './storageMigrations';
+
+let cachedUsuarioLogadoRaw: string | null = null;
+let cachedUsuarioLogado: UsuarioLogado | null = null;
+
+function atualizarCacheUsuarioLogado(raw: string | null, usuario: UsuarioLogado | null): void {
+  cachedUsuarioLogadoRaw = raw;
+  cachedUsuarioLogado = usuario;
+}
+
+function salvarUsuarioLogado(usuario: UsuarioLogado | null): void {
+  if (typeof window === 'undefined') return;
+
+  if (usuario) {
+    const raw = JSON.stringify(usuario);
+    localStorage.setItem('usuarioLogado', raw);
+    atualizarCacheUsuarioLogado(raw, usuario);
+    return;
+  }
+
+  localStorage.removeItem('usuarioLogado');
+  atualizarCacheUsuarioLogado(null, null);
+}
+
+function lerUsuarioLogadoArmazenado(): UsuarioLogado | null {
+  if (typeof window === 'undefined') return null;
+
+  const raw = localStorage.getItem('usuarioLogado');
+
+  if (raw === cachedUsuarioLogadoRaw) {
+    return cachedUsuarioLogado;
+  }
+
+  if (!raw) {
+    atualizarCacheUsuarioLogado(null, null);
+    return null;
+  }
+
+  try {
+    const usuario = JSON.parse(raw) as UsuarioLogado;
+    atualizarCacheUsuarioLogado(raw, usuario);
+    return usuario;
+  } catch {
+    atualizarCacheUsuarioLogado(null, null);
+    return null;
+  }
+}
+
+function lerUsuarios(): Usuario[] {
+  if (typeof window === 'undefined') return [];
+
+  return normalizarUsuariosStorage(JSON.parse(localStorage.getItem('usuarios') || '[]'));
+}
+
+function salvarUsuarios(usuarios: Usuario[]): void {
+  if (typeof window === 'undefined') return;
+
+  localStorage.setItem('usuarios', JSON.stringify(usuarios));
+}
 
 /**
  * Verifica se um usuário já existe na base (matrícula ou email)
  */
 export function usuarioExiste(matricula: string, email: string): boolean {
   if (typeof window === 'undefined') return false;
-  
-  const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]') as Usuario[];
+
+  const usuarios = lerUsuarios();
   return usuarios.some(
     (u) =>
       String(u.matricula) === String(matricula) ||
@@ -27,8 +86,8 @@ export function buscarUsuarioCadastrado(
   senha: string
 ): Usuario | undefined {
   if (typeof window === 'undefined') return undefined;
-  
-  const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]') as Usuario[];
+
+  const usuarios = lerUsuarios();
   return usuarios.find(
     (u) =>
       String(u.matricula) === String(matricula) &&
@@ -41,8 +100,8 @@ export function buscarUsuarioCadastrado(
  */
 export function acharUsuario(matricula: string): Usuario | undefined {
   if (typeof window === 'undefined') return undefined;
-  
-  const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]') as Usuario[];
+
+  const usuarios = lerUsuarios();
   return usuarios.find((u) => String(u.matricula) === String(matricula));
 }
 
@@ -61,12 +120,12 @@ export function autenticarLogin(
 
   if (usuarioEncontrado) {
     const { senha: _, ...usuarioLogado } = usuarioEncontrado;
-    localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
+    salvarUsuarioLogado(usuarioLogado);
     localStorage.setItem('auth', 'true');
     return { ok: true, usuarioLogado };
   }
 
-  const existe = usuarioExiste(matricula, '');
+  const existe = Boolean(acharUsuario(matricula));
   if (!existe) {
     return {
       ok: false,
@@ -91,18 +150,25 @@ export function adicionarUsuario(
   cargo: 'aluno' | 'coordenador'
 ): void {
   if (typeof window === 'undefined') return;
-  
-  const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]') as Usuario[];
 
-  usuarios.push({
+  const usuarios = lerUsuarios();
+
+  const novoUsuario: Usuario = {
     nome,
     matricula,
     email,
     senha,
     cargo,
-  });
+  };
 
-  localStorage.setItem('usuarios', JSON.stringify(usuarios));
+  if (cargo === 'coordenador') {
+    novoUsuario.alunosCadastrados = [];
+    novoUsuario.usuariosCadastrados = [];
+  }
+
+  usuarios.push(novoUsuario);
+
+  salvarUsuarios(usuarios);
 }
 
 /**
@@ -113,40 +179,53 @@ export function registrarCoordenador(dados: RegistroDados): AuthResponse {
     return { ok: false, mensagem: 'Servidor-side' };
   }
 
-  // Validar chave de ativação
-  if (!dados.chaveAtivacao || !chaveValida(dados.chaveAtivacao)) {
+  const nome = String(dados.nome || '').trim();
+  const matricula = String(dados.matricula || '').trim();
+  const email = String(dados.email || '').trim();
+  const senha = String(dados.senha || '');
+  const chaveAtivacao = String(dados.chaveAtivacao || '').trim();
+
+  if (!nome || !matricula || !email || !senha || !chaveAtivacao) {
     return {
       ok: false,
-      mensagem: 'Chave de ativação inválida ou já utilizada.',
+      mensagem: 'Preencha todos os campos.',
     };
   }
 
-  // Verificar duplicidade
-  if (usuarioExiste(dados.matricula, dados.email)) {
+  // Validar duplicidade antes de consumir a chave de ativação.
+  // Assim, tentativas inválidas não inutilizam uma chave válida.
+  if (usuarioExiste(matricula, email)) {
     return {
       ok: false,
       mensagem: 'Matrícula ou email já cadastrados.',
     };
   }
 
+  // Validar chave de ativação
+  if (!chaveValida(chaveAtivacao)) {
+    return {
+      ok: false,
+      mensagem: 'Chave de ativação inválida ou já utilizada.',
+    };
+  }
+
   // Adicionar usuário
-  adicionarUsuario(dados.nome, dados.matricula, dados.email, dados.senha, 'coordenador');
+  adicionarUsuario(nome, matricula, email, senha, 'coordenador');
 
   // Retornar usuário logado (sem senha)
-  const { senha: _, ...usuarioLogado } = {
-    nome: dados.nome,
-    matricula: dados.matricula,
-    email: dados.email,
-    senha: dados.senha,
+  const usuarioLogado: UsuarioLogado = {
+    nome,
+    matricula,
+    email,
     cargo: 'coordenador' as const,
   };
 
-  localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
+  salvarUsuarioLogado(usuarioLogado);
   localStorage.setItem('auth', 'true');
 
   return {
     ok: true,
-    usuarioLogado: usuarioLogado as UsuarioLogado,
+    usuarioLogado,
   };
 }
 
@@ -165,9 +244,8 @@ export function chaveValida(code: string): boolean {
     chaves = JSON.parse(localStorage.getItem('chavesAtivacao') || '[]');
   }
 
-  const find = chaves.find(
-    (chave: any) =>
-      String(chave.code) === chaveNormalizada && !chave.used
+  const find = chaves.find((chave: { code?: string; used?: boolean }) =>
+    String(chave.code) === chaveNormalizada && !chave.used
   );
 
   if (!find) return false;
@@ -197,24 +275,81 @@ export function criarChaves(): void {
  */
 export function atribuirAluno(matriculaCoord: string, matriculaAluno: string): void {
   if (typeof window === 'undefined') return;
-  
-  const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]') as Usuario[];
+
+  const usuarios = lerUsuarios();
 
   const coordenador = usuarios.find(
     (u) => String(u.matricula) === String(matriculaCoord)
   );
 
-  if (!coordenador) return;
+  const aluno = usuarios.find(
+    (u) => String(u.matricula) === String(matriculaAluno)
+  );
 
-  if (!coordenador.usuariosCadastrados) {
-    coordenador.usuariosCadastrados = [];
+  if (!coordenador || !aluno) return;
+
+  const vinculos = [
+    ...(coordenador.alunosCadastrados || []),
+    ...(coordenador.usuariosCadastrados || []),
+    String(matriculaAluno),
+  ];
+
+  coordenador.alunosCadastrados = [...new Set(vinculos)];
+  coordenador.usuariosCadastrados = [...coordenador.alunosCadastrados];
+  aluno.coordenador = String(matriculaCoord);
+
+  salvarUsuarios(usuarios);
+}
+
+/**
+ * Faz o vínculo no sentido aluno -> coordenador, mantendo compatibilidade com o original
+ */
+export function atribuirCoordenador(matriculaAluno: string, matriculaCoord: string): void {
+  atribuirAluno(matriculaCoord, matriculaAluno);
+}
+
+/**
+ * Remove um aluno do sistema, limpando vínculos e demandas associadas
+ */
+export function deletarAluno(matriculaAluno: string): void {
+  if (typeof window === 'undefined') return;
+
+  const matriculaNormalizada = String(matriculaAluno);
+  const usuarios = lerUsuarios().filter((usuario) => String(usuario.matricula) !== matriculaNormalizada);
+
+  usuarios.forEach((usuario) => {
+    if (usuario.cargo === 'coordenador') {
+      const vinculos = [
+        ...(usuario.alunosCadastrados || []),
+        ...(usuario.usuariosCadastrados || []),
+      ].filter((matricula) => String(matricula) !== matriculaNormalizada);
+
+      usuario.alunosCadastrados = [...new Set(vinculos)];
+      usuario.usuariosCadastrados = [...usuario.alunosCadastrados];
+    }
+  });
+
+  salvarUsuarios(usuarios);
+
+  const demandas = normalizarDemandasStorage(JSON.parse(localStorage.getItem('demandas') || '[]'));
+  const demandasFiltradas = demandas.filter(
+    (demanda) => String(demanda.matriculaAluno) !== matriculaNormalizada
+  );
+  localStorage.setItem('demandas', JSON.stringify(demandasFiltradas));
+
+  const turmas = JSON.parse(localStorage.getItem('turmas') || '[]') as Array<{
+    alunos?: string[];
+  } & Record<string, unknown>>;
+  if (Array.isArray(turmas)) {
+    const turmasAtualizadas = turmas.map((turma) => ({
+      ...turma,
+      alunos: Array.isArray(turma.alunos)
+        ? turma.alunos.filter((matricula: string) => String(matricula) !== matriculaNormalizada)
+        : [],
+    }));
+
+    localStorage.setItem('turmas', JSON.stringify(turmasAtualizadas));
   }
-
-  if (!coordenador.usuariosCadastrados.includes(String(matriculaAluno))) {
-    coordenador.usuariosCadastrados.push(String(matriculaAluno));
-  }
-
-  localStorage.setItem('usuarios', JSON.stringify(usuarios));
 }
 
 /**
@@ -223,7 +358,7 @@ export function atribuirAluno(matriculaCoord: string, matriculaAluno: string): v
 export function logout(): void {
   if (typeof window === 'undefined') return;
   
-  localStorage.removeItem('usuarioLogado');
+  salvarUsuarioLogado(null);
   localStorage.removeItem('auth');
 }
 
@@ -232,13 +367,6 @@ export function logout(): void {
  */
 export function obterUsuarioLogado(): UsuarioLogado | null {
   if (typeof window === 'undefined') return null;
-  
-  const raw = localStorage.getItem('usuarioLogado');
-  if (!raw) return null;
 
-  try {
-    return JSON.parse(raw) as UsuarioLogado;
-  } catch {
-    return null;
-  }
+  return lerUsuarioLogadoArmazenado();
 }

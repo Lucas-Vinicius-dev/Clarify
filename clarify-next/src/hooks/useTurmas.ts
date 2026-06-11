@@ -5,8 +5,9 @@
 // Gerencia turmas do sistema com estado reativo
 // ═════════════════════════════════════════════════════════════════
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import type { Turma } from '@/types';
+import { popularLocalStorage } from '@/lib/localStorage';
 
 export interface UseTurmasReturn {
   turmas: Turma[];
@@ -25,27 +26,19 @@ export interface UseTurmasReturn {
   filtrar: (matriculaCoordenador: string) => Turma[];
 }
 
+function obterTurmasIniciais(): Turma[] {
+  if (typeof window === 'undefined') return [];
+
+  popularLocalStorage();
+
+  return JSON.parse(localStorage.getItem('turmas') || '[]') as Turma[];
+}
+
 /**
  * Hook para gerenciar turmas
  */
 export function useTurmas(): UseTurmasReturn {
-  const [turmas, setTurmas] = useState<Turma[]>([]);
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  // Carrega turmas iniciais
-  useEffect(() => {
-    recarregar();
-    setIsInitialized(true);
-  }, []);
-
-  const recarregar = useCallback(() => {
-    if (typeof window === 'undefined') return;
-
-    const turmasSalvas = JSON.parse(
-      localStorage.getItem('turmas') || '[]'
-    ) as Turma[];
-    setTurmas(turmasSalvas);
-  }, []);
+  const [turmas, setTurmas] = useState<Turma[]>(() => obterTurmasIniciais());
 
   const salvar = useCallback((novasTurmas: Turma[]) => {
     if (typeof window === 'undefined') return;

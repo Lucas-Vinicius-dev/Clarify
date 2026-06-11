@@ -106,9 +106,9 @@ export function obterDataHoje(): string {
 /**
  * Remove propriedades vazias de um objeto
  */
-export function limparObjeto<T extends Record<string, any>>(obj: T): Partial<T> {
+export function limparObjeto<T extends Record<string, unknown>>(obj: T): Partial<T> {
   return Object.fromEntries(
-    Object.entries(obj).filter(([_, v]) => v !== null && v !== undefined && v !== '')
+    Object.entries(obj).filter(([, value]) => value !== null && value !== undefined && value !== '')
   ) as Partial<T>;
 }
 
@@ -126,7 +126,7 @@ export function cn(...classes: (string | undefined | null | boolean)[]): string 
 /**
  * Debounce de função
  */
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {

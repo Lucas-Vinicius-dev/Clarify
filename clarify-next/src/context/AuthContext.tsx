@@ -8,12 +8,10 @@
 import {
   createContext,
   useContext,
-  useState,
-  useEffect,
+  useSyncExternalStore,
   ReactNode,
 } from 'react';
 import type {
-  UsuarioLogado,
   AuthContextValue,
   RegistroDados,
   AuthResponse,
@@ -25,6 +23,25 @@ import {
   obterUsuarioLogado,
 } from '@/lib/auth';
 
+const authListeners = new Set<() => void>();
+
+function notificarMudancaAuth(): void {
+  authListeners.forEach((listener) => listener());
+}
+
+function subscreverAuth(listener: () => void): () => void {
+  authListeners.add(listener);
+  return () => authListeners.delete(listener);
+}
+
+function obterSnapshotAuth() {
+  return obterUsuarioLogado();
+}
+
+function obterSnapshotAuthServidor() {
+  return null;
+}
+
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export interface AuthProviderProps {
@@ -35,36 +52,22 @@ export interface AuthProviderProps {
  * Provider de autenticação para o app
  */
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [usuario, setUsuario] = useState<UsuarioLogado | null>(null);
-  const [isHidrated, setIsHidrated] = useState(false);
-
-  // Hidratação inicial a partir do localStorage
-  useEffect(() => {
-    const usuarioSalvo = obterUsuarioLogado();
-    if (usuarioSalvo) {
-      setUsuario(usuarioSalvo);
-    }
-    setIsHidrated(true);
-  }, []);
+  const usuario = useSyncExternalStore(subscreverAuth, obterSnapshotAuth, obterSnapshotAuthServidor);
 
   const login = (matricula: string, senha: string): AuthResponse => {
     const resultado = autenticarLogin(matricula, senha);
-    if (resultado.ok && resultado.usuarioLogado) {
-      setUsuario(resultado.usuarioLogado);
-    }
+    if (resultado.ok) notificarMudancaAuth();
     return resultado;
   };
 
   const logout = () => {
     authLogout();
-    setUsuario(null);
+    notificarMudancaAuth();
   };
 
   const registro = (dados: RegistroDados): AuthResponse => {
     const resultado = registrarCoordenador(dados);
-    if (resultado.ok && resultado.usuarioLogado) {
-      setUsuario(resultado.usuarioLogado);
-    }
+    if (resultado.ok) notificarMudancaAuth();
     return resultado;
   };
 

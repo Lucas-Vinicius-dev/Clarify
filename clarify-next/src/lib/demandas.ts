@@ -4,6 +4,19 @@
 // ═════════════════════════════════════════════════════════════════
 
 import type { Demanda, StatusDemanda, TipoDemanda } from '@/types';
+import { normalizarDemandasStorage } from './storageMigrations';
+
+function lerDemandas(): Demanda[] {
+  if (typeof window === 'undefined') return [];
+
+  return normalizarDemandasStorage(JSON.parse(localStorage.getItem('demandas') || '[]'));
+}
+
+function salvarDemandas(demandas: Demanda[]): void {
+  if (typeof window === 'undefined') return;
+
+  localStorage.setItem('demandas', JSON.stringify(demandas));
+}
 
 /**
  * Gera o próximo protocolo (REQ-XXX)
@@ -11,7 +24,7 @@ import type { Demanda, StatusDemanda, TipoDemanda } from '@/types';
 export function gerarProximoProtocolo(): string {
   if (typeof window === 'undefined') return 'REQ-0';
   
-  const demandas = JSON.parse(localStorage.getItem('demandas') || '[]') as Demanda[];
+  const demandas = lerDemandas();
 
   let maior = 0;
   for (const demanda of demandas) {
@@ -34,7 +47,7 @@ export function criarDemanda(dados: {
     return {} as Demanda;
   }
 
-  const demandas = JSON.parse(localStorage.getItem('demandas') || '[]') as Demanda[];
+  const demandas = lerDemandas();
 
   const dataHoje = obterDataHoje();
 
@@ -50,7 +63,7 @@ export function criarDemanda(dados: {
   };
 
   demandas.unshift(novaDemanda);
-  localStorage.setItem('demandas', JSON.stringify(demandas));
+  salvarDemandas(demandas);
 
   return novaDemanda;
 }
@@ -61,7 +74,7 @@ export function criarDemanda(dados: {
 export function buscarDemandasPorAluno(matricula: string): Demanda[] {
   if (typeof window === 'undefined') return [];
   
-  const demandas = JSON.parse(localStorage.getItem('demandas') || '[]') as Demanda[];
+  const demandas = lerDemandas();
 
   return demandas.filter(
     (d) => String(d.matriculaAluno) === String(matricula)
@@ -74,7 +87,7 @@ export function buscarDemandasPorAluno(matricula: string): Demanda[] {
 export function buscarDemandaPorProtocolo(protocolo: string): Demanda | undefined {
   if (typeof window === 'undefined') return undefined;
   
-  const demandas = JSON.parse(localStorage.getItem('demandas') || '[]') as Demanda[];
+  const demandas = lerDemandas();
   return demandas.find((d) => d.protocolo === protocolo);
 }
 
@@ -107,7 +120,7 @@ export function atualizarStatusDemanda(
 export function buscarTodasDemandas(): Demanda[] {
   if (typeof window === 'undefined') return [];
   
-  return JSON.parse(localStorage.getItem('demandas') || '[]') as Demanda[];
+  return lerDemandas();
 }
 
 /**
@@ -116,7 +129,7 @@ export function buscarTodasDemandas(): Demanda[] {
 export function buscarDemandasPorStatus(status: StatusDemanda): Demanda[] {
   if (typeof window === 'undefined') return [];
   
-  const demandas = JSON.parse(localStorage.getItem('demandas') || '[]') as Demanda[];
+  const demandas = lerDemandas();
   return demandas.filter((d) => d.status === status);
 }
 
@@ -129,7 +142,7 @@ export function buscarDemandasAlunoComStatus(
 ): Demanda[] {
   if (typeof window === 'undefined') return [];
   
-  const demandas = JSON.parse(localStorage.getItem('demandas') || '[]') as Demanda[];
+  const demandas = lerDemandas();
 
   return demandas.filter(
     (d) =>

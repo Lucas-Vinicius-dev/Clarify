@@ -5,14 +5,16 @@
 // Gerencia usuários do sistema com estado reativo
 // ═════════════════════════════════════════════════════════════════
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import type { Usuario, Cargo } from '@/types';
 import {
   adicionarUsuario,
   acharUsuario,
   atribuirAluno,
+  deletarAluno,
   usuarioExiste,
 } from '@/lib/auth';
+import { popularLocalStorage } from '@/lib/localStorage';
 
 export interface UseUsuariosReturn {
   usuarios: Usuario[];
@@ -28,21 +30,23 @@ export interface UseUsuariosReturn {
   obterCoordenadores: () => Usuario[];
   obterAlunosDoCoordenador: (matriculaCoordenador: string) => string[];
   atribuir: (matriculaCoord: string, matriculaAluno: string) => void;
+  deletar: (matriculaAluno: string) => void;
   existe: (matricula: string, email: string) => boolean;
+}
+
+function obterUsuariosIniciais(): Usuario[] {
+  if (typeof window === 'undefined') return [];
+
+  popularLocalStorage();
+
+  return JSON.parse(localStorage.getItem('usuarios') || '[]') as Usuario[];
 }
 
 /**
  * Hook para gerenciar usuários
  */
 export function useUsuarios(): UseUsuariosReturn {
-  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  // Carrega usuários iniciais
-  useEffect(() => {
-    recarregar();
-    setIsInitialized(true);
-  }, []);
+  const [usuarios, setUsuarios] = useState<Usuario[]>(() => obterUsuariosIniciais());
 
   const recarregar = useCallback(() => {
     if (typeof window === 'undefined') return;
@@ -81,15 +85,38 @@ export function useUsuarios(): UseUsuariosReturn {
 
   const obterAlunosDoCoordenador = useCallback(
     (matriculaCoordenador: string) => {
-      const coordenador = buscar(matriculaCoordenador);
-      return coordenador?.usuariosCadastrados || [];
+      const vinculados = new Set<string>();
+
+      usuarios.forEach((usuario) => {
+        if (
+          String(usuario.cargo) === 'aluno' &&
+          String(usuario.coordenador) === String(matriculaCoordenador)
+        ) {
+          vinculados.add(String(usuario.matricula));
+        }
+
+        if (String(usuario.matricula) === String(matriculaCoordenador)) {
+          (usuario.alunosCadastrados || []).forEach((matricula) => vinculados.add(String(matricula)));
+          (usuario.usuariosCadastrados || []).forEach((matricula) => vinculados.add(String(matricula)));
+        }
+      });
+
+      return [...vinculados];
     },
-    [buscar]
+    [usuarios]
   );
 
   const atribuir = useCallback(
     (matriculaCoord: string, matriculaAluno: string) => {
       atribuirAluno(matriculaCoord, matriculaAluno);
+      recarregar();
+    },
+    [recarregar]
+  );
+
+  const deletar = useCallback(
+    (matriculaAluno: string) => {
+      deletarAluno(matriculaAluno);
       recarregar();
     },
     [recarregar]
@@ -107,6 +134,7 @@ export function useUsuarios(): UseUsuariosReturn {
     obterCoordenadores,
     obterAlunosDoCoordenador,
     atribuir,
+    deletar,
     existe,
   };
 }

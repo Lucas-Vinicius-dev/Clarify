@@ -33,13 +33,15 @@ export interface Usuario {
   email: string;
   senha: string;
   cargo: Cargo;
+  coordenador?: string;
+  alunosCadastrados?: string[];
   usuariosCadastrados?: string[]; // matrículas vinculadas ao coordenador
 }
 
 /**
  * Usuário logado (sem senha)
  */
-export interface UsuarioLogado extends Omit<Usuario, 'senha'> {}
+export type UsuarioLogado = Omit<Usuario, 'senha'>;
 
 /**
  * Demanda de um aluno

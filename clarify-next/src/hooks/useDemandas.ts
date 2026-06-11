@@ -5,7 +5,7 @@
 // Gerencia demandas do sistema com estado reativo
 // ═════════════════════════════════════════════════════════════════
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import type { Demanda, StatusDemanda, TipoDemanda } from '@/types';
 import {
   criarDemanda as criar_,
@@ -16,6 +16,7 @@ import {
   buscarTodasDemandas,
   atualizarStatusDemanda,
 } from '@/lib/demandas';
+import { popularLocalStorage } from '@/lib/localStorage';
 
 export interface UseDemandAsOptions {
   matriculaAluno?: string;
@@ -39,32 +40,35 @@ export interface UseDemandAsReturn {
   filtrar: (filtros: Partial<UseDemandAsOptions>) => Demanda[];
 }
 
+function obterDemandasIniciais(opcoes?: UseDemandAsOptions): Demanda[] {
+  if (typeof window === 'undefined') return [];
+
+  popularLocalStorage();
+
+  if (opcoes?.matriculaAluno && opcoes?.status) {
+    return buscarDemandasAlunoComStatus(opcoes.matriculaAluno, opcoes.status);
+  }
+
+  if (opcoes?.matriculaAluno) {
+    return buscarDemandasPorAluno(opcoes.matriculaAluno);
+  }
+
+  if (opcoes?.status) {
+    return buscarDemandasPorStatus(opcoes.status);
+  }
+
+  return buscarTodasDemandas();
+}
+
 /**
  * Hook para gerenciar demandas
  */
 export function useDemandas(opcoes?: UseDemandAsOptions): UseDemandAsReturn {
-  const [demandas, setDemandas] = useState<Demanda[]>([]);
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  // Carrega demandas iniciais
-  useEffect(() => {
-    recarregar();
-    setIsInitialized(true);
-  }, []);
+  const [demandas, setDemandas] = useState<Demanda[]>(() => obterDemandasIniciais(opcoes));
 
   const recarregar = useCallback(() => {
-    if (opcoes?.matriculaAluno && opcoes?.status) {
-      setDemandas(
-        buscarDemandasAlunoComStatus(opcoes.matriculaAluno, opcoes.status)
-      );
-    } else if (opcoes?.matriculaAluno) {
-      setDemandas(buscarDemandasPorAluno(opcoes.matriculaAluno));
-    } else if (opcoes?.status) {
-      setDemandas(buscarDemandasPorStatus(opcoes.status));
-    } else {
-      setDemandas(buscarTodasDemandas());
-    }
-  }, [opcoes?.matriculaAluno, opcoes?.status]);
+    setDemandas(obterDemandasIniciais(opcoes));
+  }, [opcoes]);
 
   const criar = useCallback(
     (dados: { matriculaAluno: string; tipo: TipoDemanda; descricao: string }) => {

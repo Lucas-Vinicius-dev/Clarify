@@ -6,8 +6,6 @@ import { useEffect, useState } from 'react'
 import { ArrowRight, Calendar, Check, Clock, Eye, GraduationCap, Plus, Users } from 'lucide-react'
 
 function useReveal() {
-  const [refs, setRefs] = useState<HTMLDivElement[]>([])
-
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -54,9 +52,11 @@ export default function LandingPage() {
       >
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <img
-              src="/next.svg"
+            <Image
+              src="/GATOGORDO.png"
               alt="Clarify"
+              width={36}
+              height={36}
               className="w-9 h-9 object-contain drop-shadow-[0_4px_12px_rgba(202,95,21,0.25)]"
             />
             <div className="leading-none">
@@ -253,6 +253,11 @@ export default function LandingPage() {
                 title: 'Coordenador',
                 features: ['Gerenciar demandas', 'Enviar feedback', 'Gerar relatórios'],
                 icon: Users,
+              },
+              {
+                title: 'Professor',
+                features: ['Consultar encaminhamentos', 'Acompanhar turmas', 'Apoiar a coordenação'],
+                icon: Eye,
               },
             ].map((profile, i) => (
               <div key={i} className="bg-white border border-slate-200 rounded-2xl p-8">

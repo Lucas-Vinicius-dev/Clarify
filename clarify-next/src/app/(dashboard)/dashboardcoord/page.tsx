@@ -8,12 +8,12 @@ import { CardAluno } from '@/components/coord/CardAluno';
 import { CardTurma } from '@/components/coord/CardTurma';
 import { ModalCriarTurma } from '@/components/coord/ModalCriarTurma';
 import { ModalFeedback } from '@/components/coord/ModalFeedback';
+import { ModalDetalhesDemanda } from '@/components/demandas/ModalDetalhesDemanda';
 import { useAuth } from '@/context/AuthContext';
 import { useDemandas } from '@/hooks/useDemandas';
 import { useUsuarios } from '@/hooks/useUsuarios';
 import { useTurmas } from '@/hooks/useTurmas';
 import { atualizarStatusDemanda } from '@/lib/demandas';
-import type { Demanda } from '@/types';
 
 type DashView = 'nome' | 'alunos' | 'demandas' | 'turmas' | 'adicionar';
 
@@ -31,11 +31,10 @@ export default function DashboardCoordPage() {
   const [modalTurmaAberta, setModalTurmaAberta] = useState(false);
   const [modalFeedbackAberta, setModalFeedbackAberta] = useState(false);
   const [protocoloFeedback, setProtocoloFeedback] = useState<string | null>(null);
-  const [detalheDemanda, setDetalheDemanda] = useState<Demanda | null>(null);
+  const [modalDetalhesAberta, setModalDetalhesAberta] = useState(false);
+  const [demandaDetalhe, setDemandaDetalhe] = useState<ReturnType<typeof demandas.find> | null>(null);
   const [adicionarErro, setAdicionarErro] = useState('');
   const [adicionarSucesso, setAdicionarSucesso] = useState('');
-
-  const pendentes = useMemo(() => demandas.filter((d) => d.status !== 'concluido'), [demandas]);
 
   const alunosDoCoord = useMemo(() => {
     if (!usuario) return [];
@@ -43,15 +42,25 @@ export default function DashboardCoordPage() {
     return usuariosHook.usuarios.filter((u) => matriculas.includes(u.matricula));
   }, [usuario, usuariosHook]);
 
+  const demandasDoCoord = useMemo(() => {
+    const matriculas = new Set(alunosDoCoord.map((aluno) => aluno.matricula));
+    return demandas.filter((d) => matriculas.has(d.matriculaAluno));
+  }, [alunosDoCoord, demandas]);
+
+  const demandasPendentes = useMemo(
+    () => demandasDoCoord.filter((d) => d.status !== 'concluido'),
+    [demandasDoCoord]
+  );
+
   const turmasDoCoord = useMemo(() => {
     if (!usuario) return [];
     return turmasHook.filtrar(usuario.matricula);
   }, [usuario, turmasHook]);
 
   const totalAlunos = alunosDoCoord.length;
-  const demandasAbertas = pendentes.length;
-  const demandasConcluidas = demandas.filter((d) => d.status === 'concluido').length;
-  const resolvidas = demandas.length > 0 ? Math.round((demandasConcluidas / demandas.length) * 100) : 0;
+  const demandasAbertas = demandasPendentes.length;
+  const demandasConcluidas = demandasDoCoord.filter((d) => d.status === 'concluido').length;
+  const resolvidas = demandasDoCoord.length > 0 ? Math.round((demandasConcluidas / demandasDoCoord.length) * 100) : 0;
 
   const handleCriarTurma = useCallback((dados: { nome: string; disciplina: string; alunos: string[] }) => {
     if (!usuario) return;
@@ -67,6 +76,12 @@ export default function DashboardCoordPage() {
     setProtocoloFeedback(protocolo);
     setModalFeedbackAberta(true);
   }, []);
+
+  const handleVerDetalhes = useCallback((protocolo: string) => {
+    const demanda = demandas.find((item) => item.protocolo === protocolo) || null;
+    setDemandaDetalhe(demanda);
+    setModalDetalhesAberta(true);
+  }, [demandas]);
 
   const handleFeedbackSubmit = useCallback((feedback: string) => {
     if (!protocoloFeedback) return;
@@ -109,6 +124,17 @@ export default function DashboardCoordPage() {
     (e.target as HTMLFormElement).reset();
   }, [usuario, usuariosHook]);
 
+  const handleRemoverAluno = useCallback((matriculaAluno: string) => {
+    usuariosHook.deletar(matriculaAluno);
+  }, [usuariosHook]);
+
+  const recentesOrdenadas = useMemo(
+    () => [...demandas].sort(
+      (a, b) => new Date(b.dataAtualizacao).getTime() - new Date(a.dataAtualizacao).getTime()
+    ),
+    [demandas]
+  );
+
   return (
     <div className="p-4 sm:p-6 max-w-6xl mx-auto space-y-6">
       {/* ── View: Início ── */}
@@ -139,11 +165,11 @@ export default function DashboardCoordPage() {
           </div>
 
           {/* Demandas pendentes recentes */}
-          {pendentes.length > 0 && (
+          {demandasPendentes.length > 0 && (
             <section>
               <h2 className="text-lg font-bold text-gray-900 mb-3">Demandas Pendentes</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {pendentes.slice(0, 6).map((d) => (
+                {recentesOrdenadas.filter((d) => d.status !== 'concluido').slice(0, 6).map((d) => (
                   <div key={d.protocolo} className="bg-white border border-gray-200 rounded-2xl p-5 shadow-lg hover:-translate-y-1 transition-transform duration-200 ease-out flex flex-col justify-between h-full">
                     <div className="flex items-start justify-between gap-4 mb-4">
                       <div className="space-y-2">
@@ -203,6 +229,7 @@ export default function DashboardCoordPage() {
                   demandasEmAberto={demandas.filter(
                     (d) => d.matriculaAluno === aluno.matricula && d.status !== 'concluido'
                   ).length}
+                  onRemover={handleRemoverAluno}
                 />
               ))}
             </div>
@@ -214,13 +241,13 @@ export default function DashboardCoordPage() {
       {view === 'demandas' && (
         <section>
           <h2 className="text-xl font-bold text-gray-900 mb-4">Demandas</h2>
-          {pendentes.length === 0 ? (
+          {demandasPendentes.length === 0 ? (
             <div className="text-center py-12 text-gray-400">
               <p className="text-sm">Nenhuma demanda pendente.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {pendentes.map((d) => (
+              {demandasPendentes.map((d) => (
                 <div key={d.protocolo} className="bg-white border border-gray-200 rounded-2xl p-5 shadow-lg hover:-translate-y-1 transition-transform duration-200 ease-out flex flex-col justify-between h-full">
                   <div className="flex items-start justify-between gap-4 mb-4">
                     <div className="space-y-2">
@@ -253,6 +280,13 @@ export default function DashboardCoordPage() {
                       className="flex-1 bg-red-500 text-white py-2 px-3 rounded-lg text-xs font-semibold hover:bg-red-600 transition-colors cursor-pointer border-none"
                     >
                       Reprovar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleVerDetalhes(d.protocolo)}
+                      className="flex-1 bg-gray-900 text-white py-2 px-3 rounded-lg text-xs font-semibold hover:bg-gray-800 transition-colors cursor-pointer border-none"
+                    >
+                      Detalhes
                     </button>
                   </div>
                 </div>
@@ -377,6 +411,16 @@ export default function DashboardCoordPage() {
               {turmasDoCoord.map((turma) => (
                 <CardTurma key={turma.id} turma={turma} />
               ))}
+
+              <ModalDetalhesDemanda
+                open={modalDetalhesAberta}
+                onClose={() => {
+                  setModalDetalhesAberta(false);
+                  setDemandaDetalhe(null);
+                }}
+                demanda={demandaDetalhe}
+                remetente={demandaDetalhe ? usuariosHook.buscar(demandaDetalhe.matriculaAluno) ?? null : null}
+              />
             </div>
           )}
         </section>
