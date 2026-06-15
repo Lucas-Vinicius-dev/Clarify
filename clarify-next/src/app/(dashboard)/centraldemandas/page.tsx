@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useReducer } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ArrowRight, FileText, Clock, CheckCircle } from 'lucide-react';
 import { BarraFiltros } from '@/components/demandas/BarraFiltros';
@@ -16,6 +16,7 @@ import { ModalDetalhesDemanda } from '@/components/demandas/ModalDetalhesDemanda
 import { useDemandas } from '@/hooks/useDemandas';
 import { useAuth } from '@/context/AuthContext';
 import { acharUsuario } from '@/lib/auth';
+import { modaisReducer, modaisInicial } from './_components/modaisReducer';
 import type { StatusDemanda, TipoDemanda } from '@/types';
 
 type StudentView = 'nome' | 'demandas';
@@ -34,13 +35,11 @@ export default function CentralDemandasPage() {
 
   const [busca, setBusca] = useState('');
   const [filtroStatus, setFiltroStatus] = useState<StatusDemanda | 'todos'>('todos');
-  const [modalNovaAberta, setModalNovaAberta] = useState(false);
-  const [modalDetalhesAberta, setModalDetalhesAberta] = useState(false);
-  const [protocoloSelecionado, setProtocoloSelecionado] = useState<string | null>(null);
+  const [modais, dispatchModais] = useReducer(modaisReducer, modaisInicial);
 
   const demandaDetalhes = useMemo(
-    () => protocoloSelecionado ? buscarPorProtocolo(protocoloSelecionado) ?? null : null,
-    [protocoloSelecionado, buscarPorProtocolo]
+    () => modais.protocoloSelecionado ? buscarPorProtocolo(modais.protocoloSelecionado) ?? null : null,
+    [modais.protocoloSelecionado, buscarPorProtocolo]
   );
 
   const remetente = useMemo(
@@ -77,12 +76,11 @@ export default function CentralDemandasPage() {
   }, [criar, usuario]);
 
   const handleVerDetalhes = useCallback((protocolo: string) => {
-    setProtocoloSelecionado(protocolo);
-    setModalDetalhesAberta(true);
+    dispatchModais({ type: 'abrirDetalhes', protocolo });
   }, []);
 
   const recentes = useMemo(
-    () => [...demandas].sort(
+    () => demandas.toSorted(
       (a, b) => new Date(b.dataAtualizacao).getTime() - new Date(a.dataAtualizacao).getTime()
     ).slice(0, 6),
     [demandas]
@@ -148,7 +146,7 @@ export default function CentralDemandasPage() {
                     onVerDetalhes={handleVerDetalhes}
                   />
                 ))}
-                <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                <CardNovaDemanda onClick={() => dispatchModais({ type: 'abrirNova' })} />
               </div>
             </section>
           )}
@@ -158,7 +156,7 @@ export default function CentralDemandasPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <EstadoVazio />
                 <div className="sm:col-span-2 lg:col-span-3">
-                  <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                  <CardNovaDemanda onClick={() => dispatchModais({ type: 'abrirNova' })} />
                 </div>
               </div>
             </section>
@@ -204,13 +202,13 @@ export default function CentralDemandasPage() {
                       onVerDetalhes={handleVerDetalhes}
                     />
                   ))}
-                  <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                  <CardNovaDemanda onClick={() => dispatchModais({ type: 'abrirNova' })} />
                 </>
               ) : (
                 <>
                   <EstadoVazio />
                   <div className="sm:col-span-2 lg:col-span-3">
-                    <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                    <CardNovaDemanda onClick={() => dispatchModais({ type: 'abrirNova' })} />
                   </div>
                 </>
               )}
@@ -251,22 +249,22 @@ export default function CentralDemandasPage() {
           )}
 
           {/* FAB mobile */}
-          <FabMobile onClick={() => setModalNovaAberta(true)} />
+          <FabMobile onClick={() => dispatchModais({ type: 'abrirNova' })} />
         </>
       )}
 
       {/* Modal nova demanda */}
       <ModalNovaDemanda
-        open={modalNovaAberta}
-        onClose={() => setModalNovaAberta(false)}
+        open={modais.nova}
+        onClose={() => dispatchModais({ type: 'fecharNova' })}
         usuario={usuario}
         onSubmit={handleCriarDemanda}
       />
 
       {/* Modal detalhes */}
       <ModalDetalhesDemanda
-        open={modalDetalhesAberta}
-        onClose={() => { setModalDetalhesAberta(false); setProtocoloSelecionado(null); }}
+        open={modais.detalhes}
+        onClose={() => dispatchModais({ type: 'fecharDetalhes' })}
         demanda={demandaDetalhes}
         remetente={remetente}
       />
