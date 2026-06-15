@@ -5,12 +5,18 @@ function toStringValue(value: unknown): string {
 }
 
 function uniqueStrings(values: string[]): string[] {
-  return [...new Set(values.map((value) => toStringValue(value)).filter(Boolean))];
+  return [...new Set(values.flatMap((value) => {
+    const normalizado = toStringValue(value);
+    return normalizado ? [normalizado] : [];
+  }))];
 }
 
 function toStringArray(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
-  return value.map((item) => toStringValue(item)).filter(Boolean);
+  return value.flatMap((item) => {
+    const normalizado = toStringValue(item);
+    return normalizado ? [normalizado] : [];
+  });
 }
 
 function normalizarStatusLegado(status: unknown): StatusDemanda {
@@ -25,7 +31,7 @@ function normalizarStatusLegado(status: unknown): StatusDemanda {
   return 'pendente';
 }
 
-export function normalizarUsuarioStorage(raw: unknown): Usuario | null {
+function normalizarUsuarioStorage(raw: unknown): Usuario | null {
   if (!raw || typeof raw !== 'object') return null;
 
   const source = raw as Record<string, unknown>;
@@ -66,7 +72,7 @@ export function normalizarUsuariosStorage(raw: unknown): Usuario[] {
   return raw.map(normalizarUsuarioStorage).filter((usuario): usuario is Usuario => Boolean(usuario));
 }
 
-export function normalizarDemandaStorage(raw: unknown): Demanda | null {
+function normalizarDemandaStorage(raw: unknown): Demanda | null {
   if (!raw || typeof raw !== 'object') return null;
 
   const source = raw as Record<string, unknown>;

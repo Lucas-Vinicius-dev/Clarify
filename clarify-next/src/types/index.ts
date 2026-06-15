@@ -109,16 +109,3 @@ export interface RegistroDados {
   cargo?: Cargo;
   chaveAtivacao?: string;
 }
-
-/**
- * Constante: tipos de demanda disponíveis
- */
-export const TIPOS_DEMANDA: TipoDemanda[] = [
-  'Quebra de Pré-requisito',
-  'Revisão de Prova',
-  'Aproveitamento de Horas AC',
-  'Trancamento de Disciplina',
-  'Troca de Turma',
-  'Solicitação de Histórico',
-  'Justificativa de Falta',
-];

@@ -34,39 +34,6 @@ export function formatarData(dataISO: string): string {
 }
 
 /**
- * Formata uma data ISO para formato BR (DD/MM/YYYY)
- */
-export function formatarDataBR(dataISO: string): string {
-  if (!dataISO) return '';
-
-  const [ano, mes, dia] = dataISO.split('-');
-  return `${dia}/${mes}/${ano}`;
-}
-
-/**
- * Valida formato de email
- */
-export function validarEmail(email: string): boolean {
-  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return regex.test(email);
-}
-
-/**
- * Valida matrícula (geralmente números)
- */
-export function validarMatricula(matricula: string): boolean {
-  return /^\d+$/.test(String(matricula).trim());
-}
-
-/**
- * Valida data em formato ISO
- */
-export function validarData(dataISO: string): boolean {
-  const regex = /^\d{4}-\d{2}-\d{2}$/;
-  return regex.test(dataISO);
-}
-
-/**
  * Obtém o label traduzido de um status
  */
 export function obterLabelStatus(status: StatusDemanda): string {
@@ -90,49 +57,4 @@ export function obterCorStatus(status: StatusDemanda): string {
     concluido: 'bg-green-100 text-green-800',
   };
   return cores[status];
-}
-
-/**
- * Obtém a data de hoje em formato ISO (YYYY-MM-DD)
- */
-export function obterDataHoje(): string {
-  const hoje = new Date();
-  const ano = hoje.getFullYear();
-  const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-  const dia = String(hoje.getDate()).padStart(2, '0');
-  return `${ano}-${mes}-${dia}`;
-}
-
-/**
- * Remove propriedades vazias de um objeto
- */
-export function limparObjeto<T extends Record<string, unknown>>(obj: T): Partial<T> {
-  return Object.fromEntries(
-    Object.entries(obj).filter(([, value]) => value !== null && value !== undefined && value !== '')
-  ) as Partial<T>;
-}
-
-/**
- * Concatena classes CSS (similiar a clsx/classnames)
- */
-export function cn(...classes: (string | undefined | null | boolean)[]): string {
-  return classes
-    .filter((cls) => typeof cls === 'string')
-    .join(' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-/**
- * Debounce de função
- */
-export function debounce<T extends (...args: unknown[]) => unknown>(
-  func: T,
-  wait: number
-): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout;
-  return (...args: Parameters<T>) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
-  };
 }
