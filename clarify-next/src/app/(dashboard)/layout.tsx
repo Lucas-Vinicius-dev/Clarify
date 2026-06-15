@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState, Suspense } from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { TopbarDesktop } from '@/components/layout/TopbarDesktop';
@@ -14,38 +14,25 @@ interface DashboardLayoutProps {
 
 /**
  * Layout compartilhado para o dashboard protegido
- * - Verifica autenticação (redireciona para /login se não autenticado)
+ * - A proteção de rotas (autenticação e cargo) é feita pelo proxy (src/proxy.ts)
  * - Renderiza sidebar + topbar + conteúdo
  * - Gerencia drawer móvel
  */
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const { isAuthenticated, usuario, logout } = useAuth();
   const router = useRouter();
-  const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.replace('/login');
-      return;
-    }
-    // Proteção de rotas por cargo
-    if (usuario) {
-      if (pathname.startsWith('/dashboardcoord') && usuario.cargo !== 'coordenador') {
-        router.replace('/centraldemandas');
-      } else if (pathname.startsWith('/centraldemandas') && usuario.cargo !== 'aluno') {
-        router.replace('/dashboardcoord');
-      }
-    }
-  }, [isAuthenticated, router, pathname, usuario]);
-
-  // Renderiza nada enquanto verifica autenticação
+  // Guarda de renderização: o middleware já garante a sessão no servidor,
+  // mas evitamos renderizar a UI antes do usuário estar hidratado no cliente.
   if (!isAuthenticated || !usuario) {
     return null;
   }
 
   const handleNavigate = (view: string) => {
     setDrawerOpen(false);
+    // Lido sob demanda dentro do handler (evita re-render a cada mudança de URL)
+    const pathname = window.location.pathname;
     if (pathname.startsWith('/dashboardcoord')) {
       router.push(`/dashboardcoord?view=${view}`);
     } else {

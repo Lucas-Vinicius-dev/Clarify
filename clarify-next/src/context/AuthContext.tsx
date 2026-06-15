@@ -7,7 +7,7 @@
 
 import {
   createContext,
-  useContext,
+  use,
   useSyncExternalStore,
   ReactNode,
 } from 'react';
@@ -42,6 +42,60 @@ function obterSnapshotAuthServidor() {
   return null;
 }
 
+// Nome do cookie de sessão usado pelo proxy (src/proxy.ts) para proteger as rotas.
+const NOME_COOKIE_SESSAO = 'clarify_sessao';
+
+/**
+ * Define o cookie de sessão com o cargo do usuário.
+ * Sem Secure (ambiente de desenvolvimento roda em http).
+ */
+function definirCookieSessao(cargo: 'aluno' | 'coordenador'): void {
+  if (typeof document === 'undefined') return;
+  document.cookie = `${NOME_COOKIE_SESSAO}=${cargo}; path=/; SameSite=Lax`;
+}
+
+/**
+ * Limpa o cookie de sessão (expira imediatamente).
+ */
+function limparCookieSessao(): void {
+  if (typeof document === 'undefined') return;
+  document.cookie = `${NOME_COOKIE_SESSAO}=; path=/; SameSite=Lax; Max-Age=0`;
+}
+
+/**
+ * Autentica o usuário e, em caso de sucesso, grava o cookie de sessão.
+ * Função pura de módulo (não depende de estado/props do componente).
+ */
+function login(matricula: string, senha: string): AuthResponse {
+  const resultado = autenticarLogin(matricula, senha);
+  if (resultado.ok && resultado.usuarioLogado) {
+    definirCookieSessao(resultado.usuarioLogado.cargo);
+    notificarMudancaAuth();
+  }
+  return resultado;
+}
+
+/**
+ * Faz logout e limpa o cookie de sessão.
+ */
+function logout(): void {
+  authLogout();
+  limparCookieSessao();
+  notificarMudancaAuth();
+}
+
+/**
+ * Registra um coordenador e, em caso de sucesso, grava o cookie de sessão.
+ */
+function registro(dados: RegistroDados): AuthResponse {
+  const resultado = registrarCoordenador(dados);
+  if (resultado.ok) {
+    definirCookieSessao('coordenador');
+    notificarMudancaAuth();
+  }
+  return resultado;
+}
+
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export interface AuthProviderProps {
@@ -53,23 +107,6 @@ export interface AuthProviderProps {
  */
 export function AuthProvider({ children }: AuthProviderProps) {
   const usuario = useSyncExternalStore(subscreverAuth, obterSnapshotAuth, obterSnapshotAuthServidor);
-
-  const login = (matricula: string, senha: string): AuthResponse => {
-    const resultado = autenticarLogin(matricula, senha);
-    if (resultado.ok) notificarMudancaAuth();
-    return resultado;
-  };
-
-  const logout = () => {
-    authLogout();
-    notificarMudancaAuth();
-  };
-
-  const registro = (dados: RegistroDados): AuthResponse => {
-    const resultado = registrarCoordenador(dados);
-    if (resultado.ok) notificarMudancaAuth();
-    return resultado;
-  };
 
   const value: AuthContextValue = {
     usuario,
@@ -90,7 +127,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
  * Hook para acessar o contexto de autenticação
  */
 export function useAuth(): AuthContextValue {
-  const ctx = useContext(AuthContext);
+  const ctx = use(AuthContext);
   if (!ctx) {
     throw new Error('useAuth deve ser usado dentro de um AuthProvider');
   }
