@@ -79,7 +79,6 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
               maxLength={80}
               placeholder="Ex.: Justificativa de falta — Cálculo III"
               className="modal-input font-semibold mt-1"
-              autoFocus
             />
           </section>
 

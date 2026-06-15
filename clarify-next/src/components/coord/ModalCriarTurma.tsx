@@ -98,11 +98,12 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="turmaMatriculaAluno" className="block text-sm font-medium text-gray-700 mb-1">
               Adicionar aluno por matrícula
             </label>
             <div className="flex gap-2">
               <input
+                id="turmaMatriculaAluno"
                 type="text"
                 value={matriculaInput}
                 onChange={(e) => setMatriculaInput(e.target.value)}

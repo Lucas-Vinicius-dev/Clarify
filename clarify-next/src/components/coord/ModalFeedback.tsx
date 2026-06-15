@@ -38,8 +38,8 @@ export function ModalFeedback({ open, onClose, onSubmit }: ModalFeedbackProps) {
           onChange={(e) => setFeedback(e.target.value)}
           placeholder="Digite seu feedback..."
           required
+          aria-label="Feedback"
           className="w-full border border-gray-300 rounded-lg p-3 mb-4 text-sm outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
-          autoFocus
         />
         <div className="flex justify-end gap-2">
           <button
