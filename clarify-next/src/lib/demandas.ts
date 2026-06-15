@@ -5,23 +5,24 @@
 
 import type { Demanda, StatusDemanda, TipoDemanda } from '@/types';
 import { normalizarDemandasStorage } from './storageMigrations';
+import { STORAGE_KEYS } from './storageKeys';
 
 function lerDemandas(): Demanda[] {
   if (typeof window === 'undefined') return [];
 
-  return normalizarDemandasStorage(JSON.parse(localStorage.getItem('demandas') || '[]'));
+  return normalizarDemandasStorage(JSON.parse(localStorage.getItem(STORAGE_KEYS.demandas) || '[]'));
 }
 
 function salvarDemandas(demandas: Demanda[]): void {
   if (typeof window === 'undefined') return;
 
-  localStorage.setItem('demandas', JSON.stringify(demandas));
+  localStorage.setItem(STORAGE_KEYS.demandas, JSON.stringify(demandas));
 }
 
 /**
  * Gera o próximo protocolo (REQ-XXX)
  */
-export function gerarProximoProtocolo(): string {
+function gerarProximoProtocolo(): string {
   if (typeof window === 'undefined') return 'REQ-0';
   
   const demandas = lerDemandas();
@@ -100,8 +101,8 @@ export function atualizarStatusDemanda(
   feedback?: string
 ): Demanda | undefined {
   if (typeof window === 'undefined') return undefined;
-  
-  const demandas = JSON.parse(localStorage.getItem('demandas') || '[]') as Demanda[];
+
+  const demandas = lerDemandas();
   const demanda = demandas.find((d) => d.protocolo === protocolo);
 
   if (!demanda) return undefined;
@@ -110,7 +111,7 @@ export function atualizarStatusDemanda(
   demanda.dataAtualizacao = obterDataHoje();
   if (feedback !== undefined) demanda.feedback = feedback;
 
-  localStorage.setItem('demandas', JSON.stringify(demandas));
+  salvarDemandas(demandas);
   return demanda;
 }
 

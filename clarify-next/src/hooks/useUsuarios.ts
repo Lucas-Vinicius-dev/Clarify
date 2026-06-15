@@ -15,6 +15,7 @@ import {
   usuarioExiste,
 } from '@/lib/auth';
 import { popularLocalStorage } from '@/lib/localStorage';
+import { STORAGE_KEYS } from '@/lib/storageKeys';
 
 export interface UseUsuariosReturn {
   usuarios: Usuario[];
@@ -34,12 +35,19 @@ export interface UseUsuariosReturn {
   existe: (matricula: string, email: string) => boolean;
 }
 
+function lerUsuariosArmazenados(): Usuario[] {
+  if (typeof window === 'undefined') return [];
+
+  const usuariosRaw = localStorage.getItem(STORAGE_KEYS.usuarios) || '[]';
+  return JSON.parse(usuariosRaw) as Usuario[];
+}
+
 function obterUsuariosIniciais(): Usuario[] {
   if (typeof window === 'undefined') return [];
 
   popularLocalStorage();
 
-  return JSON.parse(localStorage.getItem('usuarios') || '[]') as Usuario[];
+  return lerUsuariosArmazenados();
 }
 
 /**
@@ -51,10 +59,7 @@ export function useUsuarios(): UseUsuariosReturn {
   const recarregar = useCallback(() => {
     if (typeof window === 'undefined') return;
 
-    const usuariosSalvos = JSON.parse(
-      localStorage.getItem('usuarios') || '[]'
-    ) as Usuario[];
-    setUsuarios(usuariosSalvos);
+    setUsuarios(lerUsuariosArmazenados());
   }, []);
 
   const adicionar = useCallback(

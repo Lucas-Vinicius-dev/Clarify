@@ -5,6 +5,7 @@
 
 import { criarChaves } from './auth';
 import { normalizarDemandasStorage, normalizarUsuariosStorage } from './storageMigrations';
+import { STORAGE_KEYS } from './storageKeys';
 import type { Usuario, Demanda } from '@/types';
 
 /**
@@ -129,63 +130,50 @@ export function popularLocalStorage(): void {
   migrarLocalStorageLegado();
 
   // Só popular se ainda não foi
-  if (localStorage.getItem('usuarios')) return;
+  if (localStorage.getItem(STORAGE_KEYS.usuarios)) return;
 
-  localStorage.setItem('usuarios', JSON.stringify(USUARIOS_TESTE));
+  localStorage.setItem(STORAGE_KEYS.usuarios, JSON.stringify(USUARIOS_TESTE));
   popularDemandas();
   inicializarTurmas();
+  // criarChaves() retorna o array criado, mas aqui só precisamos popular o storage
   criarChaves();
 }
 
 /**
  * Popula o localStorage com demandas de teste
  */
-export function popularDemandas(): void {
+function popularDemandas(): void {
   if (typeof window === 'undefined') return;
 
-  localStorage.setItem('demandas', JSON.stringify(DEMANDAS_TESTE));
+  localStorage.setItem(STORAGE_KEYS.demandas, JSON.stringify(DEMANDAS_TESTE));
 }
 
 /**
  * Migra dados antigos para o schema atual sem apagar a sessão do usuário
  */
-export function migrarLocalStorageLegado(): void {
+function migrarLocalStorageLegado(): void {
   if (typeof window === 'undefined') return;
 
-  const usuariosRaw = localStorage.getItem('usuarios');
+  const usuariosRaw = localStorage.getItem(STORAGE_KEYS.usuarios);
   if (usuariosRaw) {
     const usuariosNormalizados = normalizarUsuariosStorage(JSON.parse(usuariosRaw));
-    localStorage.setItem('usuarios', JSON.stringify(usuariosNormalizados));
+    localStorage.setItem(STORAGE_KEYS.usuarios, JSON.stringify(usuariosNormalizados));
   }
 
-  const demandasRaw = localStorage.getItem('demandas');
+  const demandasRaw = localStorage.getItem(STORAGE_KEYS.demandas);
   if (demandasRaw) {
     const demandasNormalizadas = normalizarDemandasStorage(JSON.parse(demandasRaw));
-    localStorage.setItem('demandas', JSON.stringify(demandasNormalizadas));
+    localStorage.setItem(STORAGE_KEYS.demandas, JSON.stringify(demandasNormalizadas));
   }
 }
 
 /**
  * Inicializa o array de turmas vazio
  */
-export function inicializarTurmas(): void {
+function inicializarTurmas(): void {
   if (typeof window === 'undefined') return;
 
-  if (!localStorage.getItem('turmas')) {
-    localStorage.setItem('turmas', JSON.stringify([]));
+  if (!localStorage.getItem(STORAGE_KEYS.turmas)) {
+    localStorage.setItem(STORAGE_KEYS.turmas, JSON.stringify([]));
   }
-}
-
-/**
- * Reseta o localStorage completamente (útil para testes)
- */
-export function resetarLocalStorage(): void {
-  if (typeof window === 'undefined') return;
-
-  localStorage.removeItem('usuarios');
-  localStorage.removeItem('demandas');
-  localStorage.removeItem('turmas');
-  localStorage.removeItem('chavesAtivacao');
-  localStorage.removeItem('usuarioLogado');
-  localStorage.removeItem('auth');
 }

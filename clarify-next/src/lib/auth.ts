@@ -3,8 +3,9 @@
 // Funções de login, registro e gerenciamento de chaves de ativação
 // ═════════════════════════════════════════════════════════════════
 
-import type { Usuario, UsuarioLogado, AuthResponse, RegistroDados } from '@/types';
+import type { Usuario, UsuarioLogado, AuthResponse, RegistroDados, ChaveAtivacao } from '@/types';
 import { normalizarDemandasStorage, normalizarUsuariosStorage } from './storageMigrations';
+import { STORAGE_KEYS } from './storageKeys';
 
 let cachedUsuarioLogadoRaw: string | null = null;
 let cachedUsuarioLogado: UsuarioLogado | null = null;
@@ -19,19 +20,19 @@ function salvarUsuarioLogado(usuario: UsuarioLogado | null): void {
 
   if (usuario) {
     const raw = JSON.stringify(usuario);
-    localStorage.setItem('usuarioLogado', raw);
+    localStorage.setItem(STORAGE_KEYS.usuarioLogado, raw);
     atualizarCacheUsuarioLogado(raw, usuario);
     return;
   }
 
-  localStorage.removeItem('usuarioLogado');
+  localStorage.removeItem(STORAGE_KEYS.usuarioLogado);
   atualizarCacheUsuarioLogado(null, null);
 }
 
 function lerUsuarioLogadoArmazenado(): UsuarioLogado | null {
   if (typeof window === 'undefined') return null;
 
-  const raw = localStorage.getItem('usuarioLogado');
+  const raw = localStorage.getItem(STORAGE_KEYS.usuarioLogado);
 
   if (raw === cachedUsuarioLogadoRaw) {
     return cachedUsuarioLogado;
@@ -55,13 +56,13 @@ function lerUsuarioLogadoArmazenado(): UsuarioLogado | null {
 function lerUsuarios(): Usuario[] {
   if (typeof window === 'undefined') return [];
 
-  return normalizarUsuariosStorage(JSON.parse(localStorage.getItem('usuarios') || '[]'));
+  return normalizarUsuariosStorage(JSON.parse(localStorage.getItem(STORAGE_KEYS.usuarios) || '[]'));
 }
 
 function salvarUsuarios(usuarios: Usuario[]): void {
   if (typeof window === 'undefined') return;
 
-  localStorage.setItem('usuarios', JSON.stringify(usuarios));
+  localStorage.setItem(STORAGE_KEYS.usuarios, JSON.stringify(usuarios));
 }
 
 /**
@@ -81,7 +82,7 @@ export function usuarioExiste(matricula: string, email: string): boolean {
 /**
  * Busca um usuário pelo matrícula + senha
  */
-export function buscarUsuarioCadastrado(
+function buscarUsuarioCadastrado(
   matricula: string,
   senha: string
 ): Usuario | undefined {
@@ -121,7 +122,7 @@ export function autenticarLogin(
   if (usuarioEncontrado) {
     const { senha: _, ...usuarioLogado } = usuarioEncontrado;
     salvarUsuarioLogado(usuarioLogado);
-    localStorage.setItem('auth', 'true');
+    localStorage.setItem(STORAGE_KEYS.auth, 'true');
     return { ok: true, usuarioLogado };
   }
 
@@ -221,7 +222,7 @@ export function registrarCoordenador(dados: RegistroDados): AuthResponse {
   };
 
   salvarUsuarioLogado(usuarioLogado);
-  localStorage.setItem('auth', 'true');
+  localStorage.setItem(STORAGE_KEYS.auth, 'true');
 
   return {
     ok: true,
@@ -232,42 +233,43 @@ export function registrarCoordenador(dados: RegistroDados): AuthResponse {
 /**
  * Verifica se uma chave de ativação é válida (e a marca como usada)
  */
-export function chaveValida(code: string): boolean {
+function chaveValida(code: string): boolean {
   if (typeof window === 'undefined') return false;
-  
+
   const chaveNormalizada = String(code || '').trim();
   if (!chaveNormalizada) return false;
 
-  let chaves = JSON.parse(localStorage.getItem('chavesAtivacao') || '[]');
-  if (!Array.isArray(chaves) || chaves.length === 0) {
-    criarChaves();
-    chaves = JSON.parse(localStorage.getItem('chavesAtivacao') || '[]');
-  }
+  const chavesArmazenadas = JSON.parse(localStorage.getItem(STORAGE_KEYS.chavesAtivacao) || '[]');
+  const chaves: ChaveAtivacao[] =
+    Array.isArray(chavesArmazenadas) && chavesArmazenadas.length > 0
+      ? chavesArmazenadas
+      : criarChaves();
 
-  const find = chaves.find((chave: { code?: string; used?: boolean }) =>
+  const find = chaves.find((chave) =>
     String(chave.code) === chaveNormalizada && !chave.used
   );
 
   if (!find) return false;
 
   find.used = true;
-  localStorage.setItem('chavesAtivacao', JSON.stringify(chaves));
+  localStorage.setItem(STORAGE_KEYS.chavesAtivacao, JSON.stringify(chaves));
   return true;
 }
 
 /**
- * Cria as chaves de ativação iniciais
+ * Cria as chaves de ativação iniciais e retorna o array criado
  */
-export function criarChaves(): void {
-  if (typeof window === 'undefined') return;
-  
-  const chavesInicializadoras = [
+export function criarChaves(): ChaveAtivacao[] {
+  if (typeof window === 'undefined') return [];
+
+  const chavesInicializadoras: ChaveAtivacao[] = [
     { code: '123', used: false },
     { code: '456', used: false },
     { code: '789', used: false },
   ];
 
-  localStorage.setItem('chavesAtivacao', JSON.stringify(chavesInicializadoras));
+  localStorage.setItem(STORAGE_KEYS.chavesAtivacao, JSON.stringify(chavesInicializadoras));
+  return chavesInicializadoras;
 }
 
 /**
@@ -302,13 +304,6 @@ export function atribuirAluno(matriculaCoord: string, matriculaAluno: string): v
 }
 
 /**
- * Faz o vínculo no sentido aluno -> coordenador, mantendo compatibilidade com o original
- */
-export function atribuirCoordenador(matriculaAluno: string, matriculaCoord: string): void {
-  atribuirAluno(matriculaCoord, matriculaAluno);
-}
-
-/**
  * Remove um aluno do sistema, limpando vínculos e demandas associadas
  */
 export function deletarAluno(matriculaAluno: string): void {
@@ -331,13 +326,13 @@ export function deletarAluno(matriculaAluno: string): void {
 
   salvarUsuarios(usuarios);
 
-  const demandas = normalizarDemandasStorage(JSON.parse(localStorage.getItem('demandas') || '[]'));
+  const demandas = normalizarDemandasStorage(JSON.parse(localStorage.getItem(STORAGE_KEYS.demandas) || '[]'));
   const demandasFiltradas = demandas.filter(
     (demanda) => String(demanda.matriculaAluno) !== matriculaNormalizada
   );
-  localStorage.setItem('demandas', JSON.stringify(demandasFiltradas));
+  localStorage.setItem(STORAGE_KEYS.demandas, JSON.stringify(demandasFiltradas));
 
-  const turmas = JSON.parse(localStorage.getItem('turmas') || '[]') as Array<{
+  const turmas = JSON.parse(localStorage.getItem(STORAGE_KEYS.turmas) || '[]') as Array<{
     alunos?: string[];
   } & Record<string, unknown>>;
   if (Array.isArray(turmas)) {
@@ -348,7 +343,7 @@ export function deletarAluno(matriculaAluno: string): void {
         : [],
     }));
 
-    localStorage.setItem('turmas', JSON.stringify(turmasAtualizadas));
+    localStorage.setItem(STORAGE_KEYS.turmas, JSON.stringify(turmasAtualizadas));
   }
 }
 
@@ -359,7 +354,7 @@ export function logout(): void {
   if (typeof window === 'undefined') return;
   
   salvarUsuarioLogado(null);
-  localStorage.removeItem('auth');
+  localStorage.removeItem(STORAGE_KEYS.auth);
 }
 
 /**

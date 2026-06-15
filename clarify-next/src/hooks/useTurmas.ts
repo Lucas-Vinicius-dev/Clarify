@@ -8,6 +8,7 @@
 import { useState, useCallback } from 'react';
 import type { Turma } from '@/types';
 import { popularLocalStorage } from '@/lib/localStorage';
+import { STORAGE_KEYS } from '@/lib/storageKeys';
 
 export interface UseTurmasReturn {
   turmas: Turma[];
@@ -31,7 +32,7 @@ function obterTurmasIniciais(): Turma[] {
 
   popularLocalStorage();
 
-  return JSON.parse(localStorage.getItem('turmas') || '[]') as Turma[];
+  return JSON.parse(localStorage.getItem(STORAGE_KEYS.turmas) || '[]') as Turma[];
 }
 
 /**
@@ -42,7 +43,7 @@ export function useTurmas(): UseTurmasReturn {
 
   const salvar = useCallback((novasTurmas: Turma[]) => {
     if (typeof window === 'undefined') return;
-    localStorage.setItem('turmas', JSON.stringify(novasTurmas));
+    localStorage.setItem(STORAGE_KEYS.turmas, JSON.stringify(novasTurmas));
     setTurmas(novasTurmas);
   }, []);
 
