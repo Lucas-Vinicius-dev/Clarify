@@ -77,7 +77,7 @@ export default function RegistroPage() {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+            <label htmlFor="registro-fullName" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
               Nome Completo
             </label>
             <div className="relative">
@@ -92,6 +92,7 @@ export default function RegistroPage() {
                 </svg>
               </span>
               <input
+                id="registro-fullName"
                 type="text"
                 name="fullName"
                 placeholder="e.g. John Doe"
@@ -103,7 +104,7 @@ export default function RegistroPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+            <label htmlFor="registro-institutionalId" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
               ID Institucional
             </label>
             <div className="relative">
@@ -118,6 +119,7 @@ export default function RegistroPage() {
                 </svg>
               </span>
               <input
+                id="registro-institutionalId"
                 type="text"
                 name="institutionalId"
                 placeholder="e.g. 123456789"
@@ -129,7 +131,7 @@ export default function RegistroPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+            <label htmlFor="registro-institutionalEmail" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
               Email Institucional
             </label>
             <div className="relative">
@@ -144,6 +146,7 @@ export default function RegistroPage() {
                 </svg>
               </span>
               <input
+                id="registro-institutionalEmail"
                 type="email"
                 name="institutionalEmail"
                 placeholder="e.g. john.doe@academico.edu.br"
@@ -155,7 +158,7 @@ export default function RegistroPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+            <label htmlFor="registro-securityKey" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
               Chave de Segurança
             </label>
             <div className="relative">
@@ -170,6 +173,7 @@ export default function RegistroPage() {
                 </svg>
               </span>
               <input
+                id="registro-securityKey"
                 type="password"
                 name="securityKey"
                 placeholder="••••••••"
@@ -181,7 +185,7 @@ export default function RegistroPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+            <label htmlFor="registro-activationKey" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
               Chave de Ativação
             </label>
             <div className="relative">
@@ -196,6 +200,7 @@ export default function RegistroPage() {
                 </svg>
               </span>
               <input
+                id="registro-activationKey"
                 type="text"
                 name="activationKey"
                 placeholder="Chave fornecida pela instituição"
