@@ -51,7 +51,7 @@ export default function DashboardCoordPage() {
 
   const demandasDoCoord = useMemo(
     () => demandas.filter((d) => alunoIds.has(d.alunoId)),
-    [alunosDoCoord, alunoIds, demandas]
+    [alunoIds, demandas]
   );
 
   const demandasPendentes = useMemo(
@@ -139,9 +139,6 @@ export default function DashboardCoordPage() {
 
     if (json.ok) {
       await usuariosHook.recarregar();
-      if (usuario?.id && json.profile?.id) {
-        await usuariosHook.atribuir(usuario.id, json.profile.id);
-      }
       setAdicionarSucesso('Aluno cadastrado com sucesso!');
       (e.target as HTMLFormElement).reset();
     } else {

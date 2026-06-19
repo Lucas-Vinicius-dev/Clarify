@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/client'
 import type { AuthResponse, RegistroDados, UsuarioLogado } from '@/types'
 
 let cachedUsuario: UsuarioLogado | null = null
-let authListeners = new Set<() => void>()
+const authListeners = new Set<() => void>()
 
 export function notificarMudancaAuth(): void {
   authListeners.forEach((l) => l())

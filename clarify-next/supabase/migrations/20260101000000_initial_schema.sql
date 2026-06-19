@@ -103,6 +103,15 @@ begin
 end;
 $$;
 
+-- 2.9 FUNCTION: wrapper para setval (usada pelo seed script)
+create or replace function public.setval(sequence text, value bigint)
+returns bigint
+language sql
+security definer
+as $$
+  select setval(sequence::regclass, value);
+$$;
+
 -- ============================================================
 -- RLS POLICIES
 -- ============================================================

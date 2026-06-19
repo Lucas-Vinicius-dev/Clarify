@@ -23,7 +23,7 @@ export interface UseDemandasReturn {
     novoStatus: StatusDemanda,
     feedback?: string
   ) => Promise<Demanda | null>
-  recarregar: () => Promise<void>
+  recarregar: () => void
   filtrar: (filtros: Partial<UseDemandasOptions>) => Demanda[]
 }
 
@@ -45,22 +45,32 @@ export function useDemandas(opcoes?: UseDemandasOptions): UseDemandasReturn {
   const supabase = createClient()
   const [demandas, setDemandas] = useState<Demanda[]>([])
   const [loading, setLoading] = useState(true)
-
-  const recarregar = useCallback(async () => {
-    setLoading(true)
-    let query = supabase.from('demandas').select('*')
-
-    if (opcoes?.alunoId) query = query.eq('aluno_id', opcoes.alunoId)
-    if (opcoes?.status) query = query.eq('status', opcoes.status)
-
-    const { data } = await query.order('created_at', { ascending: false })
-    setDemandas((data ?? []).map(mapRow))
-    setLoading(false)
-  }, [supabase, opcoes?.alunoId, opcoes?.status])
+  const [refreshKey, setRefreshKey] = useState(0)
 
   useEffect(() => {
-    recarregar()
-  }, [recarregar])
+    let cancelled = false
+
+    const load = async () => {
+      let query = supabase.from('demandas').select('*')
+
+      if (opcoes?.alunoId) query = query.eq('aluno_id', opcoes.alunoId)
+      if (opcoes?.status) query = query.eq('status', opcoes.status)
+
+      const { data } = await query.order('created_at', { ascending: false })
+      if (!cancelled) {
+        setDemandas((data ?? []).map(mapRow))
+        setLoading(false)
+      }
+    }
+
+    load()
+    return () => { cancelled = true }
+  }, [supabase, opcoes?.alunoId, opcoes?.status, refreshKey])
+
+  const recarregar = useCallback(() => {
+    setLoading(true)
+    setRefreshKey((k) => k + 1)
+  }, [])
 
   const criar = useCallback(
     async (dados: { alunoId: string; tipo: TipoDemanda; descricao: string }) => {

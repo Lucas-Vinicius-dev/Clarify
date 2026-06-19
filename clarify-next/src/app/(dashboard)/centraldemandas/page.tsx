@@ -23,7 +23,7 @@ const VIEWS: StudentView[] = ['nome', 'demandas'];
 
 export default function CentralDemandasPage() {
   const { usuario } = useAuth();
-  const { demandas, criar, buscarPorProtocolo } = useDemandas(
+  const { demandas, criar } = useDemandas(
     usuario ? { alunoId: usuario.id } : undefined
   );
   const searchParams = useSearchParams();
@@ -46,30 +46,34 @@ export default function CentralDemandasPage() {
   );
 
   useEffect(() => {
-    if (demandaDetalhes) {
-      supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', demandaDetalhes.alunoId)
-        .maybeSingle()
-        .then(({ data }) => {
-          if (data) {
-            setRemetenteDetalhe({
-              id: data.id,
-              nome: data.nome,
-              matricula: data.matricula,
-              email: data.email,
-              cargo: data.cargo,
-              coordenador_id: data.coordenador_id,
-            });
-          } else {
-            setRemetenteDetalhe(null);
-          }
-        });
-    } else {
-      setRemetenteDetalhe(null);
-    }
-  }, [demandaDetalhes, supabase]);
+    if (!demandaDetalhes) return
+
+    let cancelled = false
+
+    supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', demandaDetalhes.alunoId)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!cancelled) {
+          setRemetenteDetalhe(
+            data
+              ? {
+                  id: data.id,
+                  nome: data.nome,
+                  matricula: data.matricula,
+                  email: data.email,
+                  cargo: data.cargo,
+                  coordenador_id: data.coordenador_id,
+                }
+              : null
+          )
+        }
+      })
+
+    return () => { cancelled = true }
+  }, [demandaDetalhes, supabase])
 
   const filtradas = useMemo(() => {
     return demandas.filter((d) => {
@@ -276,7 +280,7 @@ export default function CentralDemandasPage() {
 
       <ModalDetalhesDemanda
         open={modalDetalhesAberta}
-        onClose={() => { setModalDetalhesAberta(false); setProtocoloSelecionado(null); }}
+        onClose={() => { setModalDetalhesAberta(false); setProtocoloSelecionado(null); setRemetenteDetalhe(null); }}
         demanda={demandaDetalhes}
         remetente={remetenteDetalhe}
       />

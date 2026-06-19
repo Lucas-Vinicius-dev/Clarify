@@ -19,7 +19,7 @@ export interface UseTurmasReturn {
   removerAluno: (turmaId: string, alunoId: string) => Promise<void>
   contarAlunos: (idTurma: string) => number
   filtrar: (coordenadorId: string) => Turma[]
-  recarregar: () => Promise<void>
+  recarregar: () => void
 }
 
 function mapRow(row: Record<string, unknown>): Turma {
@@ -37,32 +37,42 @@ export function useTurmas(): UseTurmasReturn {
   const supabase = createClient()
   const [turmas, setTurmas] = useState<Turma[]>([])
   const [loading, setLoading] = useState(true)
-
-  const recarregar = useCallback(async () => {
-    setLoading(true)
-    const { data } = await supabase
-      .from('turmas')
-      .select('*')
-      .order('created_at', { ascending: false })
-    const turmasRows = (data ?? []).map(mapRow)
-
-    const turmasComAlunos = await Promise.all(
-      turmasRows.map(async (t) => {
-        const { data: alunos } = await supabase
-          .from('turma_alunos')
-          .select('aluno_id')
-          .eq('turma_id', t.id)
-        return { ...t, alunos: (alunos ?? []).map((a) => a.aluno_id) }
-      })
-    )
-
-    setTurmas(turmasComAlunos)
-    setLoading(false)
-  }, [supabase])
+  const [refreshKey, setRefreshKey] = useState(0)
 
   useEffect(() => {
-    recarregar()
-  }, [recarregar])
+    let cancelled = false
+
+    const load = async () => {
+      const { data } = await supabase
+        .from('turmas')
+        .select('*')
+        .order('created_at', { ascending: false })
+      const turmasRows = (data ?? []).map(mapRow)
+
+      const turmasComAlunos = await Promise.all(
+        turmasRows.map(async (t) => {
+          const { data: alunos } = await supabase
+            .from('turma_alunos')
+            .select('aluno_id')
+            .eq('turma_id', t.id)
+          return { ...t, alunos: (alunos ?? []).map((a) => a.aluno_id) }
+        })
+      )
+
+      if (!cancelled) {
+        setTurmas(turmasComAlunos)
+        setLoading(false)
+      }
+    }
+
+    load()
+    return () => { cancelled = true }
+  }, [supabase, refreshKey])
+
+  const recarregar = useCallback(() => {
+    setLoading(true)
+    setRefreshKey((k) => k + 1)
+  }, [])
 
   const criar = useCallback(
     async (dados: {

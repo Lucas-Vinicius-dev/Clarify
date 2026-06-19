@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import type { Usuario, Cargo, UsuarioLogado } from '@/types'
+import type { Cargo, UsuarioLogado } from '@/types'
 
 export interface UseUsuariosReturn {
   usuarios: UsuarioLogado[]
@@ -19,7 +19,7 @@ export interface UseUsuariosReturn {
   atribuir: (coordenadorId: string, alunoId: string) => Promise<void>
   deletar: (alunoId: string) => Promise<void>
   existe: (matricula: string, email: string) => Promise<boolean>
-  recarregar: () => Promise<void>
+  recarregar: () => void
 }
 
 function mapProfileToUser(row: Record<string, unknown>): UsuarioLogado {
@@ -37,17 +37,27 @@ export function useUsuarios(): UseUsuariosReturn {
   const supabase = createClient()
   const [usuarios, setUsuarios] = useState<UsuarioLogado[]>([])
   const [loading, setLoading] = useState(true)
-
-  const recarregar = useCallback(async () => {
-    setLoading(true)
-    const { data } = await supabase.from('profiles').select('*')
-    setUsuarios((data ?? []).map(mapProfileToUser))
-    setLoading(false)
-  }, [supabase])
+  const [refreshKey, setRefreshKey] = useState(0)
 
   useEffect(() => {
-    recarregar()
-  }, [recarregar])
+    let cancelled = false
+
+    const load = async () => {
+      const { data } = await supabase.from('profiles').select('*')
+      if (!cancelled) {
+        setUsuarios((data ?? []).map(mapProfileToUser))
+        setLoading(false)
+      }
+    }
+
+    load()
+    return () => { cancelled = true }
+  }, [supabase, refreshKey])
+
+  const recarregar = useCallback(() => {
+    setLoading(true)
+    setRefreshKey((k) => k + 1)
+  }, [])
 
   const adicionar = useCallback(
     async (nome: string, matricula: string, email: string, senha: string, cargo: Cargo) => {

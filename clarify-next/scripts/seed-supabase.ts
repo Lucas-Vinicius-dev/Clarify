@@ -168,7 +168,21 @@ async function main() {
     }
   }
 
-  // 3. Cria demandas de teste
+  // 3. Atualiza a sequence protocolo_seq para o próximo valor
+  const maxProtocolo = Math.max(
+    ...DEMANDAS_TESTE.map((d) => parseInt(d.protocolo.replace('REQ-', ''), 10))
+  )
+  const { error: seqError } = await supabase.rpc('setval', {
+    sequence: 'public.protocolo_seq',
+    value: maxProtocolo + 1,
+  })
+  if (seqError) {
+    console.error(`Erro ao atualizar sequence: ${seqError.message}`)
+  } else {
+    console.log(`Sequence protocolo_seq atualizada para ${maxProtocolo + 1}`)
+  }
+
+  // 4. Cria demandas de teste
   for (const d of DEMANDAS_TESTE) {
     const alunoProfile = profileMap.get(d.matriculaAluno)
 
