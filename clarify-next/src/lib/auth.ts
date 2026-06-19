@@ -32,67 +32,23 @@ export async function autenticarLogin(matricula: string, senha: string): Promise
 }
 
 export async function registrarCoordenador(dados: RegistroDados): Promise<AuthResponse> {
-  const supabase = createClient()
-
   if (!dados.chaveAtivacao) {
     return { ok: false, mensagem: 'Chave de ativação é obrigatória.' }
   }
 
-  const { data: chave } = await supabase
-    .from('chaves_ativacao')
-    .select('*')
-    .eq('code', dados.chaveAtivacao)
-    .eq('used', false)
-    .single()
-
-  if (!chave) {
-    return { ok: false, mensagem: 'Chave de ativação inválida ou já utilizada.' }
-  }
-
-  const { data, error } = await supabase.auth.signUp({
-    email: dados.email,
-    password: dados.senha,
-    options: {
-      data: {
-        matricula: dados.matricula,
-        nome: dados.nome,
-        cargo: dados.cargo ?? 'coordenador',
-      },
-    },
+  const res = await fetch('/api/auth/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      nome: dados.nome,
+      matricula: dados.matricula,
+      email: dados.email,
+      senha: dados.senha,
+      chaveAtivacao: dados.chaveAtivacao,
+    }),
   })
 
-  if (error) {
-    return { ok: false, mensagem: error.message }
-  }
-
-  if (!data.user) {
-    return { ok: false, mensagem: 'Erro ao criar usuário.' }
-  }
-
-  await supabase
-    .from('chaves_ativacao')
-    .update({ used: true })
-    .eq('code', dados.chaveAtivacao)
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', data.user.id)
-    .single()
-
-  return {
-    ok: true,
-    usuarioLogado: profile
-      ? {
-          id: profile.id,
-          nome: profile.nome,
-          matricula: profile.matricula,
-          email: profile.email,
-          cargo: profile.cargo,
-          coordenador_id: profile.coordenador_id,
-        }
-      : undefined,
-  }
+  return res.json()
 }
 
 export async function usuarioExiste(matricula: string, email: string): Promise<boolean> {

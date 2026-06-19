@@ -99,62 +99,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
       return { ok: false, mensagem: 'Chave de ativação é obrigatória.' }
     }
 
-    const { data: chave } = await supabase
-      .from('chaves_ativacao')
-      .select('*')
-      .eq('code', dados.chaveAtivacao)
-      .eq('used', false)
-      .single()
-
-    if (!chave) {
-      return { ok: false, mensagem: 'Chave de ativação inválida ou já utilizada.' }
-    }
-
-    const { data, error } = await supabase.auth.signUp({
-      email: dados.email,
-      password: dados.senha,
-      options: {
-        data: {
-          matricula: dados.matricula,
-          nome: dados.nome,
-          cargo: dados.cargo ?? 'coordenador',
-        },
-      },
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nome: dados.nome,
+        matricula: dados.matricula,
+        email: dados.email,
+        senha: dados.senha,
+        chaveAtivacao: dados.chaveAtivacao,
+      }),
     })
 
-    if (error) {
-      return { ok: false, mensagem: error.message }
+    const result = await res.json()
+
+    if (result.ok && result.usuarioLogado) {
+      setUsuario(result.usuarioLogado)
     }
 
-    if (!data.user) {
-      return { ok: false, mensagem: 'Erro ao criar usuário.' }
-    }
-
-    await supabase
-      .from('chaves_ativacao')
-      .update({ used: true })
-      .eq('code', dados.chaveAtivacao)
-
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', data.user.id)
-      .single()
-
-    const usuarioLogado = profile
-      ? {
-          id: profile.id,
-          nome: profile.nome,
-          matricula: profile.matricula,
-          email: profile.email,
-          cargo: profile.cargo,
-          coordenador_id: profile.coordenador_id,
-        }
-      : undefined
-
-    if (usuarioLogado) setUsuario(usuarioLogado)
-    return { ok: true, usuarioLogado }
-  }, [supabase])
+    return result
+  }, [])
 
   const value: AuthContextValue = {
     usuario,
