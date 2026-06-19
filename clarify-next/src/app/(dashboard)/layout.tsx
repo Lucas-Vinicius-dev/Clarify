@@ -12,24 +12,20 @@ interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
-/**
- * Layout compartilhado para o dashboard protegido
- * - Verifica autenticação (redireciona para /login se não autenticado)
- * - Renderiza sidebar + topbar + conteúdo
- * - Gerencia drawer móvel
- */
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  const { isAuthenticated, usuario, logout } = useAuth();
+  const { isAuthenticated, loading, usuario, logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
+    if (loading) return;
+
     if (!isAuthenticated) {
       router.replace('/login');
       return;
     }
-    // Proteção de rotas por cargo
+
     if (usuario) {
       if (pathname.startsWith('/dashboardcoord') && usuario.cargo !== 'coordenador') {
         router.replace('/centraldemandas');
@@ -37,10 +33,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         router.replace('/dashboardcoord');
       }
     }
-  }, [isAuthenticated, router, pathname, usuario]);
+  }, [loading, isAuthenticated, router, pathname, usuario]);
 
-  // Renderiza nada enquanto verifica autenticação
-  if (!isAuthenticated || !usuario) {
+  if (loading || !isAuthenticated || !usuario) {
     return null;
   }
 
@@ -53,14 +48,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     }
   };
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     router.replace('/login');
   };
 
   return (
     <div className="flex h-screen overflow-hidden bg-white">
-      {/* Sidebar + Drawer com suporte a searchParams */}
       <Suspense fallback={<div className="hidden md:block w-64 bg-gray-50 border-r border-gray-200" />}>
         <SidebarNav
           cargo={usuario.cargo}
@@ -71,19 +65,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         />
       </Suspense>
 
-      {/* Área principal (mobile + desktop) */}
       <div className="flex flex-col flex-1 overflow-hidden">
-        {/* Topbar mobile */}
         <TopbarMobile
           usuario={usuario}
           onLogout={handleLogout}
           onMenuClick={() => setDrawerOpen(true)}
         />
 
-        {/* Topbar desktop */}
         <TopbarDesktop usuario={usuario} onLogout={handleLogout} />
 
-        {/* Conteúdo da página */}
         <main className="flex-1 overflow-y-auto">
           {children}
         </main>
@@ -92,10 +82,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   );
 }
 
-/**
- * Componente aninhado que usa useSearchParams para manter a sidebarView sincronizada
- * Separado para poder ser envolvido em Suspense (exigência do Next.js)
- */
 function SidebarNav({
   cargo,
   drawerOpen,
@@ -114,7 +100,6 @@ function SidebarNav({
 
   return (
     <>
-      {/* Sidebar desktop (oculta em mobile) */}
       <div className="hidden md:block">
         <Sidebar
           cargo={cargo}
@@ -124,7 +109,6 @@ function SidebarNav({
         />
       </div>
 
-      {/* Drawer mobile */}
       <DrawerMobile
         open={drawerOpen}
         onClose={onCloseDrawer}

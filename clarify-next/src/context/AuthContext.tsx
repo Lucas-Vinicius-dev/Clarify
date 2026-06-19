@@ -1,98 +1,181 @@
-'use client';
-
-// ═════════════════════════════════════════════════════════════════
-// CONTEXT: AUTENTICAÇÃO
-// Provider global de autenticação do sistema
-// ═════════════════════════════════════════════════════════════════
+'use client'
 
 import {
   createContext,
   useContext,
-  useSyncExternalStore,
+  useEffect,
+  useState,
+  useCallback,
   ReactNode,
-} from 'react';
+} from 'react'
+import { createClient } from '@/lib/supabase/client'
 import type {
   AuthContextValue,
-  RegistroDados,
   AuthResponse,
-} from '@/types';
-import {
-  autenticarLogin,
-  registrarCoordenador,
-  logout as authLogout,
-  obterUsuarioLogado,
-} from '@/lib/auth';
+  RegistroDados,
+  UsuarioLogado,
+} from '@/types'
 
-const authListeners = new Set<() => void>();
-
-function notificarMudancaAuth(): void {
-  authListeners.forEach((listener) => listener());
-}
-
-function subscreverAuth(listener: () => void): () => void {
-  authListeners.add(listener);
-  return () => authListeners.delete(listener);
-}
-
-function obterSnapshotAuth() {
-  return obterUsuarioLogado();
-}
-
-function obterSnapshotAuthServidor() {
-  return null;
-}
-
-const AuthContext = createContext<AuthContextValue | null>(null);
+const AuthContext = createContext<AuthContextValue | null>(null)
 
 export interface AuthProviderProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
-/**
- * Provider de autenticação para o app
- */
 export function AuthProvider({ children }: AuthProviderProps) {
-  const usuario = useSyncExternalStore(subscreverAuth, obterSnapshotAuth, obterSnapshotAuthServidor);
+  const supabase = createClient()
+  const [usuario, setUsuario] = useState<UsuarioLogado | null>(null)
+  const [loading, setLoading] = useState(true)
 
-  const login = (matricula: string, senha: string): AuthResponse => {
-    const resultado = autenticarLogin(matricula, senha);
-    if (resultado.ok) notificarMudancaAuth();
-    return resultado;
-  };
+  const fetchProfile = useCallback(async (userId: string) => {
+    const { data } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .maybeSingle()
 
-  const logout = () => {
-    authLogout();
-    notificarMudancaAuth();
-  };
+    if (data) {
+      const u: UsuarioLogado = {
+        id: data.id,
+        nome: data.nome,
+        matricula: data.matricula,
+        email: data.email,
+        cargo: data.cargo,
+        coordenador_id: data.coordenador_id,
+      }
+      setUsuario(u)
+    } else {
+      setUsuario(null)
+    }
+    setLoading(false)
+  }, [supabase])
 
-  const registro = (dados: RegistroDados): AuthResponse => {
-    const resultado = registrarCoordenador(dados);
-    if (resultado.ok) notificarMudancaAuth();
-    return resultado;
-  };
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        fetchProfile(session.user.id)
+      } else {
+        setLoading(false)
+      }
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (session?.user) {
+          fetchProfile(session.user.id)
+        } else {
+          setUsuario(null)
+          setLoading(false)
+        }
+      }
+    )
+
+    return () => subscription.unsubscribe()
+  }, [supabase, fetchProfile])
+
+  const login = useCallback(async (matricula: string, senha: string): Promise<AuthResponse> => {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ matricula, senha }),
+    })
+    const data = await res.json()
+    if (data.ok) {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.user) {
+        await fetchProfile(session.user.id)
+      }
+    }
+    return data
+  }, [supabase, fetchProfile])
+
+  const logout = useCallback(async () => {
+    await supabase.auth.signOut()
+    setUsuario(null)
+  }, [supabase])
+
+  const registro = useCallback(async (dados: RegistroDados): Promise<AuthResponse> => {
+    if (!dados.chaveAtivacao) {
+      return { ok: false, mensagem: 'Chave de ativação é obrigatória.' }
+    }
+
+    const { data: chave } = await supabase
+      .from('chaves_ativacao')
+      .select('*')
+      .eq('code', dados.chaveAtivacao)
+      .eq('used', false)
+      .single()
+
+    if (!chave) {
+      return { ok: false, mensagem: 'Chave de ativação inválida ou já utilizada.' }
+    }
+
+    const { data, error } = await supabase.auth.signUp({
+      email: dados.email,
+      password: dados.senha,
+      options: {
+        data: {
+          matricula: dados.matricula,
+          nome: dados.nome,
+          cargo: dados.cargo ?? 'coordenador',
+        },
+      },
+    })
+
+    if (error) {
+      return { ok: false, mensagem: error.message }
+    }
+
+    if (!data.user) {
+      return { ok: false, mensagem: 'Erro ao criar usuário.' }
+    }
+
+    await supabase
+      .from('chaves_ativacao')
+      .update({ used: true })
+      .eq('code', dados.chaveAtivacao)
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', data.user.id)
+      .single()
+
+    const usuarioLogado = profile
+      ? {
+          id: profile.id,
+          nome: profile.nome,
+          matricula: profile.matricula,
+          email: profile.email,
+          cargo: profile.cargo,
+          coordenador_id: profile.coordenador_id,
+        }
+      : undefined
+
+    if (usuarioLogado) setUsuario(usuarioLogado)
+    return { ok: true, usuarioLogado }
+  }, [supabase])
 
   const value: AuthContextValue = {
     usuario,
     isAuthenticated: !!usuario,
+    loading,
     login,
     logout,
     registro,
-  };
+  }
 
   return (
     <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
-  );
+  )
 }
 
-/**
- * Hook para acessar o contexto de autenticação
- */
 export function useAuth(): AuthContextValue {
-  const ctx = useContext(AuthContext);
+  const ctx = useContext(AuthContext)
   if (!ctx) {
-    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
+    throw new Error('useAuth deve ser usado dentro de um AuthProvider')
   }
-  return ctx;
+  return ctx
 }

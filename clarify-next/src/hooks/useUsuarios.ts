@@ -1,140 +1,129 @@
-'use client';
+'use client'
 
-// ═════════════════════════════════════════════════════════════════
-// HOOK: useUsuarios
-// Gerencia usuários do sistema com estado reativo
-// ═════════════════════════════════════════════════════════════════
-
-import { useState, useCallback } from 'react';
-import type { Usuario, Cargo } from '@/types';
-import {
-  adicionarUsuario,
-  acharUsuario,
-  atribuirAluno,
-  deletarAluno,
-  usuarioExiste,
-} from '@/lib/auth';
-import { popularLocalStorage } from '@/lib/localStorage';
+import { useState, useEffect, useCallback } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import type { Usuario, Cargo, UsuarioLogado } from '@/types'
 
 export interface UseUsuariosReturn {
-  usuarios: Usuario[];
+  usuarios: UsuarioLogado[]
+  loading: boolean
   adicionar: (
     nome: string,
     matricula: string,
     email: string,
     senha: string,
     cargo: Cargo
-  ) => void;
-  buscar: (matricula: string) => Usuario | undefined;
-  obterAlunos: () => Usuario[];
-  obterCoordenadores: () => Usuario[];
-  obterAlunosDoCoordenador: (matriculaCoordenador: string) => string[];
-  atribuir: (matriculaCoord: string, matriculaAluno: string) => void;
-  deletar: (matriculaAluno: string) => void;
-  existe: (matricula: string, email: string) => boolean;
+  ) => Promise<void>
+  buscar: (matricula: string) => Promise<UsuarioLogado | null>
+  obterAlunosDoCoordenador: (coordenadorId: string) => Promise<UsuarioLogado[]>
+  atribuir: (coordenadorId: string, alunoId: string) => Promise<void>
+  deletar: (alunoId: string) => Promise<void>
+  existe: (matricula: string, email: string) => Promise<boolean>
+  recarregar: () => Promise<void>
 }
 
-function obterUsuariosIniciais(): Usuario[] {
-  if (typeof window === 'undefined') return [];
-
-  popularLocalStorage();
-
-  return JSON.parse(localStorage.getItem('usuarios') || '[]') as Usuario[];
+function mapProfileToUser(row: Record<string, unknown>): UsuarioLogado {
+  return {
+    id: row.id as string,
+    nome: row.nome as string,
+    matricula: row.matricula as string,
+    email: row.email as string,
+    cargo: row.cargo as Cargo,
+    coordenador_id: (row.coordenador_id as string) ?? undefined,
+  }
 }
 
-/**
- * Hook para gerenciar usuários
- */
 export function useUsuarios(): UseUsuariosReturn {
-  const [usuarios, setUsuarios] = useState<Usuario[]>(() => obterUsuariosIniciais());
+  const supabase = createClient()
+  const [usuarios, setUsuarios] = useState<UsuarioLogado[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const recarregar = useCallback(() => {
-    if (typeof window === 'undefined') return;
+  const recarregar = useCallback(async () => {
+    setLoading(true)
+    const { data } = await supabase.from('profiles').select('*')
+    setUsuarios((data ?? []).map(mapProfileToUser))
+    setLoading(false)
+  }, [supabase])
 
-    const usuariosSalvos = JSON.parse(
-      localStorage.getItem('usuarios') || '[]'
-    ) as Usuario[];
-    setUsuarios(usuariosSalvos);
-  }, []);
+  useEffect(() => {
+    recarregar()
+  }, [recarregar])
 
   const adicionar = useCallback(
-    (
-      nome: string,
-      matricula: string,
-      email: string,
-      senha: string,
-      cargo: Cargo
-    ) => {
-      adicionarUsuario(nome, matricula, email, senha, cargo);
-      recarregar();
+    async (nome: string, matricula: string, email: string, senha: string, cargo: Cargo) => {
+      const res = await fetch('/api/profiles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome, matricula, email, senha, cargo }),
+      })
+      const json = await res.json()
+      if (json.ok) await recarregar()
     },
     [recarregar]
-  );
+  )
 
-  const buscar = useCallback((matricula: string) => {
-    return acharUsuario(matricula);
-  }, []);
-
-  const obterAlunos = useCallback(() => {
-    return usuarios.filter((u) => u.cargo === 'aluno');
-  }, [usuarios]);
-
-  const obterCoordenadores = useCallback(() => {
-    return usuarios.filter((u) => u.cargo === 'coordenador');
-  }, [usuarios]);
+  const buscar = useCallback(async (matricula: string) => {
+    const { data } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('matricula', matricula)
+      .maybeSingle()
+    if (!data) return null
+    return mapProfileToUser(data)
+  }, [supabase])
 
   const obterAlunosDoCoordenador = useCallback(
-    (matriculaCoordenador: string) => {
-      const vinculados = new Set<string>();
-
-      usuarios.forEach((usuario) => {
-        if (
-          String(usuario.cargo) === 'aluno' &&
-          String(usuario.coordenador) === String(matriculaCoordenador)
-        ) {
-          vinculados.add(String(usuario.matricula));
-        }
-
-        if (String(usuario.matricula) === String(matriculaCoordenador)) {
-          (usuario.alunosCadastrados || []).forEach((matricula) => vinculados.add(String(matricula)));
-          (usuario.usuariosCadastrados || []).forEach((matricula) => vinculados.add(String(matricula)));
-        }
-      });
-
-      return [...vinculados];
+    async (coordenadorId: string) => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('coordenador_id', coordenadorId)
+        .eq('cargo', 'aluno')
+      return (data ?? []).map(mapProfileToUser)
     },
-    [usuarios]
-  );
+    [supabase]
+  )
 
   const atribuir = useCallback(
-    (matriculaCoord: string, matriculaAluno: string) => {
-      atribuirAluno(matriculaCoord, matriculaAluno);
-      recarregar();
+    async (coordenadorId: string, alunoId: string) => {
+      await supabase
+        .from('profiles')
+        .update({ coordenador_id: coordenadorId })
+        .eq('id', alunoId)
+      await recarregar()
     },
-    [recarregar]
-  );
+    [supabase, recarregar]
+  )
 
   const deletar = useCallback(
-    (matriculaAluno: string) => {
-      deletarAluno(matriculaAluno);
-      recarregar();
+    async (alunoId: string) => {
+      await fetch(`/api/profiles?alunoId=${alunoId}`, { method: 'DELETE' })
+      await recarregar()
     },
     [recarregar]
-  );
+  )
 
-  const existe = useCallback((matricula: string, email: string) => {
-    return usuarioExiste(matricula, email);
-  }, []);
+  const existe = useCallback(
+    async (matricula: string, email: string) => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('id')
+        .or(`matricula.eq.${matricula},email.eq.${email}`)
+        .maybeSingle()
+      return !!data
+    },
+    [supabase]
+  )
 
   return {
     usuarios,
+    loading,
     adicionar,
     buscar,
-    obterAlunos,
-    obterCoordenadores,
     obterAlunosDoCoordenador,
     atribuir,
     deletar,
     existe,
-  };
+    recarregar,
+  }
 }

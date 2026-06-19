@@ -91,6 +91,7 @@ export async function loginComMatricula(
   return {
     ok: true,
     usuarioLogado: {
+      id: profile.id,
       nome: profile.nome,
       matricula: profile.matricula,
       email: profile.email,
@@ -150,6 +151,7 @@ export async function registrarCoordenador(
     ok: true,
     usuarioLogado: profile
       ? {
+          id: profile.id,
           nome: profile.nome,
           matricula: profile.matricula,
           email: profile.email,
