@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import type { Cargo, UsuarioLogado } from '@/types'
 
 export interface UseUsuariosReturn {
@@ -34,7 +33,6 @@ function mapProfileToUser(row: Record<string, unknown>): UsuarioLogado {
 }
 
 export function useUsuarios(): UseUsuariosReturn {
-  const supabase = createClient()
   const [usuarios, setUsuarios] = useState<UsuarioLogado[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshKey, setRefreshKey] = useState(0)
@@ -43,7 +41,8 @@ export function useUsuarios(): UseUsuariosReturn {
     let cancelled = false
 
     const load = async () => {
-      const { data } = await supabase.from('profiles').select('*')
+      const res = await fetch('/api/perfis')
+      const data = await res.json()
       if (!cancelled) {
         setUsuarios((data ?? []).map(mapProfileToUser))
         setLoading(false)
@@ -52,7 +51,7 @@ export function useUsuarios(): UseUsuariosReturn {
 
     load()
     return () => { cancelled = true }
-  }, [supabase, refreshKey])
+  }, [refreshKey])
 
   const recarregar = useCallback(() => {
     setLoading(true)
@@ -61,7 +60,7 @@ export function useUsuarios(): UseUsuariosReturn {
 
   const adicionar = useCallback(
     async (nome: string, matricula: string, email: string, senha: string, cargo: Cargo) => {
-      const res = await fetch('/api/profiles', {
+      const res = await fetch('/api/perfis', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome, matricula, email, senha, cargo }),
@@ -73,41 +72,37 @@ export function useUsuarios(): UseUsuariosReturn {
   )
 
   const buscar = useCallback(async (matricula: string) => {
-    const { data } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('matricula', matricula)
-      .maybeSingle()
-    if (!data) return null
-    return mapProfileToUser(data)
-  }, [supabase])
+    const res = await fetch(`/api/perfis?matricula=${encodeURIComponent(matricula)}`)
+    const data = await res.json()
+    const user = (data ?? [])[0]
+    if (!user) return null
+    return mapProfileToUser(user)
+  }, [])
 
   const obterAlunosDoCoordenador = useCallback(
     async (coordenadorId: string) => {
-      const { data } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('coordenador_id', coordenadorId)
-        .eq('cargo', 'aluno')
+      const res = await fetch(`/api/perfis?coordenadorId=${encodeURIComponent(coordenadorId)}&cargo=aluno`)
+      const data = await res.json()
       return (data ?? []).map(mapProfileToUser)
     },
-    [supabase]
+    []
   )
 
   const atribuir = useCallback(
     async (coordenadorId: string, alunoId: string) => {
-      await supabase
-        .from('profiles')
-        .update({ coordenador_id: coordenadorId })
-        .eq('id', alunoId)
+      await fetch(`/api/perfis/${alunoId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ coordenador_id: coordenadorId }),
+      })
       await recarregar()
     },
-    [supabase, recarregar]
+    [recarregar]
   )
 
   const deletar = useCallback(
     async (alunoId: string) => {
-      await fetch(`/api/profiles?alunoId=${alunoId}`, { method: 'DELETE' })
+      await fetch(`/api/perfis?alunoId=${alunoId}`, { method: 'DELETE' })
       await recarregar()
     },
     [recarregar]
@@ -115,14 +110,11 @@ export function useUsuarios(): UseUsuariosReturn {
 
   const existe = useCallback(
     async (matricula: string, email: string) => {
-      const { data } = await supabase
-        .from('profiles')
-        .select('id')
-        .or(`matricula.eq.${matricula},email.eq.${email}`)
-        .maybeSingle()
-      return !!data
+      const res = await fetch(`/api/perfis?matricula=${encodeURIComponent(matricula)}&email=${encodeURIComponent(email)}`)
+      const data = await res.json()
+      return (data ?? []).length > 0
     },
-    [supabase]
+    []
   )
 
   return {

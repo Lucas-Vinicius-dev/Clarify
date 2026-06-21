@@ -1,4 +1,3 @@
-import { createClient } from '@/lib/supabase/client'
 import type { AuthResponse, RegistroDados, UsuarioLogado } from '@/types'
 
 let cachedUsuario: UsuarioLogado | null = null
@@ -52,48 +51,40 @@ export async function registrarCoordenador(dados: RegistroDados): Promise<AuthRe
 }
 
 export async function usuarioExiste(matricula: string, email: string): Promise<boolean> {
-  const supabase = createClient()
-  const { data } = await supabase
-    .from('profiles')
-    .select('id')
-    .or(`matricula.eq.${matricula},email.eq.${email}`)
-    .maybeSingle()
-  return !!data
+  const res = await fetch(`/api/perfis?matricula=${encodeURIComponent(matricula)}&email=${encodeURIComponent(email)}`)
+  const data = await res.json()
+  return (data ?? []).length > 0
 }
 
 export async function acharUsuario(matricula: string): Promise<UsuarioLogado | null> {
-  const supabase = createClient()
-  const { data } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('matricula', matricula)
-    .maybeSingle()
-  if (!data) return null
+  const res = await fetch(`/api/perfis?matricula=${encodeURIComponent(matricula)}`)
+  const data = await res.json()
+  const user = (data ?? [])[0]
+  if (!user) return null
   return {
-    id: data.id,
-    nome: data.nome,
-    matricula: data.matricula,
-    email: data.email,
-    cargo: data.cargo,
-    coordenador_id: data.coordenador_id,
+    id: user.id,
+    nome: user.nome,
+    matricula: user.matricula,
+    email: user.email,
+    cargo: user.cargo,
+    coordenador_id: user.coordenador_id,
   }
 }
 
 export async function atribuirAluno(coordenadorId: string, alunoId: string): Promise<void> {
-  const supabase = createClient()
-  await supabase
-    .from('profiles')
-    .update({ coordenador_id: coordenadorId })
-    .eq('id', alunoId)
+  await fetch(`/api/perfis/${alunoId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ coordenador_id: coordenadorId }),
+  })
 }
 
 export async function deletarAluno(alunoId: string): Promise<void> {
-  await fetch(`/api/profiles?alunoId=${alunoId}`, { method: 'DELETE' })
+  await fetch(`/api/perfis?alunoId=${alunoId}`, { method: 'DELETE' })
 }
 
 export async function logout(): Promise<void> {
-  const supabase = createClient()
-  await supabase.auth.signOut()
+  await fetch('/api/auth/logout', { method: 'POST' })
   setCachedUsuario(null)
 }
 

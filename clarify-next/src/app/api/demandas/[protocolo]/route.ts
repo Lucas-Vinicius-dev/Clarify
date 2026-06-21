@@ -1,0 +1,56 @@
+import { createAdminClient } from '@/lib/supabase/admin'
+import { NextResponse } from 'next/server'
+
+export async function GET(
+  _request: Request,
+  { params }: { params: Promise<{ protocolo: string }> }
+) {
+  const { protocolo } = await params
+  const supabase = createAdminClient()
+
+  const { data } = await supabase
+    .from('demandas')
+    .select('*')
+    .eq('protocolo', protocolo)
+    .maybeSingle()
+
+  if (!data) {
+    return NextResponse.json(
+      { ok: false, mensagem: 'Demanda não encontrada.' },
+      { status: 404 }
+    )
+  }
+
+  return NextResponse.json(data)
+}
+
+export async function PATCH(
+  request: Request,
+  { params }: { params: Promise<{ protocolo: string }> }
+) {
+  const { protocolo } = await params
+  const body = await request.json()
+  const supabase = createAdminClient()
+
+  const updateData: Record<string, string> = {
+    status: body.status,
+    data_atualizacao: new Date().toISOString().split('T')[0],
+  }
+  if (body.feedback !== undefined) updateData.feedback = body.feedback
+
+  const { data } = await supabase
+    .from('demandas')
+    .update(updateData)
+    .eq('protocolo', protocolo)
+    .select()
+    .single()
+
+  if (!data) {
+    return NextResponse.json(
+      { ok: false, mensagem: 'Demanda não encontrada.' },
+      { status: 404 }
+    )
+  }
+
+  return NextResponse.json({ ok: true, data })
+}

@@ -28,27 +28,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState(true)
 
   const fetchProfile = useCallback(async (userId: string) => {
-    const { data } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .maybeSingle()
-
-    if (data) {
-      const u: UsuarioLogado = {
+    const res = await fetch(`/api/perfis/${userId}`)
+    if (res.ok) {
+      const data = await res.json()
+      setUsuario({
         id: data.id,
         nome: data.nome,
         matricula: data.matricula,
         email: data.email,
         cargo: data.cargo,
         coordenador_id: data.coordenador_id,
-      }
-      setUsuario(u)
+      })
     } else {
       setUsuario(null)
     }
     setLoading(false)
-  }, [supabase])
+  }, [])
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {

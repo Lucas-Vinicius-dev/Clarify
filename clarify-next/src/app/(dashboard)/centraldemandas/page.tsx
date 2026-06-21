@@ -8,14 +8,13 @@ import { CardDemanda } from '@/components/demandas/CardDemanda';
 import { CardNovaDemanda } from '@/components/demandas/CardNovaDemanda';
 import { CardHistorico } from '@/components/demandas/CardHistorico';
 import { LinhaHistorico } from '@/components/demandas/LinhaHistorico';
-import { CardMetrica } from '@/components/coord/CardMetrica';
+import { CardMetrica } from '@/components/coordenador/CardMetrica';
 import { EstadoVazio } from '@/components/demandas/EstadoVazio';
 import { FabMobile } from '@/components/demandas/FabMobile';
 import { ModalNovaDemanda } from '@/components/demandas/ModalNovaDemanda';
 import { ModalDetalhesDemanda } from '@/components/demandas/ModalDetalhesDemanda';
 import { useDemandas } from '@/hooks/useDemandas';
 import { useAuth } from '@/context/AuthContext';
-import { createClient } from '@/lib/supabase/client';
 import type { StatusDemanda, TipoDemanda, UsuarioLogado } from '@/types';
 
 type StudentView = 'nome' | 'demandas';
@@ -28,7 +27,6 @@ export default function CentralDemandasPage() {
   );
   const searchParams = useSearchParams();
   const router = useRouter();
-  const supabase = createClient();
 
   const rawView = searchParams.get('view') as StudentView | null;
   const view: StudentView = rawView && VIEWS.includes(rawView) ? rawView : 'nome';
@@ -50,30 +48,25 @@ export default function CentralDemandasPage() {
 
     let cancelled = false
 
-    supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', demandaDetalhes.alunoId)
-      .maybeSingle()
-      .then(({ data }) => {
-        if (!cancelled) {
-          setRemetenteDetalhe(
-            data
-              ? {
-                  id: data.id,
-                  nome: data.nome,
-                  matricula: data.matricula,
-                  email: data.email,
-                  cargo: data.cargo,
-                  coordenador_id: data.coordenador_id,
-                }
-              : null
-          )
+    fetch(`/api/perfis/${demandaDetalhes.alunoId}`)
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (!cancelled && data) {
+          setRemetenteDetalhe({
+            id: data.id,
+            nome: data.nome,
+            matricula: data.matricula,
+            email: data.email,
+            cargo: data.cargo,
+            coordenador_id: data.coordenador_id,
+          })
+        } else if (!cancelled) {
+          setRemetenteDetalhe(null)
         }
       })
 
     return () => { cancelled = true }
-  }, [demandaDetalhes, supabase])
+  }, [demandaDetalhes])
 
   const filtradas = useMemo(() => {
     return demandas.filter((d) => {

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import type { Demanda, StatusDemanda, TipoDemanda } from '@/types'
 
 export interface UseDemandasOptions {
@@ -42,7 +41,6 @@ function mapRow(row: Record<string, unknown>): Demanda {
 }
 
 export function useDemandas(opcoes?: UseDemandasOptions): UseDemandasReturn {
-  const supabase = createClient()
   const [demandas, setDemandas] = useState<Demanda[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshKey, setRefreshKey] = useState(0)
@@ -51,12 +49,12 @@ export function useDemandas(opcoes?: UseDemandasOptions): UseDemandasReturn {
     let cancelled = false
 
     const load = async () => {
-      let query = supabase.from('demandas').select('*')
+      const params = new URLSearchParams()
+      if (opcoes?.alunoId) params.set('alunoId', opcoes.alunoId)
+      if (opcoes?.status) params.set('status', opcoes.status)
 
-      if (opcoes?.alunoId) query = query.eq('aluno_id', opcoes.alunoId)
-      if (opcoes?.status) query = query.eq('status', opcoes.status)
-
-      const { data } = await query.order('created_at', { ascending: false })
+      const res = await fetch(`/api/demandas?${params}`)
+      const data = await res.json()
       if (!cancelled) {
         setDemandas((data ?? []).map(mapRow))
         setLoading(false)
@@ -65,7 +63,7 @@ export function useDemandas(opcoes?: UseDemandasOptions): UseDemandasReturn {
 
     load()
     return () => { cancelled = true }
-  }, [supabase, opcoes?.alunoId, opcoes?.status, refreshKey])
+  }, [opcoes?.alunoId, opcoes?.status, refreshKey])
 
   const recarregar = useCallback(() => {
     setLoading(true)
@@ -74,68 +72,45 @@ export function useDemandas(opcoes?: UseDemandasOptions): UseDemandasReturn {
 
   const criar = useCallback(
     async (dados: { alunoId: string; tipo: TipoDemanda; descricao: string }) => {
-      const { data: protocolo } = await supabase.rpc('gerar_proximo_protocolo')
-      if (!protocolo) return null
+      const res = await fetch('/api/demandas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados),
+      })
+      const json = await res.json()
+      if (!json.ok || !json.data) return null
 
-      const { data } = await supabase
-        .from('demandas')
-        .insert({
-          protocolo,
-          aluno_id: dados.alunoId,
-          tipo: dados.tipo,
-          descricao: dados.descricao,
-        })
-        .select()
-        .single()
-
-      if (data) {
-        const mapped = mapRow(data)
-        setDemandas((prev) => [mapped, ...prev])
-        return mapped
-      }
-      return null
+      const mapped = mapRow(json.data)
+      setDemandas((prev) => [mapped, ...prev])
+      return mapped
     },
-    [supabase]
+    []
   )
 
-  const buscarPorProtocolo = useCallback(
-    async (protocolo: string) => {
-      const { data } = await supabase
-        .from('demandas')
-        .select('*')
-        .eq('protocolo', protocolo)
-        .maybeSingle()
-      if (!data) return null
-      return mapRow(data)
-    },
-    [supabase]
-  )
+  const buscarPorProtocolo = useCallback(async (protocolo: string) => {
+    const res = await fetch(`/api/demandas/${protocolo}`)
+    if (!res.ok) return null
+    const data = await res.json()
+    return mapRow(data)
+  }, [])
 
   const atualizarStatus = useCallback(
     async (protocolo: string, novoStatus: StatusDemanda, feedback?: string) => {
-      const updateData: Record<string, string> = {
-        status: novoStatus,
-        data_atualizacao: new Date().toISOString().split('T')[0],
-      }
-      if (feedback !== undefined) updateData.feedback = feedback
+      const res = await fetch(`/api/demandas/${protocolo}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: novoStatus, feedback }),
+      })
+      const json = await res.json()
+      if (!json.ok || !json.data) return null
 
-      const { data } = await supabase
-        .from('demandas')
-        .update(updateData)
-        .eq('protocolo', protocolo)
-        .select()
-        .single()
-
-      if (data) {
-        const mapped = mapRow(data)
-        setDemandas((prev) =>
-          prev.map((d) => (d.protocolo === protocolo ? mapped : d))
-        )
-        return mapped
-      }
-      return null
+      const mapped = mapRow(json.data)
+      setDemandas((prev) =>
+        prev.map((d) => (d.protocolo === protocolo ? mapped : d))
+      )
+      return mapped
     },
-    [supabase]
+    []
   )
 
   const filtrar = useCallback(

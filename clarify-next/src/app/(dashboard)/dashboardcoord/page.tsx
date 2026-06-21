@@ -3,11 +3,11 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { AlertCircle, Plus } from 'lucide-react';
-import { CardMetrica } from '@/components/coord/CardMetrica';
-import { CardAluno } from '@/components/coord/CardAluno';
-import { CardTurma } from '@/components/coord/CardTurma';
-import { ModalCriarTurma } from '@/components/coord/ModalCriarTurma';
-import { ModalFeedback } from '@/components/coord/ModalFeedback';
+import { CardMetrica } from '@/components/coordenador/CardMetrica';
+import { CardAluno } from '@/components/coordenador/CardAluno';
+import { CardTurma } from '@/components/coordenador/CardTurma';
+import { ModalCriarTurma } from '@/components/coordenador/ModalCriarTurma';
+import { ModalFeedback } from '@/components/coordenador/ModalFeedback';
 import { ModalDetalhesDemanda } from '@/components/demandas/ModalDetalhesDemanda';
 import { useAuth } from '@/context/AuthContext';
 import { useDemandas } from '@/hooks/useDemandas';
@@ -129,7 +129,7 @@ export default function DashboardCoordPage() {
       return;
     }
 
-    const res = await fetch('/api/profiles', {
+    const res = await fetch('/api/perfis', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nome, matricula, email, senha, coordenadorId: usuario?.id }),

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import type { Turma } from '@/types'
 
 export interface UseTurmasReturn {
@@ -27,14 +26,13 @@ function mapRow(row: Record<string, unknown>): Turma {
     id: row.id as string,
     nome: row.nome as string,
     disciplina: row.disciplina as string,
-    alunos: [],
+    alunos: (row.alunos as string[]) ?? [],
     coordenador_id: row.coordenador_id as string,
     criadaEm: row.created_at as string,
   }
 }
 
 export function useTurmas(): UseTurmasReturn {
-  const supabase = createClient()
   const [turmas, setTurmas] = useState<Turma[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshKey, setRefreshKey] = useState(0)
@@ -43,31 +41,17 @@ export function useTurmas(): UseTurmasReturn {
     let cancelled = false
 
     const load = async () => {
-      const { data } = await supabase
-        .from('turmas')
-        .select('*')
-        .order('created_at', { ascending: false })
-      const turmasRows = (data ?? []).map(mapRow)
-
-      const turmasComAlunos = await Promise.all(
-        turmasRows.map(async (t) => {
-          const { data: alunos } = await supabase
-            .from('turma_alunos')
-            .select('aluno_id')
-            .eq('turma_id', t.id)
-          return { ...t, alunos: (alunos ?? []).map((a) => a.aluno_id) }
-        })
-      )
-
+      const res = await fetch('/api/turmas')
+      const data = await res.json()
       if (!cancelled) {
-        setTurmas(turmasComAlunos)
+        setTurmas((data ?? []).map(mapRow))
         setLoading(false)
       }
     }
 
     load()
     return () => { cancelled = true }
-  }, [supabase, refreshKey])
+  }, [refreshKey])
 
   const recarregar = useCallback(() => {
     setLoading(true)
@@ -81,38 +65,26 @@ export function useTurmas(): UseTurmasReturn {
       alunos: string[]
       coordenadorId: string
     }) => {
-      const { data: turma } = await supabase
-        .from('turmas')
-        .insert({
-          nome: dados.nome,
-          disciplina: dados.disciplina,
-          coordenador_id: dados.coordenadorId,
-        })
-        .select()
-        .single()
-
-      if (!turma) return null
-
-      if (dados.alunos.length > 0) {
-        const inserts = dados.alunos.map((alunoId) => ({
-          turma_id: turma.id,
-          aluno_id: alunoId,
-        }))
-        await supabase.from('turma_alunos').insert(inserts)
-      }
+      const res = await fetch('/api/turmas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados),
+      })
+      const json = await res.json()
+      if (!json.ok || !json.data) return null
 
       await recarregar()
-      return { ...mapRow(turma), alunos: dados.alunos }
+      return mapRow(json.data)
     },
-    [supabase, recarregar]
+    [recarregar]
   )
 
   const deletar = useCallback(
     async (id: string) => {
-      await supabase.from('turmas').delete().eq('id', id)
+      await fetch(`/api/turmas/${id}`, { method: 'DELETE' })
       await recarregar()
     },
-    [supabase, recarregar]
+    [recarregar]
   )
 
   const buscar = useCallback(
@@ -124,24 +96,22 @@ export function useTurmas(): UseTurmasReturn {
 
   const adicionarAluno = useCallback(
     async (turmaId: string, alunoId: string) => {
-      await supabase
-        .from('turma_alunos')
-        .insert({ turma_id: turmaId, aluno_id: alunoId })
+      await fetch(`/api/turmas/${turmaId}/alunos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ alunoId }),
+      })
       await recarregar()
     },
-    [supabase, recarregar]
+    [recarregar]
   )
 
   const removerAluno = useCallback(
     async (turmaId: string, alunoId: string) => {
-      await supabase
-        .from('turma_alunos')
-        .delete()
-        .eq('turma_id', turmaId)
-        .eq('aluno_id', alunoId)
+      await fetch(`/api/turmas/${turmaId}/alunos/${alunoId}`, { method: 'DELETE' })
       await recarregar()
     },
-    [supabase, recarregar]
+    [recarregar]
   )
 
   const contarAlunos = useCallback(
