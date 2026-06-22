@@ -1,3 +1,4 @@
+import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
@@ -7,7 +8,7 @@ export async function GET(request: Request) {
   const cargo = searchParams.get('cargo')
   const matricula = searchParams.get('matricula')
   const email = searchParams.get('email')
-  const supabase = createAdminClient()
+  const supabase = await createClient()
 
   let query = supabase.from('profiles').select('*')
 

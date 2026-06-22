@@ -1,4 +1,4 @@
-import { createAdminClient } from '@/lib/supabase/admin'
+import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 export async function POST(
@@ -7,11 +7,18 @@ export async function POST(
 ) {
   const { id } = await params
   const { alunoId } = await request.json()
-  const supabase = createAdminClient()
+  const supabase = await createClient()
 
-  await supabase
+  const { error } = await supabase
     .from('turma_alunos')
     .insert({ turma_id: id, aluno_id: alunoId })
+
+  if (error) {
+    return NextResponse.json(
+      { ok: false, mensagem: error.message },
+      { status: 500 }
+    )
+  }
 
   return NextResponse.json({ ok: true })
 }

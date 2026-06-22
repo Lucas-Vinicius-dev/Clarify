@@ -1,4 +1,4 @@
-import { createAdminClient } from '@/lib/supabase/admin'
+import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 export async function DELETE(
@@ -6,9 +6,16 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
-  const supabase = createAdminClient()
+  const supabase = await createClient()
 
-  await supabase.from('turmas').delete().eq('id', id)
+  const { error } = await supabase.from('turmas').delete().eq('id', id)
+
+  if (error) {
+    return NextResponse.json(
+      { ok: false, mensagem: error.message },
+      { status: 500 }
+    )
+  }
 
   return NextResponse.json({ ok: true })
 }
