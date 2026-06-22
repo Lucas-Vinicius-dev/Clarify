@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { CardMetrica } from '@/components/coordenador/CardMetrica';
 import { CardAluno } from '@/components/coordenador/CardAluno';
 import { CardTurma } from '@/components/coordenador/CardTurma';
@@ -12,15 +13,27 @@ import { FormAdicionarAluno } from '@/components/coordenador/FormAdicionarAluno'
 import { useAuth } from '@/context/AuthContext';
 import { useDemandas } from '@/hooks/useDemandas';
 import { useUsuarios } from '@/hooks/useUsuarios';
-import type { Demanda, UsuarioLogado } from '@/types';
+import type { Cargo, Demanda, UsuarioLogado } from '@/types';
 import { useTurmas } from '@/hooks/useTurmas';
 import { atualizarStatusDemanda } from '@/lib/demandas';
+
+function mapProfileToUser(row: Record<string, unknown>): UsuarioLogado {
+  return {
+    id: row.id as string,
+    nome: row.nome as string,
+    matricula: row.matricula as string,
+    email: row.email as string,
+    cargo: row.cargo as Cargo,
+    coordenador_id: (row.coordenador_id as string) ?? undefined,
+  };
+}
 
 type DashView = 'nome' | 'alunos' | 'demandas' | 'turmas' | 'adicionar';
 
 const VIEWS: DashView[] = ['nome', 'alunos', 'demandas', 'turmas', 'adicionar'];
 
 export default function DashboardCoordPage() {
+  const queryClient = useQueryClient();
   const { usuario } = useAuth();
   const { demandas, recarregar: recarregarDemandas } = useDemandas();
   const usuariosHook = useUsuarios();
@@ -34,16 +47,17 @@ export default function DashboardCoordPage() {
   const [protocoloFeedback, setProtocoloFeedback] = useState<string | null>(null);
   const [modalDetalhesAberta, setModalDetalhesAberta] = useState(false);
   const [demandaDetalhe, setDemandaDetalhe] = useState<Demanda | null>(null);
-  const [alunosDoCoord, setAlunosDoCoord] = useState<UsuarioLogado[]>([]);
   const [remetenteDetalhe, setRemetenteDetalhe] = useState<UsuarioLogado | null>(null);
 
-  useEffect(() => {
-    if (usuario?.id) {
-      usuariosHook.obterAlunosDoCoordenador(usuario.id).then((alunos) => {
-        setAlunosDoCoord(alunos);
-      });
-    }
-  }, [usuario?.id, usuariosHook]);
+  const { data: alunosDoCoord = [] } = useQuery({
+    queryKey: ['alunos', usuario?.id],
+    queryFn: async () => {
+      const res = await fetch(`/api/perfis?coordenadorId=${encodeURIComponent(usuario!.id)}&cargo=aluno`)
+      const data = await res.json()
+      return (data ?? []).map(mapProfileToUser) as UsuarioLogado[]
+    },
+    enabled: !!usuario?.id,
+  });
 
   const alunoIds = useMemo(() => new Set(alunosDoCoord.map((a) => a.id)), [alunosDoCoord]);
 
@@ -109,9 +123,9 @@ export default function DashboardCoordPage() {
     const aluno = alunosDoCoord.find((a) => a.matricula === matricula);
     if (aluno) {
       await usuariosHook.deletar(aluno.id);
-      setAlunosDoCoord((prev) => prev.filter((a) => a.id !== aluno.id));
+      queryClient.invalidateQueries({ queryKey: ['alunos', usuario?.id] });
     }
-  }, [alunosDoCoord, usuariosHook]);
+  }, [alunosDoCoord, usuariosHook, queryClient, usuario?.id]);
 
   const demandasPendentesOrdenadas = useMemo(
     () => [...demandasPendentes].sort(
