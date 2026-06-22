@@ -28,31 +28,38 @@ export type TipoDemanda =
  * Usuário completo (com senha)
  */
 export interface Usuario {
+  id: string;
   nome: string;
   matricula: string;
   email: string;
   senha: string;
   cargo: Cargo;
-  coordenador?: string;
-  alunosCadastrados?: string[];
-  usuariosCadastrados?: string[]; // matrículas vinculadas ao coordenador
+  coordenador_id?: string;
 }
 
 /**
  * Usuário logado (sem senha)
  */
-export type UsuarioLogado = Omit<Usuario, 'senha'>;
+export type UsuarioLogado = {
+  id: string;
+  nome: string;
+  matricula: string;
+  email: string;
+  cargo: Cargo;
+  coordenador_id?: string;
+};
 
 /**
  * Demanda de um aluno
  */
 export interface Demanda {
-  protocolo: string; // ex: "REQ-402"
-  matriculaAluno: string;
+  id: string;
+  protocolo: string;
+  alunoId: string;
   tipo: TipoDemanda;
   descricao: string;
   status: StatusDemanda;
-  dataCriacao: string; // ISO: "2025-11-12"
+  dataCriacao: string;
   dataAtualizacao: string;
   feedback: string;
 }
@@ -61,12 +68,12 @@ export interface Demanda {
  * Turma de disciplina
  */
 export interface Turma {
-  id: string; // "turma_<timestamp>_<random>"
+  id: string;
   nome: string;
   disciplina: string;
-  alunos: string[]; // matrículas
-  coordenador: string; // matrícula do coord
-  criadaEm: string; // ISO datetime
+  alunos: string[];
+  coordenador_id: string;
+  criadaEm: string;
 }
 
 /**
@@ -84,7 +91,6 @@ export interface AuthResponse {
   ok: boolean;
   mensagem?: string;
   usuarioLogado?: UsuarioLogado;
-  usuario?: UsuarioLogado;
 }
 
 /**
@@ -93,9 +99,10 @@ export interface AuthResponse {
 export interface AuthContextValue {
   usuario: UsuarioLogado | null;
   isAuthenticated: boolean;
-  login: (matricula: string, senha: string) => AuthResponse;
-  logout: () => void;
-  registro: (dados: RegistroDados) => AuthResponse;
+  loading: boolean;
+  login: (matricula: string, senha: string) => Promise<AuthResponse>;
+  logout: () => Promise<void>;
+  registro: (dados: RegistroDados) => Promise<AuthResponse>;
 }
 
 /**

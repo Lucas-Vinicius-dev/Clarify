@@ -1,133 +1,139 @@
-'use client';
+'use client'
 
-// ═════════════════════════════════════════════════════════════════
-// HOOK: useDemandas
-// Gerencia demandas do sistema com estado reativo
-// ═════════════════════════════════════════════════════════════════
+import { useState, useEffect, useCallback } from 'react'
+import type { Demanda, StatusDemanda, TipoDemanda } from '@/types'
 
-import { useState, useCallback } from 'react';
-import type { Demanda, StatusDemanda, TipoDemanda } from '@/types';
-import {
-  criarDemanda as criar_,
-  buscarDemandaPorProtocolo,
-  buscarDemandasPorAluno,
-  buscarDemandasPorStatus,
-  buscarDemandasAlunoComStatus,
-  buscarTodasDemandas,
-  atualizarStatusDemanda,
-} from '@/lib/demandas';
-import { popularLocalStorage } from '@/lib/localStorage';
-
-export interface UseDemandAsOptions {
-  matriculaAluno?: string;
-  status?: StatusDemanda;
+export interface UseDemandasOptions {
+  alunoId?: string
+  status?: StatusDemanda
 }
 
-export interface UseDemandAsReturn {
-  demandas: Demanda[];
+export interface UseDemandasReturn {
+  demandas: Demanda[]
+  loading: boolean
   criar: (dados: {
-    matriculaAluno: string;
-    tipo: TipoDemanda;
-    descricao: string;
-  }) => Demanda;
-  buscarPorProtocolo: (protocolo: string) => Demanda | undefined;
+    alunoId: string
+    tipo: TipoDemanda
+    descricao: string
+  }) => Promise<Demanda | null>
+  buscarPorProtocolo: (protocolo: string) => Promise<Demanda | null>
   atualizarStatus: (
     protocolo: string,
     novoStatus: StatusDemanda,
     feedback?: string
-  ) => Demanda | undefined;
-  recarregar: () => void;
-  filtrar: (filtros: Partial<UseDemandAsOptions>) => Demanda[];
+  ) => Promise<Demanda | null>
+  recarregar: () => void
+  filtrar: (filtros: Partial<UseDemandasOptions>) => Demanda[]
 }
 
-function obterDemandasIniciais(opcoes?: UseDemandAsOptions): Demanda[] {
-  if (typeof window === 'undefined') return [];
-
-  popularLocalStorage();
-
-  if (opcoes?.matriculaAluno && opcoes?.status) {
-    return buscarDemandasAlunoComStatus(opcoes.matriculaAluno, opcoes.status);
+function mapRow(row: Record<string, unknown>): Demanda {
+  return {
+    id: row.id as string,
+    protocolo: row.protocolo as string,
+    alunoId: row.aluno_id as string,
+    tipo: row.tipo as TipoDemanda,
+    descricao: row.descricao as string,
+    status: row.status as StatusDemanda,
+    dataCriacao: row.data_criacao as string,
+    dataAtualizacao: row.data_atualizacao as string,
+    feedback: (row.feedback as string) ?? '',
   }
-
-  if (opcoes?.matriculaAluno) {
-    return buscarDemandasPorAluno(opcoes.matriculaAluno);
-  }
-
-  if (opcoes?.status) {
-    return buscarDemandasPorStatus(opcoes.status);
-  }
-
-  return buscarTodasDemandas();
 }
 
-/**
- * Hook para gerenciar demandas
- */
-export function useDemandas(opcoes?: UseDemandAsOptions): UseDemandAsReturn {
-  const [demandas, setDemandas] = useState<Demanda[]>(() => obterDemandasIniciais(opcoes));
+export function useDemandas(opcoes?: UseDemandasOptions): UseDemandasReturn {
+  const [demandas, setDemandas] = useState<Demanda[]>([])
+  const [loading, setLoading] = useState(true)
+  const [refreshKey, setRefreshKey] = useState(0)
+
+  useEffect(() => {
+    let cancelled = false
+
+    const load = async () => {
+      const params = new URLSearchParams()
+      if (opcoes?.alunoId) params.set('alunoId', opcoes.alunoId)
+      if (opcoes?.status) params.set('status', opcoes.status)
+
+      const res = await fetch(`/api/demandas?${params}`)
+      const data = await res.json()
+      if (!cancelled) {
+        setDemandas((data ?? []).map(mapRow))
+        setLoading(false)
+      }
+    }
+
+    load()
+    return () => { cancelled = true }
+  }, [opcoes?.alunoId, opcoes?.status, refreshKey])
 
   const recarregar = useCallback(() => {
-    setDemandas(obterDemandasIniciais(opcoes));
-  }, [opcoes]);
+    setLoading(true)
+    setRefreshKey((k) => k + 1)
+  }, [])
 
   const criar = useCallback(
-    (dados: { matriculaAluno: string; tipo: TipoDemanda; descricao: string }) => {
-      const novaDemanda = criar_(dados);
-      setDemandas((prev) => [novaDemanda, ...prev]);
-      return novaDemanda;
+    async (dados: { alunoId: string; tipo: TipoDemanda; descricao: string }) => {
+      const res = await fetch('/api/demandas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados),
+      })
+      const json = await res.json()
+      if (!json.ok || !json.data) return null
+
+      const mapped = mapRow(json.data)
+      setDemandas((prev) => [mapped, ...prev])
+      return mapped
     },
     []
-  );
+  )
 
-  const buscarProtocolo = useCallback((protocolo: string) => {
-    return buscarDemandaPorProtocolo(protocolo);
-  }, []);
+  const buscarPorProtocolo = useCallback(async (protocolo: string) => {
+    const res = await fetch(`/api/demandas/${protocolo}`)
+    if (!res.ok) return null
+    const data = await res.json()
+    return mapRow(data)
+  }, [])
 
   const atualizarStatus = useCallback(
-    (
-      protocolo: string,
-      novoStatus: StatusDemanda,
-      feedback?: string
-    ) => {
-      const atualizada = atualizarStatusDemanda(protocolo, novoStatus, feedback);
-      if (atualizada) {
-        setDemandas((prev) =>
-          prev.map((d) =>
-            d.protocolo === protocolo ? atualizada : d
-          )
-        );
-      }
-      return atualizada;
+    async (protocolo: string, novoStatus: StatusDemanda, feedback?: string) => {
+      const res = await fetch(`/api/demandas/${protocolo}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: novoStatus, feedback }),
+      })
+      const json = await res.json()
+      if (!json.ok || !json.data) return null
+
+      const mapped = mapRow(json.data)
+      setDemandas((prev) =>
+        prev.map((d) => (d.protocolo === protocolo ? mapped : d))
+      )
+      return mapped
     },
     []
-  );
+  )
 
   const filtrar = useCallback(
-    (filtros: Partial<UseDemandAsOptions>) => {
-      let resultado = demandas;
-
-      if (filtros.matriculaAluno) {
-        resultado = resultado.filter(
-          (d) =>
-            String(d.matriculaAluno) === String(filtros.matriculaAluno)
-        );
+    (filtros: Partial<UseDemandasOptions>) => {
+      let resultado = demandas
+      if (filtros.alunoId) {
+        resultado = resultado.filter((d) => d.alunoId === filtros.alunoId)
       }
-
       if (filtros.status) {
-        resultado = resultado.filter((d) => d.status === filtros.status);
+        resultado = resultado.filter((d) => d.status === filtros.status)
       }
-
-      return resultado;
+      return resultado
     },
     [demandas]
-  );
+  )
 
   return {
     demandas,
+    loading,
     criar,
-    buscarPorProtocolo: buscarProtocolo,
+    buscarPorProtocolo,
     atualizarStatus,
     recarregar,
     filtrar,
-  };
+  }
 }

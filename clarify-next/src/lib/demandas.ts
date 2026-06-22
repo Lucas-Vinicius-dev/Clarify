@@ -1,168 +1,30 @@
-// ═════════════════════════════════════════════════════════════════
-// LIB: DEMANDAS
-// CRUD e funções de demandas do sistema
-// ═════════════════════════════════════════════════════════════════
+import type { Demanda, StatusDemanda, TipoDemanda } from '@/types'
 
-import type { Demanda, StatusDemanda, TipoDemanda } from '@/types';
-import { normalizarDemandasStorage } from './storageMigrations';
-
-function lerDemandas(): Demanda[] {
-  if (typeof window === 'undefined') return [];
-
-  return normalizarDemandasStorage(JSON.parse(localStorage.getItem('demandas') || '[]'));
-}
-
-function salvarDemandas(demandas: Demanda[]): void {
-  if (typeof window === 'undefined') return;
-
-  localStorage.setItem('demandas', JSON.stringify(demandas));
-}
-
-/**
- * Gera o próximo protocolo (REQ-XXX)
- */
-export function gerarProximoProtocolo(): string {
-  if (typeof window === 'undefined') return 'REQ-0';
-  
-  const demandas = lerDemandas();
-
-  let maior = 0;
-  for (const demanda of demandas) {
-    const numero = Number(demanda.protocolo.split('-')[1]);
-    if (numero > maior) maior = numero;
+function mapDemandaRow(row: Record<string, unknown>): Demanda {
+  return {
+    id: row.id as string,
+    protocolo: row.protocolo as string,
+    alunoId: row.aluno_id as string,
+    tipo: row.tipo as TipoDemanda,
+    descricao: row.descricao as string,
+    status: row.status as StatusDemanda,
+    dataCriacao: row.data_criacao as string,
+    dataAtualizacao: row.data_atualizacao as string,
+    feedback: (row.feedback as string) ?? '',
   }
-
-  return `REQ-${maior + 1}`;
 }
 
-/**
- * Cria uma nova demanda
- */
-export function criarDemanda(dados: {
-  matriculaAluno: string;
-  tipo: TipoDemanda;
-  descricao: string;
-}): Demanda {
-  if (typeof window === 'undefined') {
-    return {} as Demanda;
-  }
-
-  const demandas = lerDemandas();
-
-  const dataHoje = obterDataHoje();
-
-  const novaDemanda: Demanda = {
-    protocolo: gerarProximoProtocolo(),
-    matriculaAluno: dados.matriculaAluno,
-    tipo: dados.tipo,
-    descricao: dados.descricao.trim(),
-    status: 'pendente',
-    dataCriacao: dataHoje,
-    dataAtualizacao: dataHoje,
-    feedback: '',
-  };
-
-  demandas.unshift(novaDemanda);
-  salvarDemandas(demandas);
-
-  return novaDemanda;
-}
-
-/**
- * Busca todas as demandas de um aluno
- */
-export function buscarDemandasPorAluno(matricula: string): Demanda[] {
-  if (typeof window === 'undefined') return [];
-  
-  const demandas = lerDemandas();
-
-  return demandas.filter(
-    (d) => String(d.matriculaAluno) === String(matricula)
-  );
-}
-
-/**
- * Busca uma demanda específica pelo protocolo
- */
-export function buscarDemandaPorProtocolo(protocolo: string): Demanda | undefined {
-  if (typeof window === 'undefined') return undefined;
-  
-  const demandas = lerDemandas();
-  return demandas.find((d) => d.protocolo === protocolo);
-}
-
-/**
- * Atualiza o status e/ou feedback de uma demanda
- */
-export function atualizarStatusDemanda(
+export async function atualizarStatusDemanda(
   protocolo: string,
   novoStatus: StatusDemanda,
   feedback?: string
-): Demanda | undefined {
-  if (typeof window === 'undefined') return undefined;
-  
-  const demandas = JSON.parse(localStorage.getItem('demandas') || '[]') as Demanda[];
-  const demanda = demandas.find((d) => d.protocolo === protocolo);
-
-  if (!demanda) return undefined;
-
-  demanda.status = novoStatus;
-  demanda.dataAtualizacao = obterDataHoje();
-  if (feedback !== undefined) demanda.feedback = feedback;
-
-  localStorage.setItem('demandas', JSON.stringify(demandas));
-  return demanda;
+): Promise<Demanda | null> {
+  const res = await fetch(`/api/demandas/${protocolo}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status: novoStatus, feedback }),
+  })
+  const json = await res.json()
+  if (!json.ok || !json.data) return null
+  return mapDemandaRow(json.data)
 }
-
-/**
- * Busca todas as demandas
- */
-export function buscarTodasDemandas(): Demanda[] {
-  if (typeof window === 'undefined') return [];
-  
-  return lerDemandas();
-}
-
-/**
- * Busca demandas por status
- */
-export function buscarDemandasPorStatus(status: StatusDemanda): Demanda[] {
-  if (typeof window === 'undefined') return [];
-  
-  const demandas = lerDemandas();
-  return demandas.filter((d) => d.status === status);
-}
-
-/**
- * Busca demandas de um aluno com filtro de status
- */
-export function buscarDemandasAlunoComStatus(
-  matriculaAluno: string,
-  status: StatusDemanda
-): Demanda[] {
-  if (typeof window === 'undefined') return [];
-  
-  const demandas = lerDemandas();
-
-  return demandas.filter(
-    (d) =>
-      String(d.matriculaAluno) === String(matriculaAluno) && d.status === status
-  );
-}
-
-/**
- * Obtém a data de hoje em formato ISO (YYYY-MM-DD)
- */
-function obterDataHoje(): string {
-  if (typeof window === 'undefined') {
-    return new Date().toISOString().split('T')[0];
-  }
-
-  const hoje = new Date();
-  const ano = hoje.getFullYear();
-  const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-  const dia = String(hoje.getDate()).padStart(2, '0');
-  return `${ano}-${mes}-${dia}`;
-}
-
-export { obterDataHoje };

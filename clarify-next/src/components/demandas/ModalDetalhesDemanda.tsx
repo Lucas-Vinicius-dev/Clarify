@@ -4,13 +4,13 @@ import { FileText, Calendar, Tag, Hash, Mail, MessageSquareQuote } from 'lucide-
 import { Modal } from '@/components/ui/Modal';
 import { TimelineProgresso } from './TimelineProgresso';
 import { obterLabelStatus, obterCorStatus, formatarData } from '@/lib/utils';
-import type { Demanda, Usuario } from '@/types';
+import type { Demanda, UsuarioLogado } from '@/types';
 
 interface ModalDetalhesDemandaProps {
   open: boolean;
   onClose: () => void;
   demanda: Demanda | null;
-  remetente?: Usuario | null;
+  remetente?: UsuarioLogado | null;
 }
 
 function diasDesde(dataISO: string): number | null {
@@ -28,7 +28,7 @@ export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: Moda
   const statusLabel = obterLabelStatus(demanda.status);
   const statusCor = obterCorStatus(demanda.status);
   const dias = diasDesde(demanda.dataCriacao);
-  const nomeRemetente = remetente?.nome || `Matrícula ${demanda.matriculaAluno}`;
+  const nomeRemetente = remetente?.nome || `Aluno ${demanda.alunoId.slice(0, 8)}`;
   const inicialRemetente = nomeRemetente.charAt(0).toUpperCase();
   const emailRemetente = remetente?.email || '—';
 
@@ -85,7 +85,7 @@ export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: Moda
                 <p className="text-sm font-semibold text-gray-900 truncate">{nomeRemetente}</p>
                 <p className="text-xs text-gray-500 truncate inline-flex items-center gap-1.5">
                   <Hash className="w-3 h-3" />
-                  {demanda.matriculaAluno}
+                  {remetente?.matricula || demanda.alunoId.slice(0, 8)}
                   <span className="opacity-30">·</span>
                   <Mail className="w-3 h-3" />
                   <span className="truncate">{emailRemetente}</span>

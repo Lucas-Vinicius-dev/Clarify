@@ -43,8 +43,11 @@ next-env.d.ts
 
 # Misc
 *.pem
+2026_1_*.pdf
+opencode.json
 *.local
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
+demandas_equipe*.txt

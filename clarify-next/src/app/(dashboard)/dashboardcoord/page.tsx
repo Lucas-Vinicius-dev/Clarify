@@ -1,18 +1,18 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { AlertCircle, Plus } from 'lucide-react';
-import { CardMetrica } from '@/components/coord/CardMetrica';
-import { CardAluno } from '@/components/coord/CardAluno';
-import { CardTurma } from '@/components/coord/CardTurma';
-import { ModalCriarTurma } from '@/components/coord/ModalCriarTurma';
-import { ModalFeedback } from '@/components/coord/ModalFeedback';
+import { CardMetrica } from '@/components/coordenador/CardMetrica';
+import { CardAluno } from '@/components/coordenador/CardAluno';
+import { CardTurma } from '@/components/coordenador/CardTurma';
+import { ModalCriarTurma } from '@/components/coordenador/ModalCriarTurma';
+import { ModalFeedback } from '@/components/coordenador/ModalFeedback';
 import { ModalDetalhesDemanda } from '@/components/demandas/ModalDetalhesDemanda';
 import { useAuth } from '@/context/AuthContext';
 import { useDemandas } from '@/hooks/useDemandas';
 import { useUsuarios } from '@/hooks/useUsuarios';
-import type { Demanda } from '@/types';
+import type { Demanda, UsuarioLogado } from '@/types';
 import { useTurmas } from '@/hooks/useTurmas';
 import { atualizarStatusDemanda } from '@/lib/demandas';
 
@@ -22,7 +22,7 @@ const VIEWS: DashView[] = ['nome', 'alunos', 'demandas', 'turmas', 'adicionar'];
 
 export default function DashboardCoordPage() {
   const { usuario } = useAuth();
-  const { demandas, recarregar } = useDemandas();
+  const { demandas, recarregar: recarregarDemandas } = useDemandas();
   const usuariosHook = useUsuarios();
   const turmasHook = useTurmas();
   const searchParams = useSearchParams();
@@ -36,17 +36,23 @@ export default function DashboardCoordPage() {
   const [demandaDetalhe, setDemandaDetalhe] = useState<Demanda | null>(null);
   const [adicionarErro, setAdicionarErro] = useState('');
   const [adicionarSucesso, setAdicionarSucesso] = useState('');
+  const [alunosDoCoord, setAlunosDoCoord] = useState<UsuarioLogado[]>([]);
+  const [remetenteDetalhe, setRemetenteDetalhe] = useState<UsuarioLogado | null>(null);
 
-  const alunosDoCoord = useMemo(() => {
-    if (!usuario) return [];
-    const matriculas = usuariosHook.obterAlunosDoCoordenador(usuario.matricula);
-    return usuariosHook.usuarios.filter((u) => matriculas.includes(u.matricula));
-  }, [usuario, usuariosHook]);
+  useEffect(() => {
+    if (usuario?.id) {
+      usuariosHook.obterAlunosDoCoordenador(usuario.id).then((alunos) => {
+        setAlunosDoCoord(alunos);
+      });
+    }
+  }, [usuario?.id, usuariosHook]);
 
-  const demandasDoCoord = useMemo(() => {
-    const matriculas = new Set(alunosDoCoord.map((aluno) => aluno.matricula));
-    return demandas.filter((d) => matriculas.has(d.matriculaAluno));
-  }, [alunosDoCoord, demandas]);
+  const alunoIds = useMemo(() => new Set(alunosDoCoord.map((a) => a.id)), [alunosDoCoord]);
+
+  const demandasDoCoord = useMemo(
+    () => demandas.filter((d) => alunoIds.has(d.alunoId)),
+    [alunoIds, demandas]
+  );
 
   const demandasPendentes = useMemo(
     () => demandasDoCoord.filter((d) => d.status !== 'concluido'),
@@ -55,7 +61,7 @@ export default function DashboardCoordPage() {
 
   const turmasDoCoord = useMemo(() => {
     if (!usuario) return [];
-    return turmasHook.filtrar(usuario.matricula);
+    return turmasHook.filtrar(usuario.id);
   }, [usuario, turmasHook]);
 
   const totalAlunos = alunosDoCoord.length;
@@ -69,7 +75,7 @@ export default function DashboardCoordPage() {
       nome: dados.nome,
       disciplina: dados.disciplina,
       alunos: dados.alunos,
-      coordenador: usuario.matricula,
+      coordenadorId: usuario.id,
     });
   }, [usuario, turmasHook]);
 
@@ -78,24 +84,30 @@ export default function DashboardCoordPage() {
     setModalFeedbackAberta(true);
   }, []);
 
-  const handleVerDetalhes = useCallback((protocolo: string) => {
+  const handleVerDetalhes = useCallback(async (protocolo: string) => {
     const demanda = demandas.find((item) => item.protocolo === protocolo) || null;
     setDemandaDetalhe(demanda);
+
+    if (demanda) {
+      const aluno = alunosDoCoord.find((a) => a.id === demanda.alunoId) ?? null;
+      setRemetenteDetalhe(aluno);
+    }
+
     setModalDetalhesAberta(true);
-  }, [demandas]);
+  }, [demandas, alunosDoCoord]);
 
-  const handleFeedbackSubmit = useCallback((feedback: string) => {
+  const handleFeedbackSubmit = useCallback(async (feedback: string) => {
     if (!protocoloFeedback) return;
-    atualizarStatusDemanda(protocoloFeedback, 'requer_ajuste', feedback);
-    recarregar();
-  }, [protocoloFeedback, recarregar]);
+    await atualizarStatusDemanda(protocoloFeedback, 'requer_ajuste', feedback);
+    await recarregarDemandas();
+  }, [protocoloFeedback, recarregarDemandas]);
 
-  const handleAprovar = useCallback((protocolo: string) => {
-    atualizarStatusDemanda(protocolo, 'concluido');
-    recarregar();
-  }, [recarregar]);
+  const handleAprovar = useCallback(async (protocolo: string) => {
+    await atualizarStatusDemanda(protocolo, 'concluido');
+    await recarregarDemandas();
+  }, [recarregarDemandas]);
 
-  const handleAdicionarAluno = useCallback((e: React.FormEvent<HTMLFormElement>) => {
+  const handleAdicionarAluno = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setAdicionarErro('');
     setAdicionarSucesso('');
@@ -111,23 +123,36 @@ export default function DashboardCoordPage() {
       return;
     }
 
-    if (usuariosHook.existe(matricula, email)) {
+    const existe = await usuariosHook.existe(matricula, email);
+    if (existe) {
       setAdicionarErro('Matrícula ou email já cadastrados.');
       return;
     }
 
-    usuariosHook.adicionar(nome, matricula, email, senha, 'aluno');
-    if (usuario) {
-      usuariosHook.atribuir(usuario.matricula, matricula);
-    }
+    const res = await fetch('/api/perfis', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome, matricula, email, senha, coordenadorId: usuario?.id }),
+    });
 
-    setAdicionarSucesso('Aluno cadastrado com sucesso!');
-    (e.target as HTMLFormElement).reset();
+    const json = await res.json();
+
+    if (json.ok) {
+      await usuariosHook.recarregar();
+      setAdicionarSucesso('Aluno cadastrado com sucesso!');
+      (e.target as HTMLFormElement).reset();
+    } else {
+      setAdicionarErro(json.mensagem || 'Erro ao cadastrar aluno.');
+    }
   }, [usuario, usuariosHook]);
 
-  const handleRemoverAluno = useCallback((matriculaAluno: string) => {
-    usuariosHook.deletar(matriculaAluno);
-  }, [usuariosHook]);
+  const handleRemoverAluno = useCallback(async (matricula: string) => {
+    const aluno = alunosDoCoord.find((a) => a.matricula === matricula);
+    if (aluno) {
+      await usuariosHook.deletar(aluno.id);
+      setAlunosDoCoord((prev) => prev.filter((a) => a.id !== aluno.id));
+    }
+  }, [alunosDoCoord, usuariosHook]);
 
   const demandasPendentesOrdenadas = useMemo(
     () => [...demandasPendentes].sort(
@@ -138,7 +163,6 @@ export default function DashboardCoordPage() {
 
   return (
     <div className="p-4 sm:p-6 max-w-6xl mx-auto space-y-6">
-      {/* ── View: Início ── */}
       {view === 'nome' && (
         <div className="space-y-6">
           <section className="relative overflow-hidden bg-gray-900 p-5 sm:p-8 text-white rounded-2xl">
@@ -165,7 +189,6 @@ export default function DashboardCoordPage() {
             </CardMetrica>
           </div>
 
-          {/* Demandas pendentes recentes */}
           {demandasPendentes.length > 0 && (
             <section>
               <h2 className="text-lg font-bold text-gray-900 mb-3">Demandas Pendentes</h2>
@@ -191,7 +214,6 @@ export default function DashboardCoordPage() {
                     </div>
                     <div className="grid gap-1 text-sm text-gray-500">
                       <p><span className="font-semibold text-gray-800">Protocolo:</span> {d.protocolo}</p>
-                      <p><span className="font-semibold text-gray-800">Matrícula:</span> {d.matriculaAluno}</p>
                     </div>
                     <div className="mt-4 flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
                       <button
@@ -217,7 +239,6 @@ export default function DashboardCoordPage() {
         </div>
       )}
 
-      {/* ── View: Alunos ── */}
       {view === 'alunos' && (
         <section>
           <h2 className="text-xl font-bold text-gray-900 mb-4">Alunos</h2>
@@ -229,10 +250,10 @@ export default function DashboardCoordPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {alunosDoCoord.map((aluno) => (
                 <CardAluno
-                  key={aluno.matricula}
+                  key={aluno.id}
                   aluno={aluno}
                   demandasEmAberto={demandas.filter(
-                    (d) => d.matriculaAluno === aluno.matricula && d.status !== 'concluido'
+                    (d) => d.alunoId === aluno.id && d.status !== 'concluido'
                   ).length}
                   onRemover={handleRemoverAluno}
                 />
@@ -242,7 +263,6 @@ export default function DashboardCoordPage() {
         </section>
       )}
 
-      {/* ── View: Demandas ── */}
       {view === 'demandas' && (
         <section>
           <h2 className="text-xl font-bold text-gray-900 mb-4">Demandas</h2>
@@ -273,7 +293,6 @@ export default function DashboardCoordPage() {
                   </div>
                   <div className="grid gap-1 text-sm text-gray-500">
                     <p><span className="font-semibold text-gray-800">Protocolo:</span> {d.protocolo}</p>
-                    <p><span className="font-semibold text-gray-800">Matrícula:</span> {d.matriculaAluno}</p>
                   </div>
                   <div className="mt-4 flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
                     <button
@@ -298,7 +317,6 @@ export default function DashboardCoordPage() {
         </section>
       )}
 
-      {/* ── View: Adicionar Aluno ── */}
       {view === 'adicionar' && (
         <section className="max-w-xl">
           {adicionarSucesso && (
@@ -308,7 +326,6 @@ export default function DashboardCoordPage() {
           )}
 
           <div className="bg-white border border-gray-200 rounded-2xl shadow-soft-xl overflow-hidden">
-            {/* Header */}
             <div className="px-6 sm:px-7 pt-5 sm:pt-6">
               <div className="inline-flex items-center gap-2 mb-5">
                 <span className="modal-eyebrow-dot"></span>
@@ -325,7 +342,6 @@ export default function DashboardCoordPage() {
               </header>
             </div>
 
-            {/* Form */}
             <form id="formAdicionarAluno" onSubmit={handleAdicionarAluno} className="px-6 sm:px-7 pt-5 pb-2 space-y-6">
               <section>
                 <label htmlFor="nome" className="modal-label">Nome Completo</label>
@@ -380,7 +396,6 @@ export default function DashboardCoordPage() {
               )}
             </form>
 
-            {/* Footer */}
             <footer className="flex items-center justify-end gap-3 px-6 sm:px-7 py-4 mt-3 border-t border-gray-100 bg-gradient-to-b from-white to-brand-surface/40">
               <button type="submit" form="formAdicionarAluno" className="modal-btn-primary">
                 <Plus className="w-4 h-4" />
@@ -391,7 +406,6 @@ export default function DashboardCoordPage() {
         </section>
       )}
 
-      {/* ── View: Turmas ── */}
       {view === 'turmas' && (
         <section>
           <div className="flex items-center justify-between mb-4">
@@ -413,35 +427,32 @@ export default function DashboardCoordPage() {
               {turmasDoCoord.map((turma) => (
                 <CardTurma key={turma.id} turma={turma} />
               ))}
-
             </div>
           )}
         </section>
       )}
 
-      {/* Modal criar turma */}
       <ModalCriarTurma
         open={modalTurmaAberta}
         onClose={() => setModalTurmaAberta(false)}
         onCreate={handleCriarTurma}
       />
 
-      {/* Modal feedback */}
       <ModalFeedback
         open={modalFeedbackAberta}
         onClose={() => { setModalFeedbackAberta(false); setProtocoloFeedback(null); }}
         onSubmit={handleFeedbackSubmit}
       />
 
-      {/* Modal detalhes demanda */}
       <ModalDetalhesDemanda
         open={modalDetalhesAberta}
         onClose={() => {
           setModalDetalhesAberta(false);
           setDemandaDetalhe(null);
+          setRemetenteDetalhe(null);
         }}
         demanda={demandaDetalhe}
-        remetente={demandaDetalhe ? usuariosHook.buscar(demandaDetalhe.matriculaAluno) ?? null : null}
+        remetente={remetenteDetalhe}
       />
     </div>
   );

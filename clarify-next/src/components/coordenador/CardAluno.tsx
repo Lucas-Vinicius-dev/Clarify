@@ -1,7 +1,7 @@
-import type { Usuario } from '@/types';
+import type { UsuarioLogado } from '@/types';
 
 interface CardAlunoProps {
-  aluno: Usuario;
+  aluno: UsuarioLogado;
   demandasEmAberto: number;
   onRemover?: (matricula: string) => void;
 }
