@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ArrowRight, FileText, Clock, CheckCircle } from 'lucide-react';
 import { BarraFiltros } from '@/components/demandas/BarraFiltros';
@@ -8,23 +8,22 @@ import { CardDemanda } from '@/components/demandas/CardDemanda';
 import { CardNovaDemanda } from '@/components/demandas/CardNovaDemanda';
 import { CardHistorico } from '@/components/demandas/CardHistorico';
 import { LinhaHistorico } from '@/components/demandas/LinhaHistorico';
-import { CardMetrica } from '@/components/coord/CardMetrica';
+import { CardMetrica } from '@/components/coordenador/CardMetrica';
 import { EstadoVazio } from '@/components/demandas/EstadoVazio';
 import { FabMobile } from '@/components/demandas/FabMobile';
 import { ModalNovaDemanda } from '@/components/demandas/ModalNovaDemanda';
 import { ModalDetalhesDemanda } from '@/components/demandas/ModalDetalhesDemanda';
 import { useDemandas } from '@/hooks/useDemandas';
 import { useAuth } from '@/context/AuthContext';
-import { acharUsuario } from '@/lib/auth';
-import type { StatusDemanda, TipoDemanda } from '@/types';
+import type { StatusDemanda, TipoDemanda, UsuarioLogado } from '@/types';
 
 type StudentView = 'nome' | 'demandas';
 const VIEWS: StudentView[] = ['nome', 'demandas'];
 
 export default function CentralDemandasPage() {
   const { usuario } = useAuth();
-  const { demandas, criar, buscarPorProtocolo } = useDemandas(
-    usuario ? { matriculaAluno: usuario.matricula } : undefined
+  const { demandas, criar } = useDemandas(
+    usuario ? { alunoId: usuario.id } : undefined
   );
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -37,16 +36,37 @@ export default function CentralDemandasPage() {
   const [modalNovaAberta, setModalNovaAberta] = useState(false);
   const [modalDetalhesAberta, setModalDetalhesAberta] = useState(false);
   const [protocoloSelecionado, setProtocoloSelecionado] = useState<string | null>(null);
+  const [remetenteDetalhe, setRemetenteDetalhe] = useState<UsuarioLogado | null>(null);
 
   const demandaDetalhes = useMemo(
-    () => protocoloSelecionado ? buscarPorProtocolo(protocoloSelecionado) ?? null : null,
-    [protocoloSelecionado, buscarPorProtocolo]
+    () => protocoloSelecionado ? demandas.find((d) => d.protocolo === protocoloSelecionado) ?? null : null,
+    [protocoloSelecionado, demandas]
   );
 
-  const remetente = useMemo(
-    () => demandaDetalhes ? acharUsuario(demandaDetalhes.matriculaAluno) ?? null : null,
-    [demandaDetalhes]
-  );
+  useEffect(() => {
+    if (!demandaDetalhes) return
+
+    let cancelled = false
+
+    fetch(`/api/perfis/${demandaDetalhes.alunoId}`)
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (!cancelled && data) {
+          setRemetenteDetalhe({
+            id: data.id,
+            nome: data.nome,
+            matricula: data.matricula,
+            email: data.email,
+            cargo: data.cargo,
+            coordenador_id: data.coordenador_id,
+          })
+        } else if (!cancelled) {
+          setRemetenteDetalhe(null)
+        }
+      })
+
+    return () => { cancelled = true }
+  }, [demandaDetalhes])
 
   const filtradas = useMemo(() => {
     return demandas.filter((d) => {
@@ -69,8 +89,9 @@ export default function CentralDemandasPage() {
   const eficiencia = total > 0 ? Math.round((resolvidas / total) * 100) : 0;
 
   const handleCriarDemanda = useCallback((dados: { tipo: string; descricao: string }) => {
+    if (!usuario?.id) return;
     criar({
-      matriculaAluno: usuario?.matricula ?? '',
+      alunoId: usuario.id,
       tipo: dados.tipo as TipoDemanda,
       descricao: dados.descricao,
     });
@@ -90,10 +111,8 @@ export default function CentralDemandasPage() {
 
   return (
     <div className="p-4 sm:p-6 max-w-6xl mx-auto space-y-6">
-      {/* ── View: Início ── */}
       {view === 'nome' && (
         <div className="space-y-6">
-          {/* Hero */}
           <section className="relative overflow-hidden bg-gray-900 p-5 sm:p-8 text-white rounded-2xl">
             <div className="relative z-10 space-y-3">
               <span className="text-[10px] tracking-[0.2em] uppercase block opacity-70">
@@ -108,7 +127,6 @@ export default function CentralDemandasPage() {
             </div>
           </section>
 
-          {/* Métricas */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <CardMetrica titulo="Total" valor={total} label="solicitações">
               <FileText className="w-4 h-4 text-gray-400 mb-1.5" />
@@ -126,7 +144,6 @@ export default function CentralDemandasPage() {
             </CardMetrica>
           </div>
 
-          {/* Demandas recentes */}
           {recentes.length > 0 && (
             <section>
               <div className="flex items-center justify-between mb-3">
@@ -166,10 +183,8 @@ export default function CentralDemandasPage() {
         </div>
       )}
 
-      {/* ── View: Minhas Demandas ── */}
       {view === 'demandas' && (
         <>
-          {/* Métricas */}
           <div className="grid grid-cols-3 gap-4">
             <CardMetrica titulo="Total de Solicitações" valor={total} label="no semestre" />
             <CardMetrica titulo="Em Análise" valor={String(emAnalise).padStart(2, '0')}>
@@ -184,7 +199,6 @@ export default function CentralDemandasPage() {
             </CardMetrica>
           </div>
 
-          {/* Barra de filtros */}
           <BarraFiltros
             busca={busca}
             status={filtroStatus}
@@ -192,7 +206,6 @@ export default function CentralDemandasPage() {
             onStatusChange={setFiltroStatus}
           />
 
-          {/* Cards de demanda em aberto */}
           <section>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {emAberto.length > 0 ? (
@@ -217,12 +230,10 @@ export default function CentralDemandasPage() {
             </div>
           </section>
 
-          {/* Histórico de concluídas */}
           {concluidas.length > 0 && (
             <section>
               <h2 className="text-lg font-bold text-gray-900 mb-3">Histórico</h2>
 
-              {/* Tabela desktop */}
               <div className="hidden md:block bg-white rounded-xl border border-gray-200 overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
@@ -241,7 +252,6 @@ export default function CentralDemandasPage() {
                 </table>
               </div>
 
-              {/* Cards mobile */}
               <div className="md:hidden space-y-2">
                 {concluidas.map((demanda) => (
                   <CardHistorico key={demanda.protocolo} demanda={demanda} />
@@ -250,12 +260,10 @@ export default function CentralDemandasPage() {
             </section>
           )}
 
-          {/* FAB mobile */}
           <FabMobile onClick={() => setModalNovaAberta(true)} />
         </>
       )}
 
-      {/* Modal nova demanda */}
       <ModalNovaDemanda
         open={modalNovaAberta}
         onClose={() => setModalNovaAberta(false)}
@@ -263,12 +271,11 @@ export default function CentralDemandasPage() {
         onSubmit={handleCriarDemanda}
       />
 
-      {/* Modal detalhes */}
       <ModalDetalhesDemanda
         open={modalDetalhesAberta}
-        onClose={() => { setModalDetalhesAberta(false); setProtocoloSelecionado(null); }}
+        onClose={() => { setModalDetalhesAberta(false); setProtocoloSelecionado(null); setRemetenteDetalhe(null); }}
         demanda={demandaDetalhes}
-        remetente={remetente}
+        remetente={remetenteDetalhe}
       />
     </div>
   );

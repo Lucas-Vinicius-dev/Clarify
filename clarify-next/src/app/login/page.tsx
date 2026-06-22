@@ -22,7 +22,7 @@ export default function LoginPage() {
       const institutionalId = formData.get('institutionalId') as string
       const securityKey = formData.get('securityKey') as string
 
-      const resultado = login(institutionalId, securityKey)
+      const resultado = await login(institutionalId, securityKey)
 
       if (resultado.ok && resultado.usuarioLogado) {
         router.push(

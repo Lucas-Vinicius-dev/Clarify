@@ -25,7 +25,7 @@ export default function RegistroPage() {
       const senha = formData.get('securityKey') as string
       const senhaAtivacao = formData.get('activationKey') as string
 
-      const resultado = registro({
+      const resultado = await registro({
         nome,
         matricula,
         email,

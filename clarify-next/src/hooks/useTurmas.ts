@@ -1,159 +1,144 @@
-'use client';
+'use client'
 
-// ═════════════════════════════════════════════════════════════════
-// HOOK: useTurmas
-// Gerencia turmas do sistema com estado reativo
-// ═════════════════════════════════════════════════════════════════
-
-import { useState, useCallback } from 'react';
-import type { Turma } from '@/types';
-import { popularLocalStorage } from '@/lib/localStorage';
+import { useState, useEffect, useCallback } from 'react'
+import type { Turma } from '@/types'
 
 export interface UseTurmasReturn {
-  turmas: Turma[];
+  turmas: Turma[]
+  loading: boolean
   criar: (dados: {
-    nome: string;
-    disciplina: string;
-    alunos: string[];
-    coordenador: string;
-  }) => Turma;
-  atualizar: (id: string, dados: Partial<Turma>) => Turma | undefined;
-  deletar: (id: string) => void;
-  buscar: (id: string) => Turma | undefined;
-  adicionarAluno: (idTurma: string, matriculaAluno: string) => void;
-  removerAluno: (idTurma: string, matriculaAluno: string) => void;
-  contarAlunos: (idTurma: string) => number;
-  filtrar: (matriculaCoordenador: string) => Turma[];
+    nome: string
+    disciplina: string
+    alunos: string[]
+    coordenadorId: string
+  }) => Promise<Turma | null>
+  deletar: (id: string) => Promise<void>
+  buscar: (id: string) => Turma | undefined
+  adicionarAluno: (turmaId: string, alunoId: string) => Promise<void>
+  removerAluno: (turmaId: string, alunoId: string) => Promise<void>
+  contarAlunos: (idTurma: string) => number
+  filtrar: (coordenadorId: string) => Turma[]
+  recarregar: () => void
 }
 
-function obterTurmasIniciais(): Turma[] {
-  if (typeof window === 'undefined') return [];
-
-  popularLocalStorage();
-
-  return JSON.parse(localStorage.getItem('turmas') || '[]') as Turma[];
+function mapRow(row: Record<string, unknown>): Turma {
+  return {
+    id: row.id as string,
+    nome: row.nome as string,
+    disciplina: row.disciplina as string,
+    alunos: (row.alunos as string[]) ?? [],
+    coordenador_id: row.coordenador_id as string,
+    criadaEm: row.created_at as string,
+  }
 }
 
-/**
- * Hook para gerenciar turmas
- */
 export function useTurmas(): UseTurmasReturn {
-  const [turmas, setTurmas] = useState<Turma[]>(() => obterTurmasIniciais());
+  const [turmas, setTurmas] = useState<Turma[]>([])
+  const [loading, setLoading] = useState(true)
+  const [refreshKey, setRefreshKey] = useState(0)
 
-  const salvar = useCallback((novasTurmas: Turma[]) => {
-    if (typeof window === 'undefined') return;
-    localStorage.setItem('turmas', JSON.stringify(novasTurmas));
-    setTurmas(novasTurmas);
-  }, []);
+  useEffect(() => {
+    let cancelled = false
+
+    const load = async () => {
+      const res = await fetch('/api/turmas')
+      const data = await res.json()
+      if (!cancelled) {
+        setTurmas((data ?? []).map(mapRow))
+        setLoading(false)
+      }
+    }
+
+    load()
+    return () => { cancelled = true }
+  }, [refreshKey])
+
+  const recarregar = useCallback(() => {
+    setLoading(true)
+    setRefreshKey((k) => k + 1)
+  }, [])
 
   const criar = useCallback(
-    (dados: {
-      nome: string;
-      disciplina: string;
-      alunos: string[];
-      coordenador: string;
+    async (dados: {
+      nome: string
+      disciplina: string
+      alunos: string[]
+      coordenadorId: string
     }) => {
-      const id = `turma_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      const agora = new Date().toISOString();
+      const res = await fetch('/api/turmas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados),
+      })
+      const json = await res.json()
+      if (!json.ok || !json.data) return null
 
-      const novaTurma: Turma = {
-        id,
-        nome: dados.nome,
-        disciplina: dados.disciplina,
-        alunos: dados.alunos,
-        coordenador: dados.coordenador,
-        criadaEm: agora,
-      };
-
-      const novasTurmas = [...turmas, novaTurma];
-      salvar(novasTurmas);
-      return novaTurma;
+      await recarregar()
+      return mapRow(json.data)
     },
-    [turmas, salvar]
-  );
-
-  const atualizar = useCallback(
-    (id: string, dados: Partial<Turma>) => {
-      const novasTurmas = turmas.map((t) =>
-        t.id === id ? { ...t, ...dados } : t
-      );
-      const turmaAtualizada = novasTurmas.find((t) => t.id === id);
-      salvar(novasTurmas);
-      return turmaAtualizada;
-    },
-    [turmas, salvar]
-  );
+    [recarregar]
+  )
 
   const deletar = useCallback(
-    (id: string) => {
-      const novasTurmas = turmas.filter((t) => t.id !== id);
-      salvar(novasTurmas);
+    async (id: string) => {
+      await fetch(`/api/turmas/${id}`, { method: 'DELETE' })
+      await recarregar()
     },
-    [turmas, salvar]
-  );
+    [recarregar]
+  )
 
   const buscar = useCallback(
     (id: string) => {
-      return turmas.find((t) => t.id === id);
+      return turmas.find((t) => t.id === id)
     },
     [turmas]
-  );
+  )
 
   const adicionarAluno = useCallback(
-    (idTurma: string, matriculaAluno: string) => {
-      const novasTurmas = turmas.map((t) => {
-        if (t.id === idTurma && !t.alunos.includes(matriculaAluno)) {
-          return { ...t, alunos: [...t.alunos, matriculaAluno] };
-        }
-        return t;
-      });
-      salvar(novasTurmas);
+    async (turmaId: string, alunoId: string) => {
+      await fetch(`/api/turmas/${turmaId}/alunos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ alunoId }),
+      })
+      await recarregar()
     },
-    [turmas, salvar]
-  );
+    [recarregar]
+  )
 
   const removerAluno = useCallback(
-    (idTurma: string, matriculaAluno: string) => {
-      const novasTurmas = turmas.map((t) => {
-        if (t.id === idTurma) {
-          return {
-            ...t,
-            alunos: t.alunos.filter((m) => m !== matriculaAluno),
-          };
-        }
-        return t;
-      });
-      salvar(novasTurmas);
+    async (turmaId: string, alunoId: string) => {
+      await fetch(`/api/turmas/${turmaId}/alunos/${alunoId}`, { method: 'DELETE' })
+      await recarregar()
     },
-    [turmas, salvar]
-  );
+    [recarregar]
+  )
 
   const contarAlunos = useCallback(
     (idTurma: string) => {
-      const turma = turmas.find((t) => t.id === idTurma);
-      return turma?.alunos.length ?? 0;
+      const turma = turmas.find((t) => t.id === idTurma)
+      return turma?.alunos.length ?? 0
     },
     [turmas]
-  );
+  )
 
   const filtrar = useCallback(
-    (matriculaCoordenador: string) => {
-      return turmas.filter(
-        (t) => String(t.coordenador) === String(matriculaCoordenador)
-      );
+    (coordenadorId: string) => {
+      return turmas.filter((t) => t.coordenador_id === coordenadorId)
     },
     [turmas]
-  );
+  )
 
   return {
     turmas,
+    loading,
     criar,
-    atualizar,
     deletar,
     buscar,
     adicionarAluno,
     removerAluno,
     contarAlunos,
     filtrar,
-  };
+    recarregar,
+  }
 }
