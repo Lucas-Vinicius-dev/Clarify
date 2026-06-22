@@ -76,13 +76,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     })
     const data = await res.json()
     if (data.ok) {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (session?.user) {
-        await fetchProfile(session.user.id)
-      }
+      await supabase.auth.getSession()
     }
     return data
-  }, [supabase, fetchProfile])
+  }, [supabase])
 
   const logout = useCallback(async () => {
     await supabase.auth.signOut()
