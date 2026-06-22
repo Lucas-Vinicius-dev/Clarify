@@ -1,8 +1,11 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { X, Users, Plus, Check } from 'lucide-react';
+import { useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Modal } from '@/components/ui/Modal';
+import { criarTurmaSchema, type CriarTurmaFormData } from '@/schemas/turmas';
 
 interface ModalCriarTurmaProps {
   open: boolean;
@@ -11,39 +14,50 @@ interface ModalCriarTurmaProps {
 }
 
 export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProps) {
-  const [nome, setNome] = useState('');
-  const [disciplina, setDisciplina] = useState('');
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm<CriarTurmaFormData>({
+    resolver: zodResolver(criarTurmaSchema),
+    mode: 'onChange',
+    defaultValues: { nome: '', disciplina: '', alunos: [] },
+  });
+
+  const alunos = useWatch({ control, name: 'alunos' }) ?? [];
   const [matriculaInput, setMatriculaInput] = useState('');
-  const [alunosAdicionados, setAlunosAdicionados] = useState<string[]>([]);
 
   const adicionarAluno = useCallback(() => {
     const mat = matriculaInput.trim();
-    if (!mat || alunosAdicionados.includes(mat)) return;
-    setAlunosAdicionados((prev) => [...prev, mat]);
+    if (!mat || alunos.includes(mat)) return;
+    setValue('alunos', [...alunos, mat], { shouldValidate: true });
     setMatriculaInput('');
-  }, [matriculaInput, alunosAdicionados]);
+  }, [matriculaInput, alunos, setValue]);
 
-  const removerAluno = useCallback((matricula: string) => {
-    setAlunosAdicionados((prev) => prev.filter((m) => m !== matricula));
-  }, []);
+  const removerAluno = useCallback((index: number) => {
+    const current = getValues('alunos');
+    setValue('alunos', current.filter((_, i) => i !== index), { shouldValidate: true });
+  }, [getValues, setValue]);
 
-  const handleSubmit = useCallback((e: React.FormEvent) => {
-    e.preventDefault();
-    if (!nome.trim() || !disciplina.trim()) return;
-    onCreate({ nome: nome.trim(), disciplina: disciplina.trim(), alunos: alunosAdicionados });
-    setNome('');
-    setDisciplina('');
-    setAlunosAdicionados([]);
+  const onValid = useCallback((data: CriarTurmaFormData) => {
+    onCreate({
+      nome: data.nome.trim(),
+      disciplina: data.disciplina.trim(),
+      alunos: data.alunos,
+    });
+    reset();
     onClose();
-  }, [nome, disciplina, alunosAdicionados, onCreate, onClose]);
+  }, [onCreate, reset, onClose]);
 
   const handleClose = useCallback(() => {
-    setNome('');
-    setDisciplina('');
+    reset();
     setMatriculaInput('');
-    setAlunosAdicionados([]);
     onClose();
-  }, [onClose]);
+  }, [reset, onClose]);
 
   return (
     <Modal open={open} onClose={handleClose} maxWidth="max-w-md">
@@ -66,7 +80,7 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onValid)} className="space-y-4">
           <div>
             <label htmlFor="turmaNome" className="block text-sm font-medium text-gray-700 mb-1">
               Nome da turma
@@ -74,12 +88,13 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
             <input
               id="turmaNome"
               type="text"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-              required
+              {...register('nome')}
               placeholder="Ex: Engenharia de Software — 2025.1"
               className="w-full border border-gray-300 rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
             />
+            {errors.nome && (
+              <p className="text-xs text-red-600 mt-1">{errors.nome.message}</p>
+            )}
           </div>
 
           <div>
@@ -89,12 +104,13 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
             <input
               id="turmaDisciplina"
               type="text"
-              value={disciplina}
-              onChange={(e) => setDisciplina(e.target.value)}
-              required
+              {...register('disciplina')}
               placeholder="Ex: Cálculo I"
               className="w-full border border-gray-300 rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
             />
+            {errors.disciplina && (
+              <p className="text-xs text-red-600 mt-1">{errors.disciplina.message}</p>
+            )}
           </div>
 
           <div>
@@ -124,18 +140,18 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
           <div className="border border-gray-200 rounded-xl p-3 min-h-[64px]">
             <p className="text-xs text-gray-400 mb-2">Alunos adicionados</p>
             <div className="flex flex-wrap gap-2">
-              {alunosAdicionados.length === 0 && (
+              {alunos.length === 0 && (
                 <span className="text-xs text-gray-300">Nenhum aluno adicionado</span>
               )}
-              {alunosAdicionados.map((matricula) => (
+              {alunos.map((matricula, index) => (
                 <span
-                  key={matricula}
+                  key={`${matricula}-${index}`}
                   className="inline-flex items-center gap-1.5 bg-orange-100 text-orange-700 text-xs font-medium rounded-full px-3 py-1"
                 >
                   {matricula}
                   <button
                     type="button"
-                    onClick={() => removerAluno(matricula)}
+                    onClick={() => removerAluno(index)}
                     className="text-orange-400 hover:text-orange-700 cursor-pointer leading-none bg-transparent border-none p-0"
                   >
                     <X className="w-3 h-3" />
@@ -156,7 +172,6 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
             <button
               type="submit"
               className="px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-semibold hover:bg-orange-600 transition-colors cursor-pointer flex items-center gap-1.5 border-none"
-              disabled={!nome.trim() || !disciplina.trim()}
             >
               <Check className="w-3.5 h-3.5" />
               Criar turma

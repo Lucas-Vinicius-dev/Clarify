@@ -1,7 +1,10 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Modal } from '@/components/ui/Modal';
+import { feedbackSchema, type FeedbackFormData } from '@/schemas/demandas';
 
 interface ModalFeedbackProps {
   open: boolean;
@@ -10,37 +13,44 @@ interface ModalFeedbackProps {
 }
 
 export function ModalFeedback({ open, onClose, onSubmit }: ModalFeedbackProps) {
-  const [feedback, setFeedback] = useState('');
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FeedbackFormData>({
+    resolver: zodResolver(feedbackSchema),
+    mode: 'onChange',
+  });
 
-  const handleSubmit = useCallback((e: React.FormEvent) => {
-    e.preventDefault();
-    if (!feedback.trim()) return;
-    onSubmit(feedback.trim());
-    setFeedback('');
+  const onValid = useCallback((data: FeedbackFormData) => {
+    onSubmit(data.texto.trim());
+    reset();
     onClose();
-  }, [feedback, onSubmit, onClose]);
+  }, [onSubmit, reset, onClose]);
 
   const handleClose = useCallback(() => {
-    setFeedback('');
+    reset();
     onClose();
-  }, [onClose]);
+  }, [reset, onClose]);
 
   return (
     <Modal open={open} onClose={handleClose} maxWidth="max-w-sm">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg">
+      <form onSubmit={handleSubmit(onValid)} className="bg-white p-6 rounded-lg">
         <h3 className="text-lg font-bold text-gray-900 mb-2">Feedback</h3>
         <p className="text-sm text-gray-500 mb-4">
           Descreva o motivo da reprovação ou o ajuste necessário.
         </p>
         <input
           type="text"
-          value={feedback}
-          onChange={(e) => setFeedback(e.target.value)}
+          {...register('texto')}
           placeholder="Digite seu feedback..."
-          required
           className="w-full border border-gray-300 rounded-lg p-3 mb-4 text-sm outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
           autoFocus
         />
+        {errors.texto && (
+          <p className="text-xs text-red-600 mb-2">{errors.texto.message}</p>
+        )}
         <div className="flex justify-end gap-2">
           <button
             type="button"
@@ -51,8 +61,7 @@ export function ModalFeedback({ open, onClose, onSubmit }: ModalFeedbackProps) {
           </button>
           <button
             type="submit"
-            disabled={!feedback.trim()}
-            className="px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-semibold hover:bg-orange-600 transition-colors cursor-pointer border-none disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-semibold hover:bg-orange-600 transition-colors cursor-pointer border-none"
           >
             Enviar
           </button>
