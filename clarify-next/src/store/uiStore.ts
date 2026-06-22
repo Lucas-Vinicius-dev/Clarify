@@ -9,5 +9,5 @@ interface UIState {
 export const useUIStore = create<UIState>((set) => ({
   drawerOpen: false,
   toggleDrawer: () => set((s) => ({ drawerOpen: !s.drawerOpen })),
-  setDrawer: (open: () => boolean) => set({ drawerOpen: open }),
+  setDrawer: (open: boolean) => set({ drawerOpen: open }),
 }))
