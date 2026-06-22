@@ -15,7 +15,8 @@ import { ModalNovaDemanda } from '@/components/demandas/ModalNovaDemanda';
 import { ModalDetalhesDemanda } from '@/components/demandas/ModalDetalhesDemanda';
 import { useDemandas } from '@/hooks/useDemandas';
 import { useAuth } from '@/context/AuthContext';
-import type { StatusDemanda, TipoDemanda, UsuarioLogado } from '@/types';
+import { useFiltrosStore } from '@/store/filtrosStore';
+import type { TipoDemanda, UsuarioLogado } from '@/types';
 
 type StudentView = 'nome' | 'demandas';
 const VIEWS: StudentView[] = ['nome', 'demandas'];
@@ -31,8 +32,7 @@ export default function CentralDemandasPage() {
   const rawView = searchParams.get('view') as StudentView | null;
   const view: StudentView = rawView && VIEWS.includes(rawView) ? rawView : 'nome';
 
-  const [busca, setBusca] = useState('');
-  const [filtroStatus, setFiltroStatus] = useState<StatusDemanda | 'todos'>('todos');
+  const { busca, filtroStatus, setBusca, setFiltroStatus } = useFiltrosStore();
   const [modalNovaAberta, setModalNovaAberta] = useState(false);
   const [modalDetalhesAberta, setModalDetalhesAberta] = useState(false);
   const [protocoloSelecionado, setProtocoloSelecionado] = useState<string | null>(null);
