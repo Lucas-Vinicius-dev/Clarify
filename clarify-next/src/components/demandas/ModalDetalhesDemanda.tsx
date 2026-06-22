@@ -2,9 +2,18 @@
 
 import { FileText, Calendar, Tag, Hash, Mail, MessageSquareQuote } from 'lucide-react';
 import { Modal } from '@/components/ui/Modal';
+import { Badge } from '@/components/ui/Badge';
+import { Card } from '@/components/ui/Card';
 import { TimelineProgresso } from './TimelineProgresso';
-import { obterLabelStatus, obterCorStatus, formatarData } from '@/lib/utils';
-import type { Demanda, UsuarioLogado } from '@/types';
+import { obterLabelStatus, formatarData } from '@/lib/utils';
+import type { Demanda, StatusDemanda, UsuarioLogado } from '@/types';
+
+const statusVariant: Record<StatusDemanda, 'pendente' | 'em_analise' | 'requer_ajuste' | 'concluido'> = {
+  pendente: 'pendente',
+  em_analise: 'em_analise',
+  requer_ajuste: 'requer_ajuste',
+  concluido: 'concluido',
+};
 
 interface ModalDetalhesDemandaProps {
   open: boolean;
@@ -26,7 +35,6 @@ export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: Moda
   if (!demanda) return null;
 
   const statusLabel = obterLabelStatus(demanda.status);
-  const statusCor = obterCorStatus(demanda.status);
   const dias = diasDesde(demanda.dataCriacao);
   const nomeRemetente = remetente?.nome || `Aluno ${demanda.alunoId.slice(0, 8)}`;
   const inicialRemetente = nomeRemetente.charAt(0).toUpperCase();
@@ -53,10 +61,10 @@ export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: Moda
                 {dias !== null ? ` · há ${dias} dias` : ''}
               </p>
             </div>
-            <span className={`self-start inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border whitespace-nowrap ${statusCor}`}>
-              <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70"></span>
+            <Badge variant={statusVariant[demanda.status]} className="self-start text-[10px] uppercase tracking-widest border">
+              <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70 mr-1.5" />
               {statusLabel}
-            </span>
+            </Badge>
           </header>
 
           <section className="mt-6 bg-gradient-to-br from-white to-brand-surface/50 rounded-2xl border border-gray-100 px-3 sm:px-6 py-4">
@@ -68,11 +76,11 @@ export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: Moda
               <FileText className="w-3.5 h-3.5 text-brand-primary" />
               <p className="modal-label">Detalhes da solicitação</p>
             </div>
-            <div className="bg-brand-surface/50 border border-brand-surface-dim/40 rounded-2xl px-5 py-4">
+            <Card className="bg-brand-surface/50 border-brand-surface-dim/40 rounded-2xl px-5 py-4 shadow-none">
               <p className="text-[0.95rem] sm:text-base text-gray-800 leading-relaxed break-words [overflow-wrap:anywhere] whitespace-pre-wrap">
                 {demanda.descricao}
               </p>
-            </div>
+            </Card>
           </section>
 
           <section className="mt-6">
@@ -95,20 +103,20 @@ export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: Moda
           </section>
 
           <section className="mt-7 grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="bg-white rounded-2xl border border-gray-100 px-4 py-3">
+            <Card className="rounded-2xl px-4 py-3 shadow-none">
               <p className="modal-label">Criada em</p>
               <p className="text-sm font-semibold text-gray-900 mt-1 inline-flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5 text-gray-400" />
                 {formatarData(demanda.dataCriacao)}
               </p>
-            </div>
-            <div className="bg-white rounded-2xl border border-gray-100 px-4 py-3">
+            </Card>
+            <Card className="rounded-2xl px-4 py-3 shadow-none">
               <p className="modal-label">Status</p>
               <p className="text-sm font-semibold text-gray-900 mt-1 inline-flex items-center gap-1.5">
                 <Tag className="w-3.5 h-3.5 text-gray-400" />
                 {statusLabel}
               </p>
-            </div>
+            </Card>
           </section>
 
           {demanda.feedback && (

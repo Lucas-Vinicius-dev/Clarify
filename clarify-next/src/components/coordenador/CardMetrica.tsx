@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Card } from '@/components/ui/Card';
 
 interface CardMetricaProps {
   titulo: string;
@@ -9,7 +10,7 @@ interface CardMetricaProps {
 
 export function CardMetrica({ titulo, valor, children, label }: CardMetricaProps) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-5">
+    <Card className="p-5">
       <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
         {titulo}
       </p>
@@ -18,6 +19,6 @@ export function CardMetrica({ titulo, valor, children, label }: CardMetricaProps
         {children}
       </div>
       {label && <p className="text-[10px] text-gray-400 mt-1">{label}</p>}
-    </div>
+    </Card>
   );
 }

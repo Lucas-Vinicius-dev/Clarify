@@ -1,8 +1,17 @@
 'use client';
 
 import { Calendar, Clock, ChevronRight } from 'lucide-react';
-import { obterLabelStatus, obterCorStatus, formatarData } from '@/lib/utils';
-import type { Demanda } from '@/types';
+import { Card } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/Badge';
+import { obterLabelStatus, formatarData } from '@/lib/utils';
+import type { Demanda, StatusDemanda } from '@/types';
+
+const statusVariant: Record<StatusDemanda, 'pendente' | 'em_analise' | 'requer_ajuste' | 'concluido'> = {
+  pendente: 'pendente',
+  em_analise: 'em_analise',
+  requer_ajuste: 'requer_ajuste',
+  concluido: 'concluido',
+};
 
 interface CardDemandaProps {
   demanda: Demanda;
@@ -11,16 +20,14 @@ interface CardDemandaProps {
 
 export function CardDemanda({ demanda, onVerDetalhes }: CardDemandaProps) {
   return (
-    <article className="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 flex flex-col gap-3 hover:shadow-md hover:-translate-y-0.5 transition-all">
+    <Card className="p-4 sm:p-5 flex flex-col gap-3 hover:shadow-md hover:-translate-y-0.5 transition-all">
       <div className="flex items-center justify-between gap-2">
         <span className="text-xs font-semibold text-gray-500 tracking-wider">
           #{demanda.protocolo}
         </span>
-        <span
-          className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full whitespace-nowrap ${obterCorStatus(demanda.status)}`}
-        >
+        <Badge variant={statusVariant[demanda.status]}>
           {obterLabelStatus(demanda.status)}
-        </span>
+        </Badge>
       </div>
 
       <div className="min-w-0">
@@ -57,6 +64,6 @@ export function CardDemanda({ demanda, onVerDetalhes }: CardDemandaProps) {
         Ver Detalhes
         <ChevronRight className="w-3.5 h-3.5" />
       </button>
-    </article>
+    </Card>
   );
 }
