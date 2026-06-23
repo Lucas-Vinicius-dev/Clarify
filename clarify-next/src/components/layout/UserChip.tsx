@@ -39,7 +39,7 @@ export function UserChip({ usuario, onLogout, showName = true }: UserChipProps) 
         type="button"
         title="Sair da conta"
         onClick={onLogout}
-        className="w-8 h-8 rounded-full text-gray-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-colors cursor-pointer"
+        className="w-8 h-8 rounded-full text-rose-600 hover:text-rose-700 hover:bg-rose-50 flex items-center justify-center transition-colors cursor-pointer"
         aria-label="Sair da conta"
       >
         <LogOut className="w-4 h-4" />

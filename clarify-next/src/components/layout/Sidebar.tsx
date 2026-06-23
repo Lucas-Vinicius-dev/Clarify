@@ -82,7 +82,7 @@ export function Sidebar({
         <button
           type="button"
           onClick={onLogout}
-          className="flex items-center gap-3 rounded-xl px-4 py-3 text-left text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors font-medium mt-auto"
+          className="flex items-center gap-3 rounded-xl px-4 py-3 text-left text-rose-600 hover:bg-rose-50 hover:text-rose-700 transition-colors font-medium mt-auto"
         >
           <LogOut className="w-5 h-5" />
           <span>Sair</span>

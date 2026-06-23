@@ -35,6 +35,7 @@ export function BarraFiltros({
           value={busca}
           onChange={(e) => onBuscaChange(e.target.value)}
           placeholder="Pesquisar protocolo ou tipo..."
+          aria-label="Pesquisar protocolo ou tipo"
           className="w-full pl-8 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-sm outline-none focus:border-brand-primary focus:bg-white transition-colors"
         />
       </div>
