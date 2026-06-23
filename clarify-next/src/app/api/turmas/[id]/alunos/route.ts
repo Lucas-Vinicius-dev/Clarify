@@ -5,9 +5,11 @@ export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params
-  const { alunoId } = await request.json()
-  const supabase = await createClient()
+  const [{ id }, { alunoId }, supabase] = await Promise.all([
+    params,
+    request.json(),
+    createClient(),
+  ])
 
   const { error } = await supabase
     .from('turma_alunos')

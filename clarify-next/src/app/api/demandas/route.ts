@@ -18,8 +18,10 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const dados = await request.json()
-  const supabase = await createClient()
+  const [dados, supabase] = await Promise.all([
+    request.json(),
+    createClient(),
+  ])
 
   const { data: protocolo } = await supabase.rpc('gerar_proximo_protocolo')
   if (!protocolo) {

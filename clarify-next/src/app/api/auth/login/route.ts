@@ -12,8 +12,10 @@ import { NextResponse } from 'next/server'
  * A matrícula é resolvida para email via RPC `get_email_by_matricula`.
  */
 export async function POST(req: Request) {
-  const { matricula, senha } = await req.json()
-  const supabase = await createClient()
+  const [{ matricula, senha }, supabase] = await Promise.all([
+    req.json(),
+    createClient(),
+  ])
 
   const { data: email } = await supabase
     .rpc('get_email_by_matricula', { p_matricula: matricula })
