@@ -14,6 +14,26 @@ function mapProfileToUser(row: Record<string, unknown>): UsuarioLogado {
   }
 }
 
+async function buscar(matricula: string): Promise<UsuarioLogado | null> {
+  const res = await fetch(`/api/perfis?matricula=${encodeURIComponent(matricula)}`)
+  const data = await res.json()
+  const user = (data ?? [])[0]
+  if (!user) return null
+  return mapProfileToUser(user)
+}
+
+async function obterAlunosDoCoordenador(coordenadorId: string): Promise<UsuarioLogado[]> {
+  const res = await fetch(`/api/perfis?coordenadorId=${encodeURIComponent(coordenadorId)}&cargo=aluno`)
+  const data = await res.json()
+  return (data ?? []).map(mapProfileToUser) as UsuarioLogado[]
+}
+
+async function existe(matricula: string, email: string): Promise<boolean> {
+  const res = await fetch(`/api/perfis?matricula=${encodeURIComponent(matricula)}&email=${encodeURIComponent(email)}`)
+  const data = await res.json()
+  return (data ?? []).length > 0
+}
+
 export function useUsuarios() {
   const queryClient = useQueryClient()
 
@@ -67,26 +87,6 @@ export function useUsuarios() {
       queryClient.invalidateQueries({ queryKey: ['usuarios'] })
     },
   })
-
-  const buscar = async (matricula: string): Promise<UsuarioLogado | null> => {
-    const res = await fetch(`/api/perfis?matricula=${encodeURIComponent(matricula)}`)
-    const data = await res.json()
-    const user = (data ?? [])[0]
-    if (!user) return null
-    return mapProfileToUser(user)
-  }
-
-  const obterAlunosDoCoordenador = async (coordenadorId: string): Promise<UsuarioLogado[]> => {
-    const res = await fetch(`/api/perfis?coordenadorId=${encodeURIComponent(coordenadorId)}&cargo=aluno`)
-    const data = await res.json()
-    return (data ?? []).map(mapProfileToUser) as UsuarioLogado[]
-  }
-
-  const existe = async (matricula: string, email: string): Promise<boolean> => {
-    const res = await fetch(`/api/perfis?matricula=${encodeURIComponent(matricula)}&email=${encodeURIComponent(email)}`)
-    const data = await res.json()
-    return (data ?? []).length > 0
-  }
 
   return {
     usuarios,

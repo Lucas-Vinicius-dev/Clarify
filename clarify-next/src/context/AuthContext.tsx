@@ -2,7 +2,7 @@
 
 import {
   createContext,
-  useContext,
+  use,
   useEffect,
   useState,
   useCallback,
@@ -40,31 +40,40 @@ export interface AuthProviderProps {
   children: ReactNode
 }
 
+interface AuthState {
+  usuario: UsuarioLogado | null
+  loading: boolean
+}
+
 export function AuthProvider({ children }: AuthProviderProps) {
   const supabase = createClient()
-  const [usuario, setUsuario] = useState<UsuarioLogado | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [{ usuario, loading }, setAuthState] = useState<AuthState>({
+    usuario: null,
+    loading: true,
+  })
 
   const fetchProfile = useCallback(async (userId: string) => {
     const res = await fetch(`/api/perfis/${userId}`)
     if (res.ok) {
       const data = await res.json()
-      setUsuario({
-        id: data.id,
-        nome: data.nome,
-        matricula: data.matricula,
-        email: data.email,
-        cargo: data.cargo,
-        coordenador_id: data.coordenador_id,
+      setAuthState({
+        usuario: {
+          id: data.id,
+          nome: data.nome,
+          matricula: data.matricula,
+          email: data.email,
+          cargo: data.cargo,
+          coordenador_id: data.coordenador_id,
+        },
+        loading: false,
       })
       // Sincroniza o cookie do proxy a cada hidratação de sessão (ex.: refresh),
       // garantindo que uma sessão Supabase válida não seja barrada no /login.
       definirCookieSessao(data.cargo)
     } else {
-      setUsuario(null)
+      setAuthState({ usuario: null, loading: false })
       limparCookieSessao()
     }
-    setLoading(false)
   }, [])
 
   useEffect(() => {
@@ -72,7 +81,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (session?.user) {
         fetchProfile(session.user.id)
       } else {
-        setLoading(false)
+        setAuthState((prev) => ({ ...prev, loading: false }))
       }
     })
 
@@ -81,8 +90,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         if (session?.user) {
           fetchProfile(session.user.id)
         } else {
-          setUsuario(null)
-          setLoading(false)
+          setAuthState({ usuario: null, loading: false })
         }
       }
     )
@@ -98,7 +106,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     })
     const data = await res.json()
     if (data.ok && data.usuarioLogado) {
-      setUsuario(data.usuarioLogado)
+      setAuthState((prev) => ({ ...prev, usuario: data.usuarioLogado }))
       definirCookieSessao(data.usuarioLogado.cargo)
       await supabase.auth.getSession()
     }
@@ -107,7 +115,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const logout = useCallback(async () => {
     await supabase.auth.signOut()
-    setUsuario(null)
+    setAuthState((prev) => ({ ...prev, usuario: null }))
     limparCookieSessao()
   }, [supabase])
 
@@ -131,7 +139,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const result = await res.json()
 
     if (result.ok && result.usuarioLogado) {
-      setUsuario(result.usuarioLogado)
+      setAuthState((prev) => ({ ...prev, usuario: result.usuarioLogado }))
       definirCookieSessao(result.usuarioLogado.cargo)
     }
 
@@ -155,7 +163,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 }
 
 export function useAuth(): AuthContextValue {
-  const ctx = useContext(AuthContext)
+  const ctx = use(AuthContext)
   if (!ctx) {
     throw new Error('useAuth deve ser usado dentro de um AuthProvider')
   }
