@@ -80,7 +80,7 @@ export default function CentralDemandasPage() {
   }, []);
 
   const recentes = useMemo(
-    () => [...demandas].sort(
+    () => demandas.toSorted(
       (a, b) => new Date(b.dataAtualizacao).getTime() - new Date(a.dataAtualizacao).getTime()
     ).slice(0, 6),
     [demandas]
