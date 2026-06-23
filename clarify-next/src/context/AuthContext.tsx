@@ -12,9 +12,27 @@ import { createClient } from '@/lib/supabase/client'
 import type {
   AuthContextValue,
   AuthResponse,
+  Cargo,
   RegistroDados,
   UsuarioLogado,
 } from '@/types'
+
+// Cookie de sessão lido pelo proxy (src/proxy.ts) para o gating server-side
+// das rotas protegidas. Mantém o cargo como fonte de verdade do proxy.
+const NOME_COOKIE_SESSAO = 'clarify_sessao'
+const MAX_AGE_COOKIE_SESSAO = 60 * 60 * 24 * 7 // 7 dias
+
+// Grava o cargo num cookie legível pelo proxy. Sem Secure (dev roda em http).
+function definirCookieSessao(cargo: Cargo): void {
+  if (typeof document === 'undefined') return
+  document.cookie = `${NOME_COOKIE_SESSAO}=${cargo}; path=/; SameSite=Lax; Max-Age=${MAX_AGE_COOKIE_SESSAO}`
+}
+
+// Expira o cookie de sessão imediatamente.
+function limparCookieSessao(): void {
+  if (typeof document === 'undefined') return
+  document.cookie = `${NOME_COOKIE_SESSAO}=; path=/; SameSite=Lax; Max-Age=0`
+}
 
 const AuthContext = createContext<AuthContextValue | null>(null)
 
@@ -39,8 +57,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
         cargo: data.cargo,
         coordenador_id: data.coordenador_id,
       })
+      // Sincroniza o cookie do proxy a cada hidratação de sessão (ex.: refresh),
+      // garantindo que uma sessão Supabase válida não seja barrada no /login.
+      definirCookieSessao(data.cargo)
     } else {
       setUsuario(null)
+      limparCookieSessao()
     }
     setLoading(false)
   }, [])
@@ -77,6 +99,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const data = await res.json()
     if (data.ok && data.usuarioLogado) {
       setUsuario(data.usuarioLogado)
+      definirCookieSessao(data.usuarioLogado.cargo)
       await supabase.auth.getSession()
     }
     return data
@@ -85,6 +108,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const logout = useCallback(async () => {
     await supabase.auth.signOut()
     setUsuario(null)
+    limparCookieSessao()
   }, [supabase])
 
   const registro = useCallback(async (dados: RegistroDados): Promise<AuthResponse> => {
@@ -108,6 +132,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     if (result.ok && result.usuarioLogado) {
       setUsuario(result.usuarioLogado)
+      definirCookieSessao(result.usuarioLogado.cargo)
     }
 
     return result
