@@ -1,32 +1,31 @@
-import { createAdminClient } from '@/lib/supabase/admin'
+import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
-  const supabase = createAdminClient()
+  const supabase = await createClient()
 
   const { data: turmas } = await supabase
     .from('turmas')
     .select('*')
     .order('created_at', { ascending: false })
 
-  const turmasComAlunos = await Promise.all(
-    (turmas ?? []).map(async (t) => {
-      const { data: alunos } = await supabase
-        .from('turma_alunos')
-        .select('aluno_id')
-        .eq('turma_id', t.id)
-      return { ...t, alunos: (alunos ?? []).map((a) => a.aluno_id) }
-    })
-  )
+  const { data: allAlunos } = await supabase
+    .from('turma_alunos')
+    .select('turma_id, aluno_id')
+
+  const turmasComAlunos = (turmas ?? []).map((t) => ({
+    ...t,
+    alunos: (allAlunos ?? []).filter((a) => a.turma_id === t.id).map((a) => a.aluno_id),
+  }))
 
   return NextResponse.json(turmasComAlunos)
 }
 
 export async function POST(request: Request) {
   const dados = await request.json()
-  const supabase = createAdminClient()
+  const supabase = await createClient()
 
-  const { data: turma } = await supabase
+  const { data: turma, error } = await supabase
     .from('turmas')
     .insert({
       nome: dados.nome,
@@ -36,9 +35,9 @@ export async function POST(request: Request) {
     .select()
     .single()
 
-  if (!turma) {
+  if (error || !turma) {
     return NextResponse.json(
-      { ok: false, mensagem: 'Erro ao criar turma.' },
+      { ok: false, mensagem: error?.message || 'Erro ao criar turma.' },
       { status: 500 }
     )
   }
@@ -48,7 +47,13 @@ export async function POST(request: Request) {
       turma_id: turma.id,
       aluno_id: alunoId,
     }))
-    await supabase.from('turma_alunos').insert(inserts)
+    const { error: alunosError } = await supabase.from('turma_alunos').insert(inserts)
+    if (alunosError) {
+      return NextResponse.json(
+        { ok: false, mensagem: alunosError.message },
+        { status: 500 }
+      )
+    }
   }
 
   return NextResponse.json({ ok: true, data: { ...turma, alunos: dados.alunos ?? [] } })

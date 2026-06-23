@@ -1,4 +1,4 @@
-import { createAdminClient } from '@/lib/supabase/admin'
+import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 export async function GET(
@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: Promise<{ protocolo: string }> }
 ) {
   const { protocolo } = await params
-  const supabase = createAdminClient()
+  const supabase = await createClient()
 
   const { data } = await supabase
     .from('demandas')
@@ -30,7 +30,7 @@ export async function PATCH(
 ) {
   const { protocolo } = await params
   const body = await request.json()
-  const supabase = createAdminClient()
+  const supabase = await createClient()
 
   const updateData: Record<string, string> = {
     status: body.status,

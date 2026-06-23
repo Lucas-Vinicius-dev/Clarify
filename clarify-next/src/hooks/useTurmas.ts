@@ -1,25 +1,7 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { Turma } from '@/types'
-
-export interface UseTurmasReturn {
-  turmas: Turma[]
-  loading: boolean
-  criar: (dados: {
-    nome: string
-    disciplina: string
-    alunos: string[]
-    coordenadorId: string
-  }) => Promise<Turma | null>
-  deletar: (id: string) => Promise<void>
-  buscar: (id: string) => Turma | undefined
-  adicionarAluno: (turmaId: string, alunoId: string) => Promise<void>
-  removerAluno: (turmaId: string, alunoId: string) => Promise<void>
-  contarAlunos: (idTurma: string) => number
-  filtrar: (coordenadorId: string) => Turma[]
-  recarregar: () => void
-}
 
 function mapRow(row: Record<string, unknown>): Turma {
   return {
@@ -32,34 +14,20 @@ function mapRow(row: Record<string, unknown>): Turma {
   }
 }
 
-export function useTurmas(): UseTurmasReturn {
-  const [turmas, setTurmas] = useState<Turma[]>([])
-  const [loading, setLoading] = useState(true)
-  const [refreshKey, setRefreshKey] = useState(0)
+export function useTurmas() {
+  const queryClient = useQueryClient()
 
-  useEffect(() => {
-    let cancelled = false
-
-    const load = async () => {
+  const { data: turmas = [], isLoading: loading } = useQuery({
+    queryKey: ['turmas'],
+    queryFn: async () => {
       const res = await fetch('/api/turmas')
       const data = await res.json()
-      if (!cancelled) {
-        setTurmas((data ?? []).map(mapRow))
-        setLoading(false)
-      }
-    }
+      return (data ?? []).map(mapRow) as Turma[]
+    },
+  })
 
-    load()
-    return () => { cancelled = true }
-  }, [refreshKey])
-
-  const recarregar = useCallback(() => {
-    setLoading(true)
-    setRefreshKey((k) => k + 1)
-  }, [])
-
-  const criar = useCallback(
-    async (dados: {
+  const criarMutation = useMutation({
+    mutationFn: async (dados: {
       nome: string
       disciplina: string
       alunos: string[]
@@ -72,73 +40,69 @@ export function useTurmas(): UseTurmasReturn {
       })
       const json = await res.json()
       if (!json.ok || !json.data) return null
-
-      await recarregar()
-      return mapRow(json.data)
+      return mapRow(json.data) as Turma
     },
-    [recarregar]
-  )
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['turmas'] })
+    },
+  })
 
-  const deletar = useCallback(
-    async (id: string) => {
+  const deletarMutation = useMutation({
+    mutationFn: async (id: string) => {
       await fetch(`/api/turmas/${id}`, { method: 'DELETE' })
-      await recarregar()
     },
-    [recarregar]
-  )
-
-  const buscar = useCallback(
-    (id: string) => {
-      return turmas.find((t) => t.id === id)
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['turmas'] })
     },
-    [turmas]
-  )
+  })
 
-  const adicionarAluno = useCallback(
-    async (turmaId: string, alunoId: string) => {
+  const adicionarAlunoMutation = useMutation({
+    mutationFn: async ({ turmaId, alunoId }: { turmaId: string; alunoId: string }) => {
       await fetch(`/api/turmas/${turmaId}/alunos`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ alunoId }),
       })
-      await recarregar()
     },
-    [recarregar]
-  )
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['turmas'] })
+    },
+  })
 
-  const removerAluno = useCallback(
-    async (turmaId: string, alunoId: string) => {
+  const removerAlunoMutation = useMutation({
+    mutationFn: async ({ turmaId, alunoId }: { turmaId: string; alunoId: string }) => {
       await fetch(`/api/turmas/${turmaId}/alunos/${alunoId}`, { method: 'DELETE' })
-      await recarregar()
     },
-    [recarregar]
-  )
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['turmas'] })
+    },
+  })
 
-  const contarAlunos = useCallback(
-    (idTurma: string) => {
-      const turma = turmas.find((t) => t.id === idTurma)
-      return turma?.alunos.length ?? 0
-    },
-    [turmas]
-  )
+  const buscar = (id: string): Turma | undefined => {
+    return turmas.find((t) => t.id === id)
+  }
 
-  const filtrar = useCallback(
-    (coordenadorId: string) => {
-      return turmas.filter((t) => t.coordenador_id === coordenadorId)
-    },
-    [turmas]
-  )
+  const contarAlunos = (idTurma: string): number => {
+    const turma = turmas.find((t) => t.id === idTurma)
+    return turma?.alunos.length ?? 0
+  }
+
+  const filtrar = (coordenadorId: string): Turma[] => {
+    return turmas.filter((t) => t.coordenador_id === coordenadorId)
+  }
 
   return {
     turmas,
     loading,
-    criar,
-    deletar,
+    criar: criarMutation.mutateAsync,
+    deletar: deletarMutation.mutateAsync,
     buscar,
-    adicionarAluno,
-    removerAluno,
+    adicionarAluno: (turmaId: string, alunoId: string) =>
+      adicionarAlunoMutation.mutateAsync({ turmaId, alunoId }),
+    removerAluno: (turmaId: string, alunoId: string) =>
+      removerAlunoMutation.mutateAsync({ turmaId, alunoId }),
     contarAlunos,
     filtrar,
-    recarregar,
+    recarregar: () => queryClient.invalidateQueries({ queryKey: ['turmas'] }),
   }
 }

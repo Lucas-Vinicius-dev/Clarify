@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState, Suspense } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useUIStore } from '@/store/uiStore';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { TopbarDesktop } from '@/components/layout/TopbarDesktop';
 import { TopbarMobile } from '@/components/layout/TopbarMobile';
@@ -16,7 +17,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const { isAuthenticated, loading, usuario, logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const { drawerOpen, setDrawer: setDrawerOpen } = useUIStore();
 
   useEffect(() => {
     if (loading) return;

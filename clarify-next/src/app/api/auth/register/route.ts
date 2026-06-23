@@ -1,16 +1,6 @@
-import { createClient } from '@supabase/supabase-js'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
-
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  }
-)
 
 export async function POST(req: Request) {
   const { nome, matricula, email, senha, chaveAtivacao } = await req.json()
@@ -22,12 +12,9 @@ export async function POST(req: Request) {
     )
   }
 
-  const anonClient = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+  const supabase = await createClient()
 
-  const { data: chave } = await anonClient
+  const { data: chave } = await supabase
     .from('chaves_ativacao')
     .select('*')
     .eq('code', chaveAtivacao)
@@ -40,6 +27,8 @@ export async function POST(req: Request) {
       { status: 400 }
     )
   }
+
+  const supabaseAdmin = createAdminClient()
 
   const { data, error } = await supabaseAdmin.auth.admin.createUser({
     email,

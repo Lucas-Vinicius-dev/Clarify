@@ -1,11 +1,11 @@
-import { createAdminClient } from '@/lib/supabase/admin'
+import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const alunoId = searchParams.get('alunoId')
   const status = searchParams.get('status')
-  const supabase = createAdminClient()
+  const supabase = await createClient()
 
   let query = supabase.from('demandas').select('*')
 
@@ -19,7 +19,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   const dados = await request.json()
-  const supabase = createAdminClient()
+  const supabase = await createClient()
 
   const { data: protocolo } = await supabase.rpc('gerar_proximo_protocolo')
   if (!protocolo) {

@@ -1,25 +1,7 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { Cargo, UsuarioLogado } from '@/types'
-
-export interface UseUsuariosReturn {
-  usuarios: UsuarioLogado[]
-  loading: boolean
-  adicionar: (
-    nome: string,
-    matricula: string,
-    email: string,
-    senha: string,
-    cargo: Cargo
-  ) => Promise<void>
-  buscar: (matricula: string) => Promise<UsuarioLogado | null>
-  obterAlunosDoCoordenador: (coordenadorId: string) => Promise<UsuarioLogado[]>
-  atribuir: (coordenadorId: string, alunoId: string) => Promise<void>
-  deletar: (alunoId: string) => Promise<void>
-  existe: (matricula: string, email: string) => Promise<boolean>
-  recarregar: () => void
-}
 
 function mapProfileToUser(row: Record<string, unknown>): UsuarioLogado {
   return {
@@ -32,100 +14,96 @@ function mapProfileToUser(row: Record<string, unknown>): UsuarioLogado {
   }
 }
 
-export function useUsuarios(): UseUsuariosReturn {
-  const [usuarios, setUsuarios] = useState<UsuarioLogado[]>([])
-  const [loading, setLoading] = useState(true)
-  const [refreshKey, setRefreshKey] = useState(0)
+export function useUsuarios() {
+  const queryClient = useQueryClient()
 
-  useEffect(() => {
-    let cancelled = false
-
-    const load = async () => {
+  const { data: usuarios = [], isLoading: loading } = useQuery({
+    queryKey: ['usuarios'],
+    queryFn: async () => {
       const res = await fetch('/api/perfis')
       const data = await res.json()
-      if (!cancelled) {
-        setUsuarios((data ?? []).map(mapProfileToUser))
-        setLoading(false)
-      }
-    }
+      return (data ?? []).map(mapProfileToUser) as UsuarioLogado[]
+    },
+  })
 
-    load()
-    return () => { cancelled = true }
-  }, [refreshKey])
-
-  const recarregar = useCallback(() => {
-    setLoading(true)
-    setRefreshKey((k) => k + 1)
-  }, [])
-
-  const adicionar = useCallback(
-    async (nome: string, matricula: string, email: string, senha: string, cargo: Cargo) => {
+  const adicionarMutation = useMutation({
+    mutationFn: async (dados: {
+      nome: string
+      matricula: string
+      email: string
+      senha: string
+      cargo: Cargo
+    }) => {
       const res = await fetch('/api/perfis', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nome, matricula, email, senha, cargo }),
+        body: JSON.stringify(dados),
       })
-      const json = await res.json()
-      if (json.ok) await recarregar()
+      return res.json()
     },
-    [recarregar]
-  )
-
-  const buscar = useCallback(async (matricula: string) => {
-    const res = await fetch(`/api/perfis?matricula=${encodeURIComponent(matricula)}`)
-    const data = await res.json()
-    const user = (data ?? [])[0]
-    if (!user) return null
-    return mapProfileToUser(user)
-  }, [])
-
-  const obterAlunosDoCoordenador = useCallback(
-    async (coordenadorId: string) => {
-      const res = await fetch(`/api/perfis?coordenadorId=${encodeURIComponent(coordenadorId)}&cargo=aluno`)
-      const data = await res.json()
-      return (data ?? []).map(mapProfileToUser)
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['usuarios'] })
     },
-    []
-  )
+  })
 
-  const atribuir = useCallback(
-    async (coordenadorId: string, alunoId: string) => {
+  const atribuirMutation = useMutation({
+    mutationFn: async ({ coordenadorId, alunoId }: { coordenadorId: string; alunoId: string }) => {
       await fetch(`/api/perfis/${alunoId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ coordenador_id: coordenadorId }),
       })
-      await recarregar()
     },
-    [recarregar]
-  )
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['usuarios'] })
+    },
+  })
 
-  const deletar = useCallback(
-    async (alunoId: string) => {
+  const deletarMutation = useMutation({
+    mutationFn: async (alunoId: string) => {
       await fetch(`/api/perfis?alunoId=${alunoId}`, { method: 'DELETE' })
-      await recarregar()
     },
-    [recarregar]
-  )
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['usuarios'] })
+    },
+  })
 
-  const existe = useCallback(
-    async (matricula: string, email: string) => {
-      const res = await fetch(`/api/perfis?matricula=${encodeURIComponent(matricula)}&email=${encodeURIComponent(email)}`)
-      const data = await res.json()
-      return (data ?? []).length > 0
-    },
-    []
-  )
+  const buscar = async (matricula: string): Promise<UsuarioLogado | null> => {
+    const res = await fetch(`/api/perfis?matricula=${encodeURIComponent(matricula)}`)
+    const data = await res.json()
+    const user = (data ?? [])[0]
+    if (!user) return null
+    return mapProfileToUser(user)
+  }
+
+  const obterAlunosDoCoordenador = async (coordenadorId: string): Promise<UsuarioLogado[]> => {
+    const res = await fetch(`/api/perfis?coordenadorId=${encodeURIComponent(coordenadorId)}&cargo=aluno`)
+    const data = await res.json()
+    return (data ?? []).map(mapProfileToUser) as UsuarioLogado[]
+  }
+
+  const existe = async (matricula: string, email: string): Promise<boolean> => {
+    const res = await fetch(`/api/perfis?matricula=${encodeURIComponent(matricula)}&email=${encodeURIComponent(email)}`)
+    const data = await res.json()
+    return (data ?? []).length > 0
+  }
 
   return {
     usuarios,
     loading,
-    adicionar,
+    adicionar: (
+      nome: string,
+      matricula: string,
+      email: string,
+      senha: string,
+      cargo: Cargo
+    ) => adicionarMutation.mutateAsync({ nome, matricula, email, senha, cargo }),
     buscar,
     obterAlunosDoCoordenador,
-    atribuir,
-    deletar,
+    atribuir: (coordenadorId: string, alunoId: string) =>
+      atribuirMutation.mutateAsync({ coordenadorId, alunoId }),
+    deletar: deletarMutation.mutateAsync,
     existe,
-    recarregar,
+    recarregar: () => queryClient.invalidateQueries({ queryKey: ['usuarios'] }),
   }
 }

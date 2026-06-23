@@ -1,29 +1,11 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { Demanda, StatusDemanda, TipoDemanda } from '@/types'
 
 export interface UseDemandasOptions {
   alunoId?: string
   status?: StatusDemanda
-}
-
-export interface UseDemandasReturn {
-  demandas: Demanda[]
-  loading: boolean
-  criar: (dados: {
-    alunoId: string
-    tipo: TipoDemanda
-    descricao: string
-  }) => Promise<Demanda | null>
-  buscarPorProtocolo: (protocolo: string) => Promise<Demanda | null>
-  atualizarStatus: (
-    protocolo: string,
-    novoStatus: StatusDemanda,
-    feedback?: string
-  ) => Promise<Demanda | null>
-  recarregar: () => void
-  filtrar: (filtros: Partial<UseDemandasOptions>) => Demanda[]
 }
 
 function mapRow(row: Record<string, unknown>): Demanda {
@@ -40,38 +22,25 @@ function mapRow(row: Record<string, unknown>): Demanda {
   }
 }
 
-export function useDemandas(opcoes?: UseDemandasOptions): UseDemandasReturn {
-  const [demandas, setDemandas] = useState<Demanda[]>([])
-  const [loading, setLoading] = useState(true)
-  const [refreshKey, setRefreshKey] = useState(0)
+export function useDemandas(opcoes?: UseDemandasOptions) {
+  const queryClient = useQueryClient()
+  const queryKey = ['demandas', opcoes?.alunoId, opcoes?.status] as const
 
-  useEffect(() => {
-    let cancelled = false
-
-    const load = async () => {
+  const { data: demandas = [], isLoading: loading } = useQuery({
+    queryKey,
+    queryFn: async () => {
       const params = new URLSearchParams()
       if (opcoes?.alunoId) params.set('alunoId', opcoes.alunoId)
       if (opcoes?.status) params.set('status', opcoes.status)
 
       const res = await fetch(`/api/demandas?${params}`)
       const data = await res.json()
-      if (!cancelled) {
-        setDemandas((data ?? []).map(mapRow))
-        setLoading(false)
-      }
-    }
+      return (data ?? []).map(mapRow) as Demanda[]
+    },
+  })
 
-    load()
-    return () => { cancelled = true }
-  }, [opcoes?.alunoId, opcoes?.status, refreshKey])
-
-  const recarregar = useCallback(() => {
-    setLoading(true)
-    setRefreshKey((k) => k + 1)
-  }, [])
-
-  const criar = useCallback(
-    async (dados: { alunoId: string; tipo: TipoDemanda; descricao: string }) => {
+  const criarMutation = useMutation({
+    mutationFn: async (dados: { alunoId: string; tipo: TipoDemanda; descricao: string }) => {
       const res = await fetch('/api/demandas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -79,23 +48,23 @@ export function useDemandas(opcoes?: UseDemandasOptions): UseDemandasReturn {
       })
       const json = await res.json()
       if (!json.ok || !json.data) return null
-
-      const mapped = mapRow(json.data)
-      setDemandas((prev) => [mapped, ...prev])
-      return mapped
+      return mapRow(json.data) as Demanda
     },
-    []
-  )
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['demandas'] })
+    },
+  })
 
-  const buscarPorProtocolo = useCallback(async (protocolo: string) => {
-    const res = await fetch(`/api/demandas/${protocolo}`)
-    if (!res.ok) return null
-    const data = await res.json()
-    return mapRow(data)
-  }, [])
-
-  const atualizarStatus = useCallback(
-    async (protocolo: string, novoStatus: StatusDemanda, feedback?: string) => {
+  const atualizarStatusMutation = useMutation({
+    mutationFn: async ({
+      protocolo,
+      novoStatus,
+      feedback,
+    }: {
+      protocolo: string
+      novoStatus: StatusDemanda
+      feedback?: string
+    }) => {
       const res = await fetch(`/api/demandas/${protocolo}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -103,37 +72,66 @@ export function useDemandas(opcoes?: UseDemandasOptions): UseDemandasReturn {
       })
       const json = await res.json()
       if (!json.ok || !json.data) return null
-
-      const mapped = mapRow(json.data)
-      setDemandas((prev) =>
-        prev.map((d) => (d.protocolo === protocolo ? mapped : d))
-      )
-      return mapped
+      return mapRow(json.data) as Demanda
     },
-    []
-  )
+    onMutate: async ({ protocolo, novoStatus, feedback }) => {
+      await queryClient.cancelQueries({ queryKey: ['demandas'] })
+      const previousQueries = queryClient.getQueriesData<Demanda[]>({ queryKey: ['demandas'] })
 
-  const filtrar = useCallback(
-    (filtros: Partial<UseDemandasOptions>) => {
-      let resultado = demandas
-      if (filtros.alunoId) {
-        resultado = resultado.filter((d) => d.alunoId === filtros.alunoId)
-      }
-      if (filtros.status) {
-        resultado = resultado.filter((d) => d.status === filtros.status)
-      }
-      return resultado
+      queryClient.setQueriesData<Demanda[]>({ queryKey: ['demandas'] }, (old) => {
+        if (!old) return old
+        return old.map((d) =>
+          d.protocolo === protocolo
+            ? { ...d, status: novoStatus, feedback: feedback ?? d.feedback }
+            : d
+        )
+      })
+
+      return { previousQueries }
     },
-    [demandas]
-  )
+    onError: (_err, _vars, context) => {
+      if (context?.previousQueries) {
+        context.previousQueries.forEach(([key, data]) => {
+          queryClient.setQueryData(key, data)
+        })
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['demandas'] })
+    },
+  })
+
+  const buscarPorProtocolo = async (protocolo: string): Promise<Demanda | null> => {
+    const cached = queryClient.getQueryData<Demanda>(['demandas', protocolo])
+    if (cached) return cached
+
+    const res = await fetch(`/api/demandas/${protocolo}`)
+    if (!res.ok) return null
+    const data = await res.json()
+    const mapped = mapRow(data) as Demanda
+    queryClient.setQueryData(['demandas', protocolo], mapped)
+    return mapped
+  }
+
+  const filtrar = (filtros: Partial<UseDemandasOptions>): Demanda[] => {
+    let resultado = demandas
+    if (filtros.alunoId) {
+      resultado = resultado.filter((d) => d.alunoId === filtros.alunoId)
+    }
+    if (filtros.status) {
+      resultado = resultado.filter((d) => d.status === filtros.status)
+    }
+    return resultado
+  }
 
   return {
     demandas,
     loading,
-    criar,
+    criar: criarMutation.mutateAsync,
     buscarPorProtocolo,
-    atualizarStatus,
-    recarregar,
+    atualizarStatus: (protocolo: string, novoStatus: StatusDemanda, feedback?: string) =>
+      atualizarStatusMutation.mutateAsync({ protocolo, novoStatus, feedback }),
+    recarregar: () => queryClient.invalidateQueries({ queryKey: ['demandas'] }),
     filtrar,
   }
 }

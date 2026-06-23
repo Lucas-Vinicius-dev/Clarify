@@ -1,4 +1,6 @@
 import type { UsuarioLogado } from '@/types';
+import { Card } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/Badge';
 
 interface CardAlunoProps {
   aluno: UsuarioLogado;
@@ -14,7 +16,7 @@ export function CardAluno({ aluno, demandasEmAberto, onRemover }: CardAlunoProps
     .join('');
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-lg hover:-translate-y-1 transition-transform duration-200 ease-out">
+    <Card className="p-5 hover:-translate-y-1 transition-transform duration-200 ease-out">
       <div className="flex items-center gap-4 mb-4">
         <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 font-bold text-sm shrink-0">
           {iniciais}
@@ -30,15 +32,11 @@ export function CardAluno({ aluno, demandasEmAberto, onRemover }: CardAlunoProps
         </p>
         <p>
           <span className="font-semibold text-gray-800">Matrícula:</span>
-          <span className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 ml-1">
-            {aluno.matricula}
-          </span>
+          <Badge variant="blue" className="ml-1">{aluno.matricula}</Badge>
         </p>
         <p>
           <span className="font-semibold text-gray-800">Demandas em aberto:</span>
-          <span className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 ml-1">
-            {demandasEmAberto}
-          </span>
+          <Badge variant="blue" className="ml-1">{demandasEmAberto}</Badge>
         </p>
       </div>
 
@@ -51,6 +49,6 @@ export function CardAluno({ aluno, demandasEmAberto, onRemover }: CardAlunoProps
           Remover aluno
         </button>
       )}
-    </div>
+    </Card>
   );
 }

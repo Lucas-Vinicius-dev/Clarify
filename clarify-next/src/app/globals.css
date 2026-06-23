@@ -30,10 +30,7 @@ html {
     background-image: radial-gradient(circle, rgba(202, 95, 21, 0.10) 1px, transparent 1px);
     background-size: 26px 26px;
 }
-.bg-dot-grid-light {
-    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.20) 1px, transparent 1px);
-    background-size: 24px 24px;
-}
+
 
 .bg-radial-warm {
     background: radial-gradient(60% 60% at 50% 0%, rgba(202, 95, 21, 0.18) 0%, rgba(202, 95, 21, 0) 70%);
@@ -82,56 +79,6 @@ html {
 [data-reveal].is-revealed {
     opacity: 1;
     transform: translateY(0);
-}
-
-#landingNav {
-    transition: background-color 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease, box-shadow 0.25s ease;
-}
-#landingNav.is-scrolled {
-    background-color: rgba(255, 248, 246, 0.78);
-    backdrop-filter: saturate(140%) blur(14px);
-    -webkit-backdrop-filter: saturate(140%) blur(14px);
-    border-bottom-color: rgba(15, 23, 42, 0.06);
-    box-shadow: 0 1px 0 rgba(15, 23, 42, 0.02), 0 6px 24px -16px rgba(15, 23, 42, 0.10);
-}
-
-.btn-primary-cta {
-    background-color: #ca5f15;
-    color: #fff;
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.18),
-        0 1px 2px rgba(202, 95, 21, 0.30),
-        0 14px 28px -12px rgba(202, 95, 21, 0.55);
-    transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
-}
-.btn-primary-cta:hover {
-    background-color: #b35211;
-    transform: translateY(-1px);
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.22),
-        0 1px 2px rgba(202, 95, 21, 0.30),
-        0 18px 36px -12px rgba(202, 95, 21, 0.65);
-}
-.btn-primary-cta:active { transform: translateY(0); }
-
-.btn-ghost-cta {
-    background-color: rgba(255, 255, 255, 0.6);
-    color: #0f172a;
-    border: 1px solid rgba(15, 23, 42, 0.10);
-    backdrop-filter: blur(8px);
-    transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
-}
-.btn-ghost-cta:hover {
-    background-color: #fff;
-    border-color: rgba(202, 95, 21, 0.35);
-    transform: translateY(-1px);
-}
-
-.preview-tilt {
-    transform: perspective(1600px) rotateX(2deg);
-}
-@media (min-width: 768px) {
-    .preview-tilt { transform: perspective(1600px) rotateX(4deg); }
 }
 
 /* === Modais === */
@@ -243,12 +190,6 @@ html {
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: rgba(15, 23, 42, 0.45);
-}
-
-.modal-quote {
-    position: relative;
-    padding-left: 18px;
-    border-left: 2px solid #ca5f15;
 }
 
 .modal-timeline-step {

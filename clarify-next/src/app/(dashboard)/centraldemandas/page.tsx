@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ArrowRight, FileText, Clock, CheckCircle } from 'lucide-react';
 import { BarraFiltros } from '@/components/demandas/BarraFiltros';
@@ -14,8 +14,10 @@ import { FabMobile } from '@/components/demandas/FabMobile';
 import { ModalNovaDemanda } from '@/components/demandas/ModalNovaDemanda';
 import { ModalDetalhesDemanda } from '@/components/demandas/ModalDetalhesDemanda';
 import { useDemandas } from '@/hooks/useDemandas';
+import { usePerfil } from '@/hooks/usePerfil';
 import { useAuth } from '@/context/AuthContext';
-import type { StatusDemanda, TipoDemanda, UsuarioLogado } from '@/types';
+import { useFiltrosStore } from '@/store/filtrosStore';
+import type { TipoDemanda } from '@/types';
 
 type StudentView = 'nome' | 'demandas';
 const VIEWS: StudentView[] = ['nome', 'demandas'];
@@ -31,42 +33,17 @@ export default function CentralDemandasPage() {
   const rawView = searchParams.get('view') as StudentView | null;
   const view: StudentView = rawView && VIEWS.includes(rawView) ? rawView : 'nome';
 
-  const [busca, setBusca] = useState('');
-  const [filtroStatus, setFiltroStatus] = useState<StatusDemanda | 'todos'>('todos');
+  const { busca, filtroStatus, setBusca, setFiltroStatus } = useFiltrosStore();
   const [modalNovaAberta, setModalNovaAberta] = useState(false);
   const [modalDetalhesAberta, setModalDetalhesAberta] = useState(false);
   const [protocoloSelecionado, setProtocoloSelecionado] = useState<string | null>(null);
-  const [remetenteDetalhe, setRemetenteDetalhe] = useState<UsuarioLogado | null>(null);
 
   const demandaDetalhes = useMemo(
     () => protocoloSelecionado ? demandas.find((d) => d.protocolo === protocoloSelecionado) ?? null : null,
     [protocoloSelecionado, demandas]
   );
 
-  useEffect(() => {
-    if (!demandaDetalhes) return
-
-    let cancelled = false
-
-    fetch(`/api/perfis/${demandaDetalhes.alunoId}`)
-      .then((res) => res.ok ? res.json() : null)
-      .then((data) => {
-        if (!cancelled && data) {
-          setRemetenteDetalhe({
-            id: data.id,
-            nome: data.nome,
-            matricula: data.matricula,
-            email: data.email,
-            cargo: data.cargo,
-            coordenador_id: data.coordenador_id,
-          })
-        } else if (!cancelled) {
-          setRemetenteDetalhe(null)
-        }
-      })
-
-    return () => { cancelled = true }
-  }, [demandaDetalhes])
+  const { data: remetenteDetalhe = null } = usePerfil(demandaDetalhes?.alunoId);
 
   const filtradas = useMemo(() => {
     return demandas.filter((d) => {
@@ -273,7 +250,7 @@ export default function CentralDemandasPage() {
 
       <ModalDetalhesDemanda
         open={modalDetalhesAberta}
-        onClose={() => { setModalDetalhesAberta(false); setProtocoloSelecionado(null); setRemetenteDetalhe(null); }}
+        onClose={() => { setModalDetalhesAberta(false); setProtocoloSelecionado(null); }}
         demanda={demandaDetalhes}
         remetente={remetenteDetalhe}
       />

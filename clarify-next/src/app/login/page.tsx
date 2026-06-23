@@ -4,7 +4,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useAuth } from '@/context/AuthContext'
+import { loginSchema, type LoginFormData } from '@/schemas/auth'
 
 export default function LoginPage() {
   const [error, setError] = useState('')
@@ -12,24 +15,28 @@ export default function LoginPage() {
   const router = useRouter()
   const { login } = useAuth()
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onBlur',
+  })
+
+  async function onSubmit(data: LoginFormData) {
     setError('')
     setIsLoading(true)
 
     try {
-      const formData = new FormData(e.currentTarget)
-      const institutionalId = formData.get('institutionalId') as string
-      const securityKey = formData.get('securityKey') as string
-
-      const resultado = await login(institutionalId, securityKey)
+      const resultado = await login(data.matricula, data.senha)
 
       if (resultado.ok && resultado.usuarioLogado) {
         router.push(
           resultado.usuarioLogado.cargo === 'aluno' ? '/centraldemandas' : '/dashboardcoord'
         )
       } else {
-        setError(resultado.mensagem || 'Erro ao autenticar. Verifique suas credenciais.')
+        setError(resultado.mensagem || 'Usuário ou senha incorretos.')
       }
     } catch {
       setError('Erro inesperado. Tente novamente.')
@@ -66,7 +73,7 @@ export default function LoginPage() {
           <p className="text-sm font-medium text-gray-500 tracking-wider uppercase mt-1">Acesso - Instituto Federal</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
             <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
               ID Institucional
@@ -84,13 +91,15 @@ export default function LoginPage() {
               </span>
               <input
                 type="text"
-                name="institutionalId"
+                {...register('matricula')}
                 placeholder="e.g. 123456789"
                 className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
-                required
                 disabled={isLoading}
               />
             </div>
+            {errors.matricula && (
+              <p className="text-xs text-red-600 mt-1 ml-1">{errors.matricula.message}</p>
+            )}
           </div>
 
           <div>
@@ -110,13 +119,15 @@ export default function LoginPage() {
               </span>
               <input
                 type="password"
-                name="securityKey"
+                {...register('senha')}
                 placeholder="••••••••"
                 className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
-                required
                 disabled={isLoading}
               />
             </div>
+            {errors.senha && (
+              <p className="text-xs text-red-600 mt-1 ml-1">{errors.senha.message}</p>
+            )}
           </div>
 
           {error && (

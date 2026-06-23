@@ -4,7 +4,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useAuth } from '@/context/AuthContext'
+import { registroSchema, type RegistroFormData } from '@/schemas/auth'
 
 export default function RegistroPage() {
   const [error, setError] = useState('')
@@ -12,26 +15,27 @@ export default function RegistroPage() {
   const router = useRouter()
   const { registro } = useAuth()
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegistroFormData>({
+    resolver: zodResolver(registroSchema),
+    mode: 'onBlur',
+  })
+
+  async function onSubmit(data: RegistroFormData) {
     setError('')
     setIsLoading(true)
 
     try {
-      const formData = new FormData(e.currentTarget)
-      const nome = formData.get('fullName') as string
-      const matricula = formData.get('institutionalId') as string
-      const email = formData.get('institutionalEmail') as string
-      const senha = formData.get('securityKey') as string
-      const senhaAtivacao = formData.get('activationKey') as string
-
       const resultado = await registro({
-        nome,
-        matricula,
-        email,
-        senha,
+        nome: data.nome,
+        matricula: data.matricula,
+        email: data.email,
+        senha: data.senha,
         cargo: 'coordenador',
-        chaveAtivacao: senhaAtivacao,
+        chaveAtivacao: data.chaveAtivacao,
       })
 
       if (resultado.ok) {
@@ -75,7 +79,7 @@ export default function RegistroPage() {
           <p className="text-sm font-medium text-gray-500 tracking-wider uppercase mt-1">Acesso - Instituto Federal</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div>
             <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
               Nome Completo
@@ -93,13 +97,15 @@ export default function RegistroPage() {
               </span>
               <input
                 type="text"
-                name="fullName"
+                {...register('nome')}
                 placeholder="e.g. John Doe"
                 className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
-                required
                 disabled={isLoading}
               />
             </div>
+            {errors.nome && (
+              <p className="text-xs text-red-600 mt-1 ml-1">{errors.nome.message}</p>
+            )}
           </div>
 
           <div>
@@ -119,13 +125,15 @@ export default function RegistroPage() {
               </span>
               <input
                 type="text"
-                name="institutionalId"
+                {...register('matricula')}
                 placeholder="e.g. 123456789"
                 className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
-                required
                 disabled={isLoading}
               />
             </div>
+            {errors.matricula && (
+              <p className="text-xs text-red-600 mt-1 ml-1">{errors.matricula.message}</p>
+            )}
           </div>
 
           <div>
@@ -145,13 +153,15 @@ export default function RegistroPage() {
               </span>
               <input
                 type="email"
-                name="institutionalEmail"
+                {...register('email')}
                 placeholder="e.g. john.doe@academico.edu.br"
                 className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
-                required
                 disabled={isLoading}
               />
             </div>
+            {errors.email && (
+              <p className="text-xs text-red-600 mt-1 ml-1">{errors.email.message}</p>
+            )}
           </div>
 
           <div>
@@ -171,13 +181,15 @@ export default function RegistroPage() {
               </span>
               <input
                 type="password"
-                name="securityKey"
+                {...register('senha')}
                 placeholder="••••••••"
                 className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
-                required
                 disabled={isLoading}
               />
             </div>
+            {errors.senha && (
+              <p className="text-xs text-red-600 mt-1 ml-1">{errors.senha.message}</p>
+            )}
           </div>
 
           <div>
@@ -197,13 +209,15 @@ export default function RegistroPage() {
               </span>
               <input
                 type="text"
-                name="activationKey"
+                {...register('chaveAtivacao')}
                 placeholder="Chave fornecida pela instituição"
                 className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
-                required
                 disabled={isLoading}
               />
             </div>
+            {errors.chaveAtivacao && (
+              <p className="text-xs text-red-600 mt-1 ml-1">{errors.chaveAtivacao.message}</p>
+            )}
           </div>
 
           {error && (
