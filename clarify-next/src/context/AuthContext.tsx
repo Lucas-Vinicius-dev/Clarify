@@ -75,7 +75,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       body: JSON.stringify({ matricula, senha }),
     })
     const data = await res.json()
-    if (data.ok) {
+    if (data.ok && data.usuarioLogado) {
+      setUsuario(data.usuarioLogado)
       await supabase.auth.getSession()
     }
     return data

@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
   if (!email) {
     return NextResponse.json(
-      { ok: false, mensagem: 'Usuário não encontrado.' },
+      { ok: false, mensagem: 'Usuário ou senha incorretos.' },
       { status: 401 }
     )
   }
@@ -34,9 +34,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         ok: false,
-        mensagem: error.message === 'Invalid login credentials'
-          ? 'Chave de segurança incorreta.'
-          : error.message,
+        mensagem: 'Usuário ou senha incorretos.',
       },
       { status: 401 }
     )

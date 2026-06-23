@@ -36,7 +36,7 @@ export default function LoginPage() {
           resultado.usuarioLogado.cargo === 'aluno' ? '/centraldemandas' : '/dashboardcoord'
         )
       } else {
-        setError(resultado.mensagem || 'Erro ao autenticar. Verifique suas credenciais.')
+        setError(resultado.mensagem || 'Usuário ou senha incorretos.')
       }
     } catch {
       setError('Erro inesperado. Tente novamente.')
