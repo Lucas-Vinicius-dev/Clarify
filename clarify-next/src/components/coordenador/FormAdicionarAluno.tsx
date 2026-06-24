@@ -93,7 +93,6 @@ export function FormAdicionarAluno({ coordenadorId, onCadastrado, existe }: Form
               {...register('nome')}
               className="modal-input font-semibold mt-1"
               placeholder="Nome completo do aluno"
-              autoFocus
             />
             {errors.nome && (
               <p className="text-xs text-red-600 mt-1">{errors.nome.message}</p>

@@ -1,12 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
+const ALLOWED_UPDATE_FIELDS = ['coordenador_id', 'nome']
+
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params
-  const supabase = await createClient()
+  const [{ id }, supabase] = await Promise.all([params, createClient()])
 
   const { data } = await supabase
     .from('profiles')
@@ -28,13 +29,14 @@ export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params
-  const body = await request.json()
-  const supabase = await createClient()
+  const [{ id }, body, supabase] = await Promise.all([
+    params,
+    request.json(),
+    createClient(),
+  ])
 
-  const allowed = ['coordenador_id', 'nome']
   const updateData = Object.fromEntries(
-    Object.entries(body).filter(([k]) => allowed.includes(k))
+    Object.entries(body).filter(([k]) => ALLOWED_UPDATE_FIELDS.includes(k))
   )
 
   const { data, error } = await supabase

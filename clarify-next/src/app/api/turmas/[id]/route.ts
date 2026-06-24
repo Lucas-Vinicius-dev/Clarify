@@ -5,8 +5,7 @@ export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params
-  const supabase = await createClient()
+  const [{ id }, supabase] = await Promise.all([params, createClient()])
 
   const { error } = await supabase.from('turmas').delete().eq('id', id)
 

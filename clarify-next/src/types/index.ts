@@ -25,19 +25,6 @@ export type TipoDemanda =
   | 'Justificativa de Falta';
 
 /**
- * Usuário completo (com senha)
- */
-export interface Usuario {
-  id: string;
-  nome: string;
-  matricula: string;
-  email: string;
-  senha: string;
-  cargo: Cargo;
-  coordenador_id?: string;
-}
-
-/**
  * Usuário logado (sem senha)
  */
 export type UsuarioLogado = {
@@ -117,15 +104,3 @@ export interface RegistroDados {
   chaveAtivacao?: string;
 }
 
-/**
- * Constante: tipos de demanda disponíveis
- */
-export const TIPOS_DEMANDA: TipoDemanda[] = [
-  'Quebra de Pré-requisito',
-  'Revisão de Prova',
-  'Aproveitamento de Horas AC',
-  'Trancamento de Disciplina',
-  'Troca de Turma',
-  'Solicitação de Histórico',
-  'Justificativa de Falta',
-];

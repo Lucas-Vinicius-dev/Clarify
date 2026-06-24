@@ -32,7 +32,7 @@ export default function LandingPage() {
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 12)
-    window.addEventListener('scroll', handler)
+    window.addEventListener('scroll', handler, { passive: true })
     return () => window.removeEventListener('scroll', handler)
   }, [])
 
@@ -221,8 +221,8 @@ export default function LandingPage() {
               { icon: Users, title: 'Aluno envia', desc: 'Cria uma nova solicitação com tipo, descrição e documentação.' },
               { icon: Eye, title: 'Coordenador analisa', desc: 'Recebe notificação e acompanha o status em tempo real.' },
               { icon: Check, title: 'Resolvido', desc: 'Feedback completo e histórico de todas as interações.' },
-            ].map((item, i) => (
-              <div key={i} className="flex flex-col items-center text-center">
+            ].map((item) => (
+              <div key={item.title} className="flex flex-col items-center text-center">
                 <div className="w-16 h-16 rounded-full bg-brand-primary/10 flex items-center justify-center mb-4">
                   <item.icon className="w-8 h-8 text-brand-primary" />
                 </div>
@@ -259,15 +259,15 @@ export default function LandingPage() {
                 features: ['Consultar encaminhamentos', 'Acompanhar turmas', 'Apoiar a coordenação'],
                 icon: Eye,
               },
-            ].map((profile, i) => (
-              <div key={i} className="bg-white border border-slate-200 rounded-2xl p-8">
+            ].map((profile) => (
+              <div key={profile.title} className="bg-white border border-slate-200 rounded-2xl p-8">
                 <div className="flex items-center gap-3 mb-6">
                   <profile.icon className="w-8 h-8 text-brand-primary" />
                   <h3 className="text-2xl font-bold text-slate-900">{profile.title}</h3>
                 </div>
                 <ul className="space-y-3">
-                  {profile.features.map((feature, j) => (
-                    <li key={j} className="flex items-center gap-3 text-slate-700">
+                  {profile.features.map((feature) => (
+                    <li key={feature} className="flex items-center gap-3 text-slate-700">
                       <Check className="w-5 h-5 text-emerald-500" />
                       {feature}
                     </li>

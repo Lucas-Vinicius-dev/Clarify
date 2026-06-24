@@ -1,5 +1,4 @@
 import { createAdminClient } from '@/lib/supabase/admin'
-import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
@@ -12,9 +11,10 @@ export async function POST(req: Request) {
     )
   }
 
-  const supabase = await createClient()
+  // Service-role: valida a chave no servidor sem expor chaves_ativacao via RLS.
+  const supabaseAdmin = createAdminClient()
 
-  const { data: chave } = await supabase
+  const { data: chave } = await supabaseAdmin
     .from('chaves_ativacao')
     .select('*')
     .eq('code', chaveAtivacao)
@@ -27,8 +27,6 @@ export async function POST(req: Request) {
       { status: 400 }
     )
   }
-
-  const supabaseAdmin = createAdminClient()
 
   const { data, error } = await supabaseAdmin.auth.admin.createUser({
     email,

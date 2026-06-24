@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, ReactNode } from 'react';
+import { useEffect, useEffectEvent, ReactNode } from 'react';
 import { X } from 'lucide-react';
 
 interface ModalProps {
@@ -13,8 +13,12 @@ interface ModalProps {
 }
 
 /**
- * Componente Modal base com backdrop, ESC handler e scroll lock
- * Reutilizável para todos os modais da aplicação
+ * Componente Modal base com backdrop, ESC handler e scroll lock.
+ * Reutilizável para todos os modais da aplicação.
+ *
+ * O conteúdo vive em <ModalConteudo>, que só é montado quando `open` é true.
+ * Assim o efeito de scroll-lock + listener de ESC usa o ciclo de
+ * montagem/desmontagem (deps vazias) em vez de reagir à prop `open`.
  */
 export function Modal({
   open,
@@ -24,35 +28,65 @@ export function Modal({
   title,
   showCloseButton = true,
 }: ModalProps) {
-  useEffect(() => {
-    if (!open) return;
+  if (!open) return null;
 
-    // Lock scroll no body quando modal está aberto
+  return (
+    <ModalConteudo
+      onClose={onClose}
+      maxWidth={maxWidth}
+      title={title}
+      showCloseButton={showCloseButton}
+    >
+      {children}
+    </ModalConteudo>
+  );
+}
+
+interface ModalConteudoProps {
+  onClose: () => void;
+  maxWidth: string;
+  children: ReactNode;
+  title?: string;
+  showCloseButton: boolean;
+}
+
+function ModalConteudo({
+  onClose,
+  maxWidth,
+  children,
+  title,
+  showCloseButton,
+}: ModalConteudoProps) {
+  // Captura sempre o onClose mais recente sem torná-lo dependência do efeito
+  const aoPressionarEsc = useEffectEvent((e: KeyboardEvent) => {
+    if (e.key === 'Escape') onClose();
+  });
+
+  // Roda na montagem (modal abriu) e limpa na desmontagem (modal fechou)
+  useEffect(() => {
     document.body.classList.add('modal-open');
 
-    // Handler para fechar com ESC
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
+    const handleEsc = (e: KeyboardEvent) => aoPressionarEsc(e);
     document.addEventListener('keydown', handleEsc);
 
     return () => {
       document.body.classList.remove('modal-open');
       document.removeEventListener('keydown', handleEsc);
     };
-  }, [open, onClose]);
-
-  if (!open) return null;
+  }, []);
 
   return (
-    <div
-      className="modal-backdrop fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
+    <div className="modal-backdrop fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6">
+      {/* Camada de fundo clicável para fechar (atrás do painel, mantém o visual do backdrop) */}
+      <button
+        type="button"
+        aria-label="Fechar modal"
+        onClick={onClose}
+        className="absolute inset-0 z-0 cursor-default"
+        tabIndex={-1}
+      />
       <div
-        className={`modal-panel relative w-full ${maxWidth} bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden`}
+        className={`modal-panel relative z-10 w-full ${maxWidth} bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden`}
       >
         {/* Header com título e botão fechar */}
         {(title || showCloseButton) && (

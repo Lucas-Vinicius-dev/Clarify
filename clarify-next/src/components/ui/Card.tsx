@@ -14,15 +14,3 @@ export function Card({ className, ...props }: CardProps) {
     />
   )
 }
-
-export function CardHeader({ className, ...props }: CardProps) {
-  return <div className={cn('p-5', className)} {...props} />
-}
-
-export function CardContent({ className, ...props }: CardProps) {
-  return <div className={cn('p-5 pt-0', className)} {...props} />
-}
-
-export function CardFooter({ className, ...props }: CardProps) {
-  return <div className={cn('p-5 pt-0', className)} {...props} />
-}

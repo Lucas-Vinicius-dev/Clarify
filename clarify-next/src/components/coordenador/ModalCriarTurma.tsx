@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { X, Users, Plus, Check } from 'lucide-react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -28,7 +28,8 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
     defaultValues: { nome: '', disciplina: '', alunos: [] },
   });
 
-  const alunos = useWatch({ control, name: 'alunos' }) ?? [];
+  const watchedAlunos = useWatch({ control, name: 'alunos' });
+  const alunos = useMemo(() => watchedAlunos ?? [], [watchedAlunos]);
   const [matriculaInput, setMatriculaInput] = useState('');
 
   const adicionarAluno = useCallback(() => {
@@ -102,9 +103,10 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
           </div>
 
           <div>
-            <label className="modal-label mb-2 block">Adicionar aluno por matrícula</label>
+            <label htmlFor="turmaMatriculaAluno" className="modal-label mb-2 block">Adicionar aluno por matrícula</label>
             <div className="flex gap-2 mt-1">
               <input
+                id="turmaMatriculaAluno"
                 type="text"
                 value={matriculaInput}
                 onChange={(e) => setMatriculaInput(e.target.value)}

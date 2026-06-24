@@ -75,7 +75,7 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
-            <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+            <label htmlFor="login-matricula" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
               ID Institucional
             </label>
             <div className="relative">
@@ -90,6 +90,7 @@ export default function LoginPage() {
                 </svg>
               </span>
               <input
+                id="login-matricula"
                 type="text"
                 {...register('matricula')}
                 placeholder="e.g. 123456789"
@@ -103,7 +104,7 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+            <label htmlFor="login-senha" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
               Chave de Segurança
             </label>
             <div className="relative">
@@ -118,6 +119,7 @@ export default function LoginPage() {
                 </svg>
               </span>
               <input
+                id="login-senha"
                 type="password"
                 {...register('senha')}
                 placeholder="••••••••"
@@ -145,9 +147,9 @@ export default function LoginPage() {
           </button>
 
           <div className="space-y-3 text-center text-sm">
-            <a href="#" className="block font-semibold text-brand-primary hover:underline transition-all">
+            <button type="button" className="block w-full font-semibold text-brand-primary hover:underline transition-all">
               Recuperar Credenciais de Acesso
-            </a>
+            </button>
             <Link href="/registro" className="block font-semibold text-brand-primary hover:underline transition-all">
               Ir para o Registro
             </Link>

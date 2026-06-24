@@ -4,26 +4,26 @@ import { NextResponse } from 'next/server'
 export async function GET() {
   const supabase = await createClient()
 
-  const { data: turmas } = await supabase
-    .from('turmas')
-    .select('*')
-    .order('created_at', { ascending: false })
+  const [{ data: turmas }, { data: allAlunos }] = await Promise.all([
+    supabase.from('turmas').select('*').order('created_at', { ascending: false }),
+    supabase.from('turma_alunos').select('turma_id, aluno_id'),
+  ])
 
-  const { data: allAlunos } = await supabase
-    .from('turma_alunos')
-    .select('turma_id, aluno_id')
+  const alunosPorTurma = (allAlunos ?? []).reduce<Record<string, string[]>>((acc, a) => {
+    ;(acc[a.turma_id] ??= []).push(a.aluno_id)
+    return acc
+  }, {})
 
   const turmasComAlunos = (turmas ?? []).map((t) => ({
     ...t,
-    alunos: (allAlunos ?? []).filter((a) => a.turma_id === t.id).map((a) => a.aluno_id),
+    alunos: alunosPorTurma[t.id] ?? [],
   }))
 
   return NextResponse.json(turmasComAlunos)
 }
 
 export async function POST(request: Request) {
-  const dados = await request.json()
-  const supabase = await createClient()
+  const [dados, supabase] = await Promise.all([request.json(), createClient()])
 
   const { data: turma, error } = await supabase
     .from('turmas')

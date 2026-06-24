@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, Suspense } from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useUIStore } from '@/store/uiStore';
 import { Sidebar } from '@/components/layout/Sidebar';
@@ -16,25 +16,7 @@ interface DashboardLayoutProps {
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const { isAuthenticated, loading, usuario, logout } = useAuth();
   const router = useRouter();
-  const pathname = usePathname();
   const { drawerOpen, setDrawer: setDrawerOpen } = useUIStore();
-
-  useEffect(() => {
-    if (loading) return;
-
-    if (!isAuthenticated) {
-      router.replace('/login');
-      return;
-    }
-
-    if (usuario) {
-      if (pathname.startsWith('/dashboardcoord') && usuario.cargo !== 'coordenador') {
-        router.replace('/centraldemandas');
-      } else if (pathname.startsWith('/centraldemandas') && usuario.cargo !== 'aluno') {
-        router.replace('/dashboardcoord');
-      }
-    }
-  }, [loading, isAuthenticated, router, pathname, usuario]);
 
   if (loading || !isAuthenticated || !usuario) {
     return null;
@@ -42,7 +24,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const handleNavigate = (view: string) => {
     setDrawerOpen(false);
-    if (pathname.startsWith('/dashboardcoord')) {
+    if (window.location.pathname.startsWith('/dashboardcoord')) {
       router.push(`/dashboardcoord?view=${view}`);
     } else {
       router.push(`/centraldemandas?view=${view}`);

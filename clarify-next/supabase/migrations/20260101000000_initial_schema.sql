@@ -249,10 +249,16 @@ create policy "turma_alunos_delete_coordenador"
 -- CHAVES ATIVACAO
 alter table public.chaves_ativacao enable row level security;
 
-create policy "chaves_select_all"
+create policy "chaves_select_coordenador"
   on public.chaves_ativacao for select
-  to anon, authenticated
-  using (true);
+  to authenticated
+  using (
+    exists (
+      select 1 from public.profiles p
+      where p.id = auth.uid()
+      and p.cargo = 'coordenador'
+    )
+  );
 
 -- ============================================================
 -- SEED DATA

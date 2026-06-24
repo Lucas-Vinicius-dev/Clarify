@@ -45,8 +45,8 @@ export function ModalFeedback({ open, onClose, onSubmit }: ModalFeedbackProps) {
           type="text"
           {...register('texto')}
           placeholder="Digite seu feedback..."
+          aria-label="Feedback"
           className="w-full border border-gray-300 rounded-lg p-3 mb-4 text-sm outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
-          autoFocus
         />
         {errors.texto && (
           <p className="text-xs text-red-600 mb-2">{errors.texto.message}</p>
