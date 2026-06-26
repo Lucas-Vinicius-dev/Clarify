@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ArrowRight, FileText, Clock, CheckCircle } from 'lucide-react';
 import { BarraFiltros } from '@/components/demandas/BarraFiltros';
@@ -17,6 +17,7 @@ import { useDemandas } from '@/hooks/useDemandas';
 import { usePerfil } from '@/hooks/usePerfil';
 import { useAuth } from '@/context/AuthContext';
 import { useFiltrosStore } from '@/store/filtrosStore';
+import { useUIStore } from '@/store/uiStore';
 import type { TipoDemanda } from '@/types';
 
 type StudentView = 'nome' | 'demandas';
@@ -34,9 +35,11 @@ export default function CentralDemandasPage() {
   const view: StudentView = rawView && VIEWS.includes(rawView) ? rawView : 'nome';
 
   const { busca, filtroStatus, setBusca, setFiltroStatus } = useFiltrosStore();
-  const [modalNovaAberta, setModalNovaAberta] = useState(false);
-  const [modalDetalhesAberta, setModalDetalhesAberta] = useState(false);
-  const [protocoloSelecionado, setProtocoloSelecionado] = useState<string | null>(null);
+  const {
+    modalNovaAberta, setModalNovaAberta,
+    modalDetalhesAberta, setModalDetalhesAberta,
+    protocoloSelecionado, setProtocoloSelecionado,
+  } = useUIStore();
 
   const demandaDetalhes = useMemo(
     () => protocoloSelecionado ? demandas.find((d) => d.protocolo === protocoloSelecionado) ?? null : null,
