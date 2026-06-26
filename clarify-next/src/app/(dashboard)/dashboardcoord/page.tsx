@@ -2,15 +2,14 @@
 
 import { useReducer, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { ModalCriarTurma } from '@/components/coordenador/ModalCriarTurma';
 import { ModalFeedback } from '@/components/coordenador/ModalFeedback';
 import { ModalDetalhesDemanda } from '@/components/demandas/ModalDetalhesDemanda';
 import { FormAdicionarAluno } from '@/components/coordenador/FormAdicionarAluno';
 import { useAuth } from '@/context/AuthContext';
 import { useDemandas } from '@/hooks/useDemandas';
-import { useUsuarios } from '@/hooks/useUsuarios';
-import type { Cargo, UsuarioLogado } from '@/types';
+import { useUsuarios, useAlunosDoCoordenador } from '@/hooks/useUsuarios';
 import { useTurmas } from '@/hooks/useTurmas';
 import { atualizarStatusDemanda } from '@/lib/demandas';
 import { VisaoGeral } from './_components/VisaoGeral';
@@ -18,17 +17,6 @@ import { ListaAlunos } from './_components/ListaAlunos';
 import { ListaDemandas } from './_components/ListaDemandas';
 import { ListaTurmas } from './_components/ListaTurmas';
 import { dashboardUiReducer, initialDashboardUiState } from './_components/dashboardState';
-
-function mapProfileToUser(row: Record<string, unknown>): UsuarioLogado {
-  return {
-    id: row.id as string,
-    nome: row.nome as string,
-    matricula: row.matricula as string,
-    email: row.email as string,
-    cargo: row.cargo as Cargo,
-    coordenador_id: (row.coordenador_id as string) ?? undefined,
-  };
-}
 
 type DashView = 'nome' | 'alunos' | 'demandas' | 'turmas' | 'adicionar';
 
@@ -47,15 +35,7 @@ export default function DashboardCoordPage() {
 
   const [ui, dispatch] = useReducer(dashboardUiReducer, initialDashboardUiState);
 
-  const { data: alunosDoCoord = [] } = useQuery({
-    queryKey: ['alunos', usuario?.id],
-    queryFn: async () => {
-      const res = await fetch(`/api/perfis?coordenadorId=${encodeURIComponent(usuario!.id)}&cargo=aluno`)
-      const data = await res.json()
-      return (data ?? []).map(mapProfileToUser) as UsuarioLogado[]
-    },
-    enabled: !!usuario?.id,
-  });
+  const { data: alunosDoCoord = [] } = useAlunosDoCoordenador(usuario?.id);
 
   const alunoIds = useMemo(() => new Set(alunosDoCoord.map((a) => a.id)), [alunosDoCoord]);
 
@@ -116,7 +96,7 @@ export default function DashboardCoordPage() {
     const aluno = alunosDoCoord.find((a) => a.matricula === matricula);
     if (aluno) {
       await usuariosHook.deletar(aluno.id);
-      queryClient.invalidateQueries({ queryKey: ['alunos', usuario?.id] });
+      queryClient.invalidateQueries({ queryKey: ['students', usuario?.id] });
     }
   }, [alunosDoCoord, usuariosHook, queryClient, usuario?.id]);
 
