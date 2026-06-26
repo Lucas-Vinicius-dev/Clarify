@@ -98,16 +98,6 @@ html {
     from { opacity: 1; transform: translateY(0) scale(1); }
     to { opacity: 0; transform: translateY(8px) scale(0.99); }
 }
-@media (min-width: 640px) {
-    @keyframes dialog-content-in {
-        from { opacity: 0; transform: translate(-50%, -48%) scale(0.985); }
-        to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    }
-    @keyframes dialog-content-out {
-        from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-        to { opacity: 0; transform: translate(-50%, -52%) scale(0.99); }
-    }
-}
 
 /* === Modal stagger (shared) === */
 @keyframes modalStagger {

@@ -37,18 +37,23 @@ function DialogContent({
       <DialogOverlay />
       <DialogPrimitive.Content
         className={cn(
-          "fixed inset-x-0 bottom-0 z-50 flex flex-col",
-          "sm:inset-auto sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2",
-          "w-full sm:max-w-lg max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-4rem)]",
-          "bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden",
-          "shadow-[inset_0_1px_0_rgba(255,255,255,0.6),_0_1px_2px_rgba(15,23,42,0.04),_0_12px_32px_-12px_rgba(15,23,42,0.18),_0_40px_80px_-28px_rgba(202,95,21,0.22)]",
-          "data-[state=open]:animate-[dialog-content-in_260ms_ease-out_both]",
-          "data-[state=closed]:animate-[dialog-content-out_160ms_ease-in_both]",
+          "fixed z-50 inset-x-0 bottom-0",
+          "sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:inset-x-auto sm:bottom-auto",
+          "[&[data-state=open]>div]:animate-[dialog-content-in_260ms_ease-out_both]",
+          "[&[data-state=closed]>div]:animate-[dialog-content-out_160ms_ease-in_both]",
           className
         )}
         {...props}
       >
-        {children}
+        <div
+          className={cn(
+            "w-full sm:max-w-lg bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden",
+            "max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-4rem)]",
+            "shadow-[inset_0_1px_0_rgba(255,255,255,0.6),_0_1px_2px_rgba(15,23,42,0.04),_0_12px_32px_-12px_rgba(15,23,42,0.18),_0_40px_80px_-28px_rgba(202,95,21,0.22)]"
+          )}
+        >
+          {children}
+        </div>
       </DialogPrimitive.Content>
     </DialogPortal>
   )
