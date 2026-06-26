@@ -65,11 +65,11 @@ export default function CentralDemandasPage() {
   const resolvidas = demandas.filter((d) => d.status === 'concluido').length;
   const eficiencia = total > 0 ? Math.round((resolvidas / total) * 100) : 0;
 
-  const handleCriarDemanda = useCallback((dados: { tipo: string; descricao: string }) => {
+  const handleCriarDemanda = useCallback((dados: { tipo: TipoDemanda; descricao: string }) => {
     if (!usuario?.id) return;
     criar({
       alunoId: usuario.id,
-      tipo: dados.tipo as TipoDemanda,
+      tipo: dados.tipo,
       descricao: dados.descricao,
     });
   }, [criar, usuario]);

@@ -15,14 +15,17 @@ export type StatusDemanda = 'pendente' | 'em_analise' | 'requer_ajuste' | 'concl
 /**
  * Tipos de demanda suportados
  */
-export type TipoDemanda =
-  | 'Quebra de Pré-requisito'
-  | 'Revisão de Prova'
-  | 'Aproveitamento de Horas AC'
-  | 'Trancamento de Disciplina'
-  | 'Troca de Turma'
-  | 'Solicitação de Histórico'
-  | 'Justificativa de Falta';
+export const TIPOS_DEMANDA = [
+  'Quebra de Pré-requisito',
+  'Revisão de Prova',
+  'Aproveitamento de Horas AC',
+  'Trancamento de Disciplina',
+  'Troca de Turma',
+  'Solicitação de Histórico',
+  'Justificativa de Falta',
+] as const;
+
+export type TipoDemanda = typeof TIPOS_DEMANDA[number];
 
 /**
  * Usuário completo (com senha)
@@ -116,16 +119,3 @@ export interface RegistroDados {
   cargo?: Cargo;
   chaveAtivacao?: string;
 }
-
-/**
- * Constante: tipos de demanda disponíveis
- */
-export const TIPOS_DEMANDA: TipoDemanda[] = [
-  'Quebra de Pré-requisito',
-  'Revisão de Prova',
-  'Aproveitamento de Horas AC',
-  'Trancamento de Disciplina',
-  'Troca de Turma',
-  'Solicitação de Histórico',
-  'Justificativa de Falta',
-];

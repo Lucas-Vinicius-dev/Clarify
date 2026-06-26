@@ -6,13 +6,13 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Modal } from '@/components/ui/Modal';
 import { novaDemandaSchema, type NovaDemandaFormData } from '@/schemas/demandas';
-import type { UsuarioLogado } from '@/types';
+import { TIPOS_DEMANDA, type TipoDemanda, type UsuarioLogado } from '@/types';
 
 interface ModalNovaDemandaProps {
   open: boolean;
   onClose: () => void;
   usuario: UsuarioLogado | null;
-  onSubmit: (dados: { tipo: string; descricao: string }) => void;
+  onSubmit: (dados: { tipo: TipoDemanda; descricao: string }) => void;
 }
 
 const LIMITE_DESCRICAO = 500;
@@ -36,7 +36,7 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
 
   const onValid = useCallback((data: NovaDemandaFormData) => {
     if (!usuario?.matricula) return;
-    onSubmit({ tipo: data.tipo.trim(), descricao: data.descricao.trim() });
+    onSubmit({ tipo: data.tipo, descricao: data.descricao.trim() });
     reset();
     onClose();
   }, [usuario, onSubmit, reset, onClose]);
@@ -73,16 +73,19 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
           </header>
 
           <section className="mt-5">
-            <label htmlFor="campoTituloDemanda" className="modal-label">Título</label>
-            <input
-              id="campoTituloDemanda"
-              type="text"
+            <label htmlFor="campoTipoDemanda" className="modal-label">Tipo de Solicitação</label>
+            <select
+              id="campoTipoDemanda"
               {...register('tipo')}
-              maxLength={80}
-              placeholder="Ex.: Justificativa de falta — Cálculo III"
               className="modal-input font-semibold mt-1"
               autoFocus
-            />
+              defaultValue=""
+            >
+              <option value="" disabled>Selecione o tipo de solicitação</option>
+              {TIPOS_DEMANDA.map((tipo) => (
+                <option key={tipo} value={tipo}>{tipo}</option>
+              ))}
+            </select>
             {errors.tipo && (
               <p className="text-xs text-red-600 mt-1">{errors.tipo.message}</p>
             )}
