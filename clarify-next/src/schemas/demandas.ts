@@ -1,10 +1,10 @@
 import { z } from 'zod'
+import { TIPOS_DEMANDA } from '@/types'
+
+export const tipoDemandaSchema = z.enum(TIPOS_DEMANDA)
 
 export const novaDemandaSchema = z.object({
-  tipo: z
-    .string()
-    .min(4, 'Título deve ter no mínimo 4 caracteres.')
-    .max(80, 'Título deve ter no máximo 80 caracteres.'),
+  tipo: tipoDemandaSchema,
   descricao: z
     .string()
     .min(10, 'Descrição deve ter no mínimo 10 caracteres.')
