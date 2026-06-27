@@ -1,32 +1,22 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { CardMetrica } from '@/components/coordenador/CardMetrica';
-import { CardAluno } from '@/components/coordenador/CardAluno';
-import { CardTurma } from '@/components/coordenador/CardTurma';
+import { useQueryClient } from '@tanstack/react-query';
 import { ModalCriarTurma } from '@/components/coordenador/ModalCriarTurma';
 import { ModalFeedback } from '@/components/coordenador/ModalFeedback';
 import { ModalDetalhesDemanda } from '@/components/demandas/ModalDetalhesDemanda';
 import { FormAdicionarAluno } from '@/components/coordenador/FormAdicionarAluno';
 import { useAuth } from '@/context/AuthContext';
 import { useDemandas } from '@/hooks/useDemandas';
-import { useUsuarios } from '@/hooks/useUsuarios';
-import type { Cargo, Demanda, UsuarioLogado } from '@/types';
+import { useUsuarios, useAlunosDoCoordenador } from '@/hooks/useUsuarios';
 import { useTurmas } from '@/hooks/useTurmas';
 import { atualizarStatusDemanda } from '@/lib/demandas';
-
-function mapProfileToUser(row: Record<string, unknown>): UsuarioLogado {
-  return {
-    id: row.id as string,
-    nome: row.nome as string,
-    matricula: row.matricula as string,
-    email: row.email as string,
-    cargo: row.cargo as Cargo,
-    coordenador_id: (row.coordenador_id as string) ?? undefined,
-  };
-}
+import { useUIStore } from '@/store/uiStore';
+import { VisaoGeral } from './_components/VisaoGeral';
+import { ListaAlunos } from './_components/ListaAlunos';
+import { ListaDemandas } from './_components/ListaDemandas';
+import { ListaTurmas } from './_components/ListaTurmas';
 
 type DashView = 'nome' | 'alunos' | 'demandas' | 'turmas' | 'adicionar';
 
@@ -42,22 +32,17 @@ export default function DashboardCoordPage() {
 
   const rawView = searchParams.get('view') as DashView | null;
   const view: DashView = rawView && VIEWS.includes(rawView) ? rawView : 'nome';
-  const [modalTurmaAberta, setModalTurmaAberta] = useState(false);
-  const [modalFeedbackAberta, setModalFeedbackAberta] = useState(false);
-  const [protocoloFeedback, setProtocoloFeedback] = useState<string | null>(null);
-  const [modalDetalhesAberta, setModalDetalhesAberta] = useState(false);
-  const [demandaDetalhe, setDemandaDetalhe] = useState<Demanda | null>(null);
-  const [remetenteDetalhe, setRemetenteDetalhe] = useState<UsuarioLogado | null>(null);
 
-  const { data: alunosDoCoord = [] } = useQuery({
-    queryKey: ['alunos', usuario?.id],
-    queryFn: async () => {
-      const res = await fetch(`/api/perfis?coordenadorId=${encodeURIComponent(usuario!.id)}&cargo=aluno`)
-      const data = await res.json()
-      return (data ?? []).map(mapProfileToUser) as UsuarioLogado[]
-    },
-    enabled: !!usuario?.id,
-  });
+  const {
+    modalTurmaAberta, setModalTurmaAberta,
+    modalFeedbackAberta, setModalFeedbackAberta,
+    protocoloFeedback, setProtocoloFeedback,
+    modalDetalhesAberta, setModalDetalhesAberta,
+    demandaDetalhe, setDemandaDetalhe,
+    remetenteDetalhe, setRemetenteDetalhe,
+  } = useUIStore();
+
+  const { data: alunosDoCoord = [] } = useAlunosDoCoordenador(usuario?.id);
 
   const alunoIds = useMemo(() => new Set(alunosDoCoord.map((a) => a.id)), [alunosDoCoord]);
 
@@ -94,19 +79,17 @@ export default function DashboardCoordPage() {
   const handleReprovar = useCallback((protocolo: string) => {
     setProtocoloFeedback(protocolo);
     setModalFeedbackAberta(true);
-  }, []);
+  }, [setProtocoloFeedback, setModalFeedbackAberta]);
 
-  const handleVerDetalhes = useCallback(async (protocolo: string) => {
+  const handleVerDetalhes = useCallback((protocolo: string) => {
     const demanda = demandas.find((item) => item.protocolo === protocolo) || null;
+    const remetente = demanda
+      ? (alunosDoCoord.find((a) => a.id === demanda.alunoId) ?? null)
+      : null;
     setDemandaDetalhe(demanda);
-
-    if (demanda) {
-      const aluno = alunosDoCoord.find((a) => a.id === demanda.alunoId) ?? null;
-      setRemetenteDetalhe(aluno);
-    }
-
+    setRemetenteDetalhe(remetente);
     setModalDetalhesAberta(true);
-  }, [demandas, alunosDoCoord]);
+  }, [demandas, alunosDoCoord, setDemandaDetalhe, setRemetenteDetalhe, setModalDetalhesAberta]);
 
   const handleFeedbackSubmit = useCallback(async (feedback: string) => {
     if (!protocoloFeedback) return;
@@ -123,12 +106,12 @@ export default function DashboardCoordPage() {
     const aluno = alunosDoCoord.find((a) => a.matricula === matricula);
     if (aluno) {
       await usuariosHook.deletar(aluno.id);
-      queryClient.invalidateQueries({ queryKey: ['alunos', usuario?.id] });
+      queryClient.invalidateQueries({ queryKey: ['students', usuario?.id] });
     }
   }, [alunosDoCoord, usuariosHook, queryClient, usuario?.id]);
 
   const demandasPendentesOrdenadas = useMemo(
-    () => [...demandasPendentes].sort(
+    () => demandasPendentes.toSorted(
       (a, b) => new Date(b.dataAtualizacao).getTime() - new Date(a.dataAtualizacao).getTime()
     ),
     [demandasPendentes]
@@ -137,157 +120,33 @@ export default function DashboardCoordPage() {
   return (
     <div className="p-4 sm:p-6 max-w-6xl mx-auto space-y-6">
       {view === 'nome' && (
-        <div className="space-y-6">
-          <section className="relative overflow-hidden bg-gray-900 p-5 sm:p-8 text-white rounded-2xl">
-            <div className="relative z-10 space-y-3">
-              <span className="text-[10px] tracking-[0.2em] uppercase block opacity-70">
-                PORTAL DO COORDENADOR
-              </span>
-              <h1 className="text-3xl lg:text-4xl font-semibold">
-                Bem-vindo, {usuario?.nome?.split(' ')[0] || 'Coordenador'}
-              </h1>
-              <p className="text-gray-400 text-sm lg:text-base max-w-2xl">
-                Acompanhe as demandas e gerencie o fluxo de solicitações acadêmicas com precisão e clareza.
-              </p>
-            </div>
-          </section>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <CardMetrica titulo="Alunos Vinculados" valor={totalAlunos} label="total de alunos" />
-            <CardMetrica titulo="Demandas Abertas" valor={demandasAbertas} label="aguardando ação" />
-            <CardMetrica titulo="Resolução" valor={`${resolvidas}%`} label="demandas concluídas">
-              <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                <div className="h-full bg-brand-primary rounded-full" style={{ width: `${resolvidas}%` }} />
-              </div>
-            </CardMetrica>
-          </div>
-
-          {demandasPendentes.length > 0 && (
-            <section>
-              <h2 className="text-lg font-bold text-gray-900 mb-3">Demandas Pendentes</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {demandasPendentesOrdenadas.slice(0, 6).map((d) => (
-                  <div
-                    key={d.protocolo}
-                    onClick={() => handleVerDetalhes(d.protocolo)}
-                    className="bg-white border border-gray-200 rounded-2xl p-5 shadow-lg hover:-translate-y-1 transition-transform duration-200 ease-out flex flex-col justify-between h-full cursor-pointer"
-                  >
-                    <div className="flex items-start justify-between gap-4 mb-4">
-                      <div className="min-w-0 space-y-2">
-                        <h3 className="text-lg font-semibold text-gray-900 truncate">{d.tipo}</h3>
-                        <p className="text-sm text-gray-500 line-clamp-2">{d.descricao}</p>
-                      </div>
-                      <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold shrink-0 ${
-                        d.status === 'pendente' ? 'bg-yellow-100 text-yellow-800' :
-                        d.status === 'em_analise' ? 'bg-blue-100 text-blue-800' :
-                        'bg-orange-100 text-orange-800'
-                      }`}>
-                        {d.status.replace('_', ' ').toUpperCase()}
-                      </span>
-                    </div>
-                    <div className="grid gap-1 text-sm text-gray-500">
-                      <p><span className="font-semibold text-gray-800">Protocolo:</span> {d.protocolo}</p>
-                    </div>
-                    <div className="mt-4 flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-                      <button
-                        type="button"
-                        onClick={() => handleAprovar(d.protocolo)}
-                        className="flex-1 bg-brand-primary text-white py-2 px-3 rounded-lg text-xs font-semibold hover:bg-orange-700 transition-colors cursor-pointer border-none"
-                      >
-                        Aprovar
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleReprovar(d.protocolo)}
-                        className="flex-1 bg-gray-900 text-white py-2 px-3 rounded-lg text-xs font-semibold hover:bg-gray-800 transition-colors cursor-pointer border-none"
-                      >
-                        Reprovar
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-        </div>
+        <VisaoGeral
+          nomeCoordenador={usuario?.nome}
+          totalAlunos={totalAlunos}
+          demandasAbertas={demandasAbertas}
+          resolvidas={resolvidas}
+          demandasPendentes={demandasPendentesOrdenadas}
+          onVerDetalhes={handleVerDetalhes}
+          onAprovar={handleAprovar}
+          onReprovar={handleReprovar}
+        />
       )}
 
       {view === 'alunos' && (
-        <section>
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Alunos</h2>
-          {alunosDoCoord.length === 0 ? (
-            <div className="text-center py-12 text-gray-400">
-              <p className="text-sm">Nenhum aluno cadastrado.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {alunosDoCoord.map((aluno) => (
-                <CardAluno
-                  key={aluno.id}
-                  aluno={aluno}
-                  demandasEmAberto={demandas.filter(
-                    (d) => d.alunoId === aluno.id && d.status !== 'concluido'
-                  ).length}
-                  onRemover={handleRemoverAluno}
-                />
-              ))}
-            </div>
-          )}
-        </section>
+        <ListaAlunos
+          alunos={alunosDoCoord}
+          demandas={demandas}
+          onRemover={handleRemoverAluno}
+        />
       )}
 
       {view === 'demandas' && (
-        <section>
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Demandas</h2>
-          {demandasPendentes.length === 0 ? (
-            <div className="text-center py-12 text-gray-400">
-              <p className="text-sm">Nenhuma demanda pendente.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {demandasPendentes.map((d) => (
-                <div
-                  key={d.protocolo}
-                  onClick={() => handleVerDetalhes(d.protocolo)}
-                  className="bg-white border border-gray-200 rounded-2xl p-5 shadow-lg hover:-translate-y-1 transition-transform duration-200 ease-out flex flex-col justify-between h-full cursor-pointer"
-                >
-                  <div className="flex items-start justify-between gap-4 mb-4">
-                    <div className="min-w-0 space-y-2">
-                      <h3 className="text-lg font-semibold text-gray-900 truncate">{d.tipo}</h3>
-                      <p className="text-sm text-gray-500 line-clamp-2">{d.descricao}</p>
-                    </div>
-                    <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold shrink-0 ${
-                      d.status === 'pendente' ? 'bg-yellow-100 text-yellow-800' :
-                      d.status === 'em_analise' ? 'bg-blue-100 text-blue-800' :
-                      'bg-orange-100 text-orange-800'
-                    }`}>
-                      {d.status.replace('_', ' ').toUpperCase()}
-                    </span>
-                  </div>
-                  <div className="grid gap-1 text-sm text-gray-500">
-                    <p><span className="font-semibold text-gray-800">Protocolo:</span> {d.protocolo}</p>
-                  </div>
-                  <div className="mt-4 flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-                    <button
-                      type="button"
-                      onClick={() => handleAprovar(d.protocolo)}
-                      className="flex-1 bg-brand-primary text-white py-2 px-3 rounded-lg text-xs font-semibold hover:bg-orange-700 transition-colors cursor-pointer border-none"
-                    >
-                      Aprovar
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleReprovar(d.protocolo)}
-                      className="flex-1 bg-gray-900 text-white py-2 px-3 rounded-lg text-xs font-semibold hover:bg-gray-800 transition-colors cursor-pointer border-none"
-                    >
-                      Reprovar
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
+        <ListaDemandas
+          demandas={demandasPendentes}
+          onVerDetalhes={handleVerDetalhes}
+          onAprovar={handleAprovar}
+          onReprovar={handleReprovar}
+        />
       )}
 
       {view === 'adicionar' && (
@@ -299,29 +158,10 @@ export default function DashboardCoordPage() {
       )}
 
       {view === 'turmas' && (
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-900">Turmas</h2>
-            <button
-              type="button"
-              onClick={() => setModalTurmaAberta(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg font-semibold text-sm hover:bg-orange-700 transition-colors cursor-pointer border-none"
-            >
-              + Criar turma
-            </button>
-          </div>
-          {turmasDoCoord.length === 0 ? (
-            <div className="text-center py-12 text-gray-400">
-              <p className="text-sm">Nenhuma turma criada ainda.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {turmasDoCoord.map((turma) => (
-                <CardTurma key={turma.id} turma={turma} />
-              ))}
-            </div>
-          )}
-        </section>
+        <ListaTurmas
+          turmas={turmasDoCoord}
+          onCriarTurma={() => setModalTurmaAberta(true)}
+        />
       )}
 
       <ModalCriarTurma
@@ -338,11 +178,7 @@ export default function DashboardCoordPage() {
 
       <ModalDetalhesDemanda
         open={modalDetalhesAberta}
-        onClose={() => {
-          setModalDetalhesAberta(false);
-          setDemandaDetalhe(null);
-          setRemetenteDetalhe(null);
-        }}
+        onClose={() => { setModalDetalhesAberta(false); setDemandaDetalhe(null); setRemetenteDetalhe(null); }}
         demanda={demandaDetalhe}
         remetente={remetenteDetalhe}
       />

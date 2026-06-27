@@ -5,8 +5,10 @@ export async function GET(
   _request: Request,
   { params }: { params: Promise<{ protocolo: string }> }
 ) {
-  const { protocolo } = await params
-  const supabase = await createClient()
+  const [{ protocolo }, supabase] = await Promise.all([
+    params,
+    createClient(),
+  ])
 
   const { data } = await supabase
     .from('demandas')
@@ -28,9 +30,11 @@ export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ protocolo: string }> }
 ) {
-  const { protocolo } = await params
-  const body = await request.json()
-  const supabase = await createClient()
+  const [{ protocolo }, body, supabase] = await Promise.all([
+    params,
+    request.json(),
+    createClient(),
+  ])
 
   const updateData: Record<string, string> = {
     status: body.status,

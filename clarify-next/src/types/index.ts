@@ -28,19 +28,6 @@ export const TIPOS_DEMANDA = [
 export type TipoDemanda = typeof TIPOS_DEMANDA[number];
 
 /**
- * Usuário completo (com senha)
- */
-export interface Usuario {
-  id: string;
-  nome: string;
-  matricula: string;
-  email: string;
-  senha: string;
-  cargo: Cargo;
-  coordenador_id?: string;
-}
-
-/**
  * Usuário logado (sem senha)
  */
 export type UsuarioLogado = {

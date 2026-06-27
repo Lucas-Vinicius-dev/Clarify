@@ -1,10 +1,11 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { X, Users, Plus, Check } from 'lucide-react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Modal } from '@/components/ui/Modal';
+import { Dialog, DialogContent, DialogHeader } from '@/components/ui/Dialog';
+import { cn } from '@/lib/utils';
 import { criarTurmaSchema, type CriarTurmaFormData } from '@/schemas/turmas';
 
 interface ModalCriarTurmaProps {
@@ -12,6 +13,11 @@ interface ModalCriarTurmaProps {
   onClose: () => void;
   onCreate: (dados: { nome: string; disciplina: string; alunos: string[] }) => void;
 }
+
+const labelClass = "text-[0.6875rem] font-bold tracking-[0.18em] uppercase text-[rgba(15,23,42,0.45)]";
+const inputClass = "w-full bg-transparent border-0 border-b-[1.5px] border-[rgba(15,23,42,0.10)] py-2 px-0 text-lg leading-[1.3] -tracking-[0.01em] text-[#0f172a] placeholder:text-[rgba(15,23,42,0.30)] placeholder:font-normal focus:outline-none focus:border-b-[#ca5f15] transition-[border-color] duration-180";
+const btnPrimaryClass = "inline-flex items-center gap-2 bg-[#ca5f15] text-white font-bold text-sm -tracking-[0.005em] py-3 px-5 rounded-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.18),_0_1px_2px_rgba(202,95,21,0.30),_0_10px_24px_-10px_rgba(202,95,21,0.55)] hover:bg-[#b35211] hover:-translate-y-px active:translate-y-0 disabled:bg-[rgba(15,23,42,0.10)] disabled:text-[rgba(15,23,42,0.35)] disabled:shadow-none disabled:cursor-not-allowed disabled:transform-none transition-[transform,box-shadow,background-color] duration-180 cursor-pointer";
+const btnGhostClass = "inline-flex items-center gap-1.5 bg-transparent text-[rgba(15,23,42,0.65)] font-semibold text-sm py-3 px-4 rounded-xl hover:bg-[rgba(15,23,42,0.05)] hover:text-[#0f172a] transition-[background-color,color] duration-180 cursor-pointer";
 
 export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProps) {
   const {
@@ -28,7 +34,8 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
     defaultValues: { nome: '', disciplina: '', alunos: [] },
   });
 
-  const alunos = useWatch({ control, name: 'alunos' }) ?? [];
+  const watchedAlunos = useWatch({ control, name: 'alunos' });
+  const alunos = useMemo(() => watchedAlunos ?? [], [watchedAlunos]);
   const [matriculaInput, setMatriculaInput] = useState('');
 
   const adicionarAluno = useCallback(() => {
@@ -60,111 +67,118 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
   }, [reset, onClose]);
 
   return (
-    <Modal open={open} onClose={handleClose} maxWidth="max-w-md">
-      <div className="px-5 sm:px-7 pt-5 sm:pt-6 pb-6 sm:pb-8">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-xl bg-brand-primary/10 flex items-center justify-center">
-            <Users className="w-5 h-5 text-brand-primary" />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold text-gray-900">Nova turma</h2>
-            <p className="text-xs text-gray-500">Preencha os dados e adicione alunos</p>
-          </div>
-        </div>
+    <Dialog open={open} onOpenChange={(open) => { if (!open) handleClose(); }}>
+      <DialogContent className="max-w-md">
+        <div className="px-5 sm:px-7 pt-5 sm:pt-6 pb-6 sm:pb-8">
+          <DialogHeader className="border-none">
+            <div />
+          </DialogHeader>
 
-        <form onSubmit={handleSubmit(onValid)} className="space-y-5">
-          <div>
-            <label htmlFor="turmaNome" className="modal-label">Nome da turma</label>
-            <input
-              id="turmaNome"
-              type="text"
-              {...register('nome')}
-              placeholder="Ex: Engenharia de Software — 2025.1"
-              className="modal-input font-semibold mt-1"
-            />
-            {errors.nome && (
-              <p className="text-xs text-red-600 mt-1">{errors.nome.message}</p>
-            )}
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-xl bg-brand-primary/10 flex items-center justify-center">
+              <Users className="w-5 h-5 text-brand-primary" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">Nova turma</h2>
+              <p className="text-xs text-gray-500">Preencha os dados e adicione alunos</p>
+            </div>
           </div>
 
-          <div>
-            <label htmlFor="turmaDisciplina" className="modal-label">Disciplina</label>
-            <input
-              id="turmaDisciplina"
-              type="text"
-              {...register('disciplina')}
-              placeholder="Ex: Cálculo I"
-              className="modal-input font-semibold mt-1"
-            />
-            {errors.disciplina && (
-              <p className="text-xs text-red-600 mt-1">{errors.disciplina.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="modal-label mb-2 block">Adicionar aluno por matrícula</label>
-            <div className="flex gap-2 mt-1">
+          <form onSubmit={handleSubmit(onValid)} className="space-y-5">
+            <div>
+              <label htmlFor="turmaNome" className={labelClass}>Nome da turma</label>
               <input
+                id="turmaNome"
                 type="text"
-                value={matriculaInput}
-                onChange={(e) => setMatriculaInput(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); adicionarAluno(); } }}
-                placeholder="Ex: 202100452"
-                className="flex-1 modal-input font-semibold"
+                {...register('nome')}
+                placeholder="Ex: Engenharia de Software — 2025.1"
+                className={cn(inputClass, "font-semibold mt-1")}
               />
+              {errors.nome && (
+                <p className="text-xs text-red-600 mt-1">{errors.nome.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="turmaDisciplina" className={labelClass}>Disciplina</label>
+              <input
+                id="turmaDisciplina"
+                type="text"
+                {...register('disciplina')}
+                placeholder="Ex: Cálculo I"
+                className={cn(inputClass, "font-semibold mt-1")}
+              />
+              {errors.disciplina && (
+                <p className="text-xs text-red-600 mt-1">{errors.disciplina.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="turmaMatriculaAluno" className={cn(labelClass, "mb-2 block")}>Adicionar aluno por matrícula</label>
+              <div className="flex gap-2 mt-1">
+                <input
+                  id="turmaMatriculaAluno"
+                  type="text"
+                  value={matriculaInput}
+                  onChange={(e) => setMatriculaInput(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); adicionarAluno(); } }}
+                  placeholder="Ex: 202100452"
+                  className={cn(inputClass, "font-semibold flex-1")}
+                />
+                <button
+                  type="button"
+                  onClick={adicionarAluno}
+                  className={cn(btnGhostClass, "flex-shrink-0")}
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  Adicionar
+                </button>
+              </div>
+            </div>
+
+            <div className="border border-gray-200 rounded-xl p-3 min-h-[64px]">
+              <p className="text-xs text-gray-400 mb-2">Alunos adicionados</p>
+              <div className="flex flex-wrap gap-2">
+                {alunos.length === 0 && (
+                  <span className="text-xs text-gray-300">Nenhum aluno adicionado</span>
+                )}
+                {alunos.map((matricula, index) => (
+                  <span
+                    key={`${matricula}-${index}`}
+                    className="inline-flex items-center gap-1.5 bg-brand-primary/10 text-brand-primary text-xs font-medium rounded-full px-3 py-1"
+                  >
+                    {matricula}
+                    <button
+                      type="button"
+                      onClick={() => removerAluno(index)}
+                      className="opacity-60 hover:opacity-100 cursor-pointer leading-none bg-transparent border-none p-0"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 pt-2">
               <button
                 type="button"
-                onClick={adicionarAluno}
-                className="modal-btn-ghost flex-shrink-0"
+                onClick={handleClose}
+                className={btnGhostClass}
               >
-                <Plus className="w-3.5 h-3.5" />
-                Adicionar
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                className={btnPrimaryClass}
+              >
+                <Check className="w-3.5 h-3.5" />
+                Criar turma
               </button>
             </div>
-          </div>
-
-          <div className="border border-gray-200 rounded-xl p-3 min-h-[64px]">
-            <p className="text-xs text-gray-400 mb-2">Alunos adicionados</p>
-            <div className="flex flex-wrap gap-2">
-              {alunos.length === 0 && (
-                <span className="text-xs text-gray-300">Nenhum aluno adicionado</span>
-              )}
-              {alunos.map((matricula, index) => (
-                <span
-                  key={`${matricula}-${index}`}
-                  className="inline-flex items-center gap-1.5 bg-brand-primary/10 text-brand-primary text-xs font-medium rounded-full px-3 py-1"
-                >
-                  {matricula}
-                  <button
-                    type="button"
-                    onClick={() => removerAluno(index)}
-                    className="opacity-60 hover:opacity-100 cursor-pointer leading-none bg-transparent border-none p-0"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex justify-end gap-2 pt-2">
-            <button
-              type="button"
-              onClick={handleClose}
-              className="modal-btn-ghost"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              className="modal-btn-primary"
-            >
-              <Check className="w-3.5 h-3.5" />
-              Criar turma
-            </button>
-          </div>
-        </form>
-      </div>
-    </Modal>
+          </form>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

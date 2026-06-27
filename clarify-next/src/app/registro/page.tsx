@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -10,6 +11,7 @@ import { useAuth } from '@/context/AuthContext'
 import { registroSchema, type RegistroFormData } from '@/schemas/auth'
 
 export default function RegistroPage() {
+  const [mostrarSenha, setMostrarSenha] = useState(false)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
@@ -52,6 +54,15 @@ export default function RegistroPage() {
   }
 
   return (
+    <>
+      <style>{`
+        input[type="password"]::-ms-reveal,
+        input[type="password"]::-ms-clear,
+        input[type="password"]::-webkit-credentials-auto-fill-button,
+        input[type="password"]::-webkit-textfield-decoration-container {
+          display: none !important;
+        }
+      `}</style>
     <div className="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden bg-brand-surface">
       {/* Fundo Geométrico com Losangos */}
       <div
@@ -81,7 +92,7 @@ export default function RegistroPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div>
-            <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+            <label htmlFor="registro-fullName" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
               Nome Completo
             </label>
             <div className="relative">
@@ -96,6 +107,7 @@ export default function RegistroPage() {
                 </svg>
               </span>
               <input
+                id="registro-fullName"
                 type="text"
                 {...register('nome')}
                 placeholder="e.g. John Doe"
@@ -109,7 +121,7 @@ export default function RegistroPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+            <label htmlFor="registro-institutionalId" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
               ID Institucional
             </label>
             <div className="relative">
@@ -124,6 +136,7 @@ export default function RegistroPage() {
                 </svg>
               </span>
               <input
+                id="registro-institutionalId"
                 type="text"
                 {...register('matricula')}
                 placeholder="e.g. 123456789"
@@ -137,7 +150,7 @@ export default function RegistroPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+            <label htmlFor="registro-institutionalEmail" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
               Email Institucional
             </label>
             <div className="relative">
@@ -152,6 +165,7 @@ export default function RegistroPage() {
                 </svg>
               </span>
               <input
+                id="registro-institutionalEmail"
                 type="email"
                 {...register('email')}
                 placeholder="e.g. john.doe@academico.edu.br"
@@ -165,27 +179,26 @@ export default function RegistroPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+            <label htmlFor="registro-securityKey" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
               Chave de Segurança
             </label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                  />
-                </svg>
-              </span>
               <input
-                type="password"
+                id="registro-securityKey"
+                type={mostrarSenha ? 'text' : 'password'}
                 {...register('senha')}
                 placeholder="••••••••"
-                className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                className="block w-full pl-3 pr-10 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
                 disabled={isLoading}
               />
+              <button
+                type="button"
+                onClick={() => setMostrarSenha(!mostrarSenha)}
+                tabIndex={-1}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                {mostrarSenha ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </div>
             {errors.senha && (
               <p className="text-xs text-red-600 mt-1 ml-1">{errors.senha.message}</p>
@@ -193,7 +206,7 @@ export default function RegistroPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+            <label htmlFor="registro-activationKey" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
               Chave de Ativação
             </label>
             <div className="relative">
@@ -208,6 +221,7 @@ export default function RegistroPage() {
                 </svg>
               </span>
               <input
+                id="registro-activationKey"
                 type="text"
                 {...register('chaveAtivacao')}
                 placeholder="Chave fornecida pela instituição"
@@ -247,5 +261,6 @@ export default function RegistroPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }

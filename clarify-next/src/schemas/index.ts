@@ -1,8 +1,0 @@
-export { loginSchema, registroSchema } from './auth'
-export type { LoginFormData, RegistroFormData } from './auth'
-export { novaDemandaSchema, feedbackSchema, tipoDemandaSchema } from './demandas'
-export type { NovaDemandaFormData, FeedbackFormData } from './demandas'
-export { criarTurmaSchema } from './turmas'
-export type { CriarTurmaFormData } from './turmas'
-export { adicionarAlunoSchema } from './usuarios'
-export type { AdicionarAlunoFormData } from './usuarios'
