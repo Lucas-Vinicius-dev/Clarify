@@ -1,6 +1,6 @@
 'use client';
 
-import { useReducer, useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { ModalCriarTurma } from '@/components/coordenador/ModalCriarTurma';
@@ -12,11 +12,11 @@ import { useDemandas } from '@/hooks/useDemandas';
 import { useUsuarios, useAlunosDoCoordenador } from '@/hooks/useUsuarios';
 import { useTurmas } from '@/hooks/useTurmas';
 import { atualizarStatusDemanda } from '@/lib/demandas';
+import { useUIStore } from '@/store/uiStore';
 import { VisaoGeral } from './_components/VisaoGeral';
 import { ListaAlunos } from './_components/ListaAlunos';
 import { ListaDemandas } from './_components/ListaDemandas';
 import { ListaTurmas } from './_components/ListaTurmas';
-import { dashboardUiReducer, initialDashboardUiState } from './_components/dashboardState';
 
 type DashView = 'nome' | 'alunos' | 'demandas' | 'turmas' | 'adicionar';
 
@@ -33,7 +33,14 @@ export default function DashboardCoordPage() {
   const rawView = searchParams.get('view') as DashView | null;
   const view: DashView = rawView && VIEWS.includes(rawView) ? rawView : 'nome';
 
-  const [ui, dispatch] = useReducer(dashboardUiReducer, initialDashboardUiState);
+  const {
+    modalTurmaAberta, setModalTurmaAberta,
+    modalFeedbackAberta, setModalFeedbackAberta,
+    protocoloFeedback, setProtocoloFeedback,
+    modalDetalhesAberta, setModalDetalhesAberta,
+    demandaDetalhe, setDemandaDetalhe,
+    remetenteDetalhe, setRemetenteDetalhe,
+  } = useUIStore();
 
   const { data: alunosDoCoord = [] } = useAlunosDoCoordenador(usuario?.id);
 
@@ -70,22 +77,25 @@ export default function DashboardCoordPage() {
   }, [usuario, turmasHook]);
 
   const handleReprovar = useCallback((protocolo: string) => {
-    dispatch({ type: 'abrirFeedback', protocolo });
-  }, []);
+    setProtocoloFeedback(protocolo);
+    setModalFeedbackAberta(true);
+  }, [setProtocoloFeedback, setModalFeedbackAberta]);
 
   const handleVerDetalhes = useCallback((protocolo: string) => {
     const demanda = demandas.find((item) => item.protocolo === protocolo) || null;
     const remetente = demanda
       ? (alunosDoCoord.find((a) => a.id === demanda.alunoId) ?? null)
-      : ui.remetenteDetalhe;
-    dispatch({ type: 'abrirDetalhes', demanda, remetente });
-  }, [demandas, alunosDoCoord, ui.remetenteDetalhe]);
+      : null;
+    setDemandaDetalhe(demanda);
+    setRemetenteDetalhe(remetente);
+    setModalDetalhesAberta(true);
+  }, [demandas, alunosDoCoord, setDemandaDetalhe, setRemetenteDetalhe, setModalDetalhesAberta]);
 
   const handleFeedbackSubmit = useCallback(async (feedback: string) => {
-    if (!ui.protocoloFeedback) return;
-    await atualizarStatusDemanda(ui.protocoloFeedback, 'requer_ajuste', feedback);
+    if (!protocoloFeedback) return;
+    await atualizarStatusDemanda(protocoloFeedback, 'requer_ajuste', feedback);
     await recarregarDemandas();
-  }, [ui.protocoloFeedback, recarregarDemandas]);
+  }, [protocoloFeedback, recarregarDemandas]);
 
   const handleAprovar = useCallback(async (protocolo: string) => {
     await atualizarStatusDemanda(protocolo, 'concluido');
@@ -150,27 +160,27 @@ export default function DashboardCoordPage() {
       {view === 'turmas' && (
         <ListaTurmas
           turmas={turmasDoCoord}
-          onCriarTurma={() => dispatch({ type: 'abrirModalTurma' })}
+          onCriarTurma={() => setModalTurmaAberta(true)}
         />
       )}
 
       <ModalCriarTurma
-        open={ui.modalTurmaAberta}
-        onClose={() => dispatch({ type: 'fecharModalTurma' })}
+        open={modalTurmaAberta}
+        onClose={() => setModalTurmaAberta(false)}
         onCreate={handleCriarTurma}
       />
 
       <ModalFeedback
-        open={ui.modalFeedbackAberta}
-        onClose={() => dispatch({ type: 'fecharFeedback' })}
+        open={modalFeedbackAberta}
+        onClose={() => { setModalFeedbackAberta(false); setProtocoloFeedback(null); }}
         onSubmit={handleFeedbackSubmit}
       />
 
       <ModalDetalhesDemanda
-        open={ui.modalDetalhesAberta}
-        onClose={() => dispatch({ type: 'fecharDetalhes' })}
-        demanda={ui.demandaDetalhe}
-        remetente={ui.remetenteDetalhe}
+        open={modalDetalhesAberta}
+        onClose={() => { setModalDetalhesAberta(false); setDemandaDetalhe(null); setRemetenteDetalhe(null); }}
+        demanda={demandaDetalhe}
+        remetente={remetenteDetalhe}
       />
     </div>
   );
