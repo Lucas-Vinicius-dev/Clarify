@@ -11,16 +11,18 @@ import { useAuth } from '@/context/AuthContext';
 import { useDemandas } from '@/hooks/useDemandas';
 import { useUsuarios, useAlunosDoCoordenador } from '@/hooks/useUsuarios';
 import { useTurmas } from '@/hooks/useTurmas';
+import { useChaves } from '@/hooks/useChaves';
 import { atualizarStatusDemanda } from '@/lib/demandas';
 import { useUIStore } from '@/store/uiStore';
 import { VisaoGeral } from './_components/VisaoGeral';
 import { ListaAlunos } from './_components/ListaAlunos';
 import { ListaDemandas } from './_components/ListaDemandas';
 import { ListaTurmas } from './_components/ListaTurmas';
+import { ListaChaves } from './_components/ListaChaves';
 
-type DashView = 'nome' | 'alunos' | 'demandas' | 'turmas' | 'adicionar';
+type DashView = 'nome' | 'alunos' | 'demandas' | 'turmas' | 'adicionar' | 'chaves';
 
-const VIEWS: DashView[] = ['nome', 'alunos', 'demandas', 'turmas', 'adicionar'];
+const VIEWS: DashView[] = ['nome', 'alunos', 'demandas', 'turmas', 'adicionar', 'chaves'];
 
 export default function DashboardCoordPage() {
   const queryClient = useQueryClient();
@@ -28,6 +30,7 @@ export default function DashboardCoordPage() {
   const { demandas, recarregar: recarregarDemandas } = useDemandas();
   const usuariosHook = useUsuarios();
   const turmasHook = useTurmas();
+  const { chaves, loading: chavesLoading, gerar: gerarChave, gerando: gerandoChave, ultimaGerada } = useChaves();
   const searchParams = useSearchParams();
 
   const rawView = searchParams.get('view') as DashView | null;
@@ -161,6 +164,16 @@ export default function DashboardCoordPage() {
         <ListaTurmas
           turmas={turmasDoCoord}
           onCriarTurma={() => setModalTurmaAberta(true)}
+        />
+      )}
+
+      {view === 'chaves' && (
+        <ListaChaves
+          chaves={chaves}
+          loading={chavesLoading}
+          gerando={gerandoChave}
+          onGerar={() => gerarChave()}
+          ultimaGerada={ultimaGerada}
         />
       )}
 

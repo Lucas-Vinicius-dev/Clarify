@@ -7,6 +7,7 @@ import {
   Plus,
   FileText,
   Shield,
+  KeyRound,
   LogOut,
 } from 'lucide-react';
 import type { Cargo } from '@/types';
@@ -20,7 +21,7 @@ interface SidebarProps {
 
 /**
  * Sidebar desktop com navegação por cargo
- * - Coordenador: Início, Alunos, Adicionar, Demandas, Turmas
+ * - Coordenador: Início, Alunos, Adicionar, Demandas, Turmas, Chaves
  * - Aluno: Central de Demandas, Documentos
  */
 export function Sidebar({
@@ -37,6 +38,7 @@ export function Sidebar({
           { id: 'adicionar', label: 'Adicionar aluno', icon: Plus },
           { id: 'demandas', label: 'Demandas', icon: FileText },
           { id: 'turmas', label: 'Turmas', icon: Shield },
+          { id: 'chaves', label: 'Chaves', icon: KeyRound },
         ]
       : [
           { id: 'nome', label: 'Início', icon: User },
