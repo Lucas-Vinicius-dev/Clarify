@@ -1,3 +1,4 @@
+import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { novaDemandaSchema } from '@/schemas/demandas'
 import { NextResponse } from 'next/server'
@@ -33,6 +34,28 @@ export async function POST(request: Request) {
         erros: validacao.error.flatten().fieldErrors,
       },
       { status: 400 },
+    )
+  }
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    return NextResponse.json(
+      { ok: false, mensagem: 'Não autorizado.' },
+      { status: 401 },
+    )
+  }
+
+  const supabaseAdmin = createAdminClient()
+  const { data: profile } = await supabaseAdmin
+    .from('profiles')
+    .select('cargo')
+    .eq('id', user.id)
+    .single()
+
+  if (profile?.cargo !== 'aluno') {
+    return NextResponse.json(
+      { ok: false, mensagem: 'Apenas alunos podem criar demandas.' },
+      { status: 403 },
     )
   }
 
