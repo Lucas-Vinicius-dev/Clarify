@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { novaDemandaSchema } from '@/schemas/demandas'
 import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
@@ -23,11 +24,23 @@ export async function POST(request: Request) {
     createClient(),
   ])
 
+  const validacao = novaDemandaSchema.safeParse(dados)
+  if (!validacao.success) {
+    return NextResponse.json(
+      {
+        ok: false,
+        mensagem: 'Dados inválidos.',
+        erros: validacao.error.flatten().fieldErrors,
+      },
+      { status: 400 },
+    )
+  }
+
   const { data: protocolo } = await supabase.rpc('gerar_proximo_protocolo')
   if (!protocolo) {
     return NextResponse.json(
       { ok: false, mensagem: 'Erro ao gerar protocolo.' },
-      { status: 500 }
+      { status: 500 },
     )
   }
 
@@ -36,8 +49,8 @@ export async function POST(request: Request) {
     .insert({
       protocolo,
       aluno_id: dados.alunoId,
-      tipo: dados.tipo,
-      descricao: dados.descricao,
+      tipo: validacao.data.tipo,
+      descricao: validacao.data.descricao,
     })
     .select()
     .single()
@@ -45,7 +58,7 @@ export async function POST(request: Request) {
   if (!data) {
     return NextResponse.json(
       { ok: false, mensagem: 'Erro ao criar demanda.' },
-      { status: 500 }
+      { status: 500 },
     )
   }
 

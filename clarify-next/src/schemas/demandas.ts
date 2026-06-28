@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { TIPOS_DEMANDA } from '@/types'
 
-export const tipoDemandaSchema = z.enum(TIPOS_DEMANDA)
+export const tipoDemandaSchema = z.enum(TIPOS_DEMANDA, 'Selecione o tipo de solicitação.')
 
 export const novaDemandaSchema = z.object({
   tipo: tipoDemandaSchema,
