@@ -42,8 +42,37 @@ export async function POST(request: Request) {
     )
   }
 
+  let alunosIds: string[] = []
+
   if (dados.alunos?.length > 0) {
-    const inserts = dados.alunos.map((alunoId: string) => ({
+    const { data: perfis, error: perfisError } = await supabase
+      .from('profiles')
+      .select('id, matricula')
+      .in('matricula', dados.alunos)
+
+    if (perfisError) {
+      return NextResponse.json(
+        { ok: false, mensagem: perfisError.message },
+        { status: 500 }
+      )
+    }
+
+    const matriculasEncontradas = new Set(perfis?.map((p) => p.matricula) ?? [])
+    const naoEncontradas = dados.alunos.filter((m: string) => !matriculasEncontradas.has(m))
+
+    if (naoEncontradas.length > 0) {
+      return NextResponse.json(
+        {
+          ok: false,
+          mensagem: `Matrícula(s) não encontrada(s): ${naoEncontradas.join(', ')}`,
+        },
+        { status: 400 }
+      )
+    }
+
+    alunosIds = perfis?.map((p) => p.id) ?? []
+
+    const inserts = alunosIds.map((alunoId: string) => ({
       turma_id: turma.id,
       aluno_id: alunoId,
     }))
@@ -56,5 +85,5 @@ export async function POST(request: Request) {
     }
   }
 
-  return NextResponse.json({ ok: true, data: { ...turma, alunos: dados.alunos ?? [] } })
+  return NextResponse.json({ ok: true, data: { ...turma, alunos: alunosIds } })
 }
