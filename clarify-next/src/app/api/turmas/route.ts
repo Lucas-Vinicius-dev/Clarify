@@ -80,25 +80,9 @@ export async function POST(request: Request) {
     const { error: alunosError } = await supabase.from('turma_alunos').insert(inserts)
     if (alunosError) {
       return NextResponse.json(
-        { ok: false, mensagem: buscaError.message },
+        { ok: false, mensagem: alunosError.message },
         { status: 500 }
       )
-    }
-
-    alunosIds = (alunosEncontrados ?? []).map((a) => a.id)
-
-    if (alunosIds.length > 0) {
-      const inserts = alunosIds.map((alunoId) => ({
-        turma_id: turma.id,
-        aluno_id: alunoId,
-      }))
-      const { error: alunosError } = await supabase.from('turma_alunos').insert(inserts)
-      if (alunosError) {
-        return NextResponse.json(
-          { ok: false, mensagem: alunosError.message },
-          { status: 500 }
-        )
-      }
     }
   }
 

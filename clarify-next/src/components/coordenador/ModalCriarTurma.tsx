@@ -41,7 +41,6 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
 
   const watchedAlunos = useWatch({ control, name: 'alunos' });
   const alunos = useMemo(() => watchedAlunos ?? [], [watchedAlunos]);
-  const [matriculaInput, setMatriculaInput] = useState('');
   const [erroCriar, setErroCriar] = useState('');
   const [enviando, setEnviando] = useState(false);
 
@@ -98,8 +97,8 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
 
   const handleClose = useCallback(() => {
     reset();
-    setMatriculaInput('');
     setErroCriar('');
+    setDropdownOpen(false);
     onClose();
   }, [reset, onClose]);
 

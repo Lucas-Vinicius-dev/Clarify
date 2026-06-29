@@ -18,7 +18,7 @@ interface ListaTurmasProps {
 
 const ITENS_POR_PAGINA = 9;
 
-export function ListaTurmas({ turmas, loading, onCriarTurma }: ListaTurmasProps) {
+export function ListaTurmas({ turmas, loading, onCriarTurma, onEditarTurma, onExcluirTurma }: ListaTurmasProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -113,7 +113,6 @@ export function ListaTurmas({ turmas, loading, onCriarTurma }: ListaTurmasProps)
   if (paginaAtualValida && totalPaginas > 0) {
     handleMudarPagina(paginaSegura);
   }
-
   return (
     <section>
       <div className="flex items-center justify-between mb-4">
@@ -187,7 +186,7 @@ export function ListaTurmas({ turmas, loading, onCriarTurma }: ListaTurmasProps)
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {paginadas.map((turma) => (
-              <CardTurma key={turma.id} turma={turma} />
+              <CardTurma key={turma.id} turma={turma} onEditar={onEditarTurma} onExcluir={onExcluirTurma} />
             ))}
           </div>
 
