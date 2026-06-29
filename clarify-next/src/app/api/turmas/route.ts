@@ -45,12 +45,40 @@ export async function POST(request: Request) {
   let alunosIds: string[] = []
 
   if (dados.alunos?.length > 0) {
-    const { data: alunosEncontrados, error: buscaError } = await supabase
+    const { data: perfis, error: perfisError } = await supabase
       .from('profiles')
-      .select('id, matricula')
-      .in('matricula', dados.alunos)
+      .select('id')
+      .in('id', dados.alunos)
+      .eq('coordenador_id', dados.coordenadorId)
 
-    if (buscaError) {
+    if (perfisError) {
+      return NextResponse.json(
+        { ok: false, mensagem: perfisError.message },
+        { status: 500 }
+      )
+    }
+
+    const idsValidos = new Set(perfis?.map((p) => p.id) ?? [])
+    const invalidos = dados.alunos.filter((id: string) => !idsValidos.has(id))
+
+    if (invalidos.length > 0) {
+      return NextResponse.json(
+        {
+          ok: false,
+          mensagem: `Aluno(s) inválido(s) ou não vinculado(s) a você.`,
+        },
+        { status: 400 }
+      )
+    }
+
+    alunosIds = dados.alunos
+
+    const inserts = alunosIds.map((alunoId: string) => ({
+      turma_id: turma.id,
+      aluno_id: alunoId,
+    }))
+    const { error: alunosError } = await supabase.from('turma_alunos').insert(inserts)
+    if (alunosError) {
       return NextResponse.json(
         { ok: false, mensagem: buscaError.message },
         { status: 500 }
