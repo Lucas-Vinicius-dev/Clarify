@@ -1,12 +1,14 @@
 'use client';
 
 import { useCallback, useMemo, useState } from 'react';
-import { X, Users, Plus, Check } from 'lucide-react';
+import { X, Users, Check } from 'lucide-react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Dialog, DialogContent, DialogHeader } from '@/components/ui/Dialog';
 import { cn } from '@/lib/utils';
 import { criarTurmaSchema, type CriarTurmaFormData } from '@/schemas/turmas';
+import { useAuth } from '@/context/AuthContext';
+import { useAlunosDoCoordenador } from '@/hooks/useUsuarios';
 
 interface ModalCriarTurmaProps {
   open: boolean;
@@ -20,6 +22,9 @@ const btnPrimaryClass = "inline-flex items-center gap-2 bg-[#ca5f15] text-white 
 const btnGhostClass = "inline-flex items-center gap-1.5 bg-transparent text-[rgba(15,23,42,0.65)] font-semibold text-sm py-3 px-4 rounded-xl hover:bg-[rgba(15,23,42,0.05)] hover:text-[#0f172a] transition-[background-color,color] duration-180 cursor-pointer";
 
 export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProps) {
+  const { usuario } = useAuth();
+  const { data: alunosDoCoord = [], isLoading: loadingAlunos } = useAlunosDoCoordenador(usuario?.id);
+
   const {
     register,
     handleSubmit,
@@ -40,16 +45,24 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
   const [erroCriar, setErroCriar] = useState('');
   const [enviando, setEnviando] = useState(false);
 
-  const adicionarAluno = useCallback(() => {
-    const mat = matriculaInput.trim();
-    if (!mat || alunos.includes(mat)) return;
-    setValue('alunos', [...alunos, mat], { shouldValidate: true });
-    setMatriculaInput('');
-  }, [matriculaInput, alunos, setValue]);
+  const alunosMap = useMemo(() => {
+    const map = new Map<string, { nome: string; matricula: string }>();
+    alunosDoCoord.forEach((a) => map.set(a.id, { nome: a.nome, matricula: a.matricula }));
+    return map;
+  }, [alunosDoCoord]);
 
-  const removerAluno = useCallback((index: number) => {
+  const toggleAluno = useCallback((alunoId: string) => {
     const current = getValues('alunos');
-    setValue('alunos', current.filter((_, i) => i !== index), { shouldValidate: true });
+    if (current.includes(alunoId)) {
+      setValue('alunos', current.filter((id) => id !== alunoId), { shouldValidate: true });
+    } else {
+      setValue('alunos', [...current, alunoId], { shouldValidate: true });
+    }
+  }, [getValues, setValue]);
+
+  const removerAluno = useCallback((alunoId: string) => {
+    const current = getValues('alunos');
+    setValue('alunos', current.filter((id) => id !== alunoId), { shouldValidate: true });
   }, [getValues, setValue]);
 
   const onValid = useCallback(async (data: CriarTurmaFormData) => {
@@ -125,49 +138,59 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
             </div>
 
             <div>
-              <label htmlFor="turmaMatriculaAluno" className={cn(labelClass, "mb-2 block")}>Adicionar aluno por matrícula</label>
-              <div className="flex gap-2 mt-1">
-                <input
-                  id="turmaMatriculaAluno"
-                  type="text"
-                  value={matriculaInput}
-                  onChange={(e) => setMatriculaInput(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); adicionarAluno(); } }}
-                  placeholder="Ex: 202100452"
-                  className={cn(inputClass, "font-semibold flex-1")}
-                />
-                <button
-                  type="button"
-                  onClick={adicionarAluno}
-                  className={cn(btnGhostClass, "flex-shrink-0")}
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  Adicionar
-                </button>
+              <label className={cn(labelClass, "mb-2 block")}>Selecionar alunos</label>
+              <div className="border border-gray-200 rounded-xl max-h-48 overflow-y-auto">
+                {loadingAlunos ? (
+                  <div className="p-3 text-xs text-gray-400">Carregando alunos...</div>
+                ) : alunosDoCoord.length === 0 ? (
+                  <div className="p-3 text-xs text-gray-400">Nenhum aluno vinculado. Cadastre alunos primeiro.</div>
+                ) : alunosDoCoord.map((aluno) => {
+                  const isSelected = alunos.includes(aluno.id);
+                  return (
+                    <label
+                      key={aluno.id}
+                      className="flex items-center gap-3 px-3 py-2 hover:bg-[rgba(202,95,21,0.05)] cursor-pointer border-b border-gray-100 last:border-b-0"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => toggleAluno(aluno.id)}
+                        className="accent-[#ca5f15]"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">{aluno.nome}</p>
+                        <p className="text-xs text-gray-400">{aluno.matricula}</p>
+                      </div>
+                    </label>
+                  );
+                })}
               </div>
             </div>
 
             <div className="border border-gray-200 rounded-xl p-3 min-h-[64px]">
-              <p className="text-xs text-gray-400 mb-2">Alunos adicionados</p>
+              <p className="text-xs text-gray-400 mb-2">Alunos adicionados ({alunos.length})</p>
               <div className="flex flex-wrap gap-2">
                 {alunos.length === 0 && (
-                  <span className="text-xs text-gray-300">Nenhum aluno adicionado</span>
+                  <span className="text-xs text-gray-300">Nenhum aluno selecionado</span>
                 )}
-                {alunos.map((matricula, index) => (
-                  <span
-                    key={`${matricula}-${index}`}
-                    className="inline-flex items-center gap-1.5 bg-brand-primary/10 text-brand-primary text-xs font-medium rounded-full px-3 py-1"
-                  >
-                    {matricula}
-                    <button
-                      type="button"
-                      onClick={() => removerAluno(index)}
-                      className="opacity-60 hover:opacity-100 cursor-pointer leading-none bg-transparent border-none p-0"
+                {alunos.map((alunoId) => {
+                  const info = alunosMap.get(alunoId);
+                  return (
+                    <span
+                      key={alunoId}
+                      className="inline-flex items-center gap-1.5 bg-brand-primary/10 text-brand-primary text-xs font-medium rounded-full px-3 py-1"
                     >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </span>
-                ))}
+                      {info?.nome ?? alunoId}
+                      <button
+                        type="button"
+                        onClick={() => removerAluno(alunoId)}
+                        className="opacity-60 hover:opacity-100 cursor-pointer leading-none bg-transparent border-none p-0"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </span>
+                  );
+                })}
               </div>
             </div>
 
