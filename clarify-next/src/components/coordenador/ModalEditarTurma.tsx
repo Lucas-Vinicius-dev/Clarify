@@ -1,17 +1,19 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 import { X, Users, Plus, Check } from 'lucide-react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Dialog, DialogContent, DialogHeader } from '@/components/ui/Dialog';
 import { cn } from '@/lib/utils';
 import { criarTurmaSchema, type CriarTurmaFormData } from '@/schemas/turmas';
+import type { Turma } from '@/types';
 
-interface ModalCriarTurmaProps {
+interface ModalEditarTurmaProps {
   open: boolean;
+  turma: Turma | null;
   onClose: () => void;
-  onCreate: (dados: { nome: string; disciplina: string; alunos: string[] }) => Promise<void>;
+  onSalvar: (id: string, dados: { nome: string; disciplina: string; alunos: string[] }) => Promise<void>;
 }
 
 const labelClass = "text-[0.6875rem] font-bold tracking-[0.18em] uppercase text-[rgba(15,23,42,0.45)]";
@@ -19,7 +21,7 @@ const inputClass = "w-full bg-transparent border-0 border-b-[1.5px] border-[rgba
 const btnPrimaryClass = "inline-flex items-center gap-2 bg-[#ca5f15] text-white font-bold text-sm -tracking-[0.005em] py-3 px-5 rounded-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.18),_0_1px_2px_rgba(202,95,21,0.30),_0_10px_24px_-10px_rgba(202,95,21,0.55)] hover:bg-[#b35211] hover:-translate-y-px active:translate-y-0 disabled:bg-[rgba(15,23,42,0.10)] disabled:text-[rgba(15,23,42,0.35)] disabled:shadow-none disabled:cursor-not-allowed disabled:transform-none transition-[transform,box-shadow,background-color] duration-180 cursor-pointer";
 const btnGhostClass = "inline-flex items-center gap-1.5 bg-transparent text-[rgba(15,23,42,0.65)] font-semibold text-sm py-3 px-4 rounded-xl hover:bg-[rgba(15,23,42,0.05)] hover:text-[#0f172a] transition-[background-color,color] duration-180 cursor-pointer";
 
-export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProps) {
+export function ModalEditarTurma({ open, turma, onClose, onSalvar }: ModalEditarTurmaProps) {
   const {
     register,
     handleSubmit,
@@ -34,10 +36,20 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
     defaultValues: { nome: '', disciplina: '', alunos: [] },
   });
 
+  useEffect(() => {
+    if (open && turma) {
+      reset({
+        nome: turma.nome,
+        disciplina: turma.disciplina,
+        alunos: turma.alunos,
+      });
+    }
+  }, [open, turma, reset]);
+
   const watchedAlunos = useWatch({ control, name: 'alunos' });
   const alunos = useMemo(() => watchedAlunos ?? [], [watchedAlunos]);
   const [matriculaInput, setMatriculaInput] = useState('');
-  const [erroCriar, setErroCriar] = useState('');
+  const [erroSalvar, setErroSalvar] = useState('');
   const [enviando, setEnviando] = useState(false);
 
   const adicionarAluno = useCallback(() => {
@@ -53,29 +65,28 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
   }, [getValues, setValue]);
 
   const onValid = useCallback(async (data: CriarTurmaFormData) => {
-    setErroCriar('');
+    if (!turma) return;
+    setErroSalvar('');
     setEnviando(true);
     try {
-      await onCreate({
+      await onSalvar(turma.id, {
         nome: data.nome.trim(),
         disciplina: data.disciplina.trim(),
         alunos: data.alunos,
       });
-      reset();
       onClose();
     } catch (e) {
-      setErroCriar(e instanceof Error ? e.message : 'Erro ao criar turma.');
+      setErroSalvar(e instanceof Error ? e.message : 'Erro ao atualizar turma.');
     } finally {
       setEnviando(false);
     }
-  }, [onCreate, reset, onClose]);
+  }, [turma, onSalvar, onClose]);
 
   const handleClose = useCallback(() => {
-    reset();
     setMatriculaInput('');
-    setErroCriar('');
+    setErroSalvar('');
     onClose();
-  }, [reset, onClose]);
+  }, [onClose]);
 
   return (
     <Dialog open={open} onOpenChange={(open) => { if (!open) handleClose(); }}>
@@ -90,16 +101,16 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
               <Users className="w-5 h-5 text-brand-primary" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900">Nova turma</h2>
-              <p className="text-xs text-gray-500">Preencha os dados e adicione alunos</p>
+              <h2 className="text-xl font-bold text-gray-900">Editar turma</h2>
+              <p className="text-xs text-gray-500">Altere os dados e os alunos vinculados</p>
             </div>
           </div>
 
           <form onSubmit={handleSubmit(onValid)} className="space-y-5">
             <div>
-              <label htmlFor="turmaNome" className={labelClass}>Nome da turma</label>
+              <label htmlFor="editarTurmaNome" className={labelClass}>Nome da turma</label>
               <input
-                id="turmaNome"
+                id="editarTurmaNome"
                 type="text"
                 {...register('nome')}
                 placeholder="Ex: Engenharia de Software — 2025.1"
@@ -111,9 +122,9 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
             </div>
 
             <div>
-              <label htmlFor="turmaDisciplina" className={labelClass}>Disciplina</label>
+              <label htmlFor="editarTurmaDisciplina" className={labelClass}>Disciplina</label>
               <input
-                id="turmaDisciplina"
+                id="editarTurmaDisciplina"
                 type="text"
                 {...register('disciplina')}
                 placeholder="Ex: Cálculo I"
@@ -125,10 +136,10 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
             </div>
 
             <div>
-              <label htmlFor="turmaMatriculaAluno" className={cn(labelClass, "mb-2 block")}>Adicionar aluno por matrícula</label>
+              <label htmlFor="editarTurmaMatriculaAluno" className={cn(labelClass, "mb-2 block")}>Adicionar aluno por matrícula</label>
               <div className="flex gap-2 mt-1">
                 <input
-                  id="turmaMatriculaAluno"
+                  id="editarTurmaMatriculaAluno"
                   type="text"
                   value={matriculaInput}
                   onChange={(e) => setMatriculaInput(e.target.value)}
@@ -171,9 +182,9 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
               </div>
             </div>
 
-            {erroCriar && (
+            {erroSalvar && (
               <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-                {erroCriar}
+                {erroSalvar}
               </p>
             )}
 
@@ -192,7 +203,7 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
                 className={btnPrimaryClass}
               >
                 <Check className="w-3.5 h-3.5" />
-                {enviando ? 'Criando...' : 'Criar turma'}
+                {enviando ? 'Salvando...' : 'Salvar alterações'}
               </button>
             </div>
           </form>

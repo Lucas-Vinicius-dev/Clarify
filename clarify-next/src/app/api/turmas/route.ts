@@ -42,19 +42,37 @@ export async function POST(request: Request) {
     )
   }
 
+  let alunosIds: string[] = []
+
   if (dados.alunos?.length > 0) {
-    const inserts = dados.alunos.map((alunoId: string) => ({
-      turma_id: turma.id,
-      aluno_id: alunoId,
-    }))
-    const { error: alunosError } = await supabase.from('turma_alunos').insert(inserts)
-    if (alunosError) {
+    const { data: alunosEncontrados, error: buscaError } = await supabase
+      .from('profiles')
+      .select('id, matricula')
+      .in('matricula', dados.alunos)
+
+    if (buscaError) {
       return NextResponse.json(
-        { ok: false, mensagem: alunosError.message },
+        { ok: false, mensagem: buscaError.message },
         { status: 500 }
       )
     }
+
+    alunosIds = (alunosEncontrados ?? []).map((a) => a.id)
+
+    if (alunosIds.length > 0) {
+      const inserts = alunosIds.map((alunoId) => ({
+        turma_id: turma.id,
+        aluno_id: alunoId,
+      }))
+      const { error: alunosError } = await supabase.from('turma_alunos').insert(inserts)
+      if (alunosError) {
+        return NextResponse.json(
+          { ok: false, mensagem: alunosError.message },
+          { status: 500 }
+        )
+      }
+    }
   }
 
-  return NextResponse.json({ ok: true, data: { ...turma, alunos: dados.alunos ?? [] } })
+  return NextResponse.json({ ok: true, data: { ...turma, alunos: alunosIds } })
 }

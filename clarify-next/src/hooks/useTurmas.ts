@@ -39,8 +39,28 @@ export function useTurmas() {
         body: JSON.stringify(dados),
       })
       const json = await res.json()
-      if (!json.ok || !json.data) return null
+      if (!json.ok || !json.data) {
+        throw new Error(json.mensagem || 'Erro ao criar turma.')
+      }
       return mapRow(json.data) as Turma
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['turmas'] })
+    },
+  })
+
+  const atualizarMutation = useMutation({
+    mutationFn: async ({ id, dados }: { id: string; dados: { nome: string; disciplina: string; alunos: string[] } }) => {
+      const res = await fetch(`/api/turmas/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados),
+      })
+      const json = await res.json()
+      if (!json.ok) {
+        throw new Error(json.mensagem || 'Erro ao atualizar turma.')
+      }
+      return json
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['turmas'] })
@@ -49,7 +69,11 @@ export function useTurmas() {
 
   const deletarMutation = useMutation({
     mutationFn: async (id: string) => {
-      await fetch(`/api/turmas/${id}`, { method: 'DELETE' })
+      const res = await fetch(`/api/turmas/${id}`, { method: 'DELETE' })
+      const json = await res.json()
+      if (!json.ok) {
+        throw new Error(json.mensagem || 'Erro ao excluir turma.')
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['turmas'] })
@@ -95,6 +119,8 @@ export function useTurmas() {
     turmas,
     loading,
     criar: criarMutation.mutateAsync,
+    atualizar: (id: string, dados: { nome: string; disciplina: string; alunos: string[] }) =>
+      atualizarMutation.mutateAsync({ id, dados }),
     deletar: deletarMutation.mutateAsync,
     buscar,
     adicionarAluno: (turmaId: string, alunoId: string) =>
