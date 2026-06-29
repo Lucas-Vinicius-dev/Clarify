@@ -47,6 +47,22 @@ export function useTurmas() {
     },
   })
 
+  const atualizarMutation = useMutation({
+    mutationFn: async ({ id, dados }: { id: string; dados: { nome: string; disciplina: string; alunos: string[] } }) => {
+      const res = await fetch(`/api/turmas/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados),
+      })
+      const json = await res.json()
+      if (!json.ok) return null
+      return json
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['turmas'] })
+    },
+  })
+
   const deletarMutation = useMutation({
     mutationFn: async (id: string) => {
       await fetch(`/api/turmas/${id}`, { method: 'DELETE' })
@@ -95,6 +111,8 @@ export function useTurmas() {
     turmas,
     loading,
     criar: criarMutation.mutateAsync,
+    atualizar: (id: string, dados: { nome: string; disciplina: string; alunos: string[] }) =>
+      atualizarMutation.mutateAsync({ id, dados }),
     deletar: deletarMutation.mutateAsync,
     buscar,
     adicionarAluno: (turmaId: string, alunoId: string) =>

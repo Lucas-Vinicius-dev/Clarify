@@ -6,9 +6,11 @@ import type { Turma } from '@/types';
 interface ListaTurmasProps {
   turmas: Turma[];
   onCriarTurma: () => void;
+  onEditarTurma?: (turma: Turma) => void;
+  onExcluirTurma?: (id: string) => void;
 }
 
-export function ListaTurmas({ turmas, onCriarTurma }: ListaTurmasProps) {
+export function ListaTurmas({ turmas, onCriarTurma, onEditarTurma, onExcluirTurma }: ListaTurmasProps) {
   return (
     <section>
       <div className="flex items-center justify-between mb-4">
@@ -28,7 +30,12 @@ export function ListaTurmas({ turmas, onCriarTurma }: ListaTurmasProps) {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {turmas.map((turma) => (
-            <CardTurma key={turma.id} turma={turma} />
+            <CardTurma
+              key={turma.id}
+              turma={turma}
+              onEditar={onEditarTurma}
+              onExcluir={onExcluirTurma}
+            />
           ))}
         </div>
       )}

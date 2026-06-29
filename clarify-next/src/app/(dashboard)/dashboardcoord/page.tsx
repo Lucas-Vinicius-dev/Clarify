@@ -1,9 +1,11 @@
 'use client';
 
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { ModalCriarTurma } from '@/components/coordenador/ModalCriarTurma';
+import { ModalEditarTurma } from '@/components/coordenador/ModalEditarTurma';
+import { ModalConfirmarExclusao } from '@/components/coordenador/ModalConfirmarExclusao';
 import { ModalFeedback } from '@/components/coordenador/ModalFeedback';
 import { ModalDetalhesDemanda } from '@/components/demandas/ModalDetalhesDemanda';
 import { FormAdicionarAluno } from '@/components/coordenador/FormAdicionarAluno';
@@ -13,6 +15,7 @@ import { useUsuarios, useAlunosDoCoordenador } from '@/hooks/useUsuarios';
 import { useTurmas } from '@/hooks/useTurmas';
 import { useChaves } from '@/hooks/useChaves';
 import { atualizarStatusDemanda } from '@/lib/demandas';
+import type { Turma } from '@/types';
 import { useUIStore } from '@/store/uiStore';
 import { VisaoGeral } from './_components/VisaoGeral';
 import { ListaAlunos } from './_components/ListaAlunos';
@@ -69,6 +72,9 @@ export default function DashboardCoordPage() {
   const demandasConcluidas = demandasDoCoord.filter((d) => d.status === 'concluido').length;
   const resolvidas = demandasDoCoord.length > 0 ? Math.round((demandasConcluidas / demandasDoCoord.length) * 100) : 0;
 
+  const [turmaParaExcluir, setTurmaParaExcluir] = useState<string | null>(null);
+  const [turmaParaEditar, setTurmaParaEditar] = useState<Turma | null>(null);
+
   const handleCriarTurma = useCallback((dados: { nome: string; disciplina: string; alunos: string[] }) => {
     if (!usuario) return;
     turmasHook.criar({
@@ -78,6 +84,25 @@ export default function DashboardCoordPage() {
       coordenadorId: usuario.id,
     });
   }, [usuario, turmasHook]);
+
+  const handleEditarTurma = useCallback((turma: Turma) => {
+    setTurmaParaEditar(turma);
+  }, []);
+
+  const handleSalvarEdicao = useCallback(async (id: string, dados: { nome: string; disciplina: string; alunos: string[] }) => {
+    await turmasHook.atualizar(id, dados);
+    setTurmaParaEditar(null);
+  }, [turmasHook]);
+
+  const handleExcluirTurma = useCallback((turmaId: string) => {
+    setTurmaParaExcluir(turmaId);
+  }, []);
+
+  const confirmarExclusao = useCallback(async () => {
+    if (!turmaParaExcluir) return;
+    await turmasHook.deletar(turmaParaExcluir);
+    setTurmaParaExcluir(null);
+  }, [turmaParaExcluir, turmasHook]);
 
   const handleReprovar = useCallback((protocolo: string) => {
     setProtocoloFeedback(protocolo);
@@ -164,6 +189,8 @@ export default function DashboardCoordPage() {
         <ListaTurmas
           turmas={turmasDoCoord}
           onCriarTurma={() => setModalTurmaAberta(true)}
+          onEditarTurma={handleEditarTurma}
+          onExcluirTurma={handleExcluirTurma}
         />
       )}
 
@@ -181,6 +208,20 @@ export default function DashboardCoordPage() {
         open={modalTurmaAberta}
         onClose={() => setModalTurmaAberta(false)}
         onCreate={handleCriarTurma}
+      />
+
+      <ModalEditarTurma
+        open={turmaParaEditar !== null}
+        turma={turmaParaEditar}
+        onClose={() => setTurmaParaEditar(null)}
+        onSalvar={handleSalvarEdicao}
+      />
+
+      <ModalConfirmarExclusao
+        open={turmaParaExcluir !== null}
+        onClose={() => setTurmaParaExcluir(null)}
+        onConfirmar={confirmarExclusao}
+        nomeTurma={turmasDoCoord.find((t) => t.id === turmaParaExcluir)?.nome ?? ''}
       />
 
       <ModalFeedback
