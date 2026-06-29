@@ -11,7 +11,7 @@ import { criarTurmaSchema, type CriarTurmaFormData } from '@/schemas/turmas';
 interface ModalCriarTurmaProps {
   open: boolean;
   onClose: () => void;
-  onCreate: (dados: { nome: string; disciplina: string; alunos: string[] }) => void;
+  onCreate: (dados: { nome: string; disciplina: string; alunos: string[] }) => Promise<void>;
 }
 
 const labelClass = "text-[0.6875rem] font-bold tracking-[0.18em] uppercase text-[rgba(15,23,42,0.45)]";
@@ -37,6 +37,8 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
   const watchedAlunos = useWatch({ control, name: 'alunos' });
   const alunos = useMemo(() => watchedAlunos ?? [], [watchedAlunos]);
   const [matriculaInput, setMatriculaInput] = useState('');
+  const [erroCriar, setErroCriar] = useState('');
+  const [enviando, setEnviando] = useState(false);
 
   const adicionarAluno = useCallback(() => {
     const mat = matriculaInput.trim();
@@ -50,19 +52,28 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
     setValue('alunos', current.filter((_, i) => i !== index), { shouldValidate: true });
   }, [getValues, setValue]);
 
-  const onValid = useCallback((data: CriarTurmaFormData) => {
-    onCreate({
-      nome: data.nome.trim(),
-      disciplina: data.disciplina.trim(),
-      alunos: data.alunos,
-    });
-    reset();
-    onClose();
+  const onValid = useCallback(async (data: CriarTurmaFormData) => {
+    setErroCriar('');
+    setEnviando(true);
+    try {
+      await onCreate({
+        nome: data.nome.trim(),
+        disciplina: data.disciplina.trim(),
+        alunos: data.alunos,
+      });
+      reset();
+      onClose();
+    } catch (e) {
+      setErroCriar(e instanceof Error ? e.message : 'Erro ao criar turma.');
+    } finally {
+      setEnviando(false);
+    }
   }, [onCreate, reset, onClose]);
 
   const handleClose = useCallback(() => {
     reset();
     setMatriculaInput('');
+    setErroCriar('');
     onClose();
   }, [reset, onClose]);
 
@@ -160,20 +171,28 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
               </div>
             </div>
 
+            {erroCriar && (
+              <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+                {erroCriar}
+              </p>
+            )}
+
             <div className="flex justify-end gap-2 pt-2">
               <button
                 type="button"
                 onClick={handleClose}
+                disabled={enviando}
                 className={btnGhostClass}
               >
                 Cancelar
               </button>
               <button
                 type="submit"
+                disabled={enviando}
                 className={btnPrimaryClass}
               >
                 <Check className="w-3.5 h-3.5" />
-                Criar turma
+                {enviando ? 'Criando...' : 'Criar turma'}
               </button>
             </div>
           </form>

@@ -75,9 +75,9 @@ export default function DashboardCoordPage() {
   const [turmaParaExcluir, setTurmaParaExcluir] = useState<string | null>(null);
   const [turmaParaEditar, setTurmaParaEditar] = useState<Turma | null>(null);
 
-  const handleCriarTurma = useCallback((dados: { nome: string; disciplina: string; alunos: string[] }) => {
+  const handleCriarTurma = useCallback(async (dados: { nome: string; disciplina: string; alunos: string[] }) => {
     if (!usuario) return;
-    turmasHook.criar({
+    await turmasHook.criar({
       nome: dados.nome,
       disciplina: dados.disciplina,
       alunos: dados.alunos,
@@ -93,7 +93,6 @@ export default function DashboardCoordPage() {
     await turmasHook.atualizar(id, dados);
     setTurmaParaEditar(null);
   }, [turmasHook]);
-
   const handleExcluirTurma = useCallback((turmaId: string) => {
     setTurmaParaExcluir(turmaId);
   }, []);

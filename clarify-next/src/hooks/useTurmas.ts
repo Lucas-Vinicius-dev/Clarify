@@ -39,7 +39,9 @@ export function useTurmas() {
         body: JSON.stringify(dados),
       })
       const json = await res.json()
-      if (!json.ok || !json.data) return null
+      if (!json.ok || !json.data) {
+        throw new Error(json.mensagem || 'Erro ao criar turma.')
+      }
       return mapRow(json.data) as Turma
     },
     onSuccess: () => {
@@ -55,7 +57,9 @@ export function useTurmas() {
         body: JSON.stringify(dados),
       })
       const json = await res.json()
-      if (!json.ok) return null
+      if (!json.ok) {
+        throw new Error(json.mensagem || 'Erro ao atualizar turma.')
+      }
       return json
     },
     onSuccess: () => {
@@ -65,7 +69,11 @@ export function useTurmas() {
 
   const deletarMutation = useMutation({
     mutationFn: async (id: string) => {
-      await fetch(`/api/turmas/${id}`, { method: 'DELETE' })
+      const res = await fetch(`/api/turmas/${id}`, { method: 'DELETE' })
+      const json = await res.json()
+      if (!json.ok) {
+        throw new Error(json.mensagem || 'Erro ao excluir turma.')
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['turmas'] })

@@ -13,7 +13,7 @@ interface ModalEditarTurmaProps {
   open: boolean;
   turma: Turma | null;
   onClose: () => void;
-  onSalvar: (id: string, dados: { nome: string; disciplina: string; alunos: string[] }) => void;
+  onSalvar: (id: string, dados: { nome: string; disciplina: string; alunos: string[] }) => Promise<void>;
 }
 
 const labelClass = "text-[0.6875rem] font-bold tracking-[0.18em] uppercase text-[rgba(15,23,42,0.45)]";
@@ -49,6 +49,8 @@ export function ModalEditarTurma({ open, turma, onClose, onSalvar }: ModalEditar
   const watchedAlunos = useWatch({ control, name: 'alunos' });
   const alunos = useMemo(() => watchedAlunos ?? [], [watchedAlunos]);
   const [matriculaInput, setMatriculaInput] = useState('');
+  const [erroSalvar, setErroSalvar] = useState('');
+  const [enviando, setEnviando] = useState(false);
 
   const adicionarAluno = useCallback(() => {
     const mat = matriculaInput.trim();
@@ -62,18 +64,27 @@ export function ModalEditarTurma({ open, turma, onClose, onSalvar }: ModalEditar
     setValue('alunos', current.filter((_, i) => i !== index), { shouldValidate: true });
   }, [getValues, setValue]);
 
-  const onValid = useCallback((data: CriarTurmaFormData) => {
+  const onValid = useCallback(async (data: CriarTurmaFormData) => {
     if (!turma) return;
-    onSalvar(turma.id, {
-      nome: data.nome.trim(),
-      disciplina: data.disciplina.trim(),
-      alunos: data.alunos,
-    });
-    onClose();
+    setErroSalvar('');
+    setEnviando(true);
+    try {
+      await onSalvar(turma.id, {
+        nome: data.nome.trim(),
+        disciplina: data.disciplina.trim(),
+        alunos: data.alunos,
+      });
+      onClose();
+    } catch (e) {
+      setErroSalvar(e instanceof Error ? e.message : 'Erro ao atualizar turma.');
+    } finally {
+      setEnviando(false);
+    }
   }, [turma, onSalvar, onClose]);
 
   const handleClose = useCallback(() => {
     setMatriculaInput('');
+    setErroSalvar('');
     onClose();
   }, [onClose]);
 
@@ -171,20 +182,28 @@ export function ModalEditarTurma({ open, turma, onClose, onSalvar }: ModalEditar
               </div>
             </div>
 
+            {erroSalvar && (
+              <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+                {erroSalvar}
+              </p>
+            )}
+
             <div className="flex justify-end gap-2 pt-2">
               <button
                 type="button"
                 onClick={handleClose}
+                disabled={enviando}
                 className={btnGhostClass}
               >
                 Cancelar
               </button>
               <button
                 type="submit"
+                disabled={enviando}
                 className={btnPrimaryClass}
               >
                 <Check className="w-3.5 h-3.5" />
-                Salvar alterações
+                {enviando ? 'Salvando...' : 'Salvar alterações'}
               </button>
             </div>
           </form>
