@@ -4,23 +4,6 @@
 // Uso: npx tsx scripts/seed-supabase.ts
 // ═════════════════════════════════════════════════════════════════
 
-import { createClient } from '@supabase/supabase-js'
-
-/**
- * Cliente Supabase com service role — usado para criar usuários
- * via Admin API e popular tabelas.
- */
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  }
-)
-
 // ─── Main ──────────────────────────────────────────────────────
 
 async function main() {
