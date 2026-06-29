@@ -22,7 +22,7 @@ interface SidebarProps {
 /**
  * Sidebar desktop com navegação por cargo
  * - Coordenador: Início, Alunos, Adicionar, Demandas, Turmas, Chaves
- * - Aluno: Central de Demandas, Documentos
+ * - Aluno: Central de Demandas, Minhas turmas
  */
 export function Sidebar({
   cargo,
@@ -43,6 +43,7 @@ export function Sidebar({
       : [
           { id: 'nome', label: 'Início', icon: User },
           { id: 'demandas', label: 'Minhas demandas', icon: FileText },
+          { id: 'turmas', label: 'Minhas turmas', icon: Shield },
         ];
 
   return (
