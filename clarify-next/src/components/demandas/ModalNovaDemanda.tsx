@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import { ArrowRight, AlertCircle, X } from 'lucide-react';
+import { ArrowRight, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Dialog, DialogContent, DialogHeader, DialogFooter } from '@/components/ui/Dialog';
@@ -134,12 +134,6 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
               </div>
             </section>
 
-            {errors.tipo && (
-              <div className="mt-4 inline-flex items-start gap-2 text-xs font-semibold text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-3 py-2">
-                <AlertCircle className="w-4 h-4 mt-px shrink-0" />
-                <span>{errors.tipo.message}</span>
-              </div>
-            )}
           </div>
 
           <DialogFooter>

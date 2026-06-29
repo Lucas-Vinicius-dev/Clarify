@@ -71,7 +71,6 @@ export default function CentralDemandasPage() {
   const handleCriarDemanda = useCallback((dados: { tipo: TipoDemanda; descricao: string }) => {
     if (!usuario?.id) return;
     criar({
-      alunoId: usuario.id,
       tipo: dados.tipo,
       descricao: dados.descricao,
     });
@@ -145,7 +144,9 @@ export default function CentralDemandasPage() {
                     onVerDetalhes={handleVerDetalhes}
                   />
                 ))}
-                <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                {usuario?.cargo === 'aluno' && (
+                  <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                )}
               </div>
             </section>
           )}
@@ -155,7 +156,9 @@ export default function CentralDemandasPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <EstadoVazio />
                 <div className="sm:col-span-2 lg:col-span-3">
-                  <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                  {usuario?.cargo === 'aluno' && (
+                    <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                  )}
                 </div>
               </div>
             </section>
@@ -197,13 +200,17 @@ export default function CentralDemandasPage() {
                       onVerDetalhes={handleVerDetalhes}
                     />
                   ))}
-                  <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                  {usuario?.cargo === 'aluno' && (
+                    <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                  )}
                 </>
               ) : (
                 <>
                   <EstadoVazio />
                   <div className="sm:col-span-2 lg:col-span-3">
-                    <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                    {usuario?.cargo === 'aluno' && (
+                      <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                    )}
                   </div>
                 </>
               )}
@@ -240,7 +247,9 @@ export default function CentralDemandasPage() {
             </section>
           )}
 
-          <FabMobile onClick={() => setModalNovaAberta(true)} />
+          {usuario?.cargo === 'aluno' && (
+            <FabMobile onClick={() => setModalNovaAberta(true)} />
+          )}
         </>
       )}
 

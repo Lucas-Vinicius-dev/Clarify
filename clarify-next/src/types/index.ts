@@ -23,6 +23,8 @@ export const TIPOS_DEMANDA = [
   'Troca de Turma',
   'Solicitação de Histórico',
   'Justificativa de Falta',
+  'Transferência',
+  'Segunda Chamada',
 ] as const;
 
 export type TipoDemanda = typeof TIPOS_DEMANDA[number];
