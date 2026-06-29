@@ -15,19 +15,22 @@ import { ModalNovaDemanda } from '@/components/demandas/ModalNovaDemanda';
 import { ModalDetalhesDemanda } from '@/components/demandas/ModalDetalhesDemanda';
 import { useDemandas } from '@/hooks/useDemandas';
 import { usePerfil } from '@/hooks/usePerfil';
+import { useTurmas } from '@/hooks/useTurmas';
 import { useAuth } from '@/context/AuthContext';
 import { useFiltrosStore } from '@/store/filtrosStore';
 import { useUIStore } from '@/store/uiStore';
 import type { TipoDemanda } from '@/types';
+import { ListaMinhasTurmas } from './_components/ListaMinhasTurmas';
 
-type StudentView = 'nome' | 'demandas';
-const VIEWS: StudentView[] = ['nome', 'demandas'];
+type StudentView = 'nome' | 'demandas' | 'turmas';
+const VIEWS: StudentView[] = ['nome', 'demandas', 'turmas'];
 
 export default function CentralDemandasPage() {
   const { usuario } = useAuth();
   const { demandas, criar } = useDemandas(
     usuario ? { alunoId: usuario.id } : undefined
   );
+  const { turmas } = useTurmas();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -86,6 +89,11 @@ export default function CentralDemandasPage() {
       (a, b) => new Date(b.dataAtualizacao).getTime() - new Date(a.dataAtualizacao).getTime()
     ).slice(0, 6),
     [demandas]
+  );
+
+  const minhasTurmas = useMemo(
+    () => usuario ? turmas.filter((t) => t.alunos.includes(usuario.id)) : [],
+    [turmas, usuario]
   );
 
   return (
@@ -251,6 +259,10 @@ export default function CentralDemandasPage() {
             <FabMobile onClick={() => setModalNovaAberta(true)} />
           )}
         </>
+      )}
+
+      {view === 'turmas' && (
+        <ListaMinhasTurmas turmas={minhasTurmas} />
       )}
 
       <ModalNovaDemanda
