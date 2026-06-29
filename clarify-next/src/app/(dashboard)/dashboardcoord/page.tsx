@@ -187,7 +187,6 @@ export default function DashboardCoordPage() {
       {view === 'turmas' && (
         <ListaTurmas
           turmas={turmasDoCoord}
-          loading={turmasHook.loading}
           onCriarTurma={() => setModalTurmaAberta(true)}
           onEditarTurma={handleEditarTurma}
           onExcluirTurma={handleExcluirTurma}
