@@ -71,7 +71,7 @@ export async function POST(request: Request) {
     .from('demandas')
     .insert({
       protocolo,
-      aluno_id: dados.alunoId,
+      aluno_id: user.id,
       tipo: validacao.data.tipo,
       descricao: validacao.data.descricao,
     })

@@ -71,7 +71,6 @@ export default function CentralDemandasPage() {
   const handleCriarDemanda = useCallback((dados: { tipo: TipoDemanda; descricao: string }) => {
     if (!usuario?.id) return;
     criar({
-      alunoId: usuario.id,
       tipo: dados.tipo,
       descricao: dados.descricao,
     });
