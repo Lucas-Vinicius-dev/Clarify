@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
-import { X, Users, Check } from 'lucide-react';
+import { useCallback, useMemo, useRef, useState, useEffect } from 'react';
+import { X, Users, Check, ChevronDown } from 'lucide-react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Dialog, DialogContent, DialogHeader } from '@/components/ui/Dialog';
@@ -72,8 +72,22 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
     onClose();
   }, [onCreate, reset, onClose]);
 
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const handleClose = useCallback(() => {
     reset();
+    setDropdownOpen(false);
     onClose();
   }, [reset, onClose]);
 
@@ -124,34 +138,49 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
               )}
             </div>
 
-            <div>
+            <div ref={dropdownRef} className="relative">
               <label className={cn(labelClass, "mb-2 block")}>Selecionar alunos</label>
-              <div className="border border-gray-200 rounded-xl max-h-48 overflow-y-auto">
-                {loadingAlunos ? (
-                  <div className="p-3 text-xs text-gray-400">Carregando alunos...</div>
-                ) : alunosDoCoord.length === 0 ? (
-                  <div className="p-3 text-xs text-gray-400">Nenhum aluno vinculado. Cadastre alunos primeiro.</div>
-                ) : alunosDoCoord.map((aluno) => {
-                  const isSelected = alunos.includes(aluno.id);
-                  return (
-                    <label
-                      key={aluno.id}
-                      className="flex items-center gap-3 px-3 py-2 hover:bg-[rgba(202,95,21,0.05)] cursor-pointer border-b border-gray-100 last:border-b-0"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={isSelected}
-                        onChange={() => toggleAluno(aluno.id)}
-                        className="accent-[#ca5f15]"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">{aluno.nome}</p>
-                        <p className="text-xs text-gray-400">{aluno.matricula}</p>
-                      </div>
-                    </label>
-                  );
-                })}
-              </div>
+              <button
+                type="button"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="w-full flex items-center justify-between gap-2 bg-transparent border border-gray-200 rounded-xl py-2.5 px-3 text-sm text-left"
+              >
+                <span className={alunos.length === 0 ? "text-gray-400" : "text-gray-900 font-medium"}>
+                  {alunos.length === 0
+                    ? "Selecionar alunos..."
+                    : `${alunos.length} aluno${alunos.length !== 1 ? 's' : ''} selecionado${alunos.length !== 1 ? 's' : ''}`}
+                </span>
+                <ChevronDown className={cn("w-4 h-4 text-gray-400 transition-transform duration-180", dropdownOpen && "rotate-180")} />
+              </button>
+
+              {dropdownOpen && (
+                <div className="absolute z-10 mt-1 w-full border border-gray-200 rounded-xl bg-white shadow-lg max-h-48 overflow-y-auto">
+                  {loadingAlunos ? (
+                    <div className="p-3 text-xs text-gray-400">Carregando alunos...</div>
+                  ) : alunosDoCoord.length === 0 ? (
+                    <div className="p-3 text-xs text-gray-400">Nenhum aluno vinculado. Cadastre alunos primeiro.</div>
+                  ) : alunosDoCoord.map((aluno) => {
+                    const isSelected = alunos.includes(aluno.id);
+                    return (
+                      <label
+                        key={aluno.id}
+                        className="flex items-center gap-3 px-3 py-2 hover:bg-[rgba(202,95,21,0.05)] cursor-pointer border-b border-gray-100 last:border-b-0"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleAluno(aluno.id)}
+                          className="accent-[#ca5f15]"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-gray-900 truncate">{aluno.nome}</p>
+                          <p className="text-xs text-gray-400">{aluno.matricula}</p>
+                        </div>
+                      </label>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             <div className="border border-gray-200 rounded-xl p-3 min-h-[64px]">
