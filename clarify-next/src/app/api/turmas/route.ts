@@ -47,8 +47,9 @@ export async function POST(request: Request) {
   if (dados.alunos?.length > 0) {
     const { data: perfis, error: perfisError } = await supabase
       .from('profiles')
-      .select('id, matricula')
-      .in('matricula', dados.alunos)
+      .select('id')
+      .in('id', dados.alunos)
+      .eq('coordenador_id', dados.coordenadorId)
 
     if (perfisError) {
       return NextResponse.json(
@@ -57,20 +58,20 @@ export async function POST(request: Request) {
       )
     }
 
-    const matriculasEncontradas = new Set(perfis?.map((p) => p.matricula) ?? [])
-    const naoEncontradas = dados.alunos.filter((m: string) => !matriculasEncontradas.has(m))
+    const idsValidos = new Set(perfis?.map((p) => p.id) ?? [])
+    const invalidos = dados.alunos.filter((id: string) => !idsValidos.has(id))
 
-    if (naoEncontradas.length > 0) {
+    if (invalidos.length > 0) {
       return NextResponse.json(
         {
           ok: false,
-          mensagem: `Matrícula(s) não encontrada(s): ${naoEncontradas.join(', ')}`,
+          mensagem: `Aluno(s) inválido(s) ou não vinculado(s) a você.`,
         },
         { status: 400 }
       )
     }
 
-    alunosIds = perfis?.map((p) => p.id) ?? []
+    alunosIds = dados.alunos
 
     const inserts = alunosIds.map((alunoId: string) => ({
       turma_id: turma.id,
