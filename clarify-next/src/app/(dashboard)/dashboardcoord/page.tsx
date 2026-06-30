@@ -30,7 +30,7 @@ const VIEWS: DashView[] = ['nome', 'alunos', 'demandas', 'turmas', 'adicionar', 
 export default function DashboardCoordPage() {
   const queryClient = useQueryClient();
   const { usuario } = useAuth();
-  const { demandas, recarregar: recarregarDemandas } = useDemandas();
+  const { demandas, recarregar: recarregarDemandas, atualizarStatus } = useDemandas();
   const usuariosHook = useUsuarios();
   const turmasHook = useTurmas();
   const { chaves, loading: chavesLoading, gerar: gerarChave, gerando: gerandoChave, ultimaGerada } = useChaves();
@@ -116,7 +116,10 @@ export default function DashboardCoordPage() {
     setDemandaDetalhe(demanda);
     setRemetenteDetalhe(remetente);
     setModalDetalhesAberta(true);
-  }, [demandas, alunosDoCoord, setDemandaDetalhe, setRemetenteDetalhe, setModalDetalhesAberta]);
+    if (demanda?.status === 'pendente') {
+      atualizarStatus(protocolo, 'em_analise');
+    }
+  }, [demandas, alunosDoCoord, atualizarStatus, setDemandaDetalhe, setRemetenteDetalhe, setModalDetalhesAberta]);
 
   const handleFeedbackSubmit = useCallback(async (feedback: string) => {
     if (!protocoloFeedback) return;
