@@ -1,5 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
+import { montarCamposExtras } from '@/lib/camposDemanda'
 import { novaDemandaSchema } from '@/schemas/demandas'
 import { NextResponse } from 'next/server'
 
@@ -74,6 +75,7 @@ export async function POST(request: Request) {
       aluno_id: user.id,
       tipo: validacao.data.tipo,
       descricao: validacao.data.descricao,
+      campos_extras: montarCamposExtras(validacao.data.tipo, validacao.data.camposExtras),
     })
     .select()
     .single()

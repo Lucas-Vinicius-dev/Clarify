@@ -7,13 +7,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Dialog, DialogContent, DialogHeader, DialogFooter } from '@/components/ui/Dialog';
 import { cn } from '@/lib/utils';
 import { novaDemandaSchema, type NovaDemandaFormData } from '@/schemas/demandas';
+import { CAMPOS_POR_TIPO, montarCamposExtras } from '@/lib/camposDemanda';
 import { TIPOS_DEMANDA, type TipoDemanda, type UsuarioLogado } from '@/types';
 
 interface ModalNovaDemandaProps {
   open: boolean;
   onClose: () => void;
   usuario: UsuarioLogado | null;
-  onSubmit: (dados: { tipo: TipoDemanda; descricao: string }) => void;
+  onSubmit: (dados: { tipo: TipoDemanda; descricao: string; camposExtras: Record<string, string> }) => void;
 }
 
 const LIMITE_DESCRICAO = 500;
@@ -31,13 +32,15 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
   });
 
   const descricaoValue = watch('descricao') ?? '';
+  const camposDoTipo = CAMPOS_POR_TIPO[watch('tipo')] ?? [];
 
   const contadorNear = descricaoValue.length >= LIMITE_DESCRICAO * 0.85 && descricaoValue.length < LIMITE_DESCRICAO;
   const contadorOver = descricaoValue.length >= LIMITE_DESCRICAO;
 
   const onValid = useCallback((data: NovaDemandaFormData) => {
     if (!usuario?.matricula) return;
-    onSubmit({ tipo: data.tipo, descricao: data.descricao.trim() });
+    const camposExtras = montarCamposExtras(data.tipo, data.camposExtras);
+    onSubmit({ tipo: data.tipo, descricao: data.descricao.trim(), camposExtras });
     reset();
     onClose();
   }, [usuario, onSubmit, reset, onClose]);
@@ -101,6 +104,33 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
                 <p className="text-xs text-red-600 mt-1">{errors.tipo.message}</p>
               )}
             </section>
+
+            {camposDoTipo.map((campo) => {
+              const erro = errors.camposExtras?.[campo.name]?.message;
+              return (
+                <section key={campo.name} className="mt-5">
+                  <label htmlFor={`campo-${campo.name}`} className={labelClass}>{campo.label}</label>
+                  {campo.type === 'textarea' ? (
+                    <textarea
+                      id={`campo-${campo.name}`}
+                      {...register(`camposExtras.${campo.name}`)}
+                      rows={3}
+                      placeholder={campo.placeholder}
+                      className={cn(textareaClass, 'mt-2')}
+                    />
+                  ) : (
+                    <input
+                      id={`campo-${campo.name}`}
+                      type={campo.type}
+                      {...register(`camposExtras.${campo.name}`)}
+                      placeholder={campo.placeholder}
+                      className={cn(inputClass, 'mt-1')}
+                    />
+                  )}
+                  {erro && <p className="text-xs text-red-600 mt-1">{erro}</p>}
+                </section>
+              );
+            })}
 
             <section className="mt-5">
               <div className="flex items-end justify-between gap-3">

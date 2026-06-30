@@ -40,7 +40,7 @@ export function useDemandas(opcoes?: UseDemandasOptions) {
   })
 
   const criarMutation = useMutation({
-    mutationFn: async (dados: { tipo: TipoDemanda; descricao: string }) => {
+    mutationFn: async (dados: { tipo: TipoDemanda; descricao: string; camposExtras?: Record<string, string> }) => {
       const res = await fetch('/api/demandas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
