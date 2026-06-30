@@ -53,8 +53,11 @@ export default function DashboardCoordPage() {
   const alunoIds = useMemo(() => new Set(alunosDoCoord.map((a) => a.id)), [alunosDoCoord]);
 
   const demandasDoCoord = useMemo(
-    () => demandas.filter((d) => alunoIds.has(d.alunoId)),
-    [alunoIds, demandas]
+    () => demandas.filter((d) => alunoIds.has(d.alunoId)).map(d => ({
+      ...d,
+      aluno: alunosDoCoord.find(a => a.id === d.alunoId)
+    })),
+    [alunoIds, demandas, alunosDoCoord]
   );
 
   const demandasPendentes = useMemo(

@@ -20,6 +20,9 @@ export function DemandaCard({ demanda: d, onVerDetalhes, onAprovar, onReprovar }
         <div className="flex items-start justify-between gap-4 mb-4">
           <div className="min-w-0 space-y-2">
             <h3 className="text-lg font-semibold text-gray-900 truncate">{d.tipo}</h3>
+            {d.aluno?.nome && (
+              <p className="text-sm text-gray-600 font-medium">{d.aluno.nome}</p>
+            )}
             <p className="text-sm text-gray-500 line-clamp-2">{d.descricao}</p>
           </div>
           <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold shrink-0 ${
