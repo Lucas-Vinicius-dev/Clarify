@@ -3,7 +3,7 @@
 import { Calendar, Clock, ChevronRight } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
-import { obterLabelStatus, formatarData } from '@/lib/utils';
+import { obterLabelStatus, formatarData, diasParaExpirar, pertoDaExpiracao } from '@/lib/utils';
 import type { Demanda, StatusDemanda } from '@/types';
 
 const statusVariant: Record<StatusDemanda, 'pendente' | 'em_analise' | 'requer_ajuste' | 'concluido'> = {
@@ -19,15 +19,25 @@ interface CardDemandaProps {
 }
 
 export function CardDemanda({ demanda, onVerDetalhes }: CardDemandaProps) {
+  const alerta = pertoDaExpiracao(demanda);
+  const diasRestantes = diasParaExpirar(demanda);
+
   return (
     <Card className="p-4 sm:p-5 flex flex-col gap-3 hover:shadow-md hover:-translate-y-0.5 transition-all">
       <div className="flex items-center justify-between gap-2">
         <span className="text-xs font-semibold text-gray-500 tracking-wider">
           #{demanda.protocolo}
         </span>
-        <Badge variant={statusVariant[demanda.status]}>
-          {obterLabelStatus(demanda.status)}
-        </Badge>
+        <div className="flex items-center gap-2">
+          {alerta && (
+            <Badge variant="orange">
+              {diasRestantes > 0 ? `Vence em ${diasRestantes}d` : 'Vencida'}
+            </Badge>
+          )}
+          <Badge variant={statusVariant[demanda.status]}>
+            {obterLabelStatus(demanda.status)}
+          </Badge>
+        </div>
       </div>
 
       <div className="min-w-0">
