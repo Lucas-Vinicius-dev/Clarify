@@ -17,6 +17,7 @@ import { useDemandas } from '@/hooks/useDemandas';
 import { usePerfil } from '@/hooks/usePerfil';
 import { useTurmas } from '@/hooks/useTurmas';
 import { useAuth } from '@/context/AuthContext';
+import { dataExpiracao } from '@/lib/utils';
 import { useFiltrosStore } from '@/store/filtrosStore';
 import { useUIStore } from '@/store/uiStore';
 import type { TipoDemanda } from '@/types';
@@ -62,7 +63,12 @@ export default function CentralDemandasPage() {
     });
   }, [demandas, busca, filtroStatus]);
 
-  const emAberto = useMemo(() => filtradas.filter((d) => d.status !== 'concluido'), [filtradas]);
+  const emAberto = useMemo(
+    () => filtradas
+      .filter((d) => d.status !== 'concluido')
+      .toSorted((a, b) => dataExpiracao(a).getTime() - dataExpiracao(b).getTime()),
+    [filtradas]
+  );
   const concluidas = useMemo(() => filtradas.filter((d) => d.status === 'concluido'), [filtradas]);
 
   const total = demandas.length;
@@ -71,11 +77,12 @@ export default function CentralDemandasPage() {
   const resolvidas = demandas.filter((d) => d.status === 'concluido').length;
   const eficiencia = total > 0 ? Math.round((resolvidas / total) * 100) : 0;
 
-  const handleCriarDemanda = useCallback((dados: { tipo: TipoDemanda; descricao: string }) => {
+  const handleCriarDemanda = useCallback(async (dados: { tipo: TipoDemanda; descricao: string; camposExtras: Record<string, string> }) => {
     if (!usuario?.id) return;
-    criar({
+    await criar({
       tipo: dados.tipo,
       descricao: dados.descricao,
+      camposExtras: dados.camposExtras,
     });
   }, [criar, usuario]);
 
