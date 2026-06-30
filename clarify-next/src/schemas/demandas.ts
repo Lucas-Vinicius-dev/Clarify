@@ -30,7 +30,8 @@ export type NovaDemandaFormData = z.infer<typeof novaDemandaSchema>
 export const feedbackSchema = z.object({
   texto: z
     .string()
-    .min(5, 'Feedback deve ter no mínimo 5 caracteres.'),
+    .min(5, 'Feedback deve ter no mínimo 5 caracteres.')
+    .max(200, 'Feedback deve ter no máximo 200 caracteres.'),
 })
 
 export type FeedbackFormData = z.infer<typeof feedbackSchema>

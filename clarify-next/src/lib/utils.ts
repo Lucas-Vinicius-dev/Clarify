@@ -3,7 +3,7 @@
 // Funções utilitárias genéricas
 // ═════════════════════════════════════════════════════════════════
 
-import type { StatusDemanda } from '@/types';
+import type { Demanda, StatusDemanda } from '@/types';
 
 // Formata uma data ISO ("2025-11-12") para "12 Nov 2025"
 export function formatarData(dataISO: string): string {
@@ -59,6 +59,28 @@ export function obterCorStatus(status: StatusDemanda): string {
     concluido: 'bg-green-100 text-green-800',
   };
   return cores[status];
+}
+
+// SLA de atendimento de uma demanda, em dias a partir da criação. Calibrar conforme a realidade.
+export const PRAZO_DIAS = 30;
+// Janela final em que a demanda passa a ser sinalizada como perto do prazo.
+export const LIMITE_ALERTA_DIAS = 7;
+
+// Data de expiração derivada: criação + PRAZO_DIAS.
+export function dataExpiracao(demanda: Demanda): Date {
+  const data = new Date(demanda.dataCriacao);
+  data.setDate(data.getDate() + PRAZO_DIAS);
+  return data;
+}
+
+// Dias restantes até expirar (negativo quando já venceu).
+export function diasParaExpirar(demanda: Demanda): number {
+  return Math.ceil((dataExpiracao(demanda).getTime() - Date.now()) / 86400000);
+}
+
+// Demanda em aberto e dentro da janela de alerta.
+export function pertoDaExpiracao(demanda: Demanda): boolean {
+  return demanda.status !== 'concluido' && diasParaExpirar(demanda) <= LIMITE_ALERTA_DIAS;
 }
 
 // Concatena classes CSS (similar a clsx/classnames)

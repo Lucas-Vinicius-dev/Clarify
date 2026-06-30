@@ -17,6 +17,7 @@ import { useDemandas } from '@/hooks/useDemandas';
 import { usePerfil } from '@/hooks/usePerfil';
 import { useTurmas } from '@/hooks/useTurmas';
 import { useAuth } from '@/context/AuthContext';
+import { dataExpiracao } from '@/lib/utils';
 import { useFiltrosStore } from '@/store/filtrosStore';
 import { useUIStore } from '@/store/uiStore';
 import type { TipoDemanda } from '@/types';
@@ -62,7 +63,12 @@ export default function CentralDemandasPage() {
     });
   }, [demandas, busca, filtroStatus]);
 
-  const emAberto = useMemo(() => filtradas.filter((d) => d.status !== 'concluido'), [filtradas]);
+  const emAberto = useMemo(
+    () => filtradas
+      .filter((d) => d.status !== 'concluido')
+      .toSorted((a, b) => dataExpiracao(a).getTime() - dataExpiracao(b).getTime()),
+    [filtradas]
+  );
   const concluidas = useMemo(() => filtradas.filter((d) => d.status === 'concluido'), [filtradas]);
 
   const total = demandas.length;
