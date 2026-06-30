@@ -223,7 +223,13 @@ export default function RegistroPage() {
               <input
                 id="registro-activationKey"
                 type="text"
-                {...register('chaveAtivacao')}
+                {...register('chaveAtivacao', {
+                  onChange: (e) => {
+                    const valorUpper = e.target.value.toUpperCase()
+                    const valorLimpo = valorUpper.replace(/[^A-Z0-9]/g, '')
+                    e.target.value = valorLimpo
+                  },
+                })}
                 placeholder="Chave fornecida pela instituição"
                 className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
                 disabled={isLoading}
