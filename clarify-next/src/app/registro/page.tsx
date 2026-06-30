@@ -9,11 +9,14 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAuth } from '@/context/AuthContext'
 import { registroSchema, type RegistroFormData } from '@/schemas/auth'
+import { validarSenhaForca } from '@/lib/utils'
 
 export default function RegistroPage() {
   const [mostrarSenha, setMostrarSenha] = useState(false)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [senhaForca, setSenhaForca] = useState<{ valido: boolean; erros: string[]; forca: 'fraca' | 'media' | 'forte' }>({ valido: false, erros: [], forca: 'fraca' })
+  const [senhaValor, setSenhaValor] = useState('')
   const router = useRouter()
   const { registro } = useAuth()
 
@@ -186,7 +189,12 @@ export default function RegistroPage() {
               <input
                 id="registro-securityKey"
                 type={mostrarSenha ? 'text' : 'password'}
-                {...register('senha')}
+                {...register('senha', {
+                  onChange: (e) => {
+                    setSenhaValor(e.target.value)
+                    setSenhaForca(validarSenhaForca(e.target.value))
+                  },
+                })}
                 placeholder="••••••••"
                 className="block w-full pl-3 pr-10 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
                 disabled={isLoading}
@@ -200,6 +208,43 @@ export default function RegistroPage() {
                 {mostrarSenha ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
+            {senhaValor && (() => {
+              const pts = [
+                senhaValor.length >= 8,
+                /[0-9]/.test(senhaValor),
+                /[^a-zA-Z0-9]/.test(senhaValor),
+                /[A-Z]/.test(senhaValor),
+                /[a-z]/.test(senhaValor),
+              ].filter(Boolean).length
+              return (
+                <>
+                <div className="mt-2 h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-300 ${
+                      senhaForca.forca === 'fraca' ? 'bg-red-500' : senhaForca.forca === 'media' ? 'bg-yellow-500' : 'bg-green-500'
+                    }`}
+                    style={{ width: `${pts * 20}%` }}
+                  />
+                </div>
+                <ul className="mt-2 space-y-1">
+                  {[
+                    { texto: 'Mínimo de 6 caracteres', test: senhaValor.length >= 6 },
+                    { texto: 'Pelo menos 8 caracteres', test: senhaValor.length >= 8 },
+                    { texto: 'Pelo menos 1 número', test: /[0-9]/.test(senhaValor) },
+                    { texto: 'Pelo menos 1 caractere especial', test: /[^a-zA-Z0-9]/.test(senhaValor) },
+                    { texto: 'Letras maiúsculas e minúsculas', test: /[A-Z]/.test(senhaValor) && /[a-z]/.test(senhaValor) },
+                  ].map((req) => (
+                    <li key={req.texto} className="flex items-center gap-2 text-xs">
+                      <span className={req.test ? 'text-green-600' : 'text-red-400'}>
+                        {req.test ? '✓' : '✗'}
+                      </span>
+                      <span className={req.test ? 'text-gray-700' : 'text-gray-400'}>{req.texto}</span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+              )
+            })()}
             {errors.senha && (
               <p className="text-xs text-red-600 mt-1 ml-1">{errors.senha.message}</p>
             )}
