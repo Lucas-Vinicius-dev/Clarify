@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EDU 02 — Fluxo de Dados — Clarify</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+    .hero-feature {
+        position: relative;
+        padding: 64px 0 32px;
+        overflow: hidden;
+    }
+    .hero-feature::before {
+        content: '';
+        position: absolute;
+        inset: -10% -10% 0 -10%;
+        background: radial-gradient(40% 50% at 70% 0%, rgba(202,95,21,0.18) 0%, rgba(202,95,21,0) 70%);
+        pointer-events: none;
+    }
+    .hero-row {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+    }
+    h1.feature-title {
+        font-size: clamp(2.2rem, 5.4vw, 3.8rem);
+        font-weight: 700;
+        line-height: 1.04;
+        margin: 0 0 18px;
+        color: var(--slate-900);
+    }
+    .feature-lede {
+        font-size: 1.125rem;
+        color: var(--slate-700);
+        max-width: 760px;
+        line-height: 1.6;
+        margin: 0 0 22px;
+    }
+    .feature-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .flow-diagram {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 28px 20px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 18px;
+    }
+    .flow-step-group {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+    }
+    .flow-arrow {
+        font-size: 1.5rem;
+        color: var(--slate-300);
+        padding: 0 4px;
+    }
+    .flow-arrow-down {
+        font-size: 1.2rem;
+        color: var(--slate-300);
+        padding: 2px 0;
+    }
+
+    .step-box {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 12px 16px;
+        border-radius: 12px;
+        border: 2px solid var(--slate-200);
+        background: #fff;
+        min-width: 100px;
+        text-align: center;
+        font-size: 0.8rem;
+        box-shadow: 0 2px 0 var(--slate-200);
+        flex: 1;
+        max-width: 200px;
+    }
+    .step-box .layer {
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+    .step-box .file {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.65rem;
+        color: var(--slate-400);
+    }
+    .step-box.client { border-color: #0891b2; }
+    .step-box.client .layer { color: #0891b2; }
+    .step-box.hook { border-color: #059669; }
+    .step-box.hook .layer { color: #059669; }
+    .step-box.api { border-color: #2563eb; }
+    .step-box.api .layer { color: #2563eb; }
+    .step-box.supabase { border-color: #7c3aed; }
+    .step-box.supabase .layer { color: #7c3aed; }
+    .step-box.db { border-color: var(--slate-400); }
+    .step-box.db .layer { color: var(--slate-400); }
+
+    .detail-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 16px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .detail-card h3 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+        margin: 0;
+        color: var(--slate-900);
+    }
+    .detail-card .code-snip {
+        background: #f8fafc;
+        border: 1px solid var(--slate-100);
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        line-height: 1.5;
+        color: var(--slate-700);
+        overflow-x: auto;
+    }
+
+    .three-col {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+        margin-top: 24px;
+    }
+    @media (min-width: 820px) {
+        .three-col { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    footer.feature-footer {
+        margin-top: 96px;
+        padding: 32px 0;
+        border-top: 1px solid var(--slate-200);
+        text-align: center;
+        color: var(--slate-400);
+        font-size: 0.85rem;
+    }
+    footer.feature-footer a { color: var(--brand-primary); text-decoration: none; font-weight: 600; }
+    footer.feature-footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header style="position: sticky; top: 0; z-index: 10; background: rgba(255,248,246,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(15,23,42,0.06);">
+    <div class="container" style="max-width: 1080px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
+        <a href="index.html" style="display: inline-flex; align-items: center; gap: 8px; color: var(--slate-700); text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+            <span style="font-size: 1.1rem;">&larr;</span> Hub t&eacute;cnico
+        </a>
+        <span class="eyebrow eyebrow-muted">EDU 02 / 05</span>
+    </div>
+</header>
+
+<main class="container" style="max-width: 1080px; margin: 0 auto; padding: 48px 24px 0;">
+
+    <section class="hero-feature">
+        <div class="hero-row">
+            <span class="tier-badge tier-s">Fundamental</span>
+            <span class="eyebrow eyebrow-muted">EDU 02</span>
+        </div>
+        <h1 class="feature-title tracking-headline">
+            Fluxo de Dados: <span class="text-gradient-warm">Componente &rarr; Supabase</span>
+        </h1>
+        <p class="feature-lede">
+            O caminho completo que um dado percorre: do componente React at&eacute; o PostgreSQL no Supabase,
+            passando por hooks, API routes e tr&ecirc;s tipos de cliente Supabase. Tudo &eacute; 
+            <strong>client-side</strong> &mdash; n&atilde;o h&aacute; Server Components (exceto o layout root).
+        </p>
+        <div class="feature-pills">
+            <span class="pill pill-warm">Client Components</span>
+            <span class="pill pill-warm">API Routes</span>
+            <span class="pill pill-warm">Supabase</span>
+        </div>
+    </section>
+
+    <!-- ===== FLUXO COMPLETO ===== -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Fluxo completo</span>
+        <h2>O caminho do dado em 5 etapas</h2>
+        <p class="lede">
+            Exemplo: coordenador abre o dashboard e v&ecirc; a lista de demandas.
+        </p>
+
+        <div class="flow-diagram">
+            <!-- Etapa 1 -->
+            <div class="flow-step-group">
+                <div class="step-box client">
+                    <span class="layer">Componente</span>
+                    <strong>ListaDemandas.tsx</strong>
+                    <span class="file">src/components/coordenador/</span>
+                </div>
+                <span class="flow-arrow">&rarr;</span>
+                <div class="step-box hook">
+                    <span class="layer">Hook</span>
+                    <strong>useDemandas()</strong>
+                    <span class="file">src/hooks/useDemandas.ts</span>
+                </div>
+                <span class="flow-arrow">&rarr;</span>
+                <div class="step-box api">
+                    <span class="layer">API Route</span>
+                    <strong>GET /api/demandas</strong>
+                    <span class="file">src/app/api/demandas/route.ts</span>
+                </div>
+                <span class="flow-arrow">&rarr;</span>
+                <div class="step-box supabase">
+                    <span class="layer">Supabase Server Client</span>
+                    <strong>createServerClient()</strong>
+                    <span class="file">src/lib/supabase/server.ts</span>
+                </div>
+                <span class="flow-arrow">&rarr;</span>
+                <div class="step-box db">
+                    <span class="layer">PostgreSQL</span>
+                    <strong>SELECT * FROM demandas</strong>
+                    <span class="file">Supabase DB</span>
+                </div>
+            </div>
+            <span class="flow-arrow-down">&darr;</span>
+            <div style="font-size: 0.8rem; color: var(--slate-500); display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
+                <span class="pill">Response JSON</span>
+                <span class="pill">Cache RQ (30s staleTime)</span>
+                <span class="pill">Re-render</span>
+            </div>
+        </div>
+
+        <div class="info-callout" style="margin-top: 20px;">
+            <strong>Leitura:</strong> O React Query hook <span class="mono">useDemandas()</span> chama <span class="mono">fetch(/api/demandas?alunoId=...)</span>,
+            a API route usa <span class="mono">createServerClient()</span> do Supabase SSR, que l&ecirc; os cookies da requisi&ccedil;&atilde;o
+            para autenticar. O dado volta como JSON, o hook mapeia para o tipo <span class="mono">Demanda[]</span> e o React Query cacheia por 30s.
+        </div>
+    </section>
+
+    <!-- ===== TRÊS CLIENTES SUPABASE ===== -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Tr&ecirc;s clientes</span>
+        <h2>Cada contexto, um cliente Supabase diferente</h2>
+        <p class="lede">
+            O Supabase tem tr&ecirc;s "sabores" de cliente, cada um com permiss&otilde;es e use case diferentes:
+        </p>
+
+        <div class="three-col">
+            <div class="detail-card">
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <span class="tier-badge" style="background: #2563eb; color: #fff; border: none;">Browser</span>
+                </div>
+                <h3><span class="mono">createBrowserClient()</span></h3>
+                <div class="code-snip">src/lib/supabase/client.ts</div>
+                <p style="font-size: 0.82rem; color: var(--slate-600); line-height: 1.55; margin: 0;">
+                    Usado em <strong>componentes client-side</strong> que acessam o Supabase diretamente,
+                    sem passar por API route. Exemplo: AuthContext.tsx chama
+                    <span class="mono">supabase.auth.getSession()</span> e 
+                    <span class="mono">supabase.auth.onAuthStateChange()</span> no navegador.
+                </p>
+                <div class="info-callout" style="font-size: 0.72rem; padding: 8px 10px; margin-top: 4px;">
+                    RLS (Row Level Security) ativo &mdash; o cliente s&oacute; v&ecirc; dados que o usu&aacute;rio logado tem permiss&atilde;o.
+                </div>
+            </div>
+
+            <div class="detail-card">
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <span class="tier-badge" style="background: #7c3aed; color: #fff; border: none;">Server</span>
+                </div>
+                <h3><span class="mono">createServerClient()</span></h3>
+                <div class="code-snip">src/lib/supabase/server.ts</div>
+                <p style="font-size: 0.82rem; color: var(--slate-600); line-height: 1.55; margin: 0;">
+                    Usado nas <strong>API routes</strong> (/api/*). L&ecirc; os cookies da requisi&ccedil;&atilde;o
+                    (<span class="mono">next/headers</span>) para obter a sess&atilde;o do usu&aacute;rio e fazer
+                    queries autenticadas. A maioria das chamadas de dados passa por aqui.
+                </p>
+                <div class="info-callout" style="font-size: 0.72rem; padding: 8px 10px; margin-top: 4px;">
+                    Tamb&eacute;m respeita RLS &mdash; usa a sess&atilde;o extra&iacute;da dos cookies.
+                </div>
+            </div>
+
+            <div class="detail-card">
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <span class="tier-badge" style="background: #dc2626; color: #fff; border: none;">Admin</span>
+                </div>
+                <h3><span class="mono">createAdminClient()</span></h3>
+                <div class="code-snip">src/lib/supabase/admin.ts</div>
+                <p style="font-size: 0.82rem; color: var(--slate-600); line-height: 1.55; margin: 0;">
+                    Usa a <strong>service-role key</strong> do Supabase. Bypassa RLS completamente.
+                    Usado apenas em opera&ccedil;&otilde;es privilegiadas: criar usu&aacute;rio no registro
+                    (<span class="mono">supabase.auth.admin.createUser</span>), gerenciar chaves de ativa&ccedil;&atilde;o.
+                </p>
+                <div class="info-callout" style="font-size: 0.72rem; padding: 8px 10px; margin-top: 4px;">
+                    <strong>Cuidado:</strong> Esse cliente tem acesso total ao banco. S&oacute; usado em
+                    endpoints espec&iacute;ficos (/api/auth/register, /api/chaves).
+                </div>
+            </div>
+        </div>
+
+        <div class="diagram" style="margin-top: 24px;">
+            <div class="diagram-row">
+                <div class="box context" style="flex: 1;">
+                    <span class="box-label">Componente Client</span>
+                    <span class="box-title">createBrowserClient()</span>
+                    <span class="box-desc">AuthContext, hooks (via fetch para API route)</span>
+                </div>
+                <div class="arrow-right">&rarr; fetch &rarr;</div>
+                <div class="box api" style="flex: 1;">
+                    <span class="box-label">API Route</span>
+                    <span class="box-title">createServerClient()</span>
+                    <span class="box-desc">L&ecirc; cookies da request</span>
+                </div>
+                <div class="arrow-right">&rarr;</div>
+                <div class="box supabase" style="flex: 1;">
+                    <span class="box-label">Exce&ccedil;&atilde;o</span>
+                    <span class="box-title">createAdminClient()</span>
+                    <span class="box-desc">S&oacute; /api/auth/register e /api/chaves</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ESCRITA COM OPTIMISTIC UPDATE ===== -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Escrita</span>
+        <h2>Como funciona uma muta&ccedil;&atilde;o (com optimistic update)</h2>
+        <p class="lede">
+            O caso mais completo &eacute; a atualiza&ccedil;&atilde;o de status de demanda. O Clarify usa
+            <strong>optimistic update</strong> para que a UI responda instantaneamente, e s&oacute; mostra erro
+            se o servidor realmente falhar.
+        </p>
+
+        <div class="flow-diagram" style="gap: 12px;">
+            <div class="flow-step-group">
+                <div class="step-box client" style="max-width: 160px;">
+                    <span class="layer">1. Clique</span>
+                    <strong>Aprovar demanda</strong>
+                    <span class="file">ModalFeedback.tsx</span>
+                </div>
+                <span class="flow-arrow">&rarr;</span>
+                <div class="step-box hook" style="max-width: 180px;">
+                    <span class="layer">2. Hook</span>
+                    <strong>demandas.atualizarStatus()</strong>
+                    <span class="file">useDemandas.ts</span>
+                </div>
+                <span class="flow-arrow">&rarr;</span>
+                <div class="step-box api" style="max-width: 160px;">
+                    <span class="layer">3. API</span>
+                    <strong>PATCH /api/demandas/:protocolo</strong>
+                    <span class="file">route.ts</span>
+                </div>
+                <span class="flow-arrow">&rarr;</span>
+                <div class="step-box supabase" style="max-width: 160px;">
+                    <span class="layer">4. Supabase</span>
+                    <strong>UPDATE demandas SET status</strong>
+                </div>
+            </div>
+            <div style="width: 100%; height: 1px; background: var(--slate-200); margin: 4px 0;"></div>
+            <div style="font-size: 0.8rem; color: var(--slate-600); display: flex; flex-direction: column; gap: 6px; width: 100%;">
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center;">
+                    <span class="pill pill-warm">onMutate</span>
+                    <span style="font-size: 0.75rem;">Atualiza cache imediatamente</span>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center;">
+                    <span class="pill pill-warm">onError</span>
+                    <span style="font-size: 0.75rem;">Restaura cache anterior (rollback)</span>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center;">
+                    <span class="pill pill-warm">onSettled</span>
+                    <span style="font-size: 0.75rem;">Revalida query ['demandas'] no servidor</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px; background: #0f172a; border-radius: 14px; overflow-x: auto;">
+            <pre style="background: transparent; box-shadow: none; margin: 0;"><code>// src/hooks/useDemandas.ts — Optimistic update pattern
+
+onMutate: async ({ protocolo, novoStatus, feedback }) => {
+  // 1. Cancela queries em andamento
+  await queryClient.cancelQueries({ queryKey: ['demandas'] })
+
+  // 2. Salva estado anterior para rollback
+  const previousQueries = queryClient.getQueriesData({ queryKey: ['demandas'] })
+
+  // 3. Atualiza cache imediatamente
+  queryClient.setQueriesData(['demandas'], (old) =>
+    old.map(d => d.protocolo === protocolo
+      ? { ...d, status: novoStatus, feedback: feedback ?? d.feedback }
+      : d
+    )
+  )
+
+  return { previousQueries } // passado para onError
+},
+
+onError: (_err, _vars, context) => {
+  // 4. Rollback: restaura cache anterior
+  context?.previousQueries?.forEach(([key, data]) =>
+    queryClient.setQueryData(key, data)
+  )
+},
+
+onSettled: () => {
+  // 5. Sempre revalida com o servidor no final
+  queryClient.invalidateQueries({ queryKey: ['demandas'] })
+}</code></pre>
+        </div>
+    </section>
+
+    <!-- ===== API ROUTES ===== -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>API Routes</span>
+        <h2>O backend-for-frontend (BFF)</h2>
+        <p class="lede">
+            As API routes do Next.js funcionam como uma camada intermedi&aacute;ria entre o navegador e o Supabase.
+            Elas validam dados (Zod), decidem qual cliente Supabase usar, e formatam a resposta.
+        </p>
+
+        <div style="background: #fff; border: 1px solid var(--slate-200); border-radius: 16px; overflow: hidden;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                <thead>
+                    <tr style="background: #f8fafc; border-bottom: 1px solid var(--slate-200);">
+                        <th style="text-align: left; padding: 14px 18px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate-400);">Endpoint</th>
+                        <th style="text-align: left; padding: 14px 18px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate-400);">M&eacute;todos</th>
+                        <th style="text-align: left; padding: 14px 18px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate-400);">Cliente Supabase</th>
+                        <th style="text-align: left; padding: 14px 18px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate-400);">Valida&ccedil;&atilde;o</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/auth/login</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">POST</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">server + admin</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Zod (login schema)</td></tr>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/auth/register</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">POST</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);"><strong>admin</strong> (bypass RLS)</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Zod + chave de ativa&ccedil;&atilde;o</td></tr>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/auth/logout</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">POST</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">server</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">&mdash;</td></tr>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/demandas</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">GET, POST</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">server</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Zod (demanda schema)</td></tr>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/demandas/:protocolo</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">GET, PATCH</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">server</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Zod + protocolo param</td></tr>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/turmas</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">GET, POST</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">server</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Zod (turma schema)</td></tr>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/turmas/:id</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">PUT, DELETE</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">server</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Zod + id param</td></tr>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/perfis</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">GET</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">server</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">&mdash;</td></tr>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/perfis/:id</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">GET</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">server</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">&mdash;</td></tr>
+                    <tr><td style="padding: 14px 18px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/chaves</td><td style="padding: 14px 18px;">GET, POST</td><td style="padding: 14px 18px;"><strong>admin</strong> (bypass RLS)</td><td style="padding: 14px 18px;">&mdash;</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ===== ESTRUTURA DOS HOOKS ===== -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Hooks</span>
+        <h2>Padr&atilde;o de todos os hooks de dados</h2>
+        <p class="lede">
+            Cada hook de recurso segue o mesmo padr&atilde;o. Se voc&ecirc; entende um, entende todos.
+        </p>
+
+        <div class="diagram">
+            <div class="diagram-row">
+                <div class="box query" style="flex: 1;">
+                    <span class="box-label">1. useQuery</span>
+                    <span class="box-title">queryKey + queryFn</span>
+                    <span class="box-desc">useQuery({ queryKey, queryFn }) &rarr; { data, isLoading }</span>
+                </div>
+                <div class="arrow-right">&rarr;</div>
+                <div class="box store" style="flex: 1;">
+                    <span class="box-label">2. useMutation</span>
+                    <span class="box-title">criar / atualizar / excluir</span>
+                    <span class="box-desc">useMutation({ mutationFn, onSuccess: invalidateQueries })</span>
+                </div>
+                <div class="arrow-right">&rarr;</div>
+                <div class="box component" style="flex: 1;">
+                    <span class="box-label">3. Retorno</span>
+                    <span class="box-title">Objeto com dados + a&ccedil;&otilde;es</span>
+                    <span class="box-desc">{ data, loading, criar, atualizar, recarregar, filtrar }</span>
+                </div>
+            </div>
+            <div class="connector-line"><span class="line"></span> Exemplo: useDemandas, useTurmas, useUsuarios, useChaves, usePerfil <span class="line"></span></div>
+        </div>
+
+        <div style="margin-top: 20px; background: #0f172a; border-radius: 14px; overflow-x: auto;">
+            <pre style="background: transparent; box-shadow: none; margin: 0;"><code>// Padr&atilde;o de todos os hooks (src/hooks/use*.ts)
+
+export function useRecurso(opcoes?) {
+  const queryClient = useQueryClient()
+  const queryKey = ['recurso', opcoes?.filtro]  // &uacute;nico queryKey
+
+  // Leitura com cache
+  const { data = [], isLoading } = useQuery({
+    queryKey,
+    queryFn: async () => {
+      const res = await fetch(`/api/recurso?${params}`)
+      return (await res.json()).map(mapRow)
+    },
+  })
+
+  // Muta&ccedil;&atilde;o com invalida&ccedil;&atilde;o autom&aacute;tica
+  const criarMutation = useMutation({
+    mutationFn: async (dados) => {
+      const res = await fetch('/api/recurso', { method: 'POST', body: JSON.stringify(dados) })
+      return await res.json()
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['recurso'] }),
+  })
+
+  return {
+    recursos: data,
+    loading,
+    criar: criarMutation.mutateAsync,
+    recarregar: () => queryClient.invalidateQueries({ queryKey: ['recurso'] }),
+  }
+}</code></pre>
+        </div>
+    </section>
+
+</main>
+
+<footer class="feature-footer">
+    <div class="container">
+        <p><strong>Clarify</strong> &middot; N&uacute;cleo T&eacute;cnico &middot; <a href="index.html">Voltar ao hub</a></p>
+    </div>
+</footer>
+
+<script>
+    const els = document.querySelectorAll('[data-reveal]');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) { e.target.classList.add('is-revealed'); obs.unobserve(e.target); }
+        });
+    }, { threshold: 0.1 });
+    els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

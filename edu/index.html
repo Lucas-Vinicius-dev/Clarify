@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Núcleo Técnico — Clarify</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+    .hero {
+        position: relative;
+        padding: 88px 0 64px;
+        text-align: center;
+        overflow: hidden;
+    }
+    .hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(60% 60% at 50% 0%, rgba(202,95,21,0.18) 0%, rgba(202,95,21,0) 70%);
+        pointer-events: none;
+    }
+    .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255,255,255,0.7);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(15,23,42,0.08);
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--slate-700);
+        margin-bottom: 24px;
+    }
+    h1.hero-title {
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        font-weight: 700;
+        letter-spacing: -0.045em;
+        line-height: 1.02;
+        margin: 0 0 20px;
+        color: var(--slate-900);
+    }
+    .hero-sub {
+        font-size: 1.125rem;
+        color: var(--slate-500);
+        max-width: 640px;
+        margin: 0 auto 32px;
+        line-height: 1.55;
+    }
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 32px;
+    }
+    .feature-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        padding: 28px;
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 18px;
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+        overflow: hidden;
+    }
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--brand-primary), var(--brand-accent));
+        opacity: 0;
+        transition: opacity 0.22s ease;
+    }
+    .feature-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(202,95,21,0.30);
+        box-shadow: 0 24px 48px -16px rgba(202,95,21,0.20);
+    }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-number {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--slate-400);
+        letter-spacing: 0.18em;
+    }
+    .feature-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin: 0;
+        color: var(--slate-900);
+    }
+    .feature-desc {
+        font-size: 0.9rem;
+        color: var(--slate-500);
+        margin: 0;
+        line-height: 1.5;
+        flex: 1;
+    }
+    .feature-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 14px;
+        border-top: 1px solid var(--slate-100);
+    }
+    .feature-arrow {
+        color: var(--brand-primary);
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: transform 0.22s ease;
+    }
+    .feature-card:hover .feature-arrow { transform: translateX(4px); }
+    .context-strip {
+        margin-top: 56px;
+        padding: 32px;
+        background: linear-gradient(135deg, rgba(202,95,21,0.04), rgba(255,255,255,0.6));
+        border: 1px solid rgba(202,95,21,0.15);
+        border-radius: 20px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    @media (min-width: 768px) { .context-strip { grid-template-columns: repeat(3, 1fr); } }
+    .context-cell h4 {
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--brand-primary);
+        margin: 0 0 8px;
+    }
+    .context-cell p {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--slate-700);
+        line-height: 1.55;
+    }
+    footer {
+        margin-top: 80px;
+        padding: 32px 0 48px;
+        border-top: 1px solid var(--slate-200);
+        text-align: center;
+        color: var(--slate-400);
+        font-size: 0.85rem;
+    }
+    footer a { color: var(--brand-primary); text-decoration: none; font-weight: 600; }
+    footer a:hover { text-decoration: underline; }
+    .tier-section { margin-top: 64px; }
+    .tier-header {
+        display: flex;
+        align-items: baseline;
+        gap: 16px;
+        margin-bottom: 8px;
+    }
+    .tier-header h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        margin: 0;
+        color: var(--slate-900);
+    }
+    .tier-header .tier-count { color: var(--slate-400); font-size: 1rem; font-weight: 500; }
+    .tier-tagline { color: var(--slate-500); margin: 0 0 28px; max-width: 640px; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+    <div class="container" style="position: relative; z-index: 1;">
+        <span class="hero-eyebrow">
+            <span class="eyebrow-dot"></span>
+            N&uacute;cleo T&eacute;cnico &middot; Clarify
+        </span>
+        <h1 class="hero-title">
+            Como o site funciona &mdash;<br/>
+            <span class="text-gradient-warm">por dentro do c&oacute;digo</span>
+        </h1>
+        <p class="hero-sub">
+            Diagramas, fluxos e explica&ccedil;&otilde;es t&eacute;cnicas sobre a arquitetura React, 
+            estado, autentica&ccedil;&atilde;o e dados do Clarify. Feito para a apresenta&ccedil;&atilde;o 
+            do projeto &mdash; sem bl&aacute; bl&aacute; de funcionalidade, s&oacute; c&oacute;digo de verdade.
+        </p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <a href="01-estado-react.html" class="btn-primary">Come&ccedil;ar</a>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+
+    <section class="context-strip">
+        <div class="context-cell">
+            <h4>Stack principal</h4>
+            <p>Next.js 16 (App Router) + React 19 + TypeScript + Tailwind 4 + Supabase + TanStack React Query + Zustand + React Hook Form + Zod</p>
+        </div>
+        <div class="context-cell">
+            <h4>O que est&aacute; documentado</h4>
+            <p>Organiza&ccedil;&atilde;o de estado (contextos, stores, queries), fluxo de dados at&eacute; o Supabase, autentica&ccedil;&atilde;o ponta-a-ponta, &aacute;rvore de componentes e padr&otilde;es React 19.</p>
+        </div>
+        <div class="context-cell">
+            <h4>Para quem &eacute;</h4>
+            <p>Equipe t&eacute;cnica e apresentadores. Cada p&aacute;gina &eacute; auto-contida e visual &mdash; d&aacute; pra abrir no navegador e explicar olhando os diagramas.</p>
+        </div>
+    </section>
+
+    <!-- FUNDAMENTAL -->
+    <section class="tier-section">
+        <div class="tier-header">
+            <span class="tier-badge tier-s">Fundamental</span>
+            <h2>Arquitetura core</h2>
+            <span class="tier-count">3 docs</span>
+        </div>
+        <p class="tier-tagline">
+            O m&iacute;nimo que todo mundo precisa entender: estado, dados e autentica&ccedil;&atilde;o.
+        </p>
+        <div class="feature-grid">
+            <a href="01-estado-react.html" class="feature-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <span class="feature-number">EDU 01</span>
+                    <span class="tier-badge tier-s">Core</span>
+                </div>
+                <h3 class="feature-title">Estado React</h3>
+                <p class="feature-desc">
+                    Como contextos, Zustand stores e React Query se organizam em tr&ecirc;s camadas distintas.
+                    Diagrama visual de todos os contextos, stores e queryKeys com suas rela&ccedil;&otilde;es.
+                </p>
+                <div class="feature-meta">
+                    <div class="feature-tier-row">
+                        <span class="pill pill-warm">Context</span>
+                        <span class="pill">Zustand</span>
+                        <span class="pill">RQ</span>
+                    </div>
+                    <span class="feature-arrow">&rarr;</span>
+                </div>
+            </a>
+
+            <a href="02-fluxo-dados.html" class="feature-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <span class="feature-number">EDU 02</span>
+                    <span class="tier-badge tier-s">Core</span>
+                </div>
+                <h3 class="feature-title">Fluxo de Dados</h3>
+                <p class="feature-desc">
+                    O caminho completo: componente &rarr; hook &rarr; fetch API &rarr; api route &rarr; Supabase e volta.
+                    Inclui optimistic updates e invalida&ccedil;&atilde;o de cache.
+                </p>
+                <div class="feature-meta">
+                    <div class="feature-tier-row">
+                        <span class="pill pill-warm">API</span>
+                        <span class="pill">Supabase</span>
+                    </div>
+                    <span class="feature-arrow">&rarr;</span>
+                </div>
+            </a>
+
+            <a href="03-auth-flow.html" class="feature-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <span class="feature-number">EDU 03</span>
+                    <span class="tier-badge tier-s">Core</span>
+                </div>
+                <h3 class="feature-title">Autentica&ccedil;&atilde;o</h3>
+                <p class="feature-desc">
+                    Fluxo completo: login &rarr; cookie &rarr; proxy server-side &rarr; prote&ccedil;&atilde;o de rotas.
+                    Sess&atilde;o Supabase + cookie de cargo + gating server-side.
+                </p>
+                <div class="feature-meta">
+                    <div class="feature-tier-row">
+                        <span class="pill pill-warm">Auth</span>
+                        <span class="pill">Proxy</span>
+                    </div>
+                    <span class="feature-arrow">&rarr;</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- APROFUNDAMENTO -->
+    <section class="tier-section">
+        <div class="tier-header">
+            <span class="tier-badge tier-a">Aprofundamento</span>
+            <h2>Detalhes de implementa&ccedil;&atilde;o</h2>
+            <span class="tier-count">2 docs</span>
+        </div>
+        <p class="tier-tagline">
+            Pra quem quer entender a &aacute;rvore de componentes e os padr&otilde;es React 19.
+        </p>
+        <div class="feature-grid">
+            <a href="04-componentes.html" class="feature-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <span class="feature-number">EDU 04</span>
+                    <span class="tier-badge tier-a">Extra</span>
+                </div>
+                <h3 class="feature-title">&Aacute;rvore de Componentes</h3>
+                <p class="feature-desc">
+                    Layout root &rarr; providers &rarr; dashboard layout &rarr; p&aacute;ginas. Hierarquia completa
+                    de componentes, incluindo sidebar, topbar, modais e views.
+                </p>
+                <div class="feature-meta">
+                    <div class="feature-tier-row">
+                        <span class="pill">Tree</span>
+                        <span class="pill">Layout</span>
+                    </div>
+                    <span class="feature-arrow">&rarr;</span>
+                </div>
+            </a>
+
+            <a href="05-estrategia-react.html" class="feature-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <span class="feature-number">EDU 05</span>
+                    <span class="tier-badge tier-a">Extra</span>
+                </div>
+                <h3 class="feature-title">React 19 &amp; Padr&otilde;es</h3>
+                <p class="feature-desc">
+                    <span class="mono">use()</span> API, effects, promises, hooks customizados. Como o React 19 
+                    &eacute; usado no projeto e os padr&otilde;es que repetem.
+                </p>
+                <div class="feature-meta">
+                    <div class="feature-tier-row">
+                        <span class="pill pill-warm">React 19</span>
+                        <span class="pill">Hooks</span>
+                    </div>
+                    <span class="feature-arrow">&rarr;</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <div class="container">
+        <p>
+            Documenta&ccedil;&atilde;o t&eacute;cnica do <strong>Clarify</strong> &middot;
+            C&oacute;digo-fonte em <span class="mono">/clarify-next/src/</span>
+        </p>
+    </div>
+</footer>
+
+<script>
+    const els = document.querySelectorAll('[data-reveal]');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) { e.target.classList.add('is-revealed'); obs.unobserve(e.target); }
+        });
+    }, { threshold: 0.1 });
+    els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EDU 01 — Estado React — Clarify</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+    .hero-feature {
+        position: relative;
+        padding: 64px 0 32px;
+        overflow: hidden;
+    }
+    .hero-feature::before {
+        content: '';
+        position: absolute;
+        inset: -10% -10% 0 -10%;
+        background: radial-gradient(40% 50% at 70% 0%, rgba(202,95,21,0.18) 0%, rgba(202,95,21,0) 70%);
+        pointer-events: none;
+    }
+    .hero-row {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+    }
+    h1.feature-title {
+        font-size: clamp(2.2rem, 5.4vw, 3.8rem);
+        font-weight: 700;
+        line-height: 1.04;
+        margin: 0 0 18px;
+        color: var(--slate-900);
+    }
+    .feature-lede {
+        font-size: 1.125rem;
+        color: var(--slate-700);
+        max-width: 760px;
+        line-height: 1.6;
+        margin: 0 0 22px;
+    }
+    .feature-pills {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    .diagram-container {
+        margin-top: 28px;
+    }
+    .three-col {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+        margin-top: 24px;
+    }
+    @media (min-width: 820px) {
+        .three-col { grid-template-columns: repeat(3, 1fr); }
+    }
+    .layer-card {
+        background: #fff;
+        border: 1px solid var(--slate-200);
+        border-radius: 18px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+    .layer-card h3 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        margin: 0;
+    }
+    .layer-card .desc {
+        font-size: 0.85rem;
+        color: var(--slate-500);
+        line-height: 1.55;
+        margin: 0;
+    }
+    .store-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .store-entry {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid var(--slate-200);
+        font-size: 0.82rem;
+    }
+    .store-entry .name {
+        font-weight: 700;
+        color: var(--slate-900);
+    }
+    .store-entry .file {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7rem;
+        color: var(--slate-400);
+    }
+    .store-entry .provides {
+        font-size: 0.75rem;
+        color: var(--slate-500);
+        line-height: 1.4;
+        margin-top: 4px;
+    }
+    .store-entry.context { border-left: 3px solid var(--brand-primary); }
+    .store-entry.store { border-left: 3px solid #6366f1; }
+    .store-entry.query { border-left: 3px solid #059669; }
+
+    .tree-container {
+        margin-top: 28px;
+    }
+    .tree-node {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 2px solid var(--slate-200);
+        background: #fff;
+        font-size: 0.82rem;
+        text-align: center;
+    }
+    .tree-node .n { font-weight: 700; color: var(--slate-900); }
+    .tree-node .f { font-size: 0.65rem; color: var(--slate-400); }
+
+    footer.feature-footer {
+        margin-top: 96px;
+        padding: 32px 0;
+        border-top: 1px solid var(--slate-200);
+        text-align: center;
+        color: var(--slate-400);
+        font-size: 0.85rem;
+    }
+    footer.feature-footer a { color: var(--brand-primary); text-decoration: none; font-weight: 600; }
+    footer.feature-footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header style="position: sticky; top: 0; z-index: 10; background: rgba(255,248,246,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(15,23,42,0.06);">
+    <div class="container" style="max-width: 1080px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
+        <a href="index.html" style="display: inline-flex; align-items: center; gap: 8px; color: var(--slate-700); text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+            <span style="font-size: 1.1rem;">&larr;</span> Hub t&eacute;cnico
+        </a>
+        <span class="eyebrow eyebrow-muted">EDU 01 / 05</span>
+    </div>
+</header>
+
+<main class="container" style="max-width: 1080px; margin: 0 auto; padding: 48px 24px 0;">
+
+    <section class="hero-feature">
+        <div class="hero-row">
+            <span class="tier-badge tier-s">Fundamental</span>
+            <span class="eyebrow eyebrow-muted">EDU 01</span>
+        </div>
+        <h1 class="feature-title tracking-headline">
+            Estado React: <span class="text-gradient-warm">3 camadas</span>
+        </h1>
+        <p class="feature-lede">
+            O Clarify usa <strong>tr&ecirc;s sistemas de estado independentes</strong> que coexistem sem conflito.
+            Cada um resolve um problema espec&iacute;fico. N&atilde;o h&aacute; "estado global" &mdash;
+            h&aacute; estado de servidor, estado de UI e estado de autentica&ccedil;&atilde;o, cada um no seu container.
+        </p>
+        <div class="feature-pills">
+            <span class="pill pill-warm">React Context</span>
+            <span class="pill pill-warm">Zustand</span>
+            <span class="pill pill-warm">TanStack Query</span>
+        </div>
+    </section>
+
+    <!-- ===== DIAGRAMA GERAL ===== -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Vis&atilde;o geral</span>
+        <h2>Tr&ecirc;s camadas, tr&ecirc;s responsabilidades</h2>
+        <p class="lede">
+            N&atilde;o h&aacute; sobreposi&ccedil;&atilde;o: cada camada cuida de um tipo de estado e 
+            n&atilde;o interfere nas outras. A regra &eacute;: estado de servidor vai pro React Query, 
+            estado de UI vai pro Zustand, estado de auth vai pro Context.
+        </p>
+
+        <div class="diagram-container">
+            <div class="diagram">
+                <div class="diagram-row" style="align-items: stretch;">
+
+                    <div class="box context" style="flex: 1;">
+                        <span class="box-label">React Context</span>
+                        <span class="box-title">AuthContext</span>
+                        <span class="box-desc">Sess&atilde;o do usu&aacute;rio, login/logout/registro</span>
+                        <span class="file-path">src/context/AuthContext.tsx</span>
+                    </div>
+
+                    <div class="arrow-right" style="font-size: 0.7rem; writing-mode: vertical-lr; padding: 4px 8px;">
+                        &larr; usado por &rarr;
+                    </div>
+
+                    <div class="box store" style="flex: 1;">
+                        <span class="box-label">Zustand Stores</span>
+                        <span class="box-title">uiStore + filtrosStore</span>
+                        <span class="box-desc">Estado de UI: modais, drawer, filtros</span>
+                        <span class="file-path">src/store/</span>
+                    </div>
+
+                    <div class="arrow-right" style="font-size: 0.7rem; writing-mode: vertical-lr; padding: 4px 8px;">
+                        &larr; alimenta &rarr;
+                    </div>
+
+                    <div class="box query" style="flex: 1;">
+                        <span class="box-label">TanStack Query</span>
+                        <span class="box-title">React Query Cache</span>
+                        <span class="box-desc">Dados do servidor: demandas, turmas, perfis, chaves</span>
+                        <span class="file-path">src/lib/queryClient.ts</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CAMADA 1: REACT CONTEXT ===== -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Camada 1</span>
+        <h2>AuthContext &mdash; &uacute;nico contexto do app</h2>
+        <p class="lede">
+            Diferente de apps que criam dezenas de contextos, o Clarify tem <strong>um s&oacute;</strong>.
+            Ele existe porque o estado de autentica&ccedil;&atilde;o <strong>precisa</strong> ser global:
+            qualquer p&aacute;gina ou componente pode chamar <span class="mono">useAuth()</span> sem prop drilling.
+        </p>
+
+        <div class="diagram">
+            <div class="diagram-row">
+                <div class="box context" style="flex: 1; max-width: 300px;">
+                    <span class="box-label">Provider</span>
+                    <span class="box-title">AuthProvider</span>
+                    <span class="box-desc">Envolve toda a app em src/app/layout.tsx</span>
+                </div>
+                <div class="arrow-right">&rarr;</div>
+                <div class="box-group" style="flex: 2;">
+                    <span class="box-group-label">AuthContextValue &mdash; o que ele exp&otilde;e</span>
+                    <div class="diagram-row">
+                        <div class="box" style="border-color: var(--brand-primary); background: #fff8f6; flex: 1;">
+                            <span class="box-title">usuario</span>
+                            <span class="box-desc">UsuarioLogado | null</span>
+                        </div>
+                        <div class="box" style="border-color: var(--brand-primary); background: #fff8f6; flex: 1;">
+                            <span class="box-title">isAuthenticated</span>
+                            <span class="box-desc">boolean</span>
+                        </div>
+                        <div class="box" style="border-color: var(--brand-primary); background: #fff8f6; flex: 1;">
+                            <span class="box-title">loading</span>
+                            <span class="box-desc">boolean</span>
+                        </div>
+                        <div class="box" style="border-color: var(--brand-primary); background: #fff8f6; flex: 1;">
+                            <span class="box-title">login / logout / registro</span>
+                            <span class="box-desc">async functions</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="connector-line"><span class="line"></span> src/types/index.ts:91-98 define a interface AuthContextValue <span class="line"></span></div>
+        </div>
+
+        <div class="info-callout" style="margin-top: 20px;">
+            <strong>Padr&atilde;o React 19:</strong> O AuthContext usa <span class="mono">use()</span> em vez de <span class="mono">useContext()</span>.
+            Em <span class="mono">src/context/AuthContext.tsx:166</span>: <span class="mono">const ctx = use(AuthContext)</span>.
+            Isso funciona tanto em Server quanto Client Components, e futivamente permitir&aacute; suspense.
+        </div>
+    </section>
+
+    <!-- ===== CAMADA 2: ZUSTAND ===== -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Camada 2</span>
+        <h2>Zustand &mdash; estado de UI sem boilerplate</h2>
+        <p class="lede">
+            O Zustand substitui Redux sem contexto, sem provider, sem dispatch. Duas stores pequenas 
+            e focadas, cada uma com responsabilidade &uacute;nica. N&atilde;o usamos Context + useReducer 
+            porque Zustand d&aacute; menos voltas para o mesmo resultado.
+        </p>
+
+        <div class="three-col">
+            <div class="layer-card">
+                <h3 style="color: #6366f1;">uiStore</h3>
+                <p class="desc">Estado de modais e drawer. Nada de dados de servidor aqui.</p>
+                <div class="store-list">
+                    <div class="store-entry store">
+                        <span class="name">drawerOpen</span>
+                        <span class="file">toggleDrawer() / setDrawer()</span>
+                    </div>
+                    <div class="store-entry store">
+                        <span class="name">modalNovaAberta</span>
+                        <span class="file">setModalNovaAberta(open)</span>
+                    </div>
+                    <div class="store-entry store">
+                        <span class="name">modalDetalhesAberta</span>
+                        <span class="file">+ protocoloSelecionado</span>
+                    </div>
+                    <div class="store-entry store">
+                        <span class="name">modalTurmaAberta</span>
+                        <span class="file">setModalTurmaAberta(open)</span>
+                    </div>
+                    <div class="store-entry store">
+                        <span class="name">modalFeedbackAberta</span>
+                        <span class="file">+ protocoloFeedback</span>
+                    </div>
+                    <div class="store-entry store">
+                        <span class="name">demandaDetalhe / remetenteDetalhe</span>
+                        <span class="file">dados do modal de detalhes (coord)</span>
+                    </div>
+                </div>
+                <span class="file-path" style="margin-top: 4px;">src/store/uiStore.ts</span>
+            </div>
+
+            <div class="layer-card">
+                <h3 style="color: #6366f1;">filtrosStore</h3>
+                <p class="desc">Filtros de demanda com persist&ecirc;ncia em localStorage.</p>
+                <div class="store-list">
+                    <div class="store-entry store">
+                        <span class="name">busca</span>
+                        <span class="file">string de busca textual</span>
+                    </div>
+                    <div class="store-entry store">
+                        <span class="name">filtroStatus</span>
+                        <span class="file">StatusDemanda | 'todos'</span>
+                    </div>
+                    <div class="store-entry store">
+                        <span class="name">setBusca / setFiltroStatus / resetFiltros</span>
+                        <span class="file">actions</span>
+                    </div>
+                </div>
+                <span class="file-path" style="margin-top: 4px;">src/store/filtrosStore.ts</span>
+                <div class="info-callout" style="margin-top: 10px; font-size: 0.75rem; padding: 10px 12px;">
+                    Usa <span class="mono">zustand/middleware/persist</span> com chave <span class="mono">'clarify-filtros'</span> no localStorage.
+                    Ao recarregar a p&aacute;gina, os filtros persistem.
+                </div>
+            </div>
+
+            <div class="layer-card">
+                <h3 style="color: var(--slate-400);">&mdash; N&atilde;o existe</h3>
+                <p class="desc">Coisas que N&atilde;O v&atilde;o pro Zustand:</p>
+                <div style="font-size: 0.82rem; color: var(--slate-600); line-height: 1.6;">
+                    <p>&cross; Dados do servidor (demandas, turmas, perfis) &rarr; React Query</p>
+                    <p>&cross; Estado de autentica&ccedil;&atilde;o &rarr; AuthContext</p>
+                    <p>&cross; Estado de formul&aacute;rio &rarr; React Hook Form</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CAMADA 3: REACT QUERY ===== -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Camada 3</span>
+        <h2>TanStack React Query &mdash; cache de servidor</h2>
+        <p class="lede">
+            Toda comunica&ccedil;&atilde;o com o backend passa pelo React Query. Ele gerencia cache,
+            loading states, erros e revalida&ccedil;&atilde;o. N&atilde;o usamos <span class="mono">useEffect</span> 
+            para buscar dados &mdash; s&oacute; React Query.
+        </p>
+
+        <div class="diagram">
+            <div class="diagram-row" style="justify-content: flex-start;">
+                <div class="box query">
+                    <span class="box-label">QueryClient</span>
+                    <span class="box-title">makeQueryClient()</span>
+                    <span class="box-desc">staleTime: 30s, refetchOnWindowFocus: false</span>
+                    <span class="file-path">src/lib/queryClient.ts</span>
+                </div>
+                <div class="arrow-right">&rarr;</div>
+                <div class="box query">
+                    <span class="box-label">Provider</span>
+                    <span class="box-title">QueryProvider</span>
+                    <span class="box-desc">Envolve toda app | useState lazy</span>
+                    <span class="file-path">src/components/providers/QueryProvider.tsx</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 24px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; background: #fff; border: 1px solid var(--slate-200); border-radius: 14px; overflow: hidden;">
+                <thead>
+                    <tr style="background: #f8fafc; border-bottom: 1px solid var(--slate-200);">
+                        <th style="text-align: left; padding: 12px 16px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate-400);">Query Key</th>
+                        <th style="text-align: left; padding: 12px 16px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate-400);">Hook</th>
+                        <th style="text-align: left; padding: 12px 16px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate-400);">API Route</th>
+                        <th style="text-align: left; padding: 12px 16px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate-400);">Muta&ccedil;&otilde;es</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid var(--slate-100);">
+                        <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">['demandas', alunoId?, status?]</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">useDemandas()</td>
+                        <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">GET /api/demandas</td>
+                        <td style="padding: 14px 16px; font-size: 0.78rem;">criar (POST) / atualizarStatus (PATCH) &mdash; <strong>com optimistic update</strong></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--slate-100);">
+                        <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">['turmas']</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">useTurmas()</td>
+                        <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">GET /api/turmas</td>
+                        <td style="padding: 14px 16px; font-size: 0.78rem;">criar / editar / excluir (POST, PUT, DELETE)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--slate-100);">
+                        <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">['usuarios']</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">useUsuarios()</td>
+                        <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">GET /api/perfis</td>
+                        <td style="padding: 14px 16px; font-size: 0.78rem;">criar / associar / excluir</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--slate-100);">
+                        <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">['chaves']</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">useChaves()</td>
+                        <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">GET /api/chaves</td>
+                        <td style="padding: 14px 16px; font-size: 0.78rem;">gerar chave</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--slate-100);">
+                        <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">['perfil', id]</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">usePerfil(id)</td>
+                        <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">GET /api/perfis/:id</td>
+                        <td style="padding: 14px 16px; font-size: 0.78rem;">&mdash; readonly</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">['students', coordenadorId]</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">useAlunosDoCoordenador()</td>
+                        <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">GET /api/perfis?coordenadorId=</td>
+                        <td style="padding: 14px 16px; font-size: 0.78rem;">&mdash; readonly (enabled quando id existe)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="info-callout" style="margin-top: 20px;">
+            <strong>Optimistic Update (useDemandas.atualizarStatus):</strong> Quando o coordenador muda o status de uma demanda,
+            o cache &eacute; atualizado imediatamente via <span class="mono">onMutate</span>, antes da resposta do servidor.
+            Se o servidor falhar, o <span class="mono">onError</span> restaura o cache anterior.
+            Em <span class="mono">src/hooks/useDemandas.ts:77-101</span>.
+        </div>
+    </section>
+
+    <!-- ===== HIERARQUIA DE PROVIDERS ===== -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Hierarquia</span>
+        <h2>Como os providers se aninham</h2>
+        <p class="lede">
+            A ordem importa: QueryProvider precisa vir antes de qualquer hook React Query, 
+            AuthProvider precisa vir antes de qualquer <span class="mono">useAuth()</span>.
+        </p>
+
+        <div class="diagram">
+            <div class="connector-line">src/app/layout.tsx (Server Component &mdash; &uacute;nico sem 'use client')</div>
+            <div class="diagram-row">
+                <div class="box query" style="flex: 1; text-align: center;">
+                    <span class="box-title">QueryProvider</span>
+                    <span class="box-desc">&lt;QueryClientProvider&gt; com client criado via useState lazy</span>
+                    <span class="file-path">src/components/providers/QueryProvider.tsx</span>
+                </div>
+            </div>
+            <div class="arrow-down">&darr;</div>
+            <div class="diagram-row">
+                <div class="box context" style="flex: 1; text-align: center;">
+                    <span class="box-title">AuthProvider</span>
+                    <span class="box-desc">&lt;AuthContext.Provider&gt; com useState + useEffect + onAuthStateChange</span>
+                    <span class="file-path">src/context/AuthContext.tsx</span>
+                </div>
+            </div>
+            <div class="arrow-down">&darr;</div>
+            <div class="diagram-row">
+                <div class="box component" style="flex: 1; text-align: center;">
+                    <span class="box-title">{children}</span>
+                    <span class="box-desc">P&aacute;ginas: /login, /registro, /dashboard/*, /centraldemandas/*</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-callout" style="margin-top: 20px;">
+            <strong>Por que QueryProvider por fora?</strong> Porque o AuthProvider usa fetch dentro de
+            <span class="mono">login()</span>, e o React Query hook useAuth n&atilde;o usa React Query.
+            Mas os hooks de dados (useDemandas, useTurmas...) s&atilde;o chamados dentro das p&aacute;ginas,
+            que est&atilde;o dentro de ambos. A ordem QueryProvider &gt; AuthProvider &eacute; convencional.
+        </div>
+    </section>
+
+    <!-- ===== REGRA DE OURO ===== -->
+    <section class="block">
+        <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Regra de ouro</span>
+        <h2>Onde cada coisa vive</h2>
+        <p class="lede">
+            Se voc&ecirc; est&aacute; em d&uacute;vida onde colocar um estado novo, use esta tabela:
+        </p>
+
+        <div style="background: #fff; border: 1px solid var(--slate-200); border-radius: 16px; overflow: hidden;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                <thead>
+                    <tr style="background: #f8fafc; border-bottom: 1px solid var(--slate-200);">
+                        <th style="text-align: left; padding: 14px 18px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate-400);">Tipo de estado</th>
+                        <th style="text-align: left; padding: 14px 18px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate-400);">Vai para</th>
+                        <th style="text-align: left; padding: 14px 18px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate-400);">Exemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Sess&atilde;o do usu&aacute;rio</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);"><span class="mono" style="color: var(--brand-primary);">AuthContext</span></td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">usuario, isAuthenticated, loading</td></tr>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Modal aberto/fechado</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);"><span class="mono" style="color: #6366f1;">Zustand uiStore</span></td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">modalNovaAberta, drawerOpen</td></tr>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Filtros de busca</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);"><span class="mono" style="color: #6366f1;">Zustand filtrosStore</span></td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">busca, filtroStatus (persistido)</td></tr>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Lista de demandas</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);"><span class="mono" style="color: #059669;">React Query cache</span></td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">useDemandas().demandas</td></tr>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Dados de formul&aacute;rio</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);"><span class="mono" style="color: var(--slate-700);">React Hook Form</span></td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">register, handleSubmit, formState</td></tr>
+                    <tr><td style="padding: 14px 18px;">Estado derivado (ex: filtragem local)</td><td style="padding: 14px 18px;"><span class="mono" style="color: var(--slate-700);">useMemo / vari&aacute;vel local</span></td><td style="padding: 14px 18px;">useDemandas().filtrar()</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<footer class="feature-footer">
+    <div class="container">
+        <p><strong>Clarify</strong> &middot; N&uacute;cleo T&eacute;cnico &middot; <a href="index.html">Voltar ao hub</a></p>
+    </div>
+</footer>
+
+<script>
+    const els = document.querySelectorAll('[data-reveal]');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) { e.target.classList.add('is-revealed'); obs.unobserve(e.target); }
+        });
+    }, { threshold: 0.1 });
+    els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
