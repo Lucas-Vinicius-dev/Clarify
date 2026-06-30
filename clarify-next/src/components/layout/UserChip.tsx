@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { LogOut } from 'lucide-react';
 import type { UsuarioLogado } from '@/types';
 
@@ -22,10 +23,15 @@ export function UserChip({ usuario, onLogout, showName = true }: UserChipProps) 
 
   return (
     <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-full pl-2 pr-1 py-1 shadow-sm">
-      {/* Avatar */}
-      <div className="w-8 h-8 rounded-full bg-orange-100 text-orange-600 text-sm font-bold flex items-center justify-center">
+      {/* Avatar (link para o perfil) */}
+      <Link
+        href="/perfil"
+        title="Meu perfil"
+        aria-label="Meu perfil"
+        className="w-8 h-8 rounded-full bg-orange-100 text-orange-600 text-sm font-bold flex items-center justify-center hover:bg-orange-200 transition-colors"
+      >
         {inicial}
-      </div>
+      </Link>
 
       {/* Nome (hidden em LG) */}
       {showName && (
