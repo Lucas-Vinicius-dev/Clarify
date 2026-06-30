@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { ArrowRight, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,7 +14,7 @@ interface ModalNovaDemandaProps {
   open: boolean;
   onClose: () => void;
   usuario: UsuarioLogado | null;
-  onSubmit: (dados: { tipo: TipoDemanda; descricao: string; camposExtras: Record<string, string> }) => void;
+  onSubmit: (dados: { tipo: TipoDemanda; descricao: string; camposExtras: Record<string, string> }) => Promise<void>;
 }
 
 const LIMITE_DESCRICAO = 500;
@@ -31,18 +31,29 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
     mode: 'onChange',
   });
 
+  const [submitting, setSubmitting] = useState(false);
+  const [erroSubmit, setErroSubmit] = useState<string | null>(null);
+
   const descricaoValue = watch('descricao') ?? '';
   const camposDoTipo = CAMPOS_POR_TIPO[watch('tipo')] ?? [];
 
   const contadorNear = descricaoValue.length >= LIMITE_DESCRICAO * 0.85 && descricaoValue.length < LIMITE_DESCRICAO;
   const contadorOver = descricaoValue.length >= LIMITE_DESCRICAO;
 
-  const onValid = useCallback((data: NovaDemandaFormData) => {
+  const onValid = useCallback(async (data: NovaDemandaFormData) => {
     if (!usuario?.matricula) return;
-    const camposExtras = montarCamposExtras(data.tipo, data.camposExtras);
-    onSubmit({ tipo: data.tipo, descricao: data.descricao.trim(), camposExtras });
-    reset();
-    onClose();
+    setSubmitting(true);
+    setErroSubmit(null);
+    try {
+      const camposExtras = montarCamposExtras(data.tipo, data.camposExtras);
+      await onSubmit({ tipo: data.tipo, descricao: data.descricao.trim(), camposExtras });
+      reset();
+      onClose();
+    } catch (err) {
+      setErroSubmit(err instanceof Error ? err.message : 'Erro inesperado. Tente novamente.');
+    } finally {
+      setSubmitting(false);
+    }
   }, [usuario, onSubmit, reset, onClose]);
 
   const handleClose = useCallback(() => {
@@ -152,6 +163,12 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
               )}
             </section>
 
+            {erroSubmit && (
+              <section className="mt-5 rounded-2xl bg-red-50 border border-red-200 px-4 py-3">
+                <p className="text-sm text-red-700">{erroSubmit}</p>
+              </section>
+            )}
+
             <section className="mt-5 flex items-center gap-3 bg-brand-surface rounded-2xl px-3.5 py-2.5 border border-gray-100">
               <div className="w-8 h-8 rounded-full bg-brand-primary text-white text-xs font-bold flex items-center justify-center shrink-0">
                 {inicial}
@@ -170,10 +187,10 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
             <button type="button" className={btnGhostClass} onClick={handleClose}>
               Cancelar
             </button>
-            <button type="submit" className={btnPrimaryClass}>
-              Enviar solicitação
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            <button type="submit" className={btnPrimaryClass} disabled={submitting}>
+                {submitting ? 'Enviando...' : 'Enviar solicitação'}
+                {!submitting && <ArrowRight className="w-4 h-4" />}
+              </button>
           </DialogFooter>
         </form>
       </DialogContent>

@@ -38,8 +38,15 @@ export async function POST(request: Request) {
     )
   }
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const getUserResult = await supabase.auth.getUser()
+  const user = getUserResult.data?.user
   if (!user) {
+    const sessionResult = await supabase.auth.getSession()
+    console.error('[POST /api/demandas] auth fail', {
+      getUserError: getUserResult.error?.message,
+      hasSession: !!sessionResult.data?.session,
+      sessionError: sessionResult.error?.message,
+    })
     return NextResponse.json(
       { ok: false, mensagem: 'Não autorizado.' },
       { status: 401 },

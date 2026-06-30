@@ -47,7 +47,9 @@ export function useDemandas(opcoes?: UseDemandasOptions) {
         body: JSON.stringify(dados),
       })
       const json = await res.json()
-      if (!json.ok || !json.data) return null
+      if (!json.ok || !json.data) {
+        throw new Error(json.mensagem || 'Erro ao criar demanda.')
+      }
       return mapRow(json.data) as Demanda
     },
     onSuccess: () => {
