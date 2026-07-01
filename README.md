@@ -1,13 +1,146 @@
 # Clarify
 <img width="1409" height="736" alt="clarifyLogo" src="https://github.com/user-attachments/assets/8d000030-84a1-4843-baae-9b6d9ae63f04" />
 
-#### Clarify é uma aplicação web full-stack desenvolvida para centralizar, organizar e dar total transparência às solicitações acadêmicas e administrativas dentro do IFPB. O sistema atua como a ponte oficial entre o corpo discente e as coordenações de curso, resolvendo problemas históricos de comunicação fragmentada e falta de previsibilidade nos atendimentos.
+#### Clarify é uma aplicação web full-stack desenvolvida para centralizar, organizar e dar total transparência às solicitações acadêmicas e administrativas dentro do IFPB. O sistema atua como uma ponte eficiente entre alunos e coordenadores, reduzindo burocracias e aumentando a rastreabilidade de todo o processo.
 
 ## Objetivos Principais
 - Centralizar o recebimento de solicitações — elimina canais informais como e-mail, WhatsApp e papelada solta. Toda demanda passa por um fluxo único e rastreável dentro do sistema.
-- Dar transparência total ao ciclo de vida da demanda — o aluno acompanha em tempo real o status (Pendente → Em Análise → Requer Ajuste / Concluído) com estimativa de prazo, enquanto o coordenador gerencia todas as solicitações em um painel unificado.
-- Otimizar a rotina dos coordenadores — ferramentas como gestão de turmas, cadastro de alunos, filtros avançados, geração de chaves de ativação e cards com métricas (total de alunos, demandas abertas, taxa de resolução) agilizam o dia a dia.
-  
+- Dar transparência total ao ciclo de vida da demanda — o aluno acompanha em tempo real o status (Pendente → Em Análise → Requer Ajuste / Concluído) com estimativa de prazo, enquanto o coordenador mantém controle total do atendimento.
+- Otimizar a rotina dos coordenadores — ferramentas como gestão de turmas, cadastro de alunos, filtros avançados, geração de chaves de ativação e cards com métricas (total de alunos, demandas pendentes, percentual de resolução).
+
+## Estrutura Completa do Projeto
+
+```text
+.
+├── README.md
+├── clarify-next
+│   ├── .env.local
+│   ├── .gitignore
+│   ├── PLAN-10-10.md
+│   ├── PLANEJAMENTO-COMPARACAO.md
+│   ├── PRD.md
+│   ├── README.md
+│   ├── components.json
+│   ├── eslint.config.mjs
+│   ├── next.config.ts
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.mjs
+│   ├── public
+│   │   ├── file.svg
+│   │   ├── globe.svg
+│   │   ├── next.svg
+│   │   ├── logo.svg
+│   │   ├── vercel.svg
+│   │   └── window.svg
+│   ├── specs
+│   │   ├── criterios-aceitacao.md
+│   │   ├── diagramas.md
+│   │   ├── historias-usuario.md
+│   │   └── prototipos.md
+│   ├── src
+│   │   ├── app
+│   │   │   ├── (auth)
+│   │   │   │   ├── forgot-password
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── login
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── register
+│   │   │   │   │   └── page.tsx
+│   │   │   │   └── reset-password
+│   │   │   │       └── page.tsx
+│   │   │   ├── centraldemandas
+│   │   │   │   ├── minhdemandas
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── minhturmas
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── novademanda
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── page.tsx
+│   │   │   │   └── _components
+│   │   │   │       ├── HeaderDemands.tsx
+│   │   │   │       └── SidebarDemandas.tsx
+│   │   │   ├── dashboardcoord
+│   │   │   │   ├── adicionaraluno
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── alunos
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── demandas
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── turmas
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── page.tsx
+│   │   │   │   └── _components
+│   │   │   │       ├── HeaderCoord.tsx
+│   │   │   │       └── SidebarCoord.tsx
+│   │   │   ├── globals.css
+│   │   │   ├── layout.tsx
+│   │   │   ├── not-found.tsx
+│   │   │   └── page.tsx
+│   │   ├── components
+│   │   │   ├── demand
+│   │   │   │   ├── DemandasList.tsx
+│   │   │   │   ├── NewDemandModal.tsx
+│   │   │   │   └── StatusBadge.tsx
+│   │   │   ├── forms
+│   │   │   │   ├── LoginForm.tsx
+│   │   │   │   ├── RegisterAlunoForm.tsx
+│   │   │   │   ├── RegisterCoordForm.tsx
+│   │   │   │   └── RegisterRoleSelector.tsx
+│   │   │   ├── requests
+│   │   │   │   └── DashboardCards.tsx
+│   │   │   ├── ui
+│   │   │   │   ├── avatar.tsx
+│   │   │   │   ├── badge.tsx
+│   │   │   │   ├── button.tsx
+│   │   │   │   ├── card.tsx
+│   │   │   │   ├── dialog.tsx
+│   │   │   │   ├── input.tsx
+│   │   │   │   └── label.tsx
+│   │   │   ├── CoordDashboardPreview.tsx
+│   │   │   ├── DashboardCoord.tsx
+│   │   │   ├── DemandasDashboard.tsx
+│   │   │   ├── Header.tsx
+│   │   │   ├── Hero.tsx
+│   │   │   ├── HomePage.tsx
+│   │   │   ├── Navbar.tsx
+│   │   │   ├── Requests.tsx
+│   │   │   └── StatsSection.tsx
+│   │   ├── context
+│   │   │   └── AuthContext.tsx
+│   │   ├── hooks
+│   │   │   ├── useDemandas.ts
+│   │   │   ├── useTurmas.ts
+│   │   │   └── useUsuarios.ts
+│   │   ├── lib
+│   │   │   ├── supabase
+│   │   │   │   ├── browser.ts
+│   │   │   │   └── server.ts
+│   │   │   └── utils.ts
+│   │   ├── schemas
+│   │   │   ├── auth.ts
+│   │   │   ├── demandas.ts
+│   │   │   ├── turmas.ts
+│   │   │   └── usuarios.ts
+│   │   ├── store
+│   │   │   ├── filtrosStore.ts
+│   │   │   └── uiStore.ts
+│   │   ├── types
+│   │   │   └── index.ts
+│   │   ├── middleware.ts
+│   │   └── proxy.ts
+│   └── tsconfig.json
+└── sql
+    ├── create_schema.sql
+    ├── fix_coord_signup_rls.sql
+    ├── fix_recursion_rls.sql
+    ├── migration.sql
+    ├── README.md
+    ├── setup_test_data.sql
+    ├── test_approved_scenarios.sql
+    └── test_demandas_all.sql
+```
+
 ## Funcionalidades do Sistema
 ### 🔐 Autenticação Segura
 - Login por matrícula institucional (não por email).
@@ -69,4 +202,3 @@ Acessar http://localhost:3000
 ### 5. Build para produção
 npm run build
 npm start
-
