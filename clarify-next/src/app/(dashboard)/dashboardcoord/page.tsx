@@ -116,12 +116,14 @@ export default function DashboardCoordPage() {
     const remetente = demanda
       ? (alunosDoCoord.find((a) => a.id === demanda.alunoId) ?? null)
       : null;
-    setDemandaDetalhe(demanda);
+    if (demanda?.status === 'pendente') {
+      setDemandaDetalhe({ ...demanda, status: 'em_analise' });
+      atualizarStatus(protocolo, 'em_analise');
+    } else {
+      setDemandaDetalhe(demanda);
+    }
     setRemetenteDetalhe(remetente);
     setModalDetalhesAberta(true);
-    if (demanda?.status === 'pendente') {
-      atualizarStatus(protocolo, 'em_analise');
-    }
   }, [demandas, alunosDoCoord, atualizarStatus, setDemandaDetalhe, setRemetenteDetalhe, setModalDetalhesAberta]);
 
   const handleFeedbackSubmit = useCallback(async (feedback: string) => {
