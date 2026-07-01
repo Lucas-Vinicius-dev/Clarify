@@ -188,9 +188,9 @@
             <span class="text-gradient-warm">por dentro do c&oacute;digo</span>
         </h1>
         <p class="hero-sub">
-            Diagramas, fluxos e explica&ccedil;&otilde;es t&eacute;cnicas sobre a arquitetura React, 
-            estado, autentica&ccedil;&atilde;o e dados do Clarify. Feito para a apresenta&ccedil;&atilde;o 
-            do projeto &mdash; sem bl&aacute; bl&aacute; de funcionalidade, s&oacute; c&oacute;digo de verdade.
+            Diagramas, fluxos e explica&ccedil;&otilde;es t&eacute;cnicas sobre a hierarquia React, 
+            estado, tema, autentica&ccedil;&atilde;o e dados do Clarify. Feito para a apresenta&ccedil;&atilde;o 
+            do projeto &mdash; sem bl&aacute; bl&aacute; de funcionalidade, s&oacute; hierarquia React de verdade.
         </p>
         <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
             <a href="01-estado-react.html" class="btn-primary">Come&ccedil;ar</a>
@@ -207,7 +207,7 @@
         </div>
         <div class="context-cell">
             <h4>O que est&aacute; documentado</h4>
-            <p>Organiza&ccedil;&atilde;o de estado (contextos, stores, queries), fluxo de dados at&eacute; o Supabase, autentica&ccedil;&atilde;o ponta-a-ponta, &aacute;rvore de componentes e padr&otilde;es React 19.</p>
+            <p>Organiza&ccedil;&atilde;o de estado (ThemeContext, AuthContext, Zustand, React Query), fluxo de dados at&eacute; o Supabase, autentica&ccedil;&atilde;o ponta-a-ponta, &aacute;rvore de componentes com providers e padr&otilde;es React 19.</p>
         </div>
         <div class="context-cell">
             <h4>Para quem &eacute;</h4>
@@ -233,7 +233,7 @@
                 </div>
                 <h3 class="feature-title">Estado React</h3>
                 <p class="feature-desc">
-                    Como contextos, Zustand stores e React Query se organizam em tr&ecirc;s camadas distintas.
+                    Como ThemeContext, AuthContext, Zustand stores e React Query se organizam em camadas distintas.
                     Diagrama visual de todos os contextos, stores e queryKeys com suas rela&ccedil;&otilde;es.
                 </p>
                 <div class="feature-meta">
@@ -254,7 +254,7 @@
                 <h3 class="feature-title">Fluxo de Dados</h3>
                 <p class="feature-desc">
                     O caminho completo: componente &rarr; hook &rarr; fetch API &rarr; api route &rarr; Supabase e volta.
-                    Inclui optimistic updates e invalida&ccedil;&atilde;o de cache.
+                    Inclui tr&ecirc;s clientes Supabase (browser, server, admin), optimistic updates, anexos e invalida&ccedil;&atilde;o de cache.
                 </p>
                 <div class="feature-meta">
                     <div class="feature-tier-row">
@@ -304,8 +304,8 @@
                 </div>
                 <h3 class="feature-title">&Aacute;rvore de Componentes</h3>
                 <p class="feature-desc">
-                    Layout root &rarr; providers &rarr; dashboard layout &rarr; p&aacute;ginas. Hierarquia completa
-                    de componentes, incluindo sidebar, topbar, modais e views.
+                    ThemeProvider &rarr; QueryProvider &rarr; AuthProvider &rarr; dashboard layout &rarr; p&aacute;ginas. Hierarquia completa
+                    de componentes, incluindo sidebar, topbar, modais, views e p&aacute;gina de perfil.
                 </p>
                 <div class="feature-meta">
                     <div class="feature-tier-row">

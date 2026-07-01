@@ -156,6 +156,10 @@
             <!-- Nivel 2: Providers -->
             <div class="tree-level">
                 <div class="tree-node provider">
+                    <span class="n">ThemeProvider</span>
+                    <span class="f">ThemeContext.Provider</span>
+                </div>
+                <div class="tree-node provider">
                     <span class="n">QueryProvider</span>
                     <span class="f">QueryClientProvider wrapper</span>
                 </div>
@@ -171,6 +175,7 @@
                 <div class="tree-node page">/login</div>
                 <div class="tree-node page">/registro</div>
                 <div class="tree-node page">/ (landing)</div>
+                <div class="tree-node page">/perfil</div>
                 <div class="tree-node page" style="border-color: #7c3aed; background: #f5f3ff;">
                     <span class="n">DashboardLayout</span>
                     <span class="f">Route group (dashboard)</span>
@@ -191,11 +196,15 @@
                     </div>
                 </div>
                 <div class="tree-branch">
-                    <div class="tree-node layout" style="width: 100%; max-width: 160px;">
-                        <span class="n">TopbarDesktop</span>
-                    </div>
-                    <div class="tree-node layout" style="width: 100%; max-width: 160px;">
-                        <span class="n">TopbarMobile</span>
+                    <div class="tree-branch">
+                        <div class="tree-node layout" style="width: 100%; max-width: 160px;">
+                            <span class="n">TopbarDesktop</span>
+                            <span class="f">+ ThemeToggle</span>
+                        </div>
+                        <div class="tree-node layout" style="width: 100%; max-width: 160px;">
+                            <span class="n">TopbarMobile</span>
+                            <span class="f">+ ThemeToggle</span>
+                        </div>
                     </div>
                 </div>
                 <div class="tree-node client" style="border: 2px solid #059669;">

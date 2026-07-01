@@ -167,9 +167,10 @@
             Estado React: <span class="text-gradient-warm">3 camadas</span>
         </h1>
         <p class="feature-lede">
-            O Clarify usa <strong>tr&ecirc;s sistemas de estado independentes</strong> que coexistem sem conflito.
+            O Clarify usa <strong>quatro sistemas de estado independentes</strong> que coexistem sem conflito.
             Cada um resolve um problema espec&iacute;fico. N&atilde;o h&aacute; "estado global" &mdash;
-            h&aacute; estado de servidor, estado de UI e estado de autentica&ccedil;&atilde;o, cada um no seu container.
+            h&aacute; estado de servidor, estado de UI, estado de tema e estado de autentica&ccedil;&atilde;o,
+            cada um no seu container.
         </p>
         <div class="feature-pills">
             <span class="pill pill-warm">React Context</span>
@@ -194,14 +195,21 @@
 
                     <div class="box context" style="flex: 1;">
                         <span class="box-label">React Context</span>
+                        <span class="box-title">ThemeContext</span>
+                        <span class="box-desc">Tema claro/escuro, alternarTema()</span>
+                        <span class="file-path">src/context/ThemeContext.tsx</span>
+                    </div>
+
+                    <div class="arrow-right" style="font-size: 0.7rem; padding: 4px 8px;">&larr; &rarr;</div>
+
+                    <div class="box context" style="flex: 1;">
+                        <span class="box-label">React Context</span>
                         <span class="box-title">AuthContext</span>
                         <span class="box-desc">Sess&atilde;o do usu&aacute;rio, login/logout/registro</span>
                         <span class="file-path">src/context/AuthContext.tsx</span>
                     </div>
 
-                    <div class="arrow-right" style="font-size: 0.7rem; writing-mode: vertical-lr; padding: 4px 8px;">
-                        &larr; usado por &rarr;
-                    </div>
+                    <div class="arrow-right" style="font-size: 0.7rem; padding: 4px 8px;">&larr; &rarr;</div>
 
                     <div class="box store" style="flex: 1;">
                         <span class="box-label">Zustand Stores</span>
@@ -210,14 +218,12 @@
                         <span class="file-path">src/store/</span>
                     </div>
 
-                    <div class="arrow-right" style="font-size: 0.7rem; writing-mode: vertical-lr; padding: 4px 8px;">
-                        &larr; alimenta &rarr;
-                    </div>
+                    <div class="arrow-right" style="font-size: 0.7rem; padding: 4px 8px;">&larr; &rarr;</div>
 
                     <div class="box query" style="flex: 1;">
                         <span class="box-label">TanStack Query</span>
                         <span class="box-title">React Query Cache</span>
-                        <span class="box-desc">Dados do servidor: demandas, turmas, perfis, chaves</span>
+                        <span class="box-desc">Dados do servidor: demandas, turmas, perfis, chaves, anexos</span>
                         <span class="file-path">src/lib/queryClient.ts</span>
                     </div>
 
@@ -229,12 +235,32 @@
     <!-- ===== CAMADA 1: REACT CONTEXT ===== -->
     <section class="block">
         <span class="section-eyebrow eyebrow"><span class="eyebrow-dot"></span>Camada 1</span>
-        <h2>AuthContext &mdash; &uacute;nico contexto do app</h2>
+        <h2>Dois contextos, duas responsabilidades</h2>
         <p class="lede">
-            Diferente de apps que criam dezenas de contextos, o Clarify tem <strong>um s&oacute;</strong>.
-            Ele existe porque o estado de autentica&ccedil;&atilde;o <strong>precisa</strong> ser global:
-            qualquer p&aacute;gina ou componente pode chamar <span class="mono">useAuth()</span> sem prop drilling.
+            Diferente de apps que criam dezenas de contextos, o Clarify tem <strong>apenas dois</strong>:
+            <span class="mono">ThemeContext</span> para tema claro/escuro e <span class="mono">AuthContext</span>
+            para autentica&ccedil;&atilde;o. Cada um existe porque ambos <strong>precisam</strong> ser globais:
+            qualquer p&aacute;gina ou componente pode chamar <span class="mono">useTema()</span> ou
+            <span class="mono">useAuth()</span> sem prop drilling.
         </p>
+
+        <div class="diagram" style="margin-bottom: 28px;">
+            <div class="diagram-row">
+                <div class="box context" style="flex: 1;">
+                    <span class="box-label">Contexto 1</span>
+                    <span class="box-title">ThemeContext</span>
+                    <span class="box-desc">tema: 'light' | 'dark' &middot; alternarTema()</span>
+                    <span class="file-path">src/context/ThemeContext.tsx</span>
+                </div>
+                <div class="arrow-right">&rarr;</div>
+                <div class="box context" style="flex: 1;">
+                    <span class="box-label">Contexto 2</span>
+                    <span class="box-title">AuthContext</span>
+                    <span class="box-desc">usuario, isAuthenticated, login/logout/registro</span>
+                    <span class="file-path">src/context/AuthContext.tsx</span>
+                </div>
+            </div>
+        </div>
 
         <div class="diagram">
             <div class="diagram-row">
@@ -270,9 +296,12 @@
         </div>
 
         <div class="info-callout" style="margin-top: 20px;">
-            <strong>Padr&atilde;o React 19:</strong> O AuthContext usa <span class="mono">use()</span> em vez de <span class="mono">useContext()</span>.
+            <strong>Padr&atilde;o React 19 (use() API):</strong> Tanto AuthContext quanto ThemeContext usam
+            <span class="mono">use()</span> em vez de <span class="mono">useContext()</span>.
             Em <span class="mono">src/context/AuthContext.tsx:166</span>: <span class="mono">const ctx = use(AuthContext)</span>.
-            Isso funciona tanto em Server quanto Client Components, e futivamente permitir&aacute; suspense.
+            Em <span class="mono">src/context/ThemeContext.tsx:10</span>: <span class="mono">const ctx = use(ThemeContext)</span>.
+            A <span class="mono">use()</span> API funciona tanto em Server quanto Client Components,
+            e futivamente permitir&aacute; Suspense com promises.
         </div>
     </section>
 
@@ -416,13 +445,19 @@
                         <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">['chaves']</td>
                         <td style="padding: 14px 16px; font-weight: 600;">useChaves()</td>
                         <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">GET /api/chaves</td>
-                        <td style="padding: 14px 16px; font-size: 0.78rem;">gerar chave</td>
+                        <td style="padding: 14px 16px; font-size: 0.78rem;">gerar chave (POST)</td>
                     </tr>
                     <tr style="border-bottom: 1px solid var(--slate-100);">
                         <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">['perfil', id]</td>
                         <td style="padding: 14px 16px; font-weight: 600;">usePerfil(id)</td>
                         <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">GET /api/perfis/:id</td>
-                        <td style="padding: 14px 16px; font-size: 0.78rem;">&mdash; readonly</td>
+                        <td style="padding: 14px 16px; font-size: 0.78rem;">atualizar (PATCH)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--slate-100);">
+                        <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">['anexos', protocolo]</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">useAnexos(protocolo)</td>
+                        <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">GET /api/demandas/:protocolo/anexos</td>
+                        <td style="padding: 14px 16px; font-size: 0.78rem;">upload (POST) / remover (DELETE)</td>
                     </tr>
                     <tr>
                         <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">['students', coordenadorId]</td>
@@ -454,6 +489,14 @@
         <div class="diagram">
             <div class="connector-line">src/app/layout.tsx (Server Component &mdash; &uacute;nico sem 'use client')</div>
             <div class="diagram-row">
+                <div class="box context" style="flex: 1; text-align: center;">
+                    <span class="box-title">ThemeProvider</span>
+                    <span class="box-desc">&lt;ThemeContext.Provider&gt; com useState lazy + localStorage</span>
+                    <span class="file-path">src/context/ThemeContext.tsx</span>
+                </div>
+            </div>
+            <div class="arrow-down">&darr;</div>
+            <div class="diagram-row">
                 <div class="box query" style="flex: 1; text-align: center;">
                     <span class="box-title">QueryProvider</span>
                     <span class="box-desc">&lt;QueryClientProvider&gt; com client criado via useState lazy</span>
@@ -472,16 +515,17 @@
             <div class="diagram-row">
                 <div class="box component" style="flex: 1; text-align: center;">
                     <span class="box-title">{children}</span>
-                    <span class="box-desc">P&aacute;ginas: /login, /registro, /dashboard/*, /centraldemandas/*</span>
+                    <span class="box-desc">P&aacute;ginas: /login, /registro, /(dashboard)/*, /perfil/*</span>
                 </div>
             </div>
         </div>
 
         <div class="info-callout" style="margin-top: 20px;">
-            <strong>Por que QueryProvider por fora?</strong> Porque o AuthProvider usa fetch dentro de
-            <span class="mono">login()</span>, e o React Query hook useAuth n&atilde;o usa React Query.
-            Mas os hooks de dados (useDemandas, useTurmas...) s&atilde;o chamados dentro das p&aacute;ginas,
-            que est&atilde;o dentro de ambos. A ordem QueryProvider &gt; AuthProvider &eacute; convencional.
+            <strong>Ordem dos providers:</strong> ThemeProvider &gt; QueryProvider &gt; AuthProvider.
+            O ThemeProvider &eacute; o mais externo porque o tema precisa estar dispon&iacute;vel em toda a app,
+            incluindo o pr&oacute;prio QueryProvider e AuthProvider. O QueryProvider vem antes do AuthProvider
+            por conven&ccedil;&atilde;o &mdash; os hooks de dados (useDemandas, useTurmas...) s&atilde;o
+            chamados dentro das p&aacute;ginas, que est&atilde;o dentro de todos os providers.
         </div>
     </section>
 
@@ -503,6 +547,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Tema claro/escuro</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);"><span class="mono" style="color: var(--brand-primary);">ThemeContext</span></td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">tema, alternarTema() (persistido em localStorage)</td></tr>
                     <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Sess&atilde;o do usu&aacute;rio</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);"><span class="mono" style="color: var(--brand-primary);">AuthContext</span></td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">usuario, isAuthenticated, loading</td></tr>
                     <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Modal aberto/fechado</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);"><span class="mono" style="color: #6366f1;">Zustand uiStore</span></td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">modalNovaAberta, drawerOpen</td></tr>
                     <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Filtros de busca</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);"><span class="mono" style="color: #6366f1;">Zustand filtrosStore</span></td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">busca, filtroStatus (persistido)</td></tr>

@@ -300,12 +300,14 @@
                 <div class="code-snip">src/lib/supabase/admin.ts</div>
                 <p style="font-size: 0.82rem; color: var(--slate-600); line-height: 1.55; margin: 0;">
                     Usa a <strong>service-role key</strong> do Supabase. Bypassa RLS completamente.
-                    Usado apenas em opera&ccedil;&otilde;es privilegiadas: criar usu&aacute;rio no registro
-                    (<span class="mono">supabase.auth.admin.createUser</span>), gerenciar chaves de ativa&ccedil;&atilde;o.
+                    Usado em opera&ccedil;&otilde;es privilegiadas: criar usu&aacute;rio no registro
+                    (<span class="mono">supabase.auth.admin.createUser</span>), gerenciar chaves de ativa&ccedil;&atilde;o,
+                    criar/deletar perfis, upload/remo&ccedil;&atilde;o de anexos (Storage + signed URLs).
                 </p>
                 <div class="info-callout" style="font-size: 0.72rem; padding: 8px 10px; margin-top: 4px;">
-                    <strong>Cuidado:</strong> Esse cliente tem acesso total ao banco. S&oacute; usado em
-                    endpoints espec&iacute;ficos (/api/auth/register, /api/chaves).
+                    <strong>Cuidado:</strong> Esse cliente tem acesso total ao banco. Usado em
+                    /api/auth/register, /api/chaves, /api/perfis (POST/DELETE), /api/demandas (POST),
+                    /api/demandas/:protocolo/anexos.
                 </div>
             </div>
         </div>
@@ -327,7 +329,7 @@
                 <div class="box supabase" style="flex: 1;">
                     <span class="box-label">Exce&ccedil;&atilde;o</span>
                     <span class="box-title">createAdminClient()</span>
-                    <span class="box-desc">S&oacute; /api/auth/register e /api/chaves</span>
+                    <span class="box-desc">/api/auth/register, /api/chaves, /api/perfis, /api/demandas/anexos</span>
                 </div>
             </div>
         </div>
@@ -447,8 +449,10 @@ onSettled: () => {
                     <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/demandas/:protocolo</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">GET, PATCH</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">server</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Zod + protocolo param</td></tr>
                     <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/turmas</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">GET, POST</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">server</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Zod (turma schema)</td></tr>
                     <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/turmas/:id</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">PUT, DELETE</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">server</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Zod + id param</td></tr>
-                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/perfis</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">GET</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">server</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">&mdash;</td></tr>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/perfis</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">GET, POST, DELETE</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">server / <strong>admin</strong></td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">&mdash;</td></tr>
                     <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/perfis/:id</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">GET</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">server</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">&mdash;</td></tr>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/demandas/:protocolo/anexos</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">GET, POST</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">server + <strong>admin</strong></td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">FormData (multipart)</td></tr>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/demandas/:protocolo/anexos/:id</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">DELETE</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">server + <strong>admin</strong></td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">&mdash;</td></tr>
                     <tr><td style="padding: 14px 18px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">/api/chaves</td><td style="padding: 14px 18px;">GET, POST</td><td style="padding: 14px 18px;"><strong>admin</strong> (bypass RLS)</td><td style="padding: 14px 18px;">&mdash;</td></tr>
                 </tbody>
             </table>

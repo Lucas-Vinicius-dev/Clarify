@@ -295,6 +295,10 @@ useEffect(() => {
                         <span style="font-size: 1.2rem;">&larr;</span>
                         <div><strong>/centraldemandas/:path*</strong><br/><span class="file">Aluno</span></div>
                     </div>
+                    <div class="step-box proxy" style="max-width: 100%; text-align: left; flex-direction: row; align-items: center; gap: 10px;">
+                        <span style="font-size: 1.2rem;">&larr;</span>
+                        <div><strong>/perfil/:path*</strong><br/><span class="file">Perfil (ambos cargos)</span></div>
+                    </div>
                 </div>
                 <div class="info-callout" style="font-size: 0.75rem; padding: 10px; margin-top: 8px;">
                     P&aacute;ginas p&uacute;blicas (/login, /registro) n&atilde;o passam pelo proxy.
@@ -368,7 +372,8 @@ useEffect(() => {
                     <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-weight: 700;">proxy.ts</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Gateway server-side. Redireciona n&atilde;o-autenticados e cross-cargo.</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);"><span class="mono">src/proxy.ts</span></td></tr>
                     <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-weight: 700;">API /api/auth/login</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Autentica no Supabase (signInWithPassword). Retorna perfil do usu&aacute;rio.</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);"><span class="mono">src/app/api/auth/login/route.ts</span></td></tr>
                     <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-weight: 700;">API /api/auth/register</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Cria usu&aacute;rio via admin client. Valida chave de ativa&ccedil;&atilde;o.</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);"><span class="mono">src/app/api/auth/register/route.ts</span></td></tr>
-                    <tr><td style="padding: 14px 18px; font-weight: 700;">DashboardLayout</td><td style="padding: 14px 18px;">Barreira dupla: proxy (server) + useAuth() (client) protegem o dashboard.</td><td style="padding: 14px 18px;"><span class="mono">src/app/(dashboard)/layout.tsx:21</span></td></tr>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-weight: 700;">DashboardLayout</td><td style="padding: 14px 18px;">Barreira dupla: proxy (server) + useAuth() (client) protegem o dashboard.</td><td style="padding: 14px 18px;"><span class="mono">src/app/(dashboard)/layout.tsx:21</span></td></tr>
+                    <tr><td style="padding: 14px 18px; font-weight: 700;">PerfilPage</td><td style="padding: 14px 18px;">Altera&ccedil;&atilde;o de senha via <span class="mono">supabase.auth.updateUser()</span> direto no cliente (browser client), sem API route.</td><td style="padding: 14px 18px;"><span class="mono">src/app/(dashboard)/perfil/page.tsx</span></td></tr>
                 </tbody>
             </table>
         </div>

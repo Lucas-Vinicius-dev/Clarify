@@ -182,6 +182,19 @@ const ctx = use(AuthContext)
             </div>
             <div class="effect-row">
                 <div>
+                    <div class="effect-where">ThemeContext.tsx</div>
+                    <div class="effect-deps">[]</div>
+                </div>
+                <div>
+                    <div class="effect-what">
+                        <strong>Persist&ecirc;ncia de tema:</strong> Toda vez que <span class="mono">tema</span> muda,
+                        salva em <span class="mono">localStorage('clarify_tema')</span> e aplica classe
+                        <span class="mono">dark</span> no <span class="mono">document.documentElement</span>.
+                    </div>
+                </div>
+            </div>
+            <div class="effect-row">
+                <div>
                     <div class="effect-where">useDebounce.ts</div>
                     <div class="effect-deps">[value, delay]</div>
                 </div>
@@ -280,7 +293,7 @@ const ctx = use(AuthContext)
   // 4. Retorno
   return { recursos: data, loading, criar: criarMutation.mutateAsync }
 }</div>
-                <span class="location">src/hooks/useDemandas.ts &bull; useTurmas &bull; useUsuarios &bull; useChaves</span>
+                <span class="location">src/hooks/useDemandas.ts &bull; useTurmas &bull; useUsuarios &bull; useChaves &bull; usePerfil &bull; useAnexos</span>
             </div>
 
             <div class="pattern-card">
@@ -356,7 +369,7 @@ export function useDebounce&lt;T&gt;(value: T, delay: number): T {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-weight: 700;">use() em vez de useContext()</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">AuthContext</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">React 19 API para consumir contexto</td></tr>
+                    <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-weight: 700;">use() em vez de useContext()</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">AuthContext + ThemeContext</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">React 19 API para consumir contexto</td></tr>
                     <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-weight: 700;">Query Key array &uacute;nico</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">todos hooks de dados</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);;">['recurso', ...filtros] em cada hook</td></tr>
                     <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-weight: 700;">mutateAsync (nunca mutate)</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">todos hooks de dados</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">Permite await + try/catch no componente</td></tr>
                     <tr><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100); font-weight: 700;">Optimistic update pattern</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">useDemandas</td><td style="padding: 14px 18px; border-bottom: 1px solid var(--slate-100);">onMutate / onError / onSettled</td></tr>
