@@ -44,6 +44,9 @@ export function CardDemanda({ demanda, onVerDetalhes }: CardDemandaProps) {
         <h3 className="text-base font-bold text-gray-900 break-words [overflow-wrap:anywhere]">
           {demanda.tipo}
         </h3>
+        {demanda.aluno?.nome && (
+          <p className="text-sm text-gray-600 font-medium mt-1">{demanda.aluno.nome}</p>
+        )}
         <p className="text-sm text-gray-600 mt-1 line-clamp-2 break-words [overflow-wrap:anywhere]">
           {demanda.descricao}
         </p>
