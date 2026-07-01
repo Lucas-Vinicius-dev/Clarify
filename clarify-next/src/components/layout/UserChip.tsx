@@ -22,7 +22,7 @@ export function UserChip({ usuario, onLogout, showName = true }: UserChipProps) 
   const inicial = primeiroNome.charAt(0).toUpperCase();
 
   return (
-    <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-full pl-2 pr-1 py-1 shadow-sm">
+    <div className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-full pl-2 pr-1 py-1 shadow-sm">
       {/* Avatar (link para o perfil) */}
       <Link
         href="/perfil"
@@ -35,7 +35,7 @@ export function UserChip({ usuario, onLogout, showName = true }: UserChipProps) 
 
       {/* Nome (hidden em LG) */}
       {showName && (
-        <span className="text-sm font-medium text-gray-700 hidden lg:inline">
+        <span className="text-sm font-medium text-gray-700 dark:text-slate-300 hidden lg:inline">
           {nome}
         </span>
       )}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import { AuthProvider } from "@/context/AuthContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import "./globals.css";
 
@@ -23,11 +24,13 @@ export default function RootLayout({
   return (
     <html lang="pt-br" className={`${spaceGrotesk.variable} h-full antialiased`}>
       <body className="min-h-full bg-brand-surface font-sans">
-        <QueryProvider>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
-        </QueryProvider>
+        <ThemeProvider>
+          <QueryProvider>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
