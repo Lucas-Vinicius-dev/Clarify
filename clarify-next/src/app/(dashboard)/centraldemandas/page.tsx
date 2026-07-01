@@ -123,7 +123,7 @@ export default function CentralDemandasPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <CardMetrica titulo="Total" valor={total} label="solicitações">
-              <FileText className="w-4 h-4 text-gray-400 mb-1.5" />
+              <FileText className="w-4 h-4 text-gray-400 dark:text-slate-500 mb-1.5" />
             </CardMetrica>
             <CardMetrica titulo="Pendentes" valor={pendentes} label="aguardando análise">
               <Clock className="w-4 h-4 text-yellow-500 mb-1.5" />
@@ -141,7 +141,7 @@ export default function CentralDemandasPage() {
           {recentes.length > 0 && (
             <section>
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-lg font-bold text-gray-900">Demandas Recentes</h2>
+                <h2 className="text-lg font-bold text-gray-900 dark:text-slate-100">Demandas Recentes</h2>
                 <button
                   type="button"
                   onClick={() => router.push('/centraldemandas?view=demandas')}
@@ -191,7 +191,7 @@ export default function CentralDemandasPage() {
               </svg>
             </CardMetrica>
             <CardMetrica titulo="Eficiência" valor={`${eficiencia}%`} label="Demandas concluídas sobre o total">
-              <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div className="flex-1 h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
                 <div className="h-full bg-brand-primary rounded-full" style={{ width: `${eficiencia}%` }} />
               </div>
             </CardMetrica>
@@ -234,12 +234,12 @@ export default function CentralDemandasPage() {
 
           {concluidas.length > 0 && (
             <section>
-              <h2 className="text-lg font-bold text-gray-900 mb-3">Histórico</h2>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-slate-100 mb-3">Histórico</h2>
 
-              <div className="hidden md:block bg-white rounded-xl border border-gray-200 overflow-x-auto">
+              <div className="hidden md:block bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                    <tr className="text-[10px] font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest">
                       <th className="pb-2 pt-3 px-4">Protocolo</th>
                       <th className="pb-2 pt-3 px-4">Assunto</th>
                       <th className="pb-2 pt-3 px-4">Status</th>
