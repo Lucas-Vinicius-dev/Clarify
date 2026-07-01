@@ -41,17 +41,28 @@ export function useDemandas(opcoes?: UseDemandasOptions) {
   })
 
   const criarMutation = useMutation({
-    mutationFn: async (dados: { tipo: TipoDemanda; descricao: string; camposExtras?: Record<string, string> }) => {
+    mutationFn: async (dados: { tipo: TipoDemanda; descricao: string; anexos?: File[]; camposExtras?: Record<string, string> }) => {
       const res = await fetch('/api/demandas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dados),
+        body: JSON.stringify({ tipo: dados.tipo, descricao: dados.descricao, camposExtras: dados.camposExtras }),
       })
       const json = await res.json()
       if (!json.ok || !json.data) {
         throw new Error(json.mensagem || 'Erro ao criar demanda.')
       }
-      return mapRow(json.data) as Demanda
+      const demandaCriada = mapRow(json.data) as Demanda
+
+      if (dados.anexos && dados.anexos.length > 0) {
+        const formData = new FormData()
+        dados.anexos.forEach((file) => formData.append('arquivos', file))
+        await fetch(`/api/demandas/${demandaCriada.protocolo}/anexos`, {
+          method: 'POST',
+          body: formData,
+        })
+      }
+
+      return demandaCriada
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['demandas'] })

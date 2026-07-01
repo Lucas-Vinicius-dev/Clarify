@@ -77,11 +77,12 @@ export default function CentralDemandasPage() {
   const resolvidas = demandas.filter((d) => d.status === 'concluido').length;
   const eficiencia = total > 0 ? Math.round((resolvidas / total) * 100) : 0;
 
-  const handleCriarDemanda = useCallback(async (dados: { tipo: TipoDemanda; descricao: string; camposExtras: Record<string, string> }) => {
+  const handleCriarDemanda = useCallback(async (dados: { tipo: TipoDemanda; descricao: string; anexos?: File[]; camposExtras?: Record<string, string> }) => {
     if (!usuario?.id) return;
     await criar({
       tipo: dados.tipo,
       descricao: dados.descricao,
+      anexos: dados.anexos,
       camposExtras: dados.camposExtras,
     });
   }, [criar, usuario]);
