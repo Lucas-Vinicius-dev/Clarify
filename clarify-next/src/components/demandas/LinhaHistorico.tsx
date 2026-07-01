@@ -5,11 +5,15 @@ import type { Demanda } from '@/types';
 
 interface LinhaHistoricoProps {
   demanda: Demanda;
+  onVerDetalhes?: (protocolo: string) => void;
 }
 
-export function LinhaHistorico({ demanda }: LinhaHistoricoProps) {
+export function LinhaHistorico({ demanda, onVerDetalhes }: LinhaHistoricoProps) {
   return (
-    <tr className="border-t border-gray-100 dark:border-slate-700">
+    <tr
+      className="border-t border-gray-100 dark:border-slate-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-750 transition-colors"
+      onClick={() => onVerDetalhes?.(demanda.protocolo)}
+    >
       <td className="py-3 text-xs font-semibold text-gray-500 dark:text-slate-400">
         #{demanda.protocolo}
       </td>

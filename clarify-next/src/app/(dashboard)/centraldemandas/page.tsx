@@ -28,7 +28,7 @@ const VIEWS: StudentView[] = ['nome', 'demandas', 'turmas'];
 
 export default function CentralDemandasPage() {
   const { usuario } = useAuth();
-  const { demandas, criar } = useDemandas(
+  const { demandas, criar, recarregar } = useDemandas(
     usuario ? { alunoId: usuario.id } : undefined
   );
   const { turmas } = useTurmas();
@@ -91,7 +91,8 @@ export default function CentralDemandasPage() {
   const handleVerDetalhes = useCallback((protocolo: string) => {
     setProtocoloSelecionado(protocolo);
     setModalDetalhesAberta(true);
-  }, []);
+    recarregar();
+  }, [recarregar]);
 
   const recentes = useMemo(
     () => demandas.toSorted(
@@ -250,7 +251,7 @@ export default function CentralDemandasPage() {
                   </thead>
                   <tbody>
                     {concluidas.map((demanda) => (
-                      <LinhaHistorico key={demanda.protocolo} demanda={demanda} />
+                      <LinhaHistorico key={demanda.protocolo} demanda={demanda} onVerDetalhes={handleVerDetalhes} />
                     ))}
                   </tbody>
                 </table>
@@ -258,7 +259,7 @@ export default function CentralDemandasPage() {
 
               <div className="md:hidden space-y-2">
                 {concluidas.map((demanda) => (
-                  <CardHistorico key={demanda.protocolo} demanda={demanda} />
+                  <CardHistorico key={demanda.protocolo} demanda={demanda} onVerDetalhes={handleVerDetalhes} />
                 ))}
               </div>
             </section>

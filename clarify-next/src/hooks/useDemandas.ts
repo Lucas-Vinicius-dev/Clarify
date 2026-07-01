@@ -28,7 +28,7 @@ export function useDemandas(opcoes?: UseDemandasOptions) {
   const queryClient = useQueryClient()
   const queryKey = ['demandas', opcoes?.alunoId, opcoes?.status] as const
 
-  const { data: demandas = [], isLoading: loading } = useQuery({
+  const { data: demandas = [], isLoading: loading, refetch } = useQuery({
     queryKey,
     queryFn: async () => {
       const params = new URLSearchParams()
@@ -39,6 +39,7 @@ export function useDemandas(opcoes?: UseDemandasOptions) {
       const data = await res.json()
       return (data ?? []).map(mapRow) as Demanda[]
     },
+    refetchInterval: 30_000,
   })
 
   const criarMutation = useMutation({
@@ -148,5 +149,6 @@ export function useDemandas(opcoes?: UseDemandasOptions) {
       atualizarStatusMutation.mutateAsync({ protocolo, novoStatus, feedback }),
     recarregar: () => queryClient.invalidateQueries({ queryKey: ['demandas'] }),
     filtrar,
+    refetch,
   }
 }
