@@ -171,9 +171,9 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
                 className={cn(inputClass, "font-semibold mt-1")}
                 defaultValue=""
               >
-                <option value="" disabled>Selecione o tipo de solicitação</option>
+                <option value="" disabled className="dark:bg-slate-800 dark:text-slate-100">Selecione o tipo de solicitação</option>
                 {TIPOS_DEMANDA.map((tipo) => (
-                  <option key={tipo} value={tipo}>{tipo}</option>
+                  <option key={tipo} value={tipo} className="dark:bg-slate-800 dark:text-slate-100">{tipo}</option>
                 ))}
               </select>
               {errors.tipo && (
