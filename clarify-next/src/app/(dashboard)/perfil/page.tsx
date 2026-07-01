@@ -17,8 +17,8 @@ import {
 } from '@/schemas/perfil'
 import type { Cargo } from '@/types'
 
-const labelClass = "text-[0.6875rem] font-bold tracking-[0.18em] uppercase text-[rgba(15,23,42,0.45)]"
-const inputClass = "w-full bg-transparent border-0 border-b-[1.5px] border-[rgba(15,23,42,0.10)] py-2 px-0 text-lg leading-[1.3] -tracking-[0.01em] text-[#0f172a] placeholder:text-[rgba(15,23,42,0.30)] placeholder:font-normal focus:outline-none focus:border-b-[#ca5f15] transition-[border-color] duration-180"
+const labelClass = "text-[0.6875rem] font-bold tracking-[0.18em] uppercase text-[rgba(15,23,42,0.45)] dark:text-slate-400"
+const inputClass = "w-full bg-transparent border-0 border-b-[1.5px] border-[rgba(15,23,42,0.10)] dark:border-slate-700 py-2 px-0 text-lg leading-[1.3] -tracking-[0.01em] text-[#0f172a] dark:text-slate-100 placeholder:text-[rgba(15,23,42,0.30)] dark:placeholder:text-slate-500 placeholder:font-normal focus:outline-none focus:border-b-[#ca5f15] transition-[border-color] duration-180"
 const dotClass = "inline-block w-1.5 h-1.5 rounded-full bg-[#ca5f15] shadow-[0_0_0_3px_rgba(202,95,21,0.18)]"
 const btnPrimaryClass = "inline-flex items-center gap-2 bg-[#ca5f15] text-white font-bold text-sm -tracking-[0.005em] py-3 px-5 rounded-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.18),_0_1px_2px_rgba(202,95,21,0.30),_0_10px_24px_-10px_rgba(202,95,21,0.55)] hover:bg-[#b35211] hover:-translate-y-px active:translate-y-0 disabled:bg-[rgba(15,23,42,0.10)] disabled:text-[rgba(15,23,42,0.35)] disabled:shadow-none disabled:cursor-not-allowed disabled:transform-none transition-[transform,box-shadow,background-color] duration-180 cursor-pointer"
 
@@ -33,8 +33,8 @@ function Feedback({ msg }: { msg: Mensagem }) {
       className={cn(
         'inline-flex items-start gap-2 text-xs font-semibold rounded-lg px-3 py-2 border',
         msg.ok
-          ? 'text-green-700 bg-green-50 border-green-200'
-          : 'text-rose-700 bg-rose-50 border-rose-200'
+          ? 'text-green-700 bg-green-50 border-green-200 dark:text-green-300 dark:bg-green-900/30 dark:border-green-800'
+          : 'text-rose-700 bg-rose-50 border-rose-200 dark:text-rose-300 dark:bg-rose-900/30 dark:border-rose-800'
       )}
     >
       {!msg.ok && <AlertCircle className="w-4 h-4 mt-px shrink-0" />}
@@ -47,7 +47,7 @@ function Info({ label, value }: { label: string; value?: string }) {
   return (
     <div>
       <dt className={labelClass}>{label}</dt>
-      <dd className="text-base font-semibold text-gray-900 mt-1 break-words">{value || '—'}</dd>
+      <dd className="text-base font-semibold text-gray-900 dark:text-slate-100 mt-1 break-words">{value || '—'}</dd>
     </div>
   )
 }
@@ -107,8 +107,8 @@ export default function PerfilPage() {
       `}</style>
       <div className="p-4 sm:p-6 max-w-3xl mx-auto space-y-6">
         <header className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tighter-2">Meu Perfil</h1>
-          <p className="text-sm text-gray-500">Gerencie suas informações pessoais e segurança.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-100 tracking-tighter-2">Meu Perfil</h1>
+          <p className="text-sm text-gray-500 dark:text-slate-400">Gerencie suas informações pessoais e segurança.</p>
         </header>
 
         <Card className="p-6 space-y-5">
@@ -141,7 +141,7 @@ export default function PerfilPage() {
                 placeholder="Seu nome completo"
               />
               {dadosForm.formState.errors.nome && (
-                <p className="text-xs text-red-600 mt-1">{dadosForm.formState.errors.nome.message}</p>
+                <p className="text-xs text-red-600 dark:text-red-400 mt-1">{dadosForm.formState.errors.nome.message}</p>
               )}
             </div>
 
@@ -155,7 +155,7 @@ export default function PerfilPage() {
                 placeholder="(00) 00000-0000"
               />
               {dadosForm.formState.errors.telefone && (
-                <p className="text-xs text-red-600 mt-1">{dadosForm.formState.errors.telefone.message}</p>
+                <p className="text-xs text-red-600 dark:text-red-400 mt-1">{dadosForm.formState.errors.telefone.message}</p>
               )}
             </div>
 
@@ -190,13 +190,13 @@ export default function PerfilPage() {
                   type="button"
                   onClick={() => setMostrarSenha(!mostrarSenha)}
                   tabIndex={-1}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300 transition-colors"
                 >
                   {mostrarSenha ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
               {senhaForm.formState.errors.senha && (
-                <p className="text-xs text-red-600 mt-1">{senhaForm.formState.errors.senha.message}</p>
+                <p className="text-xs text-red-600 dark:text-red-400 mt-1">{senhaForm.formState.errors.senha.message}</p>
               )}
             </div>
 
@@ -214,13 +214,13 @@ export default function PerfilPage() {
                   type="button"
                   onClick={() => setMostrarConfirma(!mostrarConfirma)}
                   tabIndex={-1}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300 transition-colors"
                 >
                   {mostrarConfirma ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
               {senhaForm.formState.errors.confirmacao && (
-                <p className="text-xs text-red-600 mt-1">{senhaForm.formState.errors.confirmacao.message}</p>
+                <p className="text-xs text-red-600 dark:text-red-400 mt-1">{senhaForm.formState.errors.confirmacao.message}</p>
               )}
             </div>
 
