@@ -43,4 +43,13 @@ export const CAMPOS_POR_TIPO: Partial<Record<TipoDemanda, CampoExtra[]>> = {
     { name: 'datas', label: 'Data(s) da falta', type: 'text', placeholder: 'Separe múltiplas datas por vírgula' },
     { name: 'motivo', label: 'Motivo', type: 'textarea' },
   ],
+  'Transferência': [
+    { name: 'instituicaoDestino', label: 'Instituição de destino', type: 'text', placeholder: 'Ex.: UFRJ' },
+    { name: 'motivo', label: 'Motivo', type: 'textarea' },
+  ],
+  'Segunda Chamada': [
+    { name: 'disciplina', label: 'Disciplina', type: 'text' },
+    { name: 'dataProva', label: 'Data da prova', type: 'date' },
+    { name: 'motivo', label: 'Motivo', type: 'textarea' },
+  ],
 }

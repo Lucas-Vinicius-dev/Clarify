@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/Card';
 import { TimelineProgresso } from './TimelineProgresso';
 import { obterLabelStatus, formatarData } from '@/lib/utils';
 import { cn } from '@/lib/utils';
+import { CAMPOS_POR_TIPO } from '@/lib/camposDemanda';
 import type { Demanda, StatusDemanda, UsuarioLogado } from '@/types';
 
 const statusVariant: Record<StatusDemanda, 'pendente' | 'em_analise' | 'requer_ajuste' | 'concluido'> = {
@@ -89,6 +90,31 @@ export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: Moda
                 </p>
               </Card>
             </section>
+
+            {demanda.camposExtras && Object.keys(demanda.camposExtras).length > 0 && (
+              <section className="mt-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <FileText className="w-3.5 h-3.5 text-brand-primary" />
+                  <p className={labelClass}>Detalhes · {demanda.tipo}</p>
+                </div>
+                <Card className="bg-brand-surface/50 border-brand-surface-dim/40 rounded-2xl px-5 py-4 shadow-none">
+                  <dl className="space-y-3">
+                    {CAMPOS_POR_TIPO[demanda.tipo]?.map((campo) => {
+                      const valor = demanda.camposExtras?.[campo.name];
+                      if (!valor) return null;
+                      return (
+                        <div key={campo.name} className="flex flex-col gap-0.5">
+                          <dt className={labelClass}>{campo.label}</dt>
+                          <dd className="text-sm text-gray-800 leading-relaxed break-words [overflow-wrap:anywhere] whitespace-pre-wrap">
+                            {campo.type === 'date' ? formatarData(valor) : valor}
+                          </dd>
+                        </div>
+                      );
+                    })}
+                  </dl>
+                </Card>
+              </section>
+            )}
 
             <section className="mt-6">
               <p className={labelClass}>Enviado por</p>

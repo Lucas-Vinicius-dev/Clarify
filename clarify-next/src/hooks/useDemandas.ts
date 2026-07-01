@@ -15,6 +15,7 @@ function mapRow(row: Record<string, unknown>): Demanda {
     alunoId: row.aluno_id as string,
     tipo: row.tipo as TipoDemanda,
     descricao: row.descricao as string,
+    camposExtras: (row.campos_extras as Record<string, string>) ?? undefined,
     status: row.status as StatusDemanda,
     dataCriacao: row.data_criacao as string,
     dataAtualizacao: row.data_atualizacao as string,

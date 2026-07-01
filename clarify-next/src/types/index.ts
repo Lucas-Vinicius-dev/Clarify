@@ -51,6 +51,7 @@ export interface Demanda {
   alunoId: string;
   tipo: TipoDemanda;
   descricao: string;
+  camposExtras?: Record<string, string>;
   status: StatusDemanda;
   dataCriacao: string;
   dataAtualizacao: string;
