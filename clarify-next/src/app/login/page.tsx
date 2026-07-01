@@ -167,7 +167,7 @@ export default function LoginPage() {
 
         <div className="mt-12 text-center">
           <p className="text-xs text-gray-400 dark:text-slate-400 font-medium">Somente indivíduos autorizados.</p>
-          <p className="text-xs text-gray-300 dark:text-slate-500 mt-1">Versão v0.0.0</p>
+          <p className="text-xs text-gray-300 dark:text-slate-500 mt-1">Versão v2.0.1</p>
         </div>
       </div>
     </div>

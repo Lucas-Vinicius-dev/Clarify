@@ -301,7 +301,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center text-slate-600 dark:text-slate-300 text-sm">
             <p>© 2026 Clarify. Todos os direitos reservados.</p>
-            <p className="mt-2">Versão v0.0.0 · Federal Institution</p>
+            <p className="mt-2">Versão v2.0.1 · Federal Institution</p>
           </div>
         </div>
       </footer>
