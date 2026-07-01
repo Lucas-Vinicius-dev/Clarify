@@ -63,7 +63,7 @@ export default function RegistroPage() {
           display: none !important;
         }
       `}</style>
-    <div className="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden bg-brand-surface">
+    <div className="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden bg-brand-surface dark:bg-slate-900">
       {/* Fundo Geométrico com Losangos */}
       <div
         className="absolute inset-0 opacity-15 pointer-events-none animate-cubes"
@@ -81,22 +81,22 @@ export default function RegistroPage() {
         }}
       />
 
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 z-10 border border-brand-surface-dim">
+      <div className="w-full max-w-md bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8 z-10 border border-brand-surface-dim dark:border-slate-700">
         <div className="flex flex-col items-center mb-8">
           <div className="w-20 h-20 mb-4 bg-orange-50 rounded-xl p-2 flex items-center justify-center">
             <Image src="/GATOGORDO.png" alt="Clarify Logo" width={72} height={72} className="w-full h-full object-contain" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">Clarify</h1>
-          <p className="text-sm font-medium text-gray-500 tracking-wider uppercase mt-1">Acesso - Instituto Federal</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-100">Clarify</h1>
+          <p className="text-sm font-medium text-gray-500 dark:text-slate-400 tracking-wider uppercase mt-1">Acesso - Instituto Federal</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div>
-            <label htmlFor="registro-fullName" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+            <label htmlFor="registro-fullName" className="block text-xs font-bold text-gray-700 dark:text-slate-300 uppercase tracking-widest mb-2 ml-1">
               Nome Completo
             </label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 dark:text-slate-400">
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
@@ -111,21 +111,21 @@ export default function RegistroPage() {
                 type="text"
                 {...register('nome')}
                 placeholder="e.g. John Doe"
-                className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                className="block w-full pl-10 pr-3 py-3 border border-gray-200 dark:border-slate-700 rounded-lg bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-slate-100 placeholder-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
                 disabled={isLoading}
               />
             </div>
             {errors.nome && (
-              <p className="text-xs text-red-600 mt-1 ml-1">{errors.nome.message}</p>
+              <p className="text-xs text-red-600 dark:text-red-400 mt-1 ml-1">{errors.nome.message}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="registro-institutionalId" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+            <label htmlFor="registro-institutionalId" className="block text-xs font-bold text-gray-700 dark:text-slate-300 uppercase tracking-widest mb-2 ml-1">
               ID Institucional
             </label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 dark:text-slate-400">
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
@@ -140,21 +140,21 @@ export default function RegistroPage() {
                 type="text"
                 {...register('matricula')}
                 placeholder="e.g. 123456789"
-                className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                className="block w-full pl-10 pr-3 py-3 border border-gray-200 dark:border-slate-700 rounded-lg bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-slate-100 placeholder-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
                 disabled={isLoading}
               />
             </div>
             {errors.matricula && (
-              <p className="text-xs text-red-600 mt-1 ml-1">{errors.matricula.message}</p>
+              <p className="text-xs text-red-600 dark:text-red-400 mt-1 ml-1">{errors.matricula.message}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="registro-institutionalEmail" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+            <label htmlFor="registro-institutionalEmail" className="block text-xs font-bold text-gray-700 dark:text-slate-300 uppercase tracking-widest mb-2 ml-1">
               Email Institucional
             </label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 dark:text-slate-400">
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
@@ -169,17 +169,17 @@ export default function RegistroPage() {
                 type="email"
                 {...register('email')}
                 placeholder="e.g. john.doe@academico.edu.br"
-                className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                className="block w-full pl-10 pr-3 py-3 border border-gray-200 dark:border-slate-700 rounded-lg bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-slate-100 placeholder-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
                 disabled={isLoading}
               />
             </div>
             {errors.email && (
-              <p className="text-xs text-red-600 mt-1 ml-1">{errors.email.message}</p>
+              <p className="text-xs text-red-600 dark:text-red-400 mt-1 ml-1">{errors.email.message}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="registro-securityKey" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+            <label htmlFor="registro-securityKey" className="block text-xs font-bold text-gray-700 dark:text-slate-300 uppercase tracking-widest mb-2 ml-1">
               Chave de Segurança
             </label>
             <div className="relative">
@@ -188,29 +188,29 @@ export default function RegistroPage() {
                 type={mostrarSenha ? 'text' : 'password'}
                 {...register('senha')}
                 placeholder="••••••••"
-                className="block w-full pl-3 pr-10 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                className="block w-full pl-3 pr-10 py-3 border border-gray-200 dark:border-slate-700 rounded-lg bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-slate-100 placeholder-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
                 disabled={isLoading}
               />
               <button
                 type="button"
                 onClick={() => setMostrarSenha(!mostrarSenha)}
                 tabIndex={-1}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-400 hover:text-gray-600 dark:hover:text-slate-200 transition-colors"
               >
                 {mostrarSenha ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
             {errors.senha && (
-              <p className="text-xs text-red-600 mt-1 ml-1">{errors.senha.message}</p>
+              <p className="text-xs text-red-600 dark:text-red-400 mt-1 ml-1">{errors.senha.message}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="registro-activationKey" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+            <label htmlFor="registro-activationKey" className="block text-xs font-bold text-gray-700 dark:text-slate-300 uppercase tracking-widest mb-2 ml-1">
               Chave de Ativação
             </label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 dark:text-slate-400">
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
@@ -225,18 +225,18 @@ export default function RegistroPage() {
                 type="text"
                 {...register('chaveAtivacao')}
                 placeholder="Chave fornecida pela instituição"
-                className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                className="block w-full pl-10 pr-3 py-3 border border-gray-200 dark:border-slate-700 rounded-lg bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-slate-100 placeholder-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
                 disabled={isLoading}
               />
             </div>
             {errors.chaveAtivacao && (
-              <p className="text-xs text-red-600 mt-1 ml-1">{errors.chaveAtivacao.message}</p>
+              <p className="text-xs text-red-600 dark:text-red-400 mt-1 ml-1">{errors.chaveAtivacao.message}</p>
             )}
           </div>
 
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-xs font-bold text-red-700 uppercase tracking-widest">{error}</p>
+            <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-lg">
+              <p className="text-xs font-bold text-red-700 dark:text-red-300 uppercase tracking-widest">{error}</p>
             </div>
           )}
 
@@ -256,8 +256,8 @@ export default function RegistroPage() {
         </form>
 
         <div className="mt-8 text-center">
-          <p className="text-xs text-gray-400 font-medium">Somente indivíduos autorizados.</p>
-          <p className="text-xs text-gray-300 mt-1">Versão v0.0.0</p>
+          <p className="text-xs text-gray-400 dark:text-slate-400 font-medium">Somente indivíduos autorizados.</p>
+          <p className="text-xs text-gray-300 dark:text-slate-500 mt-1">Versão v0.0.0</p>
         </div>
       </div>
     </div>
