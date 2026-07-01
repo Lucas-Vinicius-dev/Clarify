@@ -38,6 +38,7 @@ export type UsuarioLogado = {
   matricula: string;
   email: string;
   cargo: Cargo;
+  ativo?: boolean;
   telefone?: string;
   coordenador_id?: string;
 };

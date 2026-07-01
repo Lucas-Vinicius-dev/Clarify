@@ -137,13 +137,15 @@ export default function DashboardCoordPage() {
     await recarregarDemandas();
   }, [recarregarDemandas]);
 
-  const handleRemoverAluno = useCallback(async (matricula: string) => {
-    const aluno = alunosDoCoord.find((a) => a.matricula === matricula);
-    if (aluno) {
-      await usuariosHook.deletar(aluno.id);
-      queryClient.invalidateQueries({ queryKey: ['students', usuario?.id] });
-    }
-  }, [alunosDoCoord, usuariosHook, queryClient, usuario?.id]);
+  const handleDesativar = useCallback(async (id: string) => {
+    await usuariosHook.desativar(id);
+    queryClient.invalidateQueries({ queryKey: ['students', usuario?.id] });
+  }, [usuariosHook, queryClient, usuario?.id]);
+
+  const handleReativar = useCallback(async (id: string) => {
+    await usuariosHook.reativar(id);
+    queryClient.invalidateQueries({ queryKey: ['students', usuario?.id] });
+  }, [usuariosHook, queryClient, usuario?.id]);
 
   const demandasPendentesOrdenadas = useMemo(
     () => demandasPendentes.toSorted(
@@ -171,7 +173,8 @@ export default function DashboardCoordPage() {
         <ListaAlunos
           alunos={alunosDoCoord}
           demandas={demandas}
-          onRemover={handleRemoverAluno}
+          onDesativar={handleDesativar}
+          onReativar={handleReativar}
         />
       )}
 
