@@ -16,10 +16,10 @@ interface ModalCriarTurmaProps {
   onCreate: (dados: { nome: string; disciplina: string; alunos: string[] }) => Promise<void>;
 }
 
-const labelClass = "text-[0.6875rem] font-bold tracking-[0.18em] uppercase text-[rgba(15,23,42,0.45)]";
-const inputClass = "w-full bg-transparent border-0 border-b-[1.5px] border-[rgba(15,23,42,0.10)] py-2 px-0 text-lg leading-[1.3] -tracking-[0.01em] text-[#0f172a] placeholder:text-[rgba(15,23,42,0.30)] placeholder:font-normal focus:outline-none focus:border-b-[#ca5f15] transition-[border-color] duration-180";
+const labelClass = "text-[0.6875rem] font-bold tracking-[0.18em] uppercase text-[rgba(15,23,42,0.45)] dark:text-slate-400";
+const inputClass = "w-full bg-transparent border-0 border-b-[1.5px] border-[rgba(15,23,42,0.10)] dark:border-slate-700 py-2 px-0 text-lg leading-[1.3] -tracking-[0.01em] text-[#0f172a] dark:text-slate-100 placeholder:text-[rgba(15,23,42,0.30)] dark:placeholder:text-slate-500 placeholder:font-normal focus:outline-none focus:border-b-[#ca5f15] transition-[border-color] duration-180";
 const btnPrimaryClass = "inline-flex items-center gap-2 bg-[#ca5f15] text-white font-bold text-sm -tracking-[0.005em] py-3 px-5 rounded-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.18),_0_1px_2px_rgba(202,95,21,0.30),_0_10px_24px_-10px_rgba(202,95,21,0.55)] hover:bg-[#b35211] hover:-translate-y-px active:translate-y-0 disabled:bg-[rgba(15,23,42,0.10)] disabled:text-[rgba(15,23,42,0.35)] disabled:shadow-none disabled:cursor-not-allowed disabled:transform-none transition-[transform,box-shadow,background-color] duration-180 cursor-pointer";
-const btnGhostClass = "inline-flex items-center gap-1.5 bg-transparent text-[rgba(15,23,42,0.65)] font-semibold text-sm py-3 px-4 rounded-xl hover:bg-[rgba(15,23,42,0.05)] hover:text-[#0f172a] transition-[background-color,color] duration-180 cursor-pointer";
+const btnGhostClass = "inline-flex items-center gap-1.5 bg-transparent text-[rgba(15,23,42,0.65)] dark:text-slate-300 font-semibold text-sm py-3 px-4 rounded-xl hover:bg-[rgba(15,23,42,0.05)] dark:hover:bg-slate-700 hover:text-[#0f172a] dark:hover:text-slate-100 transition-[background-color,color] duration-180 cursor-pointer";
 
 export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProps) {
   const { usuario } = useAuth();
@@ -115,8 +115,8 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
               <Users className="w-5 h-5 text-brand-primary" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900">Nova turma</h2>
-              <p className="text-xs text-gray-500">Preencha os dados e adicione alunos</p>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-slate-100">Nova turma</h2>
+              <p className="text-xs text-gray-500 dark:text-slate-400">Preencha os dados e adicione alunos</p>
             </div>
           </div>
 
@@ -131,7 +131,7 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
                 className={cn(inputClass, "font-semibold mt-1")}
               />
               {errors.nome && (
-                <p className="text-xs text-red-600 mt-1">{errors.nome.message}</p>
+                <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.nome.message}</p>
               )}
             </div>
 
@@ -145,7 +145,7 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
                 className={cn(inputClass, "font-semibold mt-1")}
               />
               {errors.disciplina && (
-                <p className="text-xs text-red-600 mt-1">{errors.disciplina.message}</p>
+                <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.disciplina.message}</p>
               )}
             </div>
 
@@ -154,28 +154,28 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
               <button
                 type="button"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="w-full flex items-center justify-between gap-2 bg-transparent border border-gray-200 rounded-xl py-2.5 px-3 text-sm text-left"
+                className="w-full flex items-center justify-between gap-2 bg-transparent border border-gray-200 dark:border-slate-700 rounded-xl py-2.5 px-3 text-sm text-left"
               >
-                <span className={alunos.length === 0 ? "text-gray-400" : "text-gray-900 font-medium"}>
+                <span className={alunos.length === 0 ? "text-gray-400 dark:text-slate-500" : "text-gray-900 dark:text-slate-100 font-medium"}>
                   {alunos.length === 0
                     ? "Selecionar alunos..."
                     : `${alunos.length} aluno${alunos.length !== 1 ? 's' : ''} selecionado${alunos.length !== 1 ? 's' : ''}`}
                 </span>
-                <ChevronDown className={cn("w-4 h-4 text-gray-400 transition-transform duration-180", dropdownOpen && "rotate-180")} />
+                <ChevronDown className={cn("w-4 h-4 text-gray-400 dark:text-slate-500 transition-transform duration-180", dropdownOpen && "rotate-180")} />
               </button>
 
               {dropdownOpen && (
-                <div className="absolute z-10 mt-1 w-full border border-gray-200 rounded-xl bg-white shadow-lg max-h-48 overflow-y-auto">
+                <div className="absolute z-10 mt-1 w-full border border-gray-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 shadow-lg max-h-48 overflow-y-auto">
                   {loadingAlunos ? (
-                    <div className="p-3 text-xs text-gray-400">Carregando alunos...</div>
+                    <div className="p-3 text-xs text-gray-400 dark:text-slate-400">Carregando alunos...</div>
                   ) : alunosDoCoord.length === 0 ? (
-                    <div className="p-3 text-xs text-gray-400">Nenhum aluno vinculado. Cadastre alunos primeiro.</div>
+                    <div className="p-3 text-xs text-gray-400 dark:text-slate-400">Nenhum aluno vinculado. Cadastre alunos primeiro.</div>
                   ) : alunosDoCoord.map((aluno) => {
                     const isSelected = alunos.includes(aluno.id);
                     return (
                       <label
                         key={aluno.id}
-                        className="flex items-center gap-3 px-3 py-2 hover:bg-[rgba(202,95,21,0.05)] cursor-pointer border-b border-gray-100 last:border-b-0"
+                        className="flex items-center gap-3 px-3 py-2 hover:bg-[rgba(202,95,21,0.05)] dark:hover:bg-slate-700/50 cursor-pointer border-b border-gray-100 dark:border-slate-700 last:border-b-0"
                       >
                         <input
                           type="checkbox"
@@ -184,8 +184,8 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
                           className="accent-[#ca5f15]"
                         />
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">{aluno.nome}</p>
-                          <p className="text-xs text-gray-400">{aluno.matricula}</p>
+                          <p className="text-sm font-medium text-gray-900 dark:text-slate-100 truncate">{aluno.nome}</p>
+                          <p className="text-xs text-gray-400 dark:text-slate-400">{aluno.matricula}</p>
                         </div>
                       </label>
                     );
@@ -194,11 +194,11 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
               )}
             </div>
 
-            <div className="border border-gray-200 rounded-xl p-3 min-h-[64px]">
-              <p className="text-xs text-gray-400 mb-2">Alunos adicionados ({alunos.length})</p>
+            <div className="border border-gray-200 dark:border-slate-700 rounded-xl p-3 min-h-[64px]">
+              <p className="text-xs text-gray-400 dark:text-slate-400 mb-2">Alunos adicionados ({alunos.length})</p>
               <div className="flex flex-wrap gap-2">
                 {alunos.length === 0 && (
-                  <span className="text-xs text-gray-300">Nenhum aluno selecionado</span>
+                  <span className="text-xs text-gray-300 dark:text-slate-500">Nenhum aluno selecionado</span>
                 )}
                 {alunos.map((alunoId) => {
                   const info = alunosMap.get(alunoId);
@@ -222,7 +222,7 @@ export function ModalCriarTurma({ open, onClose, onCreate }: ModalCriarTurmaProp
             </div>
 
             {erroCriar && (
-              <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+              <p className="text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg px-3 py-2">
                 {erroCriar}
               </p>
             )}

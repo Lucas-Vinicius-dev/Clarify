@@ -37,23 +37,23 @@ export function TimelineProgresso({ status }: TimelineProgressoProps) {
             key={passo.chave}
             className={[
               "relative flex flex-col items-center flex-1 min-w-0",
-              "[&+&]:before:content-[''] [&+&]:before:absolute [&+&]:before:left-[calc(-50%+14px)] [&+&]:before:right-[calc(50%+14px)] [&+&]:before:top-[13px] [&+&]:before:h-0.5 [&+&]:before:rounded-full [&+&]:before:bg-[rgba(15,23,42,0.10)]",
+              "[&+&]:before:content-[''] [&+&]:before:absolute [&+&]:before:left-[calc(-50%+14px)] [&+&]:before:right-[calc(50%+14px)] [&+&]:before:top-[13px] [&+&]:before:h-0.5 [&+&]:before:rounded-full [&+&]:before:bg-[rgba(15,23,42,0.10)] dark:[&+&]:before:bg-slate-600",
               isDone && "[&+&]:before:!bg-[#ca5f15]",
               isCurrent && "[&+&]:before:!bg-[linear-gradient(to_right,#ca5f15_0%,#ca5f15_60%,rgba(202,95,21,0.25)_100%)]",
             ].join(" ")}
           >
             <div
               className={[
-                "w-7 h-7 rounded-full bg-white border-2 border-[rgba(15,23,42,0.15)] flex items-center justify-center transition-all duration-220 relative z-[1]",
+                "w-7 h-7 rounded-full bg-white dark:bg-slate-800 border-2 border-[rgba(15,23,42,0.15)] dark:border-slate-600 flex items-center justify-center transition-all duration-220 relative z-[1]",
                 isDone && "!bg-[#ca5f15] !border-[#ca5f15] shadow-[0_4px_12px_-2px_rgba(202,95,21,0.35)]",
-                isCurrent && "!border-[#ca5f15] bg-white shadow-[0_0_0_5px_rgba(202,95,21,0.14),_0_4px_12px_-2px_rgba(202,95,21,0.25)] animate-pulse-glow after:content-[''] after:w-2.5 after:h-2.5 after:rounded-full after:bg-[#ca5f15]",
+                isCurrent && "!border-[#ca5f15] bg-white dark:bg-slate-800 shadow-[0_0_0_5px_rgba(202,95,21,0.14),_0_4px_12px_-2px_rgba(202,95,21,0.25)] animate-pulse-glow after:content-[''] after:w-2.5 after:h-2.5 after:rounded-full after:bg-[#ca5f15]",
               ].join(" ")}
             >
               {isDone && <Check className="w-3.5 h-3.5 text-white" />}
             </div>
             <p
               className={[
-                "text-[0.6875rem] font-bold tracking-[0.14em] uppercase text-[rgba(15,23,42,0.35)] mt-3 text-center leading-[1.2] transition-colors duration-220",
+                "text-[0.6875rem] font-bold tracking-[0.14em] uppercase text-[rgba(15,23,42,0.35)] dark:text-slate-500 mt-3 text-center leading-[1.2] transition-colors duration-220",
                 isDone && "!text-[rgba(202,95,21,0.85)]",
                 isCurrent && "!text-[#ca5f15]",
               ].join(" ")}

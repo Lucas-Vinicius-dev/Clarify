@@ -37,7 +37,7 @@ export default function LandingPage() {
   }, [])
 
   return (
-    <div className="relative min-h-screen text-slate-900 overflow-x-hidden bg-brand-surface">
+    <div className="relative min-h-screen text-slate-900 dark:text-slate-100 overflow-x-hidden bg-brand-surface dark:bg-slate-900">
       {/* Fundo sutil */}
       <div className="pointer-events-none fixed inset-0 -z-10">
         <div className="absolute inset-0 opacity-25"></div>
@@ -47,7 +47,7 @@ export default function LandingPage() {
       {/* Navbar */}
       <nav
         className={`sticky top-0 z-30 border-b transition-all duration-300 ${
-          scrolled ? 'border-slate-200/50 bg-white/80 backdrop-blur' : 'border-transparent'
+          scrolled ? 'border-slate-200/50 dark:border-slate-700/50 bg-white/80 dark:bg-slate-900/80 backdrop-blur' : 'border-transparent'
         }`}
       >
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -60,22 +60,22 @@ export default function LandingPage() {
               className="w-9 h-9 object-contain drop-shadow-[0_4px_12px_rgba(202,95,21,0.25)]"
             />
             <div className="leading-none">
-              <p className="text-base font-bold text-slate-900 tracking-tight">Clarify</p>
+              <p className="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight">Clarify</p>
               <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-slate-400 mt-0.5">Federal Institution</p>
             </div>
           </Link>
 
           <div className="hidden md:flex items-center gap-1">
-            <a href="#como-funciona" className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
+            <a href="#como-funciona" className="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors">
               Como funciona
             </a>
-            <a href="#quem-usa" className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
+            <a href="#quem-usa" className="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors">
               Perfis
             </a>
           </div>
 
           <div className="flex items-center gap-2">
-            <Link href="/registro" className="hidden sm:inline-flex items-center text-sm font-medium text-slate-500 hover:text-slate-900 px-3 py-2 transition-colors">
+            <Link href="/registro" className="hidden sm:inline-flex items-center text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 px-3 py-2 transition-colors">
               Criar conta
             </Link>
             <Link href="/login" className="inline-flex items-center gap-1.5 text-sm font-bold rounded-full px-4 py-2 bg-brand-primary text-white hover:bg-orange-700 transition-colors">
@@ -90,13 +90,13 @@ export default function LandingPage() {
       <section id="topo" className="relative pt-14 md:pt-24 pb-16 md:pb-24">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto" data-reveal>
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] text-slate-900">
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] text-slate-900 dark:text-slate-100">
               Aberto, em análise,
               <br />
               <span className="text-gradient-warm">resolvido.</span>
             </h1>
 
-            <p className="mt-6 text-base md:text-lg text-slate-600 leading-relaxed">
+            <p className="mt-6 text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
               O caminho de cada solicitação acadêmica, do clique do aluno à resposta da coordenação. Em um lugar só, com protocolo único e histórico do semestre.
             </p>
 
@@ -105,7 +105,7 @@ export default function LandingPage() {
                 Entrar
                 <ArrowRight className="w-4 h-4" />
               </Link>
-              <Link href="/registro" className="inline-flex items-center justify-center gap-2 text-sm font-semibold rounded-xl px-6 py-3 bg-white border border-slate-200 text-slate-900 hover:bg-slate-50 transition-colors w-full sm:w-auto">
+              <Link href="/registro" className="inline-flex items-center justify-center gap-2 text-sm font-semibold rounded-xl px-6 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors w-full sm:w-auto">
                 Criar conta
               </Link>
             </div>
@@ -121,13 +121,13 @@ export default function LandingPage() {
               <div className="absolute inset-x-10 top-6 h-72 rounded-[3rem] bg-gradient-to-br from-brand-primary/25 via-orange-300/25 to-amber-200/20 blur-3xl"></div>
             </div>
 
-            <div className="relative bg-white border border-slate-200/80 rounded-3xl shadow-2xl overflow-hidden">
-              <div className="flex items-center gap-2 px-5 py-3 border-b border-slate-100 bg-gradient-to-b from-slate-50 to-white">
+            <div className="relative bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 rounded-3xl shadow-2xl overflow-hidden">
+              <div className="flex items-center gap-2 px-5 py-3 border-b border-slate-100 dark:border-slate-700 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
                 <span className="w-2.5 h-2.5 rounded-full bg-rose-300"></span>
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-300"></span>
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-300"></span>
                 <span className="ml-3 text-[11px] text-slate-400 font-mono tracking-tight">clarify.app/centraldemandas</span>
-                <span className="ml-auto inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-full px-2 py-0.5">
+                <span className="ml-auto inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900 rounded-full px-2 py-0.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                   ao vivo
                 </span>
@@ -137,7 +137,7 @@ export default function LandingPage() {
                 <div className="flex items-end justify-between mb-5">
                   <div>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.22em]">Portal · Central de Demandas</p>
-                    <h3 className="text-xl md:text-2xl font-bold text-slate-900 mt-1">
+                    <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-slate-100 mt-1">
                       Em Aberto <span className="text-slate-300 ml-1 text-base">3</span>
                     </h3>
                   </div>
@@ -149,14 +149,14 @@ export default function LandingPage() {
 
                 <div className="grid md:grid-cols-3 gap-3.5">
                   {/* Card 1 */}
-                  <div className="bg-white rounded-xl border border-slate-200 p-4 flex flex-col gap-2.5">
+                  <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 flex flex-col gap-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-[10px] font-bold text-slate-400 tracking-[0.18em]">#REQ-402</span>
-                      <span className="text-[9px] font-bold uppercase tracking-[0.16em] px-2 py-0.5 rounded-full border bg-blue-50 text-blue-800 border-blue-200">Em Análise</span>
+                      <span className="text-[9px] font-bold uppercase tracking-[0.16em] px-2 py-0.5 rounded-full border bg-blue-50 text-blue-800 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-900">Em Análise</span>
                     </div>
-                    <h4 className="text-sm font-bold text-slate-900 leading-snug">Quebra de Pré-requisito</h4>
-                    <p className="text-[12px] text-slate-500 leading-relaxed line-clamp-2">Solicitação de matrícula em Compiladores antes de Linguagens Formais.</p>
-                    <div className="flex items-center gap-3 pt-2 border-t border-slate-100 text-[10px] text-slate-400">
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-snug">Quebra de Pré-requisito</h4>
+                    <p className="text-[12px] text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2">Solicitação de matrícula em Compiladores antes de Linguagens Formais.</p>
+                    <div className="flex items-center gap-3 pt-2 border-t border-slate-100 dark:border-slate-700 text-[10px] text-slate-400">
                       <span className="inline-flex items-center gap-1">
                         <Calendar className="w-3 h-3" /> 02 Out
                       </span>
@@ -167,14 +167,14 @@ export default function LandingPage() {
                   </div>
 
                   {/* Card 2 */}
-                  <div className="bg-white rounded-xl border border-slate-200 p-4 flex flex-col gap-2.5">
+                  <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 flex flex-col gap-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-[10px] font-bold text-slate-400 tracking-[0.18em]">#REQ-419</span>
-                      <span className="text-[9px] font-bold uppercase tracking-[0.16em] px-2 py-0.5 rounded-full border bg-amber-50 text-amber-800 border-amber-200">Pendente</span>
+                      <span className="text-[9px] font-bold uppercase tracking-[0.16em] px-2 py-0.5 rounded-full border bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-900">Pendente</span>
                     </div>
-                    <h4 className="text-sm font-bold text-slate-900 leading-snug">Revisão de Prova</h4>
-                    <p className="text-[12px] text-slate-500 leading-relaxed line-clamp-2">Pedido de revisão da prova final de Estrutura de Dados.</p>
-                    <div className="flex items-center gap-3 pt-2 border-t border-slate-100 text-[10px] text-slate-400">
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-snug">Revisão de Prova</h4>
+                    <p className="text-[12px] text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2">Pedido de revisão da prova final de Estrutura de Dados.</p>
+                    <div className="flex items-center gap-3 pt-2 border-t border-slate-100 dark:border-slate-700 text-[10px] text-slate-400">
                       <span className="inline-flex items-center gap-1">
                         <Calendar className="w-3 h-3" /> 02 Out
                       </span>
@@ -185,14 +185,14 @@ export default function LandingPage() {
                   </div>
 
                   {/* Card 3 */}
-                  <div className="bg-white rounded-xl border border-slate-200 p-4 flex flex-col gap-2.5">
+                  <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 flex flex-col gap-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-[10px] font-bold text-slate-400 tracking-[0.18em]">#REQ-443</span>
-                      <span className="text-[9px] font-bold uppercase tracking-[0.16em] px-2 py-0.5 rounded-full border bg-emerald-50 text-emerald-800 border-emerald-200">Concluído</span>
+                      <span className="text-[9px] font-bold uppercase tracking-[0.16em] px-2 py-0.5 rounded-full border bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-900">Concluído</span>
                     </div>
-                    <h4 className="text-sm font-bold text-slate-900 leading-snug">Cancelamento de Matrícula</h4>
-                    <p className="text-[12px] text-slate-500 leading-relaxed line-clamp-2">Solicitação de cancelamento em Linguagens Formais.</p>
-                    <div className="flex items-center gap-3 pt-2 border-t border-slate-100 text-[10px] text-slate-400">
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-snug">Cancelamento de Matrícula</h4>
+                    <p className="text-[12px] text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2">Solicitação de cancelamento em Linguagens Formais.</p>
+                    <div className="flex items-center gap-3 pt-2 border-t border-slate-100 dark:border-slate-700 text-[10px] text-slate-400">
                       <span className="inline-flex items-center gap-1">
                         <Calendar className="w-3 h-3" /> 01 Out
                       </span>
@@ -212,8 +212,8 @@ export default function LandingPage() {
       <section id="como-funciona" className="relative py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-12" data-reveal>
-            <h2 className="text-3xl md:text-5xl font-bold text-slate-900">Como funciona</h2>
-            <p className="mt-4 text-lg text-slate-600">Três passos para gerenciar todas as solicitações</p>
+            <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-slate-100">Como funciona</h2>
+            <p className="mt-4 text-lg text-slate-600 dark:text-slate-300">Três passos para gerenciar todas as solicitações</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8" data-reveal>
@@ -226,8 +226,8 @@ export default function LandingPage() {
                 <div className="w-16 h-16 rounded-full bg-brand-primary/10 flex items-center justify-center mb-4">
                   <item.icon className="w-8 h-8 text-brand-primary" />
                 </div>
-                <h3 className="text-lg font-bold text-slate-900">{item.title}</h3>
-                <p className="text-slate-600 mt-2">{item.desc}</p>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">{item.title}</h3>
+                <p className="text-slate-600 dark:text-slate-300 mt-2">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -235,11 +235,11 @@ export default function LandingPage() {
       </section>
 
       {/* Perfis */}
-      <section id="quem-usa" className="relative py-16 md:py-24 bg-white/50">
+      <section id="quem-usa" className="relative py-16 md:py-24 bg-white/50 dark:bg-slate-800/50">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-12" data-reveal>
-            <h2 className="text-3xl md:text-5xl font-bold text-slate-900">Para alunos e coordenadores</h2>
-            <p className="mt-4 text-lg text-slate-600">Ferramentas pensadas para cada perfil</p>
+            <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-slate-100">Para alunos e coordenadores</h2>
+            <p className="mt-4 text-lg text-slate-600 dark:text-slate-300">Ferramentas pensadas para cada perfil</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8" data-reveal>
@@ -260,14 +260,14 @@ export default function LandingPage() {
                 icon: Eye,
               },
             ].map((profile) => (
-              <div key={profile.title} className="bg-white border border-slate-200 rounded-2xl p-8">
+              <div key={profile.title} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-8">
                 <div className="flex items-center gap-3 mb-6">
                   <profile.icon className="w-8 h-8 text-brand-primary" />
-                  <h3 className="text-2xl font-bold text-slate-900">{profile.title}</h3>
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{profile.title}</h3>
                 </div>
                 <ul className="space-y-3">
                   {profile.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-3 text-slate-700">
+                    <li key={feature} className="flex items-center gap-3 text-slate-700 dark:text-slate-300">
                       <Check className="w-5 h-5 text-emerald-500" />
                       {feature}
                     </li>
@@ -282,14 +282,14 @@ export default function LandingPage() {
       {/* CTA Final */}
       <section className="relative py-16 md:py-24">
         <div className="max-w-3xl mx-auto px-6 text-center" data-reveal>
-          <h2 className="text-3xl md:text-5xl font-bold text-slate-900">Pronto para começar?</h2>
-          <p className="mt-4 text-lg text-slate-600">Entre com suas credenciais ou crie uma nova conta</p>
+          <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-slate-100">Pronto para começar?</h2>
+          <p className="mt-4 text-lg text-slate-600 dark:text-slate-300">Entre com suas credenciais ou crie uma nova conta</p>
           <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link href="/login" className="inline-flex items-center justify-center gap-2 text-sm font-bold rounded-xl px-6 py-3 bg-brand-primary text-white hover:bg-orange-700 transition-colors w-full sm:w-auto">
               Entrar
               <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link href="/registro" className="inline-flex items-center justify-center gap-2 text-sm font-semibold rounded-xl px-6 py-3 bg-white border border-slate-200 text-slate-900 hover:bg-slate-50 transition-colors w-full sm:w-auto">
+            <Link href="/registro" className="inline-flex items-center justify-center gap-2 text-sm font-semibold rounded-xl px-6 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors w-full sm:w-auto">
               Criar conta
             </Link>
           </div>
@@ -297,9 +297,9 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 py-8 md:py-12 bg-slate-50">
+      <footer className="border-t border-slate-200 dark:border-slate-700 py-8 md:py-12 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center text-slate-600 text-sm">
+          <div className="text-center text-slate-600 dark:text-slate-300 text-sm">
             <p>© 2026 Clarify. Todos os direitos reservados.</p>
             <p className="mt-2">Versão v0.0.0 · Federal Institution</p>
           </div>
