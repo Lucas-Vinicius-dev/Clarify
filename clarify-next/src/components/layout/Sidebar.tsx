@@ -7,6 +7,7 @@ import {
   Plus,
   FileText,
   Shield,
+  KeyRound,
   LogOut,
 } from 'lucide-react';
 import type { Cargo } from '@/types';
@@ -20,8 +21,8 @@ interface SidebarProps {
 
 /**
  * Sidebar desktop com navegação por cargo
- * - Coordenador: Início, Alunos, Adicionar, Demandas, Turmas
- * - Aluno: Central de Demandas, Documentos
+ * - Coordenador: Início, Alunos, Adicionar, Demandas, Turmas, Chaves
+ * - Aluno: Central de Demandas, Minhas turmas
  */
 export function Sidebar({
   cargo,
@@ -37,14 +38,16 @@ export function Sidebar({
           { id: 'adicionar', label: 'Adicionar aluno', icon: Plus },
           { id: 'demandas', label: 'Demandas', icon: FileText },
           { id: 'turmas', label: 'Turmas', icon: Shield },
+          { id: 'chaves', label: 'Chaves', icon: KeyRound },
         ]
       : [
           { id: 'nome', label: 'Início', icon: User },
           { id: 'demandas', label: 'Minhas demandas', icon: FileText },
+          { id: 'turmas', label: 'Minhas turmas', icon: Shield },
         ];
 
   return (
-    <aside className="flex flex-col w-64 bg-gray-50 shadow border-r border-gray-200 p-5 shrink-0 h-screen overflow-y-auto">
+    <aside className="flex flex-col w-64 bg-gray-50 dark:bg-slate-900 shadow border-r border-gray-200 dark:border-slate-700 p-5 shrink-0 h-screen overflow-y-auto">
       {/* Logo */}
       <div className="mb-6 flex items-center gap-3 px-2">
         <Image
@@ -67,7 +70,7 @@ export function Sidebar({
             className={`flex items-center gap-3 rounded-xl px-4 py-3 text-left font-medium transition-colors ${
               currentView === id
                 ? 'bg-orange-50 text-orange-600'
-                : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600'
+                : 'text-gray-700 dark:text-slate-300 hover:bg-orange-50 hover:text-orange-600'
             }`}
             aria-current={currentView === id ? 'page' : undefined}
           >

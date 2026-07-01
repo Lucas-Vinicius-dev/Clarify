@@ -11,14 +11,18 @@ Clarify é uma aplicação web para centralizar, organizar e dar transparência 
 - **Dashboard do Coordenador** — Gerenciar alunos vinculados, analisar e responder demandas, criar turmas
 - **Gestão de Turmas** — Criar turmas com alunos vinculados
 - **Registro com chave de ativação** — Coordenadores se cadastram mediante chave fornecida pela instituição
-- **Persistência local** — Dados armazenados no navegador via localStorage (sem backend)
+- **Persistência em nuvem** — Dados armazenados no Supabase (PostgreSQL) com Row Level Security
 
 ## Tecnologias
 
-- **Next.js** (App Router)
+- **Next.js 16** (App Router)
 - **React 19**
-- **TypeScript**
+- **TypeScript 5**
 - **Tailwind CSS 4**
+- **Supabase** (PostgreSQL + Auth + RLS)
+- **TanStack React Query** (estado servidor)
+- **Zustand** (estado cliente)
+- **React Hook Form + Zod** (validação)
 - **Lucide React** (ícones)
 
 ## Como rodar
@@ -38,13 +42,14 @@ Abra [http://localhost:3000](http://localhost:3000).
 | Aluno | `003` | `123456` |
 | Aluno | `456` | `123456` |
 
-### Build estático (GitHub Pages)
+### Build de produção
 
 ```bash
 npm run build
+npm start
 ```
 
-O output será gerado em `out/` pronto para servir em `/Clarify/`.
+> O projeto depende das variáveis de ambiente em `.env.local` para conexão com Supabase.
 
 ## Estrutura
 
@@ -54,6 +59,19 @@ src/
 ├── components/    # Componentes React (layout, demandas, coord, ui)
 ├── context/       # AuthContext (autenticação reativa)
 ├── hooks/         # Hooks de dados (useDemandas, useUsuarios, useTurmas)
-├── lib/           # Lógica de domínio (auth, demandas, localStorage, migrations)
+├── lib/           # Clientes Supabase e utilitários
+├── schemas/       # Schemas Zod (auth, demandas, turmas, usuarios)
+├── store/         # Zustand stores (uiStore, filtrosStore)
 └── types/         # Interfaces TypeScript
 ```
+
+## Documentação
+
+- [PRD.md](./PRD.md) — Product Requirements Document (visão geral, requisitos, roadmap)
+- [specs/](./specs/) — Artefatos de engenharia de software:
+  - [Histórias de Usuário](./specs/historias-usuario.md)
+  - [Critérios de Aceitação](./specs/criterios-aceitacao.md)
+  - [Diagramas](./specs/diagramas.md)
+  - [Protótipos](./specs/prototipos.md)
+- [PLAN-10-10.md](./PLAN-10-10.md) — Roadmap detalhado para nota 10/10
+- [PLANEJAMENTO-COMPARACAO.md](./PLANEJAMENTO-COMPARACAO.md) — Auditoria de paridade Clarify original × clarify-next

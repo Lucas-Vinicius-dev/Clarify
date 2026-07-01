@@ -34,6 +34,19 @@ async function existe(matricula: string, email: string): Promise<boolean> {
   return (data ?? []).length > 0
 }
 
+export function useAlunosDoCoordenador(coordenadorId: string | null | undefined) {
+  return useQuery({
+    queryKey: ['students', coordenadorId],
+    queryFn: async () => {
+      if (!coordenadorId) return []
+      const res = await fetch(`/api/perfis?coordenadorId=${encodeURIComponent(coordenadorId)}&cargo=aluno`)
+      const data = await res.json()
+      return (data ?? []).map(mapProfileToUser) as UsuarioLogado[]
+    },
+    enabled: !!coordenadorId,
+  })
+}
+
 export function useUsuarios() {
   const queryClient = useQueryClient()
 

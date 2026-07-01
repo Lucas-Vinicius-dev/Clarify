@@ -1,11 +1,14 @@
 'use client';
 
-import { FileText, Calendar, Tag, Hash, Mail, MessageSquareQuote } from 'lucide-react';
-import { Modal } from '@/components/ui/Modal';
+import { FileText, Calendar, Tag, Hash, Mail, MessageSquareQuote, Download, Paperclip } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogFooter } from '@/components/ui/Dialog';
 import { Badge } from '@/components/ui/Badge';
 import { Card } from '@/components/ui/Card';
 import { TimelineProgresso } from './TimelineProgresso';
+import { useAnexos } from '@/hooks/useAnexos';
 import { obterLabelStatus, formatarData } from '@/lib/utils';
+import { cn } from '@/lib/utils';
+import { CAMPOS_POR_TIPO } from '@/lib/camposDemanda';
 import type { Demanda, StatusDemanda, UsuarioLogado } from '@/types';
 
 const statusVariant: Record<StatusDemanda, 'pendente' | 'em_analise' | 'requer_ajuste' | 'concluido'> = {
@@ -31,7 +34,20 @@ function diasDesde(dataISO: string): number | null {
   return Math.max(0, Math.round(diffMs / (1000 * 60 * 60 * 24)));
 }
 
+function formatarTamanho(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+const labelClass = "text-[0.6875rem] font-bold tracking-[0.18em] uppercase text-[rgba(15,23,42,0.45)] dark:text-slate-400";
+const dotClass = "inline-block w-1.5 h-1.5 rounded-full bg-[#ca5f15] shadow-[0_0_0_3px_rgba(202,95,21,0.18)]";
+const btnGhostClass = "inline-flex items-center gap-1.5 bg-transparent text-[rgba(15,23,42,0.65)] dark:text-slate-300 font-semibold text-sm py-3 px-4 rounded-xl hover:bg-[rgba(15,23,42,0.05)] dark:hover:bg-slate-700 hover:text-[#0f172a] dark:hover:text-slate-100 transition-[background-color,color] duration-180 cursor-pointer";
+const staggerClass = "stagger-container";
+
 export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: ModalDetalhesDemandaProps) {
+  const { anexos, loading: anexosLoading } = useAnexos(demanda?.protocolo ?? null);
+
   if (!demanda) return null;
 
   const statusLabel = obterLabelStatus(demanda.status);
@@ -41,103 +57,162 @@ export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: Moda
   const emailRemetente = remetente?.email || '—';
 
   return (
-    <Modal open={open} onClose={onClose} maxWidth="max-w-xl" showCloseButton={false}>
-      <article className="flex flex-col modal-scroll">
-        <div className="flex items-start justify-between px-5 sm:px-7 pt-5 sm:pt-6">
-          <div className="inline-flex items-center gap-2">
-            <span className="modal-eyebrow-dot"></span>
-            <span className="modal-label">Solicitação · #{demanda.protocolo}</span>
-          </div>
-        </div>
-
-        <div className="px-5 sm:px-7 pt-4 sm:pt-5 pb-2 modal-stagger">
-          <header className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-            <div className="min-w-0 flex-1">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tighter-2 leading-tight break-words [overflow-wrap:anywhere]">
-                {demanda.tipo}
-              </h2>
-              <p className="text-sm text-gray-500 mt-1.5">
-                Aberta em <span className="font-semibold text-gray-700">{formatarData(demanda.dataCriacao)}</span>
-                {dias !== null ? ` · há ${dias} dias` : ''}
-              </p>
+    <Dialog open={open} onOpenChange={(open) => { if (!open) onClose(); }}>
+      <DialogContent className="max-w-xl">
+        <article className="flex flex-col max-h-[calc(100vh-8rem)] sm:max-h-[calc(100vh-4rem)] overflow-y-auto scrollbar-thin">
+          <DialogHeader className="border-none">
+            <div className="inline-flex items-center gap-2">
+              <span className={dotClass} />
+              <span className={labelClass}>Solicitação · #{demanda.protocolo}</span>
             </div>
-            <Badge variant={statusVariant[demanda.status]} className="self-start text-[10px] uppercase tracking-widest border">
-              <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70 mr-1.5" />
-              {statusLabel}
-            </Badge>
-          </header>
+          </DialogHeader>
 
-          <section className="mt-6 bg-gradient-to-br from-white to-brand-surface/50 rounded-2xl border border-gray-100 px-3 sm:px-6 py-4">
-            <TimelineProgresso status={demanda.status} />
-          </section>
-
-          <section className="mt-6">
-            <div className="flex items-center gap-2 mb-3">
-              <FileText className="w-3.5 h-3.5 text-brand-primary" />
-              <p className="modal-label">Detalhes da solicitação</p>
-            </div>
-            <Card className="bg-brand-surface/50 border-brand-surface-dim/40 rounded-2xl px-5 py-4 shadow-none">
-              <p className="text-[0.95rem] sm:text-base text-gray-800 leading-relaxed break-words [overflow-wrap:anywhere] whitespace-pre-wrap">
-                {demanda.descricao}
-              </p>
-            </Card>
-          </section>
-
-          <section className="mt-6">
-            <p className="modal-label">Enviado por</p>
-            <div className="mt-3 flex items-center gap-3 bg-brand-surface/60 rounded-2xl px-4 py-3 border border-gray-100">
-              <div className="w-11 h-11 rounded-full bg-brand-primary text-white text-base font-bold flex items-center justify-center shrink-0 shadow-soft-md">
-                {inicialRemetente}
-              </div>
-              <div className="min-w-0">
-                <p className="text-sm font-semibold text-gray-900 truncate">{nomeRemetente}</p>
-                <p className="text-xs text-gray-500 truncate inline-flex items-center gap-1.5">
-                  <Hash className="w-3 h-3" />
-                  {remetente?.matricula || demanda.alunoId.slice(0, 8)}
-                  <span className="opacity-30">·</span>
-                  <Mail className="w-3 h-3" />
-                  <span className="truncate">{emailRemetente}</span>
+          <div className={cn("px-5 sm:px-7 pt-4 sm:pt-5 pb-2", staggerClass)}>
+            <header className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+              <div className="min-w-0 flex-1">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100 tracking-tighter-2 leading-tight break-words [overflow-wrap:anywhere]">
+                  {demanda.tipo}
+                </h2>
+                <p className="text-sm text-gray-500 dark:text-slate-400 mt-1.5">
+                  Aberta em <span className="font-semibold text-gray-700 dark:text-slate-300">{formatarData(demanda.dataCriacao)}</span>
+                  {dias !== null ? ` · há ${dias} dias` : ''}
                 </p>
               </div>
-            </div>
-          </section>
-
-          <section className="mt-7 grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Card className="rounded-2xl px-4 py-3 shadow-none">
-              <p className="modal-label">Criada em</p>
-              <p className="text-sm font-semibold text-gray-900 mt-1 inline-flex items-center gap-1.5">
-                <Calendar className="w-3.5 h-3.5 text-gray-400" />
-                {formatarData(demanda.dataCriacao)}
-              </p>
-            </Card>
-            <Card className="rounded-2xl px-4 py-3 shadow-none">
-              <p className="modal-label">Status</p>
-              <p className="text-sm font-semibold text-gray-900 mt-1 inline-flex items-center gap-1.5">
-                <Tag className="w-3.5 h-3.5 text-gray-400" />
+              <Badge variant={statusVariant[demanda.status]} className="self-start text-[10px] uppercase tracking-widest border">
+                <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70 mr-1.5" />
                 {statusLabel}
-              </p>
-            </Card>
-          </section>
+              </Badge>
+            </header>
 
-          {demanda.feedback && (
+            <section className="mt-6 bg-gradient-to-br from-white to-brand-surface/50 dark:from-slate-800 dark:to-slate-900 rounded-2xl border border-gray-100 dark:border-slate-700 px-3 sm:px-6 py-4">
+              <TimelineProgresso status={demanda.status} />
+            </section>
+
             <section className="mt-6">
-              <p className="modal-label inline-flex items-center gap-1.5">
-                <MessageSquareQuote className="w-3.5 h-3.5" />
-                Observação da coordenação
-              </p>
-              <div className="mt-3 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 text-sm text-amber-900 leading-relaxed break-words [overflow-wrap:anywhere] whitespace-pre-wrap">
-                {demanda.feedback}
+              <div className="flex items-center gap-2 mb-3">
+                <FileText className="w-3.5 h-3.5 text-brand-primary" />
+                <p className={labelClass}>Detalhes da solicitação</p>
+              </div>
+              <Card className="bg-brand-surface/50 dark:bg-slate-900/50 border-brand-surface-dim/40 dark:border-slate-700 rounded-2xl px-5 py-4 shadow-none">
+                <p className="text-[0.95rem] sm:text-base text-gray-800 dark:text-slate-200 leading-relaxed break-words [overflow-wrap:anywhere] whitespace-pre-wrap">
+                  {demanda.descricao}
+                </p>
+              </Card>
+            </section>
+
+            {demanda.camposExtras && Object.keys(demanda.camposExtras).length > 0 && (
+              <section className="mt-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <FileText className="w-3.5 h-3.5 text-brand-primary" />
+                  <p className={labelClass}>Detalhes · {demanda.tipo}</p>
+                </div>
+                <Card className="bg-brand-surface/50 border-brand-surface-dim/40 rounded-2xl px-5 py-4 shadow-none">
+                  <dl className="space-y-3">
+                    {CAMPOS_POR_TIPO[demanda.tipo]?.map((campo) => {
+                      const valor = demanda.camposExtras?.[campo.name];
+                      if (!valor) return null;
+                      return (
+                        <div key={campo.name} className="flex flex-col gap-0.5">
+                          <dt className={labelClass}>{campo.label}</dt>
+                          <dd className="text-sm text-gray-800 leading-relaxed break-words [overflow-wrap:anywhere] whitespace-pre-wrap">
+                            {campo.type === 'date' ? formatarData(valor) : valor}
+                          </dd>
+                        </div>
+                      );
+                    })}
+                  </dl>
+                </Card>
+              </section>
+            )}
+
+            {(anexos.length > 0 || anexosLoading) && (
+              <section className="mt-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <Paperclip className="w-3.5 h-3.5 text-brand-primary" />
+                  <p className={labelClass}>Anexos</p>
+                </div>
+                {anexosLoading ? (
+                  <p className="text-sm text-gray-400">Carregando anexos...</p>
+                ) : (
+                  <ul className="space-y-1.5">
+                    {anexos.map((anexo) => (
+                      <li key={anexo.id}>
+                        <a
+                          href={anexo.urlAssinada}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2.5 bg-brand-surface/60 rounded-lg px-3 py-2 border border-gray-100 hover:border-brand-primary/30 hover:bg-brand-surface transition-[border-color,background-color] duration-180"
+                        >
+                          <FileText className="w-4 h-4 text-brand-primary shrink-0" />
+                          <div className="min-w-0 flex-1">
+                            <p className="text-xs font-semibold text-gray-900 truncate">{anexo.nomeArquivo}</p>
+                            <p className="text-[0.6875rem] text-gray-400">{formatarTamanho(anexo.tamanhoBytes)}</p>
+                          </div>
+                          <Download className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            )}
+
+            <section className="mt-6">
+              <p className={labelClass}>Enviado por</p>
+              <div className="mt-3 flex items-center gap-3 bg-brand-surface/60 dark:bg-slate-900/60 rounded-2xl px-4 py-3 border border-gray-100 dark:border-slate-700">
+                <div className="w-11 h-11 rounded-full bg-brand-primary text-white text-base font-bold flex items-center justify-center shrink-0 shadow-soft-md">
+                  {inicialRemetente}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-slate-100 truncate">{nomeRemetente}</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400 truncate inline-flex items-center gap-1.5">
+                    <Hash className="w-3 h-3" />
+                    {remetente?.matricula || demanda.alunoId.slice(0, 8)}
+                    <span className="opacity-30">·</span>
+                    <Mail className="w-3 h-3" />
+                    <span className="truncate">{emailRemetente}</span>
+                  </p>
+                </div>
               </div>
             </section>
-          )}
-        </div>
 
-        <footer className="flex items-center justify-end gap-3 px-5 sm:px-7 py-4 mt-3 border-t border-gray-100 bg-gradient-to-b from-white to-brand-surface/40">
-          <button type="button" className="modal-btn-ghost" onClick={onClose}>
-            Fechar
-          </button>
-        </footer>
-      </article>
-    </Modal>
+            <section className="mt-7 grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Card className="rounded-2xl px-4 py-3 shadow-none">
+                <p className={labelClass}>Criada em</p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-slate-100 mt-1 inline-flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5 text-gray-400 dark:text-slate-500" />
+                  {formatarData(demanda.dataCriacao)}
+                </p>
+              </Card>
+              <Card className="rounded-2xl px-4 py-3 shadow-none">
+                <p className={labelClass}>Status</p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-slate-100 mt-1 inline-flex items-center gap-1.5">
+                  <Tag className="w-3.5 h-3.5 text-gray-400 dark:text-slate-500" />
+                  {statusLabel}
+                </p>
+              </Card>
+            </section>
+
+            {demanda.feedback && (
+              <section className="mt-6">
+                <p className={cn(labelClass, "inline-flex items-center gap-1.5")}>
+                  <MessageSquareQuote className="w-3.5 h-3.5" />
+                  Observação da coordenação
+                </p>
+                <div className="mt-3 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-2xl px-4 py-3 text-sm text-amber-900 dark:text-amber-200 leading-relaxed break-words [overflow-wrap:anywhere] whitespace-pre-wrap">
+                  {demanda.feedback}
+                </div>
+              </section>
+            )}
+          </div>
+
+          <DialogFooter className="justify-end border-t-0">
+            <button type="button" className={btnGhostClass} onClick={onClose}>
+              Fechar
+            </button>
+          </DialogFooter>
+        </article>
+      </DialogContent>
+    </Dialog>
   );
 }

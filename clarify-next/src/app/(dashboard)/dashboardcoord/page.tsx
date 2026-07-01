@@ -1,67 +1,63 @@
 'use client';
 
-import { useReducer, useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { ModalCriarTurma } from '@/components/coordenador/ModalCriarTurma';
+import { ModalEditarTurma } from '@/components/coordenador/ModalEditarTurma';
+import { ModalConfirmarExclusao } from '@/components/coordenador/ModalConfirmarExclusao';
 import { ModalFeedback } from '@/components/coordenador/ModalFeedback';
 import { ModalDetalhesDemanda } from '@/components/demandas/ModalDetalhesDemanda';
 import { FormAdicionarAluno } from '@/components/coordenador/FormAdicionarAluno';
 import { useAuth } from '@/context/AuthContext';
 import { useDemandas } from '@/hooks/useDemandas';
-import { useUsuarios } from '@/hooks/useUsuarios';
-import type { Cargo, UsuarioLogado } from '@/types';
+import { useUsuarios, useAlunosDoCoordenador } from '@/hooks/useUsuarios';
 import { useTurmas } from '@/hooks/useTurmas';
+import { useChaves } from '@/hooks/useChaves';
 import { atualizarStatusDemanda } from '@/lib/demandas';
+import type { Turma } from '@/types';
+import { useUIStore } from '@/store/uiStore';
 import { VisaoGeral } from './_components/VisaoGeral';
 import { ListaAlunos } from './_components/ListaAlunos';
 import { ListaDemandas } from './_components/ListaDemandas';
 import { ListaTurmas } from './_components/ListaTurmas';
-import { dashboardUiReducer, initialDashboardUiState } from './_components/dashboardState';
+import { ListaChaves } from './_components/ListaChaves';
 
-function mapProfileToUser(row: Record<string, unknown>): UsuarioLogado {
-  return {
-    id: row.id as string,
-    nome: row.nome as string,
-    matricula: row.matricula as string,
-    email: row.email as string,
-    cargo: row.cargo as Cargo,
-    coordenador_id: (row.coordenador_id as string) ?? undefined,
-  };
-}
+type DashView = 'nome' | 'alunos' | 'demandas' | 'turmas' | 'adicionar' | 'chaves';
 
-type DashView = 'nome' | 'alunos' | 'demandas' | 'turmas' | 'adicionar';
-
-const VIEWS: DashView[] = ['nome', 'alunos', 'demandas', 'turmas', 'adicionar'];
+const VIEWS: DashView[] = ['nome', 'alunos', 'demandas', 'turmas', 'adicionar', 'chaves'];
 
 export default function DashboardCoordPage() {
   const queryClient = useQueryClient();
   const { usuario } = useAuth();
-  const { demandas, recarregar: recarregarDemandas } = useDemandas();
+  const { demandas, recarregar: recarregarDemandas, atualizarStatus } = useDemandas();
   const usuariosHook = useUsuarios();
   const turmasHook = useTurmas();
+  const { chaves, loading: chavesLoading, gerar: gerarChave, gerando: gerandoChave, ultimaGerada } = useChaves();
   const searchParams = useSearchParams();
 
   const rawView = searchParams.get('view') as DashView | null;
   const view: DashView = rawView && VIEWS.includes(rawView) ? rawView : 'nome';
 
-  const [ui, dispatch] = useReducer(dashboardUiReducer, initialDashboardUiState);
+  const {
+    modalTurmaAberta, setModalTurmaAberta,
+    modalFeedbackAberta, setModalFeedbackAberta,
+    protocoloFeedback, setProtocoloFeedback,
+    modalDetalhesAberta, setModalDetalhesAberta,
+    demandaDetalhe, setDemandaDetalhe,
+    remetenteDetalhe, setRemetenteDetalhe,
+  } = useUIStore();
 
-  const { data: alunosDoCoord = [] } = useQuery({
-    queryKey: ['alunos', usuario?.id],
-    queryFn: async () => {
-      const res = await fetch(`/api/perfis?coordenadorId=${encodeURIComponent(usuario!.id)}&cargo=aluno`)
-      const data = await res.json()
-      return (data ?? []).map(mapProfileToUser) as UsuarioLogado[]
-    },
-    enabled: !!usuario?.id,
-  });
+  const { data: alunosDoCoord = [] } = useAlunosDoCoordenador(usuario?.id);
 
   const alunoIds = useMemo(() => new Set(alunosDoCoord.map((a) => a.id)), [alunosDoCoord]);
 
   const demandasDoCoord = useMemo(
-    () => demandas.filter((d) => alunoIds.has(d.alunoId)),
-    [alunoIds, demandas]
+    () => demandas.filter((d) => alunoIds.has(d.alunoId)).map(d => ({
+      ...d,
+      aluno: alunosDoCoord.find(a => a.id === d.alunoId)
+    })),
+    [alunoIds, demandas, alunosDoCoord]
   );
 
   const demandasPendentes = useMemo(
@@ -79,9 +75,12 @@ export default function DashboardCoordPage() {
   const demandasConcluidas = demandasDoCoord.filter((d) => d.status === 'concluido').length;
   const resolvidas = demandasDoCoord.length > 0 ? Math.round((demandasConcluidas / demandasDoCoord.length) * 100) : 0;
 
-  const handleCriarTurma = useCallback((dados: { nome: string; disciplina: string; alunos: string[] }) => {
+  const [turmaParaExcluir, setTurmaParaExcluir] = useState<string | null>(null);
+  const [turmaParaEditar, setTurmaParaEditar] = useState<Turma | null>(null);
+
+  const handleCriarTurma = useCallback(async (dados: { nome: string; disciplina: string; alunos: string[] }) => {
     if (!usuario) return;
-    turmasHook.criar({
+    await turmasHook.criar({
       nome: dados.nome,
       disciplina: dados.disciplina,
       alunos: dados.alunos,
@@ -89,23 +88,49 @@ export default function DashboardCoordPage() {
     });
   }, [usuario, turmasHook]);
 
-  const handleReprovar = useCallback((protocolo: string) => {
-    dispatch({ type: 'abrirFeedback', protocolo });
+  const handleEditarTurma = useCallback((turma: Turma) => {
+    setTurmaParaEditar(turma);
   }, []);
+
+  const handleSalvarEdicao = useCallback(async (id: string, dados: { nome: string; disciplina: string; alunos: string[] }) => {
+    await turmasHook.atualizar(id, dados);
+    setTurmaParaEditar(null);
+  }, [turmasHook]);
+  const handleExcluirTurma = useCallback((turmaId: string) => {
+    setTurmaParaExcluir(turmaId);
+  }, []);
+
+  const confirmarExclusao = useCallback(async () => {
+    if (!turmaParaExcluir) return;
+    await turmasHook.deletar(turmaParaExcluir);
+    setTurmaParaExcluir(null);
+  }, [turmaParaExcluir, turmasHook]);
+
+  const handleReprovar = useCallback((protocolo: string) => {
+    setProtocoloFeedback(protocolo);
+    setModalFeedbackAberta(true);
+  }, [setProtocoloFeedback, setModalFeedbackAberta]);
 
   const handleVerDetalhes = useCallback((protocolo: string) => {
     const demanda = demandas.find((item) => item.protocolo === protocolo) || null;
     const remetente = demanda
       ? (alunosDoCoord.find((a) => a.id === demanda.alunoId) ?? null)
-      : ui.remetenteDetalhe;
-    dispatch({ type: 'abrirDetalhes', demanda, remetente });
-  }, [demandas, alunosDoCoord, ui.remetenteDetalhe]);
+      : null;
+    if (demanda?.status === 'pendente') {
+      setDemandaDetalhe({ ...demanda, status: 'em_analise' });
+      atualizarStatus(protocolo, 'em_analise');
+    } else {
+      setDemandaDetalhe(demanda);
+    }
+    setRemetenteDetalhe(remetente);
+    setModalDetalhesAberta(true);
+  }, [demandas, alunosDoCoord, atualizarStatus, setDemandaDetalhe, setRemetenteDetalhe, setModalDetalhesAberta]);
 
   const handleFeedbackSubmit = useCallback(async (feedback: string) => {
-    if (!ui.protocoloFeedback) return;
-    await atualizarStatusDemanda(ui.protocoloFeedback, 'requer_ajuste', feedback);
+    if (!protocoloFeedback) return;
+    await atualizarStatusDemanda(protocoloFeedback, 'requer_ajuste', feedback);
     await recarregarDemandas();
-  }, [ui.protocoloFeedback, recarregarDemandas]);
+  }, [protocoloFeedback, recarregarDemandas]);
 
   const handleAprovar = useCallback(async (protocolo: string) => {
     await atualizarStatusDemanda(protocolo, 'concluido');
@@ -116,7 +141,7 @@ export default function DashboardCoordPage() {
     const aluno = alunosDoCoord.find((a) => a.matricula === matricula);
     if (aluno) {
       await usuariosHook.deletar(aluno.id);
-      queryClient.invalidateQueries({ queryKey: ['alunos', usuario?.id] });
+      queryClient.invalidateQueries({ queryKey: ['students', usuario?.id] });
     }
   }, [alunosDoCoord, usuariosHook, queryClient, usuario?.id]);
 
@@ -170,27 +195,54 @@ export default function DashboardCoordPage() {
       {view === 'turmas' && (
         <ListaTurmas
           turmas={turmasDoCoord}
-          onCriarTurma={() => dispatch({ type: 'abrirModalTurma' })}
+          loading={turmasHook.loading}
+          onCriarTurma={() => setModalTurmaAberta(true)}
+          onEditarTurma={handleEditarTurma}
+          onExcluirTurma={handleExcluirTurma}
+        />
+      )}
+
+      {view === 'chaves' && (
+        <ListaChaves
+          chaves={chaves}
+          loading={chavesLoading}
+          gerando={gerandoChave}
+          onGerar={() => gerarChave()}
+          ultimaGerada={ultimaGerada}
         />
       )}
 
       <ModalCriarTurma
-        open={ui.modalTurmaAberta}
-        onClose={() => dispatch({ type: 'fecharModalTurma' })}
+        open={modalTurmaAberta}
+        onClose={() => setModalTurmaAberta(false)}
         onCreate={handleCriarTurma}
       />
 
+      <ModalEditarTurma
+        open={turmaParaEditar !== null}
+        turma={turmaParaEditar}
+        onClose={() => setTurmaParaEditar(null)}
+        onSalvar={handleSalvarEdicao}
+      />
+
+      <ModalConfirmarExclusao
+        open={turmaParaExcluir !== null}
+        onClose={() => setTurmaParaExcluir(null)}
+        onConfirmar={confirmarExclusao}
+        nomeTurma={turmasDoCoord.find((t) => t.id === turmaParaExcluir)?.nome ?? ''}
+      />
+
       <ModalFeedback
-        open={ui.modalFeedbackAberta}
-        onClose={() => dispatch({ type: 'fecharFeedback' })}
+        open={modalFeedbackAberta}
+        onClose={() => { setModalFeedbackAberta(false); setProtocoloFeedback(null); }}
         onSubmit={handleFeedbackSubmit}
       />
 
       <ModalDetalhesDemanda
-        open={ui.modalDetalhesAberta}
-        onClose={() => dispatch({ type: 'fecharDetalhes' })}
-        demanda={ui.demandaDetalhe}
-        remetente={ui.remetenteDetalhe}
+        open={modalDetalhesAberta}
+        onClose={() => { setModalDetalhesAberta(false); setDemandaDetalhe(null); setRemetenteDetalhe(null); }}
+        demanda={demandaDetalhe}
+        remetente={remetenteDetalhe}
       />
     </div>
   );

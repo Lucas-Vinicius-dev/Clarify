@@ -1,4 +1,7 @@
+import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
+import { montarCamposExtras } from '@/lib/camposDemanda'
+import { novaDemandaSchema } from '@/schemas/demandas'
 import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
@@ -23,11 +26,52 @@ export async function POST(request: Request) {
     createClient(),
   ])
 
+  const validacao = novaDemandaSchema.safeParse(dados)
+  if (!validacao.success) {
+    return NextResponse.json(
+      {
+        ok: false,
+        mensagem: 'Dados inválidos.',
+        erros: validacao.error.flatten().fieldErrors,
+      },
+      { status: 400 },
+    )
+  }
+
+  const getUserResult = await supabase.auth.getUser()
+  const user = getUserResult.data?.user
+  if (!user) {
+    const sessionResult = await supabase.auth.getSession()
+    console.error('[POST /api/demandas] auth fail', {
+      getUserError: getUserResult.error?.message,
+      hasSession: !!sessionResult.data?.session,
+      sessionError: sessionResult.error?.message,
+    })
+    return NextResponse.json(
+      { ok: false, mensagem: 'Não autorizado.' },
+      { status: 401 },
+    )
+  }
+
+  const supabaseAdmin = createAdminClient()
+  const { data: profile } = await supabaseAdmin
+    .from('profiles')
+    .select('cargo')
+    .eq('id', user.id)
+    .single()
+
+  if (profile?.cargo !== 'aluno') {
+    return NextResponse.json(
+      { ok: false, mensagem: 'Apenas alunos podem criar demandas.' },
+      { status: 403 },
+    )
+  }
+
   const { data: protocolo } = await supabase.rpc('gerar_proximo_protocolo')
   if (!protocolo) {
     return NextResponse.json(
       { ok: false, mensagem: 'Erro ao gerar protocolo.' },
-      { status: 500 }
+      { status: 500 },
     )
   }
 
@@ -35,9 +79,10 @@ export async function POST(request: Request) {
     .from('demandas')
     .insert({
       protocolo,
-      aluno_id: dados.alunoId,
-      tipo: dados.tipo,
-      descricao: dados.descricao,
+      aluno_id: user.id,
+      tipo: validacao.data.tipo,
+      descricao: validacao.data.descricao,
+      campos_extras: montarCamposExtras(validacao.data.tipo, validacao.data.camposExtras),
     })
     .select()
     .single()
@@ -45,7 +90,7 @@ export async function POST(request: Request) {
   if (!data) {
     return NextResponse.json(
       { ok: false, mensagem: 'Erro ao criar demanda.' },
-      { status: 500 }
+      { status: 500 },
     )
   }
 

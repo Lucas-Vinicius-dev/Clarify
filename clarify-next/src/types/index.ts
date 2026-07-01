@@ -15,14 +15,19 @@ export type StatusDemanda = 'pendente' | 'em_analise' | 'requer_ajuste' | 'concl
 /**
  * Tipos de demanda suportados
  */
-export type TipoDemanda =
-  | 'Quebra de Pré-requisito'
-  | 'Revisão de Prova'
-  | 'Aproveitamento de Horas AC'
-  | 'Trancamento de Disciplina'
-  | 'Troca de Turma'
-  | 'Solicitação de Histórico'
-  | 'Justificativa de Falta';
+export const TIPOS_DEMANDA = [
+  'Quebra de Pré-requisito',
+  'Revisão de Prova',
+  'Aproveitamento de Horas AC',
+  'Trancamento de Disciplina',
+  'Troca de Turma',
+  'Solicitação de Histórico',
+  'Justificativa de Falta',
+  'Transferência',
+  'Segunda Chamada',
+] as const;
+
+export type TipoDemanda = typeof TIPOS_DEMANDA[number];
 
 /**
  * Usuário logado (sem senha)
@@ -33,6 +38,7 @@ export type UsuarioLogado = {
   matricula: string;
   email: string;
   cargo: Cargo;
+  telefone?: string;
   coordenador_id?: string;
 };
 
@@ -45,11 +51,44 @@ export interface Demanda {
   alunoId: string;
   tipo: TipoDemanda;
   descricao: string;
+  camposExtras?: Record<string, string>;
   status: StatusDemanda;
   dataCriacao: string;
   dataAtualizacao: string;
   feedback: string;
+  aluno?: { nome: string; matricula: string };
 }
+
+/**
+ * Anexo de uma demanda
+ */
+export interface Anexo {
+  id: string;
+  demandaId: string;
+  nomeArquivo: string;
+  caminho: string;
+  contentType: string;
+  tamanhoBytes: number;
+  urlAssinada?: string;
+  createdAt: string;
+}
+
+/**
+ * Limites e tipos permitidos para anexos
+ */
+export const ANEXO_MAX_BYTES = 10 * 1024 * 1024; // 10 MB
+export const ANEXO_MAX_QTD = 5;
+export const ANEXO_TIPOS_PERMITIDOS = [
+  'application/pdf',
+  'image/png',
+  'image/jpeg',
+  'image/webp',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'text/plain',
+] as const;
 
 /**
  * Turma de disciplina
@@ -103,4 +142,3 @@ export interface RegistroDados {
   cargo?: Cargo;
   chaveAtivacao?: string;
 }
-

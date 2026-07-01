@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ArrowRight, FileText, Clock, CheckCircle } from 'lucide-react';
 import { BarraFiltros } from '@/components/demandas/BarraFiltros';
@@ -15,18 +15,23 @@ import { ModalNovaDemanda } from '@/components/demandas/ModalNovaDemanda';
 import { ModalDetalhesDemanda } from '@/components/demandas/ModalDetalhesDemanda';
 import { useDemandas } from '@/hooks/useDemandas';
 import { usePerfil } from '@/hooks/usePerfil';
+import { useTurmas } from '@/hooks/useTurmas';
 import { useAuth } from '@/context/AuthContext';
+import { dataExpiracao } from '@/lib/utils';
 import { useFiltrosStore } from '@/store/filtrosStore';
+import { useUIStore } from '@/store/uiStore';
 import type { TipoDemanda } from '@/types';
+import { ListaMinhasTurmas } from './_components/ListaMinhasTurmas';
 
-type StudentView = 'nome' | 'demandas';
-const VIEWS: StudentView[] = ['nome', 'demandas'];
+type StudentView = 'nome' | 'demandas' | 'turmas';
+const VIEWS: StudentView[] = ['nome', 'demandas', 'turmas'];
 
 export default function CentralDemandasPage() {
   const { usuario } = useAuth();
   const { demandas, criar } = useDemandas(
     usuario ? { alunoId: usuario.id } : undefined
   );
+  const { turmas } = useTurmas();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -34,9 +39,11 @@ export default function CentralDemandasPage() {
   const view: StudentView = rawView && VIEWS.includes(rawView) ? rawView : 'nome';
 
   const { busca, filtroStatus, setBusca, setFiltroStatus } = useFiltrosStore();
-  const [modalNovaAberta, setModalNovaAberta] = useState(false);
-  const [modalDetalhesAberta, setModalDetalhesAberta] = useState(false);
-  const [protocoloSelecionado, setProtocoloSelecionado] = useState<string | null>(null);
+  const {
+    modalNovaAberta, setModalNovaAberta,
+    modalDetalhesAberta, setModalDetalhesAberta,
+    protocoloSelecionado, setProtocoloSelecionado,
+  } = useUIStore();
 
   const demandaDetalhes = useMemo(
     () => protocoloSelecionado ? demandas.find((d) => d.protocolo === protocoloSelecionado) ?? null : null,
@@ -56,7 +63,12 @@ export default function CentralDemandasPage() {
     });
   }, [demandas, busca, filtroStatus]);
 
-  const emAberto = useMemo(() => filtradas.filter((d) => d.status !== 'concluido'), [filtradas]);
+  const emAberto = useMemo(
+    () => filtradas
+      .filter((d) => d.status !== 'concluido')
+      .toSorted((a, b) => dataExpiracao(a).getTime() - dataExpiracao(b).getTime()),
+    [filtradas]
+  );
   const concluidas = useMemo(() => filtradas.filter((d) => d.status === 'concluido'), [filtradas]);
 
   const total = demandas.length;
@@ -65,12 +77,13 @@ export default function CentralDemandasPage() {
   const resolvidas = demandas.filter((d) => d.status === 'concluido').length;
   const eficiencia = total > 0 ? Math.round((resolvidas / total) * 100) : 0;
 
-  const handleCriarDemanda = useCallback((dados: { tipo: string; descricao: string }) => {
+  const handleCriarDemanda = useCallback(async (dados: { tipo: TipoDemanda; descricao: string; anexos?: File[]; camposExtras?: Record<string, string> }) => {
     if (!usuario?.id) return;
-    criar({
-      alunoId: usuario.id,
-      tipo: dados.tipo as TipoDemanda,
+    await criar({
+      tipo: dados.tipo,
       descricao: dados.descricao,
+      anexos: dados.anexos,
+      camposExtras: dados.camposExtras,
     });
   }, [criar, usuario]);
 
@@ -84,6 +97,11 @@ export default function CentralDemandasPage() {
       (a, b) => new Date(b.dataAtualizacao).getTime() - new Date(a.dataAtualizacao).getTime()
     ).slice(0, 6),
     [demandas]
+  );
+
+  const minhasTurmas = useMemo(
+    () => usuario ? turmas.filter((t) => t.alunos.includes(usuario.id)) : [],
+    [turmas, usuario]
   );
 
   return (
@@ -106,7 +124,7 @@ export default function CentralDemandasPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <CardMetrica titulo="Total" valor={total} label="solicitações">
-              <FileText className="w-4 h-4 text-gray-400 mb-1.5" />
+              <FileText className="w-4 h-4 text-gray-400 dark:text-slate-500 mb-1.5" />
             </CardMetrica>
             <CardMetrica titulo="Pendentes" valor={pendentes} label="aguardando análise">
               <Clock className="w-4 h-4 text-yellow-500 mb-1.5" />
@@ -124,7 +142,7 @@ export default function CentralDemandasPage() {
           {recentes.length > 0 && (
             <section>
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-lg font-bold text-gray-900">Demandas Recentes</h2>
+                <h2 className="text-lg font-bold text-gray-900 dark:text-slate-100">Demandas Recentes</h2>
                 <button
                   type="button"
                   onClick={() => router.push('/centraldemandas?view=demandas')}
@@ -142,7 +160,9 @@ export default function CentralDemandasPage() {
                     onVerDetalhes={handleVerDetalhes}
                   />
                 ))}
-                <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                {usuario?.cargo === 'aluno' && (
+                  <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                )}
               </div>
             </section>
           )}
@@ -152,7 +172,9 @@ export default function CentralDemandasPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <EstadoVazio />
                 <div className="sm:col-span-2 lg:col-span-3">
-                  <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                  {usuario?.cargo === 'aluno' && (
+                    <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                  )}
                 </div>
               </div>
             </section>
@@ -170,7 +192,7 @@ export default function CentralDemandasPage() {
               </svg>
             </CardMetrica>
             <CardMetrica titulo="Eficiência" valor={`${eficiencia}%`} label="Demandas concluídas sobre o total">
-              <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div className="flex-1 h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
                 <div className="h-full bg-brand-primary rounded-full" style={{ width: `${eficiencia}%` }} />
               </div>
             </CardMetrica>
@@ -194,13 +216,17 @@ export default function CentralDemandasPage() {
                       onVerDetalhes={handleVerDetalhes}
                     />
                   ))}
-                  <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                  {usuario?.cargo === 'aluno' && (
+                    <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                  )}
                 </>
               ) : (
                 <>
                   <EstadoVazio />
                   <div className="sm:col-span-2 lg:col-span-3">
-                    <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                    {usuario?.cargo === 'aluno' && (
+                      <CardNovaDemanda onClick={() => setModalNovaAberta(true)} />
+                    )}
                   </div>
                 </>
               )}
@@ -209,12 +235,12 @@ export default function CentralDemandasPage() {
 
           {concluidas.length > 0 && (
             <section>
-              <h2 className="text-lg font-bold text-gray-900 mb-3">Histórico</h2>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-slate-100 mb-3">Histórico</h2>
 
-              <div className="hidden md:block bg-white rounded-xl border border-gray-200 overflow-x-auto">
+              <div className="hidden md:block bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                    <tr className="text-[10px] font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest">
                       <th className="pb-2 pt-3 px-4">Protocolo</th>
                       <th className="pb-2 pt-3 px-4">Assunto</th>
                       <th className="pb-2 pt-3 px-4">Status</th>
@@ -237,8 +263,14 @@ export default function CentralDemandasPage() {
             </section>
           )}
 
-          <FabMobile onClick={() => setModalNovaAberta(true)} />
+          {usuario?.cargo === 'aluno' && (
+            <FabMobile onClick={() => setModalNovaAberta(true)} />
+          )}
         </>
+      )}
+
+      {view === 'turmas' && (
+        <ListaMinhasTurmas turmas={minhasTurmas} />
       )}
 
       <ModalNovaDemanda
