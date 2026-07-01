@@ -45,7 +45,7 @@ export function VisaoGeral({
         <CardMetrica titulo="Alunos Vinculados" valor={totalAlunos} label="total de alunos" />
         <CardMetrica titulo="Demandas Abertas" valor={demandasAbertas} label="aguardando ação" />
         <CardMetrica titulo="Resolução" valor={`${resolvidas}%`} label="demandas concluídas">
-          <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div className="flex-1 h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
             <div className="h-full bg-brand-primary rounded-full" style={{ width: `${resolvidas}%` }} />
           </div>
         </CardMetrica>
@@ -53,7 +53,7 @@ export function VisaoGeral({
 
       {demandasPendentes.length > 0 && (
         <section>
-          <h2 className="text-lg font-bold text-gray-900 mb-3">Demandas Pendentes</h2>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-slate-100 mb-3">Demandas Pendentes</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {demandasPendentes.slice(0, 6).map((d) => (
               <DemandaCard

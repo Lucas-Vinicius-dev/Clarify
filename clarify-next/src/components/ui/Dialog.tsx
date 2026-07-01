@@ -46,7 +46,7 @@ function DialogContent({
       >
         <div
           className={cn(
-            "w-full sm:max-w-lg bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden",
+            "w-full sm:max-w-lg bg-white dark:bg-slate-800 dark:text-slate-100 rounded-t-3xl sm:rounded-3xl overflow-hidden",
             "max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-4rem)]",
             "shadow-[inset_0_1px_0_rgba(255,255,255,0.6),_0_1px_2px_rgba(15,23,42,0.04),_0_12px_32px_-12px_rgba(15,23,42,0.18),_0_40px_80px_-28px_rgba(202,95,21,0.22)]"
           )}
@@ -74,7 +74,7 @@ function DialogFooter({ className, ...props }: React.HTMLAttributes<HTMLDivEleme
   return (
     <div
       className={cn(
-        "flex items-center justify-between gap-3 px-5 sm:px-7 py-4 mt-3 border-t border-gray-100 bg-gradient-to-b from-white to-brand-surface/40",
+        "flex items-center justify-between gap-3 px-5 sm:px-7 py-4 mt-3 border-t border-gray-100 dark:border-slate-700 bg-gradient-to-b from-white dark:from-slate-800 to-brand-surface/40",
         className
       )}
       {...props}
@@ -103,7 +103,7 @@ function DialogDescription({
 }: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>) {
   return (
     <DialogPrimitive.Description
-      className={cn("text-sm text-gray-500", className)}
+      className={cn("text-sm text-gray-500 dark:text-slate-400", className)}
       {...props}
     />
   )

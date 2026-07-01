@@ -15,7 +15,7 @@ function mapRow(row: Record<string, unknown>): Demanda {
     alunoId: row.aluno_id as string,
     tipo: row.tipo as TipoDemanda,
     descricao: row.descricao as string,
-    dados: (row.dados as Record<string, string>) ?? undefined,
+    camposExtras: (row.campos_extras as Record<string, string>) ?? undefined,
     status: row.status as StatusDemanda,
     dataCriacao: row.data_criacao as string,
     dataAtualizacao: row.data_atualizacao as string,
@@ -41,14 +41,16 @@ export function useDemandas(opcoes?: UseDemandasOptions) {
   })
 
   const criarMutation = useMutation({
-    mutationFn: async (dados: { tipo: TipoDemanda; descricao: string; dados?: Record<string, string> }) => {
+    mutationFn: async (dados: { tipo: TipoDemanda; descricao: string; camposExtras?: Record<string, string> }) => {
       const res = await fetch('/api/demandas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dados),
       })
       const json = await res.json()
-      if (!json.ok || !json.data) return null
+      if (!json.ok || !json.data) {
+        throw new Error(json.mensagem || 'Erro ao criar demanda.')
+      }
       return mapRow(json.data) as Demanda
     },
     onSuccess: () => {
