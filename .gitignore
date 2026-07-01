@@ -52,3 +52,7 @@ opencode.json
 *.njsproj
 *.sln
 demandas_equipe*.txt
+
+# Ferramentas locais de agente (não versionar)
+.claude/worktrees/
+.gstack/
