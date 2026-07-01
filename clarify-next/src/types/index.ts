@@ -57,6 +57,37 @@ export interface Demanda {
 }
 
 /**
+ * Anexo de uma demanda
+ */
+export interface Anexo {
+  id: string;
+  demandaId: string;
+  nomeArquivo: string;
+  caminho: string;
+  contentType: string;
+  tamanhoBytes: number;
+  urlAssinada?: string;
+  createdAt: string;
+}
+
+/**
+ * Limites e tipos permitidos para anexos
+ */
+export const ANEXO_MAX_BYTES = 10 * 1024 * 1024; // 10 MB
+export const ANEXO_MAX_QTD = 5;
+export const ANEXO_TIPOS_PERMITIDOS = [
+  'application/pdf',
+  'image/png',
+  'image/jpeg',
+  'image/webp',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'text/plain',
+] as const;
+
+/**
  * Turma de disciplina
  */
 export interface Turma {
