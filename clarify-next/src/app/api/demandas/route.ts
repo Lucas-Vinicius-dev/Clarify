@@ -83,6 +83,7 @@ export async function POST(request: Request) {
       tipo: validacao.data.tipo,
       descricao: validacao.data.descricao,
       campos_extras: montarCamposExtras(validacao.data.tipo, validacao.data.camposExtras),
+      data_expiracao: validacao.data.dataExpiracao || null,
     })
     .select()
     .single()

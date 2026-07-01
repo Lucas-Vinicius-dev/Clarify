@@ -44,11 +44,11 @@ const ALUNOS = [
 ]
 
 const DEMANDAS_EXEMPLO = [
-  { tipo: 'Quebra de Pré-requisito', descricao: 'Preciso de quebra de pré-requisito para cursar Banco de Dados II, pois já possuo conhecimento equivalente.' },
-  { tipo: 'Revisão de Prova', descricao: 'Solicito revisão da prova de Redes, questão 3, pois acredito que minha resposta estava correta.' },
-  { tipo: 'Aproveitamento de Horas AC', descricao: 'Solicito aproveitamento de 40 horas de atividades complementares realizadas em projeto de extensão.' },
-  { tipo: 'Trancamento de Disciplina', descricao: 'Solicito trancamento da disciplina de Cálculo II por motivos pessoais.' },
-  { tipo: 'Segunda Chamada', descricao: 'Solicito segunda chamada da prova de Programação Web, devido a atestado médico.' },
+  { tipo: 'Quebra de Pré-requisito', descricao: 'Preciso de quebra de pré-requisito para cursar Banco de Dados II, pois já possuo conhecimento equivalente.', expiracaoOffset: 2 },
+  { tipo: 'Revisão de Prova', descricao: 'Solicito revisão da prova de Redes, questão 3, pois acredito que minha resposta estava correta.', expiracaoOffset: 5 },
+  { tipo: 'Aproveitamento de Horas AC', descricao: 'Solicito aproveitamento de 40 horas de atividades complementares realizadas em projeto de extensão.', expiracaoOffset: 15 },
+  { tipo: 'Trancamento de Disciplina', descricao: 'Solicito trancamento da disciplina de Cálculo II por motivos pessoais.', expiracaoOffset: 10 },
+  { tipo: 'Segunda Chamada', descricao: 'Solicito segunda chamada da prova de Programação Web, devido a atestado médico.', expiracaoOffset: 25 },
 ]
 
 // ─── Helpers ────────────────────────────────────────────────────
@@ -141,12 +141,16 @@ async function main() {
         .rpc('gerar_proximo_protocolo')
       if (errProto) throw errProto
 
+      const dataExpiracao = new Date()
+      dataExpiracao.setDate(dataExpiracao.getDate() + demanda.expiracaoOffset)
+
       const { error } = await supabase.from('demandas').insert({
         protocolo,
         aluno_id: aluno.profileId,
         tipo: demanda.tipo,
         descricao: demanda.descricao,
         status: 'pendente',
+        data_expiracao: dataExpiracao.toISOString().split('T')[0],
       })
       if (error) throw error
       console.log(`  ✓ ${protocolo} — ${demanda.tipo} (${aluno.nome})`)

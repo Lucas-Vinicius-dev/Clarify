@@ -20,6 +20,7 @@ function mapRow(row: Record<string, unknown>): Demanda {
     dataCriacao: row.data_criacao as string,
     dataAtualizacao: row.data_atualizacao as string,
     feedback: (row.feedback as string) ?? '',
+    dataExpiracao: (row.data_expiracao as string) ?? undefined,
   }
 }
 
@@ -41,11 +42,11 @@ export function useDemandas(opcoes?: UseDemandasOptions) {
   })
 
   const criarMutation = useMutation({
-    mutationFn: async (dados: { tipo: TipoDemanda; descricao: string; anexos?: File[]; camposExtras?: Record<string, string> }) => {
+    mutationFn: async (dados: { tipo: TipoDemanda; descricao: string; anexos?: File[]; camposExtras?: Record<string, string>; dataExpiracao?: string }) => {
       const res = await fetch('/api/demandas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tipo: dados.tipo, descricao: dados.descricao, camposExtras: dados.camposExtras }),
+        body: JSON.stringify({ tipo: dados.tipo, descricao: dados.descricao, camposExtras: dados.camposExtras, dataExpiracao: dados.dataExpiracao }),
       })
       const json = await res.json()
       if (!json.ok || !json.data) {
