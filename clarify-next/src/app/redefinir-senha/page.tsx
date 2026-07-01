@@ -1,50 +1,43 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
 import { Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAuth } from '@/context/AuthContext'
-import { loginSchema, type LoginFormData } from '@/schemas/auth'
+import { createClient } from '@/lib/supabase/client'
+import { redefinirSenhaSchema, type RedefinirSenhaFormData } from '@/schemas/auth'
 
-export default function LoginPage() {
+export default function RedefinirSenhaPage() {
   const [mostrarSenha, setMostrarSenha] = useState(false)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const { login } = useAuth()
+  const supabase = createClient()
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<RedefinirSenhaFormData>({
+    resolver: zodResolver(redefinirSenhaSchema),
     mode: 'onBlur',
   })
 
-  async function onSubmit(data: LoginFormData) {
+  async function onSubmit(data: RedefinirSenhaFormData) {
     setError('')
     setIsLoading(true)
 
-    try {
-      const resultado = await login(data.matricula, data.senha)
+    const { error: erroSupabase } = await supabase.auth.updateUser({ password: data.senha })
 
-      if (resultado.ok && resultado.usuarioLogado) {
-        router.push(
-          resultado.usuarioLogado.cargo === 'aluno' ? '/centraldemandas' : '/dashboardcoord'
-        )
-      } else {
-        setError(resultado.mensagem || 'Usuário ou senha incorretos.')
-      }
-    } catch {
-      setError('Erro inesperado. Tente novamente.')
-    } finally {
+    if (erroSupabase) {
+      setError('Não foi possível redefinir a senha. Solicite um novo link.')
       setIsLoading(false)
+      return
     }
+
+    router.push('/login')
   }
 
   return (
@@ -81,46 +74,17 @@ export default function LoginPage() {
             <Image src="/GATOGORDO.png" alt="Clarify Logo" width={72} height={72} className="w-full h-full object-contain" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900">Clarify</h1>
-          <p className="text-sm font-medium text-gray-500 tracking-wider uppercase mt-1">Acesso - Instituto Federal</p>
+          <p className="text-sm font-medium text-gray-500 tracking-wider uppercase mt-1">Redefinir Senha</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
-            <label htmlFor="login-matricula" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
-              ID Institucional
-            </label>
-            <div className="relative">
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-              </span>
-              <input
-                id="login-matricula"
-                type="text"
-                {...register('matricula')}
-                placeholder="e.g. 123456789"
-                className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
-                disabled={isLoading}
-              />
-            </div>
-            {errors.matricula && (
-              <p className="text-xs text-red-600 mt-1 ml-1">{errors.matricula.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="login-senha" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
-              Chave de Segurança
+            <label htmlFor="redefinir-senha" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+              Nova Senha
             </label>
             <div className="relative">
               <input
-                id="login-senha"
+                id="redefinir-senha"
                 type={mostrarSenha ? 'text' : 'password'}
                 {...register('senha')}
                 placeholder="••••••••"
@@ -141,6 +105,33 @@ export default function LoginPage() {
             )}
           </div>
 
+          <div>
+            <label htmlFor="redefinir-confirmar" className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
+              Confirmar Senha
+            </label>
+            <div className="relative">
+              <input
+                id="redefinir-confirmar"
+                type={mostrarSenha ? 'text' : 'password'}
+                {...register('confirmarSenha')}
+                placeholder="••••••••"
+                className="block w-full pl-3 pr-10 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                disabled={isLoading}
+              />
+              <button
+                type="button"
+                onClick={() => setMostrarSenha(!mostrarSenha)}
+                tabIndex={-1}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                {mostrarSenha ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+            {errors.confirmarSenha && (
+              <p className="text-xs text-red-600 mt-1 ml-1">{errors.confirmarSenha.message}</p>
+            )}
+          </div>
+
           {error && (
             <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
               <p className="text-xs font-bold text-red-700 uppercase tracking-widest">{error}</p>
@@ -152,17 +143,8 @@ export default function LoginPage() {
             disabled={isLoading}
             className="w-full bg-brand-primary text-white font-bold py-4 rounded-xl shadow-lg hover:bg-orange-700 hover:-translate-y-1 transition-all duration-150 ease-out disabled:opacity-50 disabled:hover:bg-brand-primary disabled:hover:translate-y-0"
           >
-            {isLoading ? 'Autenticando...' : 'Autenticar'}
+            {isLoading ? 'Redefinindo...' : 'Redefinir Senha'}
           </button>
-
-          <div className="space-y-3 text-center text-sm">
-            <Link href="/recuperar-senha" className="block font-semibold text-brand-primary hover:underline transition-all">
-              Recuperar Credenciais de Acesso
-            </Link>
-            <Link href="/registro" className="block font-semibold text-brand-primary hover:underline transition-all">
-              Ir para o Registro
-            </Link>
-          </div>
         </form>
 
         <div className="mt-12 text-center">

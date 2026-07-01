@@ -34,3 +34,28 @@ export const registroSchema = z.object({
 })
 
 export type RegistroFormData = z.infer<typeof registroSchema>
+
+export const recuperarSenhaSchema = z.object({
+  email: z
+    .string()
+    .min(1, 'Email é obrigatório.')
+    .refine((v) => validarEmail(v), 'Email inválido.'),
+})
+
+export type RecuperarSenhaFormData = z.infer<typeof recuperarSenhaSchema>
+
+export const redefinirSenhaSchema = z
+  .object({
+    senha: z
+      .string()
+      .min(6, 'Senha deve ter no mínimo 6 caracteres.'),
+    confirmarSenha: z
+      .string()
+      .min(1, 'Confirme a senha.'),
+  })
+  .refine((d) => d.senha === d.confirmarSenha, {
+    message: 'As senhas não coincidem.',
+    path: ['confirmarSenha'],
+  })
+
+export type RedefinirSenhaFormData = z.infer<typeof redefinirSenhaSchema>
