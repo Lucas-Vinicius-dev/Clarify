@@ -2,11 +2,19 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
-  const { nome, matricula, email, senha, chaveAtivacao } = await req.json()
+  const { nome, matricula, email, senha, chaveAtivacao: chaveAtivacaoRaw } = await req.json()
+  const chaveAtivacao = chaveAtivacaoRaw.toUpperCase()
 
   if (!nome || !matricula || !email || !senha || !chaveAtivacao) {
     return NextResponse.json(
       { ok: false, mensagem: 'Campos obrigatórios: nome, matricula, email, senha, chaveAtivacao.' },
+      { status: 400 }
+    )
+  }
+
+  if (senha.length < 6) {
+    return NextResponse.json(
+      { ok: false, mensagem: 'Senha deve ter no mínimo 6 caracteres.' },
       { status: 400 }
     )
   }

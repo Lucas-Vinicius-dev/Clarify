@@ -9,11 +9,11 @@ interface LinhaHistoricoProps {
 
 export function LinhaHistorico({ demanda }: LinhaHistoricoProps) {
   return (
-    <tr className="border-t border-gray-100">
-      <td className="py-3 text-xs font-semibold text-gray-500">
+    <tr className="border-t border-gray-100 dark:border-slate-700">
+      <td className="py-3 text-xs font-semibold text-gray-500 dark:text-slate-400">
         #{demanda.protocolo}
       </td>
-      <td className="py-3 text-sm text-gray-900 break-words [overflow-wrap:anywhere]">
+      <td className="py-3 text-sm text-gray-900 dark:text-slate-100 break-words [overflow-wrap:anywhere]">
         {demanda.tipo}
       </td>
       <td className="py-3">
@@ -23,7 +23,7 @@ export function LinhaHistorico({ demanda }: LinhaHistoricoProps) {
           {obterLabelStatus(demanda.status)}
         </span>
       </td>
-      <td className="py-3 text-xs text-gray-500">
+      <td className="py-3 text-xs text-gray-500 dark:text-slate-400">
         {formatarData(demanda.dataAtualizacao)}
       </td>
     </tr>

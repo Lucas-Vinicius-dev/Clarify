@@ -1,5 +1,25 @@
 @import "tailwindcss";
 
+/* Dark mode por classe .dark no <html> (Tailwind v4 não lê darkMode do config sem @config) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #ffffff;
+  --surface: #ffffff;
+  --foreground: #0f172a;
+  --brand: #ca5f15;
+  --border: #e5e7eb;
+}
+
+.dark {
+  --background: #0f172a;
+  --surface: #1e293b;
+  --foreground: #f8fafc;
+  --brand: #e07a30;
+  --border: #334155;
+  color-scheme: dark;
+}
+
 html {
   scroll-behavior: smooth;
 }

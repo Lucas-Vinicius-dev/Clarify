@@ -37,8 +37,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-white">
-      <Suspense fallback={<div className="hidden md:block w-64 bg-gray-50 border-r border-gray-200" />}>
+    <div className="flex h-screen overflow-hidden bg-[var(--background)] text-[var(--foreground)]">
+      <Suspense fallback={<div className="hidden md:block w-64 bg-gray-50 dark:bg-slate-900 border-r border-gray-200 dark:border-slate-700" />}>
         <SidebarNav
           cargo={usuario.cargo}
           drawerOpen={drawerOpen}

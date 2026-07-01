@@ -30,7 +30,7 @@ const VIEWS: DashView[] = ['nome', 'alunos', 'demandas', 'turmas', 'adicionar', 
 export default function DashboardCoordPage() {
   const queryClient = useQueryClient();
   const { usuario } = useAuth();
-  const { demandas, recarregar: recarregarDemandas } = useDemandas();
+  const { demandas, recarregar: recarregarDemandas, atualizarStatus } = useDemandas();
   const usuariosHook = useUsuarios();
   const turmasHook = useTurmas();
   const { chaves, loading: chavesLoading, gerar: gerarChave, gerando: gerandoChave, ultimaGerada } = useChaves();
@@ -53,8 +53,11 @@ export default function DashboardCoordPage() {
   const alunoIds = useMemo(() => new Set(alunosDoCoord.map((a) => a.id)), [alunosDoCoord]);
 
   const demandasDoCoord = useMemo(
-    () => demandas.filter((d) => alunoIds.has(d.alunoId)),
-    [alunoIds, demandas]
+    () => demandas.filter((d) => alunoIds.has(d.alunoId)).map(d => ({
+      ...d,
+      aluno: alunosDoCoord.find(a => a.id === d.alunoId)
+    })),
+    [alunoIds, demandas, alunosDoCoord]
   );
 
   const demandasPendentes = useMemo(
@@ -113,10 +116,15 @@ export default function DashboardCoordPage() {
     const remetente = demanda
       ? (alunosDoCoord.find((a) => a.id === demanda.alunoId) ?? null)
       : null;
-    setDemandaDetalhe(demanda);
+    if (demanda?.status === 'pendente') {
+      setDemandaDetalhe({ ...demanda, status: 'em_analise' });
+      atualizarStatus(protocolo, 'em_analise');
+    } else {
+      setDemandaDetalhe(demanda);
+    }
     setRemetenteDetalhe(remetente);
     setModalDetalhesAberta(true);
-  }, [demandas, alunosDoCoord, setDemandaDetalhe, setRemetenteDetalhe, setModalDetalhesAberta]);
+  }, [demandas, alunosDoCoord, atualizarStatus, setDemandaDetalhe, setRemetenteDetalhe, setModalDetalhesAberta]);
 
   const handleFeedbackSubmit = useCallback(async (feedback: string) => {
     if (!protocoloFeedback) return;

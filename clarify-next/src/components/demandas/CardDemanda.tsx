@@ -3,7 +3,7 @@
 import { Calendar, Clock, ChevronRight } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
-import { obterLabelStatus, formatarData } from '@/lib/utils';
+import { obterLabelStatus, formatarData, diasParaExpirar, pertoDaExpiracao } from '@/lib/utils';
 import type { Demanda, StatusDemanda } from '@/types';
 
 const statusVariant: Record<StatusDemanda, 'pendente' | 'em_analise' | 'requer_ajuste' | 'concluido'> = {
@@ -19,27 +19,40 @@ interface CardDemandaProps {
 }
 
 export function CardDemanda({ demanda, onVerDetalhes }: CardDemandaProps) {
+  const alerta = pertoDaExpiracao(demanda);
+  const diasRestantes = diasParaExpirar(demanda);
+
   return (
     <Card className="p-4 sm:p-5 flex flex-col gap-3 hover:shadow-md hover:-translate-y-0.5 transition-all">
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-semibold text-gray-500 tracking-wider">
+        <span className="text-xs font-semibold text-gray-500 dark:text-slate-400 tracking-wider">
           #{demanda.protocolo}
         </span>
-        <Badge variant={statusVariant[demanda.status]}>
-          {obterLabelStatus(demanda.status)}
-        </Badge>
+        <div className="flex items-center gap-2">
+          {alerta && (
+            <Badge variant="orange">
+              {diasRestantes > 0 ? `Vence em ${diasRestantes}d` : 'Vencida'}
+            </Badge>
+          )}
+          <Badge variant={statusVariant[demanda.status]}>
+            {obterLabelStatus(demanda.status)}
+          </Badge>
+        </div>
       </div>
 
       <div className="min-w-0">
-        <h3 className="text-base font-bold text-gray-900 break-words [overflow-wrap:anywhere]">
+        <h3 className="text-base font-bold text-gray-900 dark:text-slate-100 break-words [overflow-wrap:anywhere]">
           {demanda.tipo}
         </h3>
-        <p className="text-sm text-gray-600 mt-1 line-clamp-2 break-words [overflow-wrap:anywhere]">
+        {demanda.aluno?.nome && (
+          <p className="text-sm text-gray-600 dark:text-slate-300 font-medium mt-1">{demanda.aluno.nome}</p>
+        )}
+        <p className="text-sm text-gray-600 dark:text-slate-300 mt-1 line-clamp-2 break-words [overflow-wrap:anywhere]">
           {demanda.descricao}
         </p>
       </div>
 
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 pt-2 border-t border-gray-100">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-slate-400 pt-2 border-t border-gray-100 dark:border-slate-700">
         <span className="inline-flex items-center gap-1.5">
           <Calendar className="w-3.5 h-3.5" />
           {formatarData(demanda.dataCriacao)}
@@ -51,8 +64,8 @@ export function CardDemanda({ demanda, onVerDetalhes }: CardDemandaProps) {
       </div>
 
       {demanda.feedback && (
-        <div className="text-xs bg-gray-50 border border-gray-100 rounded-md p-2 text-gray-700">
-          <strong className="text-gray-900">Observação:</strong> {demanda.feedback}
+        <div className="text-xs bg-gray-50 dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-md p-2 text-gray-700 dark:text-slate-300">
+          <strong className="text-gray-900 dark:text-slate-100">Observação:</strong> {demanda.feedback}
         </div>
       )}
 

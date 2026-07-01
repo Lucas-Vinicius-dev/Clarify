@@ -10,9 +10,9 @@ interface CardHistoricoProps {
 
 export function CardHistorico({ demanda }: CardHistoricoProps) {
   return (
-    <article className="bg-white rounded-xl border border-gray-200 p-4 flex flex-col gap-2">
+    <article className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-4 flex flex-col gap-2">
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-semibold text-gray-500 tracking-wider">
+        <span className="text-xs font-semibold text-gray-500 dark:text-slate-400 tracking-wider">
           #{demanda.protocolo}
         </span>
         <span
@@ -21,10 +21,10 @@ export function CardHistorico({ demanda }: CardHistoricoProps) {
           {obterLabelStatus(demanda.status)}
         </span>
       </div>
-      <h4 className="text-sm font-bold text-gray-900 break-words [overflow-wrap:anywhere]">
+      <h4 className="text-sm font-bold text-gray-900 dark:text-slate-100 break-words [overflow-wrap:anywhere]">
         {demanda.tipo}
       </h4>
-      <span className="inline-flex items-center gap-1.5 text-xs text-gray-500">
+      <span className="inline-flex items-center gap-1.5 text-xs text-gray-500 dark:text-slate-400">
         <Clock className="w-3.5 h-3.5" />
         Concluído em {formatarData(demanda.dataAtualizacao)}
       </span>
