@@ -12,7 +12,7 @@ const variantClasses: Record<Variant, string> = {
   em_analise: 'bg-blue-100 text-blue-800',
   requer_ajuste: 'bg-orange-100 text-orange-800',
   concluido: 'bg-green-100 text-green-800',
-  default: 'bg-gray-100 text-gray-800',
+  default: 'bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-slate-100',
   orange: 'bg-orange-100 text-orange-700',
   blue: 'bg-blue-100 text-blue-700',
 }
