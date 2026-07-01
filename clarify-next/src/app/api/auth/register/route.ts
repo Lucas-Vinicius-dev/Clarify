@@ -11,6 +11,13 @@ export async function POST(req: Request) {
     )
   }
 
+  if (senha.length < 6) {
+    return NextResponse.json(
+      { ok: false, mensagem: 'Senha deve ter no mínimo 6 caracteres.' },
+      { status: 400 }
+    )
+  }
+
   // Service-role: valida a chave no servidor sem expor chaves_ativacao via RLS.
   const supabaseAdmin = createAdminClient()
 
