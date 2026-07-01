@@ -7,13 +7,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Dialog, DialogContent, DialogHeader, DialogFooter } from '@/components/ui/Dialog';
 import { cn } from '@/lib/utils';
 import { novaDemandaSchema, type NovaDemandaFormData } from '@/schemas/demandas';
-import { TIPOS_DEMANDA, type TipoDemanda, type UsuarioLogado } from '@/types';
+import { TIPOS_DEMANDA, CAMPOS_POR_TIPO, type TipoDemanda, type UsuarioLogado } from '@/types';
 
 interface ModalNovaDemandaProps {
   open: boolean;
   onClose: () => void;
   usuario: UsuarioLogado | null;
-  onSubmit: (dados: { tipo: TipoDemanda; descricao: string }) => void;
+  onSubmit: (dados: { tipo: TipoDemanda; descricao: string; dados?: Record<string, string> }) => void;
 }
 
 const LIMITE_DESCRICAO = 500;
@@ -28,16 +28,28 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
   } = useForm<NovaDemandaFormData>({
     resolver: zodResolver(novaDemandaSchema),
     mode: 'onChange',
+    shouldUnregister: true,
   });
 
   const descricaoValue = watch('descricao') ?? '';
+  const tipoValue = watch('tipo') as TipoDemanda | '';
+  const tipoSelecionado = tipoValue && TIPOS_DEMANDA.includes(tipoValue) ? tipoValue : null;
+  const camposDinamicos = tipoSelecionado ? CAMPOS_POR_TIPO[tipoSelecionado] : [];
+  const dadosErrors = errors.dados as Record<string, { message?: string } | undefined> | undefined;
 
   const contadorNear = descricaoValue.length >= LIMITE_DESCRICAO * 0.85 && descricaoValue.length < LIMITE_DESCRICAO;
   const contadorOver = descricaoValue.length >= LIMITE_DESCRICAO;
 
   const onValid = useCallback((data: NovaDemandaFormData) => {
     if (!usuario?.matricula) return;
-    onSubmit({ tipo: data.tipo, descricao: data.descricao.trim() });
+    const dadosLimpos = Object.fromEntries(
+      Object.entries(data.dados ?? {}).filter(([, v]) => v && v.trim() !== '')
+    );
+    onSubmit({
+      tipo: data.tipo,
+      descricao: data.descricao.trim(),
+      dados: Object.keys(dadosLimpos).length > 0 ? dadosLimpos : undefined,
+    });
     reset();
     onClose();
   }, [usuario, onSubmit, reset, onClose]);
@@ -121,6 +133,42 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
                 <p className="text-xs text-red-600 mt-1">{errors.descricao.message}</p>
               )}
             </section>
+
+            {camposDinamicos.length > 0 && (
+              <section className="mt-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className={dotClass} />
+                  <span className={labelClass}>Detalhes · {tipoSelecionado}</span>
+                </div>
+                <div className="space-y-4">
+                  {camposDinamicos.map((campo) => (
+                    <div key={campo.name}>
+                      <label htmlFor={`campo_${campo.name}`} className={labelClass}>{campo.label}</label>
+                      {campo.type === 'textarea' ? (
+                        <textarea
+                          id={`campo_${campo.name}`}
+                          {...register(`dados.${campo.name}` as const)}
+                          rows={3}
+                          placeholder={campo.placeholder}
+                          className={cn(textareaClass, "mt-1")}
+                        />
+                      ) : (
+                        <input
+                          id={`campo_${campo.name}`}
+                          type={campo.type}
+                          {...register(`dados.${campo.name}` as const)}
+                          placeholder={campo.placeholder}
+                          className={cn(inputClass, "mt-1")}
+                        />
+                      )}
+                      {dadosErrors?.[campo.name]?.message && (
+                        <p className="text-xs text-red-600 mt-1">{dadosErrors[campo.name]?.message}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
 
             <section className="mt-5 flex items-center gap-3 bg-brand-surface rounded-2xl px-3.5 py-2.5 border border-gray-100">
               <div className="w-8 h-8 rounded-full bg-brand-primary text-white text-xs font-bold flex items-center justify-center shrink-0">
