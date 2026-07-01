@@ -18,24 +18,24 @@ export function CardAluno({ aluno, demandasEmAberto, onRemover }: CardAlunoProps
   return (
     <Card className="p-5 hover:-translate-y-1 transition-transform duration-200 ease-out">
       <div className="flex items-center gap-4 mb-4">
-        <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 font-bold text-sm shrink-0">
+        <div className="w-12 h-12 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center text-gray-700 dark:text-slate-300 font-bold text-sm shrink-0">
           {iniciais}
         </div>
         <div className="min-w-0">
-          <h3 className="text-base font-semibold text-gray-900 truncate">{aluno.nome}</h3>
-          <p className="text-xs text-gray-400 truncate">{aluno.email}</p>
+          <h3 className="text-base font-semibold text-gray-900 dark:text-slate-100 truncate">{aluno.nome}</h3>
+          <p className="text-xs text-gray-400 dark:text-slate-400 truncate">{aluno.email}</p>
         </div>
       </div>
-      <div className="grid gap-2 text-sm text-gray-600">
+      <div className="grid gap-2 text-sm text-gray-600 dark:text-slate-300">
         <p className="truncate">
-          <span className="font-semibold text-gray-800">Nome:</span> {aluno.nome}
+          <span className="font-semibold text-gray-800 dark:text-slate-200">Nome:</span> {aluno.nome}
         </p>
         <p>
-          <span className="font-semibold text-gray-800">Matrícula:</span>
+          <span className="font-semibold text-gray-800 dark:text-slate-200">Matrícula:</span>
           <Badge variant="blue" className="ml-1">{aluno.matricula}</Badge>
         </p>
         <p>
-          <span className="font-semibold text-gray-800">Demandas em aberto:</span>
+          <span className="font-semibold text-gray-800 dark:text-slate-200">Demandas em aberto:</span>
           <Badge variant="blue" className="ml-1">{demandasEmAberto}</Badge>
         </p>
       </div>
@@ -44,7 +44,7 @@ export function CardAluno({ aluno, demandasEmAberto, onRemover }: CardAlunoProps
         <button
           type="button"
           onClick={() => onRemover(aluno.matricula)}
-          className="mt-4 inline-flex items-center justify-center rounded-lg border border-rose-200 px-3 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-50 transition-colors cursor-pointer"
+          className="mt-4 inline-flex items-center justify-center rounded-lg border border-rose-200 dark:border-rose-900/50 px-3 py-2 text-xs font-semibold text-rose-700 dark:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-colors cursor-pointer"
         >
           Remover aluno
         </button>

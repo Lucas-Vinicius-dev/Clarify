@@ -46,20 +46,20 @@ export function DrawerMobile({
 
       {/* Drawer com slide lateral */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg md:hidden overflow-y-auto transition-transform duration-300 ease-out ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-800 shadow-lg md:hidden overflow-y-auto transition-transform duration-300 ease-out ${
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Header com botão fechar */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-slate-700">
           <span className="font-bold text-orange-600 text-lg">Clarify</span>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
             aria-label="Fechar menu"
           >
-            <X className="w-5 h-5 text-gray-600" />
+            <X className="w-5 h-5 text-gray-600 dark:text-slate-400" />
           </button>
         </div>
 

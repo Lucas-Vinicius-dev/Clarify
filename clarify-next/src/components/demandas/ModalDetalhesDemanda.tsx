@@ -8,6 +8,7 @@ import { TimelineProgresso } from './TimelineProgresso';
 import { useAnexos } from '@/hooks/useAnexos';
 import { obterLabelStatus, formatarData } from '@/lib/utils';
 import { cn } from '@/lib/utils';
+import { CAMPOS_POR_TIPO } from '@/lib/camposDemanda';
 import type { Demanda, StatusDemanda, UsuarioLogado } from '@/types';
 
 const statusVariant: Record<StatusDemanda, 'pendente' | 'em_analise' | 'requer_ajuste' | 'concluido'> = {
@@ -39,9 +40,9 @@ function formatarTamanho(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-const labelClass = "text-[0.6875rem] font-bold tracking-[0.18em] uppercase text-[rgba(15,23,42,0.45)]";
+const labelClass = "text-[0.6875rem] font-bold tracking-[0.18em] uppercase text-[rgba(15,23,42,0.45)] dark:text-slate-400";
 const dotClass = "inline-block w-1.5 h-1.5 rounded-full bg-[#ca5f15] shadow-[0_0_0_3px_rgba(202,95,21,0.18)]";
-const btnGhostClass = "inline-flex items-center gap-1.5 bg-transparent text-[rgba(15,23,42,0.65)] font-semibold text-sm py-3 px-4 rounded-xl hover:bg-[rgba(15,23,42,0.05)] hover:text-[#0f172a] transition-[background-color,color] duration-180 cursor-pointer";
+const btnGhostClass = "inline-flex items-center gap-1.5 bg-transparent text-[rgba(15,23,42,0.65)] dark:text-slate-300 font-semibold text-sm py-3 px-4 rounded-xl hover:bg-[rgba(15,23,42,0.05)] dark:hover:bg-slate-700 hover:text-[#0f172a] dark:hover:text-slate-100 transition-[background-color,color] duration-180 cursor-pointer";
 const staggerClass = "stagger-container";
 
 export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: ModalDetalhesDemandaProps) {
@@ -69,11 +70,11 @@ export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: Moda
           <div className={cn("px-5 sm:px-7 pt-4 sm:pt-5 pb-2", staggerClass)}>
             <header className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
               <div className="min-w-0 flex-1">
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tighter-2 leading-tight break-words [overflow-wrap:anywhere]">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100 tracking-tighter-2 leading-tight break-words [overflow-wrap:anywhere]">
                   {demanda.tipo}
                 </h2>
-                <p className="text-sm text-gray-500 mt-1.5">
-                  Aberta em <span className="font-semibold text-gray-700">{formatarData(demanda.dataCriacao)}</span>
+                <p className="text-sm text-gray-500 dark:text-slate-400 mt-1.5">
+                  Aberta em <span className="font-semibold text-gray-700 dark:text-slate-300">{formatarData(demanda.dataCriacao)}</span>
                   {dias !== null ? ` · há ${dias} dias` : ''}
                 </p>
               </div>
@@ -83,7 +84,7 @@ export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: Moda
               </Badge>
             </header>
 
-            <section className="mt-6 bg-gradient-to-br from-white to-brand-surface/50 rounded-2xl border border-gray-100 px-3 sm:px-6 py-4">
+            <section className="mt-6 bg-gradient-to-br from-white to-brand-surface/50 dark:from-slate-800 dark:to-slate-900 rounded-2xl border border-gray-100 dark:border-slate-700 px-3 sm:px-6 py-4">
               <TimelineProgresso status={demanda.status} />
             </section>
 
@@ -92,12 +93,37 @@ export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: Moda
                 <FileText className="w-3.5 h-3.5 text-brand-primary" />
                 <p className={labelClass}>Detalhes da solicitação</p>
               </div>
-              <Card className="bg-brand-surface/50 border-brand-surface-dim/40 rounded-2xl px-5 py-4 shadow-none">
-                <p className="text-[0.95rem] sm:text-base text-gray-800 leading-relaxed break-words [overflow-wrap:anywhere] whitespace-pre-wrap">
+              <Card className="bg-brand-surface/50 dark:bg-slate-900/50 border-brand-surface-dim/40 dark:border-slate-700 rounded-2xl px-5 py-4 shadow-none">
+                <p className="text-[0.95rem] sm:text-base text-gray-800 dark:text-slate-200 leading-relaxed break-words [overflow-wrap:anywhere] whitespace-pre-wrap">
                   {demanda.descricao}
                 </p>
               </Card>
             </section>
+
+            {demanda.camposExtras && Object.keys(demanda.camposExtras).length > 0 && (
+              <section className="mt-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <FileText className="w-3.5 h-3.5 text-brand-primary" />
+                  <p className={labelClass}>Detalhes · {demanda.tipo}</p>
+                </div>
+                <Card className="bg-brand-surface/50 border-brand-surface-dim/40 rounded-2xl px-5 py-4 shadow-none">
+                  <dl className="space-y-3">
+                    {CAMPOS_POR_TIPO[demanda.tipo]?.map((campo) => {
+                      const valor = demanda.camposExtras?.[campo.name];
+                      if (!valor) return null;
+                      return (
+                        <div key={campo.name} className="flex flex-col gap-0.5">
+                          <dt className={labelClass}>{campo.label}</dt>
+                          <dd className="text-sm text-gray-800 leading-relaxed break-words [overflow-wrap:anywhere] whitespace-pre-wrap">
+                            {campo.type === 'date' ? formatarData(valor) : valor}
+                          </dd>
+                        </div>
+                      );
+                    })}
+                  </dl>
+                </Card>
+              </section>
+            )}
 
             {(anexos.length > 0 || anexosLoading) && (
               <section className="mt-6">
@@ -133,13 +159,13 @@ export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: Moda
 
             <section className="mt-6">
               <p className={labelClass}>Enviado por</p>
-              <div className="mt-3 flex items-center gap-3 bg-brand-surface/60 rounded-2xl px-4 py-3 border border-gray-100">
+              <div className="mt-3 flex items-center gap-3 bg-brand-surface/60 dark:bg-slate-900/60 rounded-2xl px-4 py-3 border border-gray-100 dark:border-slate-700">
                 <div className="w-11 h-11 rounded-full bg-brand-primary text-white text-base font-bold flex items-center justify-center shrink-0 shadow-soft-md">
                   {inicialRemetente}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-gray-900 truncate">{nomeRemetente}</p>
-                  <p className="text-xs text-gray-500 truncate inline-flex items-center gap-1.5">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-slate-100 truncate">{nomeRemetente}</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400 truncate inline-flex items-center gap-1.5">
                     <Hash className="w-3 h-3" />
                     {remetente?.matricula || demanda.alunoId.slice(0, 8)}
                     <span className="opacity-30">·</span>
@@ -153,15 +179,15 @@ export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: Moda
             <section className="mt-7 grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Card className="rounded-2xl px-4 py-3 shadow-none">
                 <p className={labelClass}>Criada em</p>
-                <p className="text-sm font-semibold text-gray-900 mt-1 inline-flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-gray-400" />
+                <p className="text-sm font-semibold text-gray-900 dark:text-slate-100 mt-1 inline-flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5 text-gray-400 dark:text-slate-500" />
                   {formatarData(demanda.dataCriacao)}
                 </p>
               </Card>
               <Card className="rounded-2xl px-4 py-3 shadow-none">
                 <p className={labelClass}>Status</p>
-                <p className="text-sm font-semibold text-gray-900 mt-1 inline-flex items-center gap-1.5">
-                  <Tag className="w-3.5 h-3.5 text-gray-400" />
+                <p className="text-sm font-semibold text-gray-900 dark:text-slate-100 mt-1 inline-flex items-center gap-1.5">
+                  <Tag className="w-3.5 h-3.5 text-gray-400 dark:text-slate-500" />
                   {statusLabel}
                 </p>
               </Card>
@@ -173,7 +199,7 @@ export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: Moda
                   <MessageSquareQuote className="w-3.5 h-3.5" />
                   Observação da coordenação
                 </p>
-                <div className="mt-3 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 text-sm text-amber-900 leading-relaxed break-words [overflow-wrap:anywhere] whitespace-pre-wrap">
+                <div className="mt-3 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-2xl px-4 py-3 text-sm text-amber-900 dark:text-amber-200 leading-relaxed break-words [overflow-wrap:anywhere] whitespace-pre-wrap">
                   {demanda.feedback}
                 </div>
               </section>

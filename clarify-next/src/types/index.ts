@@ -38,6 +38,7 @@ export type UsuarioLogado = {
   matricula: string;
   email: string;
   cargo: Cargo;
+  telefone?: string;
   coordenador_id?: string;
 };
 
@@ -50,10 +51,12 @@ export interface Demanda {
   alunoId: string;
   tipo: TipoDemanda;
   descricao: string;
+  camposExtras?: Record<string, string>;
   status: StatusDemanda;
   dataCriacao: string;
   dataAtualizacao: string;
   feedback: string;
+  aluno?: { nome: string; matricula: string };
 }
 
 /**
