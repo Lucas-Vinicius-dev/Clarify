@@ -156,9 +156,9 @@ export default function LoginPage() {
           </button>
 
           <div className="space-y-3 text-center text-sm">
-            <button type="button" className="block w-full font-semibold text-brand-primary hover:underline transition-all">
+            <Link href="/recuperar-senha" className="block font-semibold text-brand-primary hover:underline transition-all">
               Recuperar Credenciais de Acesso
-            </button>
+            </Link>
             <Link href="/registro" className="block font-semibold text-brand-primary hover:underline transition-all">
               Ir para o Registro
             </Link>

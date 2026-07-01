@@ -91,3 +91,23 @@ export function cn(...classes: (string | undefined | null | boolean)[]): string 
     .replace(/\s+/g, ' ')
     .trim();
 }
+
+export function validarSenhaForca(senha: string): {
+  valido: boolean; erros: string[]; forca: 'fraca' | 'media' | 'forte'
+} {
+  const erros: string[] = []
+  if (senha.length < 6) erros.push('Mínimo de 6 caracteres')
+
+  const criterios = [
+    senha.length >= 8,
+    /[0-9]/.test(senha),
+    /[^a-zA-Z0-9]/.test(senha),
+    /[A-Z]/.test(senha),
+    /[a-z]/.test(senha),
+  ]
+  const pontos = criterios.filter(Boolean).length
+
+  const forca = pontos <= 2 ? 'fraca' : pontos <= 4 ? 'media' : 'forte'
+
+  return { valido: erros.length === 0, erros, forca }
+}
