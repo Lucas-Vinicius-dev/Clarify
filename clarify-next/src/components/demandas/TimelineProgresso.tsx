@@ -19,7 +19,7 @@ function indiceDoStatus(status: StatusDemanda): number {
     case 'pendente': return 0;
     case 'em_analise': return 1;
     case 'requer_ajuste': return 2;
-    case 'concluido': return 3;
+    case 'concluido': return PASSOS.length;
   }
 }
 
