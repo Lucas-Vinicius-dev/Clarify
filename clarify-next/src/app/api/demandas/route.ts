@@ -74,6 +74,7 @@ export async function POST(request: Request) {
       aluno_id: user.id,
       tipo: validacao.data.tipo,
       descricao: validacao.data.descricao,
+      dados: validacao.data.dados ?? null,
     })
     .select()
     .single()
