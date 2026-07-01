@@ -1,5 +1,7 @@
 'use client';
 
+import { Badge } from '@/components/ui/Badge';
+import { calcularDiasRestantes, obterClassePrazo, obterLabelPrazo, cn } from '@/lib/utils';
 import type { Demanda } from '@/types';
 
 interface DemandaCardProps {
@@ -25,13 +27,23 @@ export function DemandaCard({ demanda: d, onVerDetalhes, onAprovar, onReprovar }
             )}
             <p className="text-sm text-gray-500 line-clamp-2">{d.descricao}</p>
           </div>
-          <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold shrink-0 ${
-            d.status === 'pendente' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200' :
-            d.status === 'em_analise' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200' :
-            'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-200'
-          }`}>
-            {d.status.replace('_', ' ').toUpperCase()}
-          </span>
+          <div className="flex items-center gap-2 shrink-0">
+            {d.dataExpiracao && d.status !== 'concluido' && (() => {
+              const dias = calcularDiasRestantes(d.dataExpiracao);
+              return (
+                <Badge className={cn(obterClassePrazo(dias), 'border-0')}>
+                  {obterLabelPrazo(dias)}
+                </Badge>
+              );
+            })()}
+            <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold shrink-0 ${
+              d.status === 'pendente' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200' :
+              d.status === 'em_analise' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200' :
+              'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-200'
+            }`}>
+              {d.status.replace('_', ' ').toUpperCase()}
+            </span>
+          </div>
         </div>
         <div className="grid gap-1 text-sm text-gray-500 dark:text-slate-400">
           <p><span className="font-semibold text-gray-800 dark:text-slate-200">Protocolo:</span> {d.protocolo}</p>

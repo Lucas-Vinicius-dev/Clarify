@@ -14,7 +14,7 @@ interface ModalNovaDemandaProps {
   open: boolean;
   onClose: () => void;
   usuario: UsuarioLogado | null;
-  onSubmit: (dados: { tipo: TipoDemanda; descricao: string; camposExtras: Record<string, string> }) => Promise<void>;
+  onSubmit: (dados: { tipo: TipoDemanda; descricao: string; camposExtras: Record<string, string>; dataExpiracao?: string }) => Promise<void>;
 }
 
 const LIMITE_DESCRICAO = 500;
@@ -46,7 +46,7 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
     setErroSubmit(null);
     try {
       const camposExtras = montarCamposExtras(data.tipo, data.camposExtras);
-      await onSubmit({ tipo: data.tipo, descricao: data.descricao.trim(), camposExtras });
+      await onSubmit({ tipo: data.tipo, descricao: data.descricao.trim(), camposExtras, dataExpiracao: data.dataExpiracao });
       reset();
       onClose();
     } catch (err) {
@@ -161,6 +161,16 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
               {errors.descricao && (
                 <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.descricao.message}</p>
               )}
+            </section>
+
+            <section className="mt-5">
+              <label htmlFor="campoDataExpiracao" className={labelClass}>Prazo para resolução (opcional)</label>
+              <input
+                id="campoDataExpiracao"
+                type="date"
+                {...register('dataExpiracao')}
+                className={cn(inputClass, "mt-1")}
+              />
             </section>
 
             {erroSubmit && (

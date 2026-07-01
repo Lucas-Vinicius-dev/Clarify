@@ -66,8 +66,9 @@ export const PRAZO_DIAS = 30;
 // Janela final em que a demanda passa a ser sinalizada como perto do prazo.
 export const LIMITE_ALERTA_DIAS = 7;
 
-// Data de expiração derivada: criação + PRAZO_DIAS.
+// Data de expiração: campo explícito ou derivada (criação + PRAZO_DIAS).
 export function dataExpiracao(demanda: Demanda): Date {
+  if (demanda.dataExpiracao) return new Date(demanda.dataExpiracao);
   const data = new Date(demanda.dataCriacao);
   data.setDate(data.getDate() + PRAZO_DIAS);
   return data;
@@ -81,6 +82,26 @@ export function diasParaExpirar(demanda: Demanda): number {
 // Demanda em aberto e dentro da janela de alerta.
 export function pertoDaExpiracao(demanda: Demanda): boolean {
   return demanda.status !== 'concluido' && diasParaExpirar(demanda) <= LIMITE_ALERTA_DIAS;
+}
+
+// Dias restantes a partir de uma data string ISO
+export function calcularDiasRestantes(dataExpiracao: string): number {
+  return Math.ceil((new Date(dataExpiracao).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+}
+
+// Classe Tailwind para badge de prazo conforme dias restantes
+export function obterClassePrazo(dias: number): string {
+  if (dias < 0) return 'bg-red-800 text-red-100';
+  if (dias < 3) return 'bg-red-100 text-red-800';
+  if (dias < 7) return 'bg-yellow-100 text-yellow-800';
+  return 'bg-green-100 text-green-800';
+}
+
+// Label do badge de prazo
+export function obterLabelPrazo(dias: number): string {
+  if (dias < 0) return 'VENCIDA';
+  if (dias < 3) return 'URGENTE';
+  return `Vence em ${dias}d`;
 }
 
 // Concatena classes CSS (similar a clsx/classnames)

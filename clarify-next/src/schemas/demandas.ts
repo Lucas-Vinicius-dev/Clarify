@@ -12,6 +12,7 @@ export const novaDemandaSchema = z
       .min(10, 'Descrição deve ter no mínimo 10 caracteres.')
       .max(500, 'Descrição deve ter no máximo 500 caracteres.'),
     camposExtras: z.record(z.string(), z.string()).optional(),
+    dataExpiracao: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     for (const campo of CAMPOS_POR_TIPO[data.tipo] ?? []) {

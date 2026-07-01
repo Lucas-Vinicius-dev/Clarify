@@ -3,7 +3,7 @@
 import { Calendar, Clock, ChevronRight } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
-import { obterLabelStatus, formatarData, diasParaExpirar, pertoDaExpiracao } from '@/lib/utils';
+import { obterLabelStatus, formatarData, diasParaExpirar, pertoDaExpiracao, calcularDiasRestantes, obterClassePrazo, obterLabelPrazo, cn } from '@/lib/utils';
 import type { Demanda, StatusDemanda } from '@/types';
 
 const statusVariant: Record<StatusDemanda, 'pendente' | 'em_analise' | 'requer_ajuste' | 'concluido'> = {
@@ -21,6 +21,7 @@ interface CardDemandaProps {
 export function CardDemanda({ demanda, onVerDetalhes }: CardDemandaProps) {
   const alerta = pertoDaExpiracao(demanda);
   const diasRestantes = diasParaExpirar(demanda);
+  const expDias = demanda.dataExpiracao ? calcularDiasRestantes(demanda.dataExpiracao) : null;
 
   return (
     <Card className="p-4 sm:p-5 flex flex-col gap-3 hover:shadow-md hover:-translate-y-0.5 transition-all">
@@ -29,7 +30,12 @@ export function CardDemanda({ demanda, onVerDetalhes }: CardDemandaProps) {
           #{demanda.protocolo}
         </span>
         <div className="flex items-center gap-2">
-          {alerta && (
+          {expDias !== null && demanda.status !== 'concluido' && (
+            <Badge className={cn(obterClassePrazo(expDias), 'border-0')}>
+              {obterLabelPrazo(expDias)}
+            </Badge>
+          )}
+          {!demanda.dataExpiracao && alerta && (
             <Badge variant="orange">
               {diasRestantes > 0 ? `Vence em ${diasRestantes}d` : 'Vencida'}
             </Badge>
