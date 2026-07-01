@@ -2,7 +2,8 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
-  const { nome, matricula, email, senha, chaveAtivacao } = await req.json()
+  const { nome, matricula, email, senha, chaveAtivacao: chaveAtivacaoRaw } = await req.json()
+  const chaveAtivacao = chaveAtivacaoRaw.toUpperCase()
 
   if (!nome || !matricula || !email || !senha || !chaveAtivacao) {
     return NextResponse.json(
