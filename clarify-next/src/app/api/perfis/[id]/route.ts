@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
-const ALLOWED_UPDATE_FIELDS = ['coordenador_id', 'nome', 'telefone']
+const ALLOWED_UPDATE_FIELDS = ['coordenador_id', 'nome', 'telefone', 'ativo']
 
 export async function GET(
   _request: Request,

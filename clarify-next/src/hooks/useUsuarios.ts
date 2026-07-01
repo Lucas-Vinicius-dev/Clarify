@@ -10,6 +10,7 @@ function mapProfileToUser(row: Record<string, unknown>): UsuarioLogado {
     matricula: row.matricula as string,
     email: row.email as string,
     cargo: row.cargo as Cargo,
+    ativo: (row.ativo as boolean) ?? true,
     coordenador_id: (row.coordenador_id as string) ?? undefined,
   }
 }
@@ -101,6 +102,36 @@ export function useUsuarios() {
     },
   })
 
+  const desativarMutation = useMutation({
+    mutationFn: async (alunoId: string) => {
+      const res = await fetch(`/api/perfis/${alunoId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ativo: false }),
+      })
+      if (!res.ok) throw new Error('Erro ao desativar aluno.')
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['usuarios'] })
+      queryClient.invalidateQueries({ queryKey: ['students'] })
+    },
+  })
+
+  const reativarMutation = useMutation({
+    mutationFn: async (alunoId: string) => {
+      const res = await fetch(`/api/perfis/${alunoId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ativo: true }),
+      })
+      if (!res.ok) throw new Error('Erro ao reativar aluno.')
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['usuarios'] })
+      queryClient.invalidateQueries({ queryKey: ['students'] })
+    },
+  })
+
   return {
     usuarios,
     loading,
@@ -116,6 +147,8 @@ export function useUsuarios() {
     atribuir: (coordenadorId: string, alunoId: string) =>
       atribuirMutation.mutateAsync({ coordenadorId, alunoId }),
     deletar: deletarMutation.mutateAsync,
+    desativar: desativarMutation.mutateAsync,
+    reativar: reativarMutation.mutateAsync,
     existe,
     recarregar: () => queryClient.invalidateQueries({ queryKey: ['usuarios'] }),
   }

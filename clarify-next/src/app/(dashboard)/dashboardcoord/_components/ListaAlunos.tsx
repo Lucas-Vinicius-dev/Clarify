@@ -8,10 +8,11 @@ import type { Demanda, UsuarioLogado } from '@/types';
 interface ListaAlunosProps {
   alunos: UsuarioLogado[];
   demandas: Demanda[];
-  onRemover: (matricula: string) => void;
+  onDesativar: (id: string) => void;
+  onReativar: (id: string) => void;
 }
 
-export function ListaAlunos({ alunos, demandas, onRemover }: ListaAlunosProps) {
+export function ListaAlunos({ alunos, demandas, onDesativar, onReativar }: ListaAlunosProps) {
   const [busca, setBusca] = useState('');
 
   const termo = busca.trim().toLowerCase();
@@ -68,7 +69,8 @@ export function ListaAlunos({ alunos, demandas, onRemover }: ListaAlunosProps) {
               demandasEmAberto={demandas.filter(
                 (d) => d.alunoId === aluno.id && d.status !== 'concluido'
               ).length}
-              onRemover={onRemover}
+              onDesativar={onDesativar}
+              onReativar={onReativar}
             />
           ))}
         </div>

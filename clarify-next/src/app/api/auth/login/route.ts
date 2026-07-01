@@ -4,6 +4,7 @@
 // ═════════════════════════════════════════════════════════════════
 
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
 /**
@@ -42,11 +43,21 @@ export async function POST(req: Request) {
     )
   }
 
-  const { data: profile } = await supabase
+  const supabaseAdmin = createAdminClient()
+
+  const { data: profile } = await supabaseAdmin
     .from('profiles')
     .select('*')
     .eq('id', data.user.id)
     .single()
+
+  if (profile && !profile.ativo) {
+    await supabaseAdmin.auth.admin.signOut(data.user.id)
+    return NextResponse.json(
+      { ok: false, mensagem: 'Conta desativada. Contate o administrador.' },
+      { status: 403 }
+    )
+  }
 
   return NextResponse.json({
     ok: true,
