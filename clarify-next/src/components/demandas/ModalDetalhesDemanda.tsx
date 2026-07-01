@@ -1,12 +1,14 @@
 'use client';
 
-import { FileText, Calendar, Tag, Hash, Mail, MessageSquareQuote } from 'lucide-react';
+import { FileText, Calendar, Tag, Hash, Mail, MessageSquareQuote, Download, Paperclip } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogFooter } from '@/components/ui/Dialog';
 import { Badge } from '@/components/ui/Badge';
 import { Card } from '@/components/ui/Card';
 import { TimelineProgresso } from './TimelineProgresso';
+import { useAnexos } from '@/hooks/useAnexos';
 import { obterLabelStatus, formatarData } from '@/lib/utils';
 import { cn } from '@/lib/utils';
+import { CAMPOS_POR_TIPO } from '@/lib/camposDemanda';
 import type { Demanda, StatusDemanda, UsuarioLogado } from '@/types';
 
 const statusVariant: Record<StatusDemanda, 'pendente' | 'em_analise' | 'requer_ajuste' | 'concluido'> = {
@@ -32,12 +34,20 @@ function diasDesde(dataISO: string): number | null {
   return Math.max(0, Math.round(diffMs / (1000 * 60 * 60 * 24)));
 }
 
+function formatarTamanho(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 const labelClass = "text-[0.6875rem] font-bold tracking-[0.18em] uppercase text-[rgba(15,23,42,0.45)] dark:text-slate-400";
 const dotClass = "inline-block w-1.5 h-1.5 rounded-full bg-[#ca5f15] shadow-[0_0_0_3px_rgba(202,95,21,0.18)]";
 const btnGhostClass = "inline-flex items-center gap-1.5 bg-transparent text-[rgba(15,23,42,0.65)] dark:text-slate-300 font-semibold text-sm py-3 px-4 rounded-xl hover:bg-[rgba(15,23,42,0.05)] dark:hover:bg-slate-700 hover:text-[#0f172a] dark:hover:text-slate-100 transition-[background-color,color] duration-180 cursor-pointer";
 const staggerClass = "stagger-container";
 
 export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: ModalDetalhesDemandaProps) {
+  const { anexos, loading: anexosLoading } = useAnexos(demanda?.protocolo ?? null);
+
   if (!demanda) return null;
 
   const statusLabel = obterLabelStatus(demanda.status);
@@ -89,6 +99,63 @@ export function ModalDetalhesDemanda({ open, onClose, demanda, remetente }: Moda
                 </p>
               </Card>
             </section>
+
+            {demanda.camposExtras && Object.keys(demanda.camposExtras).length > 0 && (
+              <section className="mt-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <FileText className="w-3.5 h-3.5 text-brand-primary" />
+                  <p className={labelClass}>Detalhes · {demanda.tipo}</p>
+                </div>
+                <Card className="bg-brand-surface/50 border-brand-surface-dim/40 rounded-2xl px-5 py-4 shadow-none">
+                  <dl className="space-y-3">
+                    {CAMPOS_POR_TIPO[demanda.tipo]?.map((campo) => {
+                      const valor = demanda.camposExtras?.[campo.name];
+                      if (!valor) return null;
+                      return (
+                        <div key={campo.name} className="flex flex-col gap-0.5">
+                          <dt className={labelClass}>{campo.label}</dt>
+                          <dd className="text-sm text-gray-800 leading-relaxed break-words [overflow-wrap:anywhere] whitespace-pre-wrap">
+                            {campo.type === 'date' ? formatarData(valor) : valor}
+                          </dd>
+                        </div>
+                      );
+                    })}
+                  </dl>
+                </Card>
+              </section>
+            )}
+
+            {(anexos.length > 0 || anexosLoading) && (
+              <section className="mt-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <Paperclip className="w-3.5 h-3.5 text-brand-primary" />
+                  <p className={labelClass}>Anexos</p>
+                </div>
+                {anexosLoading ? (
+                  <p className="text-sm text-gray-400">Carregando anexos...</p>
+                ) : (
+                  <ul className="space-y-1.5">
+                    {anexos.map((anexo) => (
+                      <li key={anexo.id}>
+                        <a
+                          href={anexo.urlAssinada}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2.5 bg-brand-surface/60 rounded-lg px-3 py-2 border border-gray-100 hover:border-brand-primary/30 hover:bg-brand-surface transition-[border-color,background-color] duration-180"
+                        >
+                          <FileText className="w-4 h-4 text-brand-primary shrink-0" />
+                          <div className="min-w-0 flex-1">
+                            <p className="text-xs font-semibold text-gray-900 truncate">{anexo.nomeArquivo}</p>
+                            <p className="text-[0.6875rem] text-gray-400">{formatarTamanho(anexo.tamanhoBytes)}</p>
+                          </div>
+                          <Download className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            )}
 
             <section className="mt-6">
               <p className={labelClass}>Enviado por</p>

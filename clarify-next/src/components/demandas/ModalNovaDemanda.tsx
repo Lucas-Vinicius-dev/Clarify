@@ -1,23 +1,36 @@
 'use client';
 
-import { useCallback, useState } from 'react';
-import { ArrowRight, X } from 'lucide-react';
+import { useCallback, useRef, useState } from 'react';
+import { ArrowRight, Paperclip, X, FileText } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Dialog, DialogContent, DialogHeader, DialogFooter } from '@/components/ui/Dialog';
 import { cn } from '@/lib/utils';
 import { novaDemandaSchema, type NovaDemandaFormData } from '@/schemas/demandas';
+import {
+  TIPOS_DEMANDA,
+  ANEXO_MAX_BYTES,
+  ANEXO_MAX_QTD,
+  ANEXO_TIPOS_PERMITIDOS,
+  type TipoDemanda,
+  type UsuarioLogado,
+} from '@/types';
 import { CAMPOS_POR_TIPO, montarCamposExtras } from '@/lib/camposDemanda';
-import { TIPOS_DEMANDA, type TipoDemanda, type UsuarioLogado } from '@/types';
 
 interface ModalNovaDemandaProps {
   open: boolean;
   onClose: () => void;
   usuario: UsuarioLogado | null;
-  onSubmit: (dados: { tipo: TipoDemanda; descricao: string; camposExtras: Record<string, string>; dataExpiracao?: string }) => Promise<void>;
+  onSubmit: (dados: { tipo: TipoDemanda; descricao: string; anexos?: File[]; camposExtras?: Record<string, string> }) => Promise<void>;
 }
 
 const LIMITE_DESCRICAO = 500;
+
+function formatarTamanho(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
 
 export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNovaDemandaProps) {
   const {
@@ -31,8 +44,11 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
     mode: 'onChange',
   });
 
+  const [arquivos, setArquivos] = useState<File[]>([]);
+  const [erroAnexo, setErroAnexo] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [erroSubmit, setErroSubmit] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const descricaoValue = watch('descricao') ?? '';
   const camposDoTipo = CAMPOS_POR_TIPO[watch('tipo')] ?? [];
@@ -40,24 +56,72 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
   const contadorNear = descricaoValue.length >= LIMITE_DESCRICAO * 0.85 && descricaoValue.length < LIMITE_DESCRICAO;
   const contadorOver = descricaoValue.length >= LIMITE_DESCRICAO;
 
+  const validarArquivos = useCallback((novos: File[], atuais: File[]): File[] | null => {
+    const total = atuais.length + novos.length;
+    if (total > ANEXO_MAX_QTD) {
+      setErroAnexo(`Máximo de ${ANEXO_MAX_QTD} arquivos por demanda.`);
+      return null;
+    }
+    const validos: File[] = [];
+    for (const file of novos) {
+      if (file.size > ANEXO_MAX_BYTES) {
+        setErroAnexo(`${file.name} excede ${ANEXO_MAX_BYTES / (1024 * 1024)} MB.`);
+        return null;
+      }
+      const tipoOk = ANEXO_TIPOS_PERMITIDOS.includes(file.type as typeof ANEXO_TIPOS_PERMITIDOS[number]);
+      if (!tipoOk) {
+        setErroAnexo(`${file.name}: tipo não permitido.`);
+        return null;
+      }
+      validos.push(file);
+    }
+    setErroAnexo('');
+    return validos;
+  }, []);
+
+  const handleSelecionarArquivos = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    if (files.length === 0) return;
+    const validos = validarArquivos(files, arquivos);
+    if (validos) {
+      setArquivos((prev) => [...prev, ...validos]);
+    }
+    if (inputRef.current) inputRef.current.value = '';
+  }, [arquivos, validarArquivos]);
+
+  const removerArquivo = useCallback((index: number) => {
+    setArquivos((prev) => prev.filter((_, i) => i !== index));
+    setErroAnexo('');
+  }, []);
+
   const onValid = useCallback(async (data: NovaDemandaFormData) => {
     if (!usuario?.matricula) return;
     setSubmitting(true);
     setErroSubmit(null);
     try {
       const camposExtras = montarCamposExtras(data.tipo, data.camposExtras);
-      await onSubmit({ tipo: data.tipo, descricao: data.descricao.trim(), camposExtras, dataExpiracao: data.dataExpiracao });
+      await onSubmit({
+        tipo: data.tipo,
+        descricao: data.descricao.trim(),
+        anexos: arquivos.length > 0 ? arquivos : undefined,
+        camposExtras,
+      });
       reset();
+      setArquivos([]);
+      setErroAnexo('');
       onClose();
     } catch (err) {
       setErroSubmit(err instanceof Error ? err.message : 'Erro inesperado. Tente novamente.');
     } finally {
       setSubmitting(false);
     }
-  }, [usuario, onSubmit, reset, onClose]);
+  }, [usuario, onSubmit, reset, onClose, arquivos]);
 
   const handleClose = useCallback(() => {
     reset();
+    setArquivos([]);
+    setErroAnexo('');
+    setErroSubmit(null);
     onClose();
   }, [reset, onClose]);
 
@@ -68,6 +132,7 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
   const textareaClass = "w-full resize-none border border-[rgba(15,23,42,0.10)] dark:border-slate-700 rounded-2xl p-4 text-[0.95rem] leading-[1.55] text-[#0f172a] dark:text-slate-100 bg-white dark:bg-slate-900 placeholder:text-[rgba(15,23,42,0.32)] dark:placeholder:text-slate-500 focus:outline-none focus:border-[#ca5f15] focus:shadow-[0_0_0_4px_rgba(202,95,21,0.12)] transition-[border-color,box-shadow] duration-180";
   const btnPrimaryClass = "inline-flex items-center gap-2 bg-[#ca5f15] text-white font-bold text-sm -tracking-[0.005em] py-3 px-5 rounded-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.18),_0_1px_2px_rgba(202,95,21,0.30),_0_10px_24px_-10px_rgba(202,95,21,0.55)] hover:bg-[#b35211] hover:-translate-y-px active:translate-y-0 disabled:bg-[rgba(15,23,42,0.10)] disabled:text-[rgba(15,23,42,0.35)] disabled:shadow-none disabled:cursor-not-allowed disabled:transform-none transition-[transform,box-shadow,background-color] duration-180 cursor-pointer";
   const btnGhostClass = "inline-flex items-center gap-1.5 bg-transparent text-[rgba(15,23,42,0.65)] dark:text-slate-300 font-semibold text-sm py-3 px-4 rounded-xl hover:bg-[rgba(15,23,42,0.05)] dark:hover:bg-slate-700 hover:text-[#0f172a] dark:hover:text-slate-100 transition-[background-color,color] duration-180 cursor-pointer";
+  const btnAnexoClass = "inline-flex items-center gap-1.5 text-[rgba(15,23,42,0.55)] dark:text-slate-400 font-semibold text-xs py-2 px-3 rounded-lg border border-[rgba(15,23,42,0.12)] dark:border-slate-600 hover:bg-[rgba(15,23,42,0.04)] dark:hover:bg-slate-700 hover:text-[#0f172a] dark:hover:text-slate-100 hover:border-[rgba(15,23,42,0.20)] transition-[background-color,color,border-color] duration-180 cursor-pointer";
   const closeBtnClass = "inline-flex items-center justify-center w-9 h-9 rounded-full text-[rgba(15,23,42,0.50)] dark:text-slate-400 hover:bg-[rgba(15,23,42,0.05)] dark:hover:bg-slate-700 hover:text-[#0f172a] dark:hover:text-slate-100 hover:rotate-90 transition-[background-color,color,transform] duration-180 cursor-pointer";
   const dotClass = "inline-block w-1.5 h-1.5 rounded-full bg-[#ca5f15] shadow-[0_0_0_3px_rgba(202,95,21,0.18)]";
   const counterClass = "tabular-nums text-[0.6875rem] text-[rgba(15,23,42,0.40)] dark:text-slate-500 tracking-[0.04em]";
@@ -106,9 +171,9 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
                 className={cn(inputClass, "font-semibold mt-1")}
                 defaultValue=""
               >
-                <option value="" disabled>Selecione o tipo de solicitação</option>
+                <option value="" disabled className="dark:bg-slate-800 dark:text-slate-100">Selecione o tipo de solicitação</option>
                 {TIPOS_DEMANDA.map((tipo) => (
-                  <option key={tipo} value={tipo}>{tipo}</option>
+                  <option key={tipo} value={tipo} className="dark:bg-slate-800 dark:text-slate-100">{tipo}</option>
                 ))}
               </select>
               {errors.tipo && (
@@ -171,6 +236,59 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
                 {...register('dataExpiracao')}
                 className={cn(inputClass, "mt-1")}
               />
+              <div className="flex items-center justify-between">
+                <label className={labelClass}>Anexos</label>
+                <span className={cn(counterClass)}>
+                  {arquivos.length} / {ANEXO_MAX_QTD}
+                </span>
+              </div>
+              <input
+                ref={inputRef}
+                type="file"
+                multiple
+                accept={ANEXO_TIPOS_PERMITIDOS.join(',')}
+                onChange={handleSelecionarArquivos}
+                className="hidden"
+                id="campoAnexosDemanda"
+              />
+              <button
+                type="button"
+                className={cn(btnAnexoClass, "mt-2")}
+                onClick={() => inputRef.current?.click()}
+              >
+                <Paperclip className="w-3.5 h-3.5" />
+                Anexar arquivo
+              </button>
+              <p className="text-[0.6875rem] text-[rgba(15,23,42,0.35)] dark:text-slate-500 mt-1.5">
+                PDF, imagens ou documentos · máx. {ANEXO_MAX_BYTES / (1024 * 1024)} MB cada
+              </p>
+              {erroAnexo && (
+                <p className="text-xs text-red-600 dark:text-red-400 mt-1">{erroAnexo}</p>
+              )}
+              {arquivos.length > 0 && (
+                <ul className="mt-3 space-y-1.5">
+                  {arquivos.map((file, index) => (
+                    <li
+                      key={`${file.name}-${index}`}
+                      className="flex items-center gap-2.5 bg-brand-surface/60 dark:bg-slate-900/60 rounded-lg px-3 py-2 border border-gray-100 dark:border-slate-700"
+                    >
+                      <FileText className="w-4 h-4 text-brand-primary shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-semibold text-gray-900 dark:text-slate-100 truncate">{file.name}</p>
+                        <p className="text-[0.6875rem] text-gray-400 dark:text-slate-500">{formatarTamanho(file.size)}</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removerArquivo(index)}
+                        className="text-gray-400 hover:text-red-500 transition-colors cursor-pointer shrink-0"
+                        title="Remover anexo"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </section>
 
             {erroSubmit && (

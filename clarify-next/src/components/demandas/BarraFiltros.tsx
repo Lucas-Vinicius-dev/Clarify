@@ -48,7 +48,7 @@ export function BarraFiltros({
           className="pl-8 pr-7 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-gray-50 dark:bg-slate-900 text-sm dark:text-slate-100 appearance-none cursor-pointer outline-none focus:border-brand-primary focus:bg-white dark:focus:bg-slate-800 transition-colors"
         >
           {OPCOES_STATUS.map((op) => (
-            <option key={op.valor} value={op.valor}>
+            <option key={op.valor} value={op.valor} className="dark:bg-slate-800 dark:text-slate-100">
               {op.label}
             </option>
           ))}
