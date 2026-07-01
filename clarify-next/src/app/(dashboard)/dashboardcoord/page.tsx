@@ -15,6 +15,7 @@ import { useUsuarios, useAlunosDoCoordenador } from '@/hooks/useUsuarios';
 import { useTurmas } from '@/hooks/useTurmas';
 import { useChaves } from '@/hooks/useChaves';
 import { atualizarStatusDemanda } from '@/lib/demandas';
+import { dataExpiracao } from '@/lib/utils';
 import type { Turma } from '@/types';
 import { useUIStore } from '@/store/uiStore';
 import { VisaoGeral } from './_components/VisaoGeral';
@@ -148,9 +149,12 @@ export default function DashboardCoordPage() {
   }, [usuariosHook, queryClient, usuario?.id]);
 
   const demandasPendentesOrdenadas = useMemo(
-    () => demandasPendentes.toSorted(
-      (a, b) => new Date(b.dataAtualizacao).getTime() - new Date(a.dataAtualizacao).getTime()
-    ),
+    () => demandasPendentes.toSorted((a, b) => {
+      const expA = dataExpiracao(a).getTime();
+      const expB = dataExpiracao(b).getTime();
+      if (expA !== expB) return expA - expB;
+      return new Date(b.dataAtualizacao).getTime() - new Date(a.dataAtualizacao).getTime();
+    }),
     [demandasPendentes]
   );
 

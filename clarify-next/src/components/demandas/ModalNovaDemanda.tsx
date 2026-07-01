@@ -21,7 +21,7 @@ interface ModalNovaDemandaProps {
   open: boolean;
   onClose: () => void;
   usuario: UsuarioLogado | null;
-  onSubmit: (dados: { tipo: TipoDemanda; descricao: string; anexos?: File[]; camposExtras?: Record<string, string> }) => Promise<void>;
+  onSubmit: (dados: { tipo: TipoDemanda; descricao: string; anexos?: File[]; camposExtras?: Record<string, string>; dataExpiracao?: string }) => Promise<void>;
 }
 
 const LIMITE_DESCRICAO = 500;
@@ -105,6 +105,7 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
         descricao: data.descricao.trim(),
         anexos: arquivos.length > 0 ? arquivos : undefined,
         camposExtras,
+        dataExpiracao: data.dataExpiracao,
       });
       reset();
       setArquivos([]);
@@ -229,6 +230,13 @@ export function ModalNovaDemanda({ open, onClose, usuario, onSubmit }: ModalNova
             </section>
 
             <section className="mt-5">
+              <label htmlFor="campoDataExpiracao" className={labelClass}>Prazo para resolução (opcional)</label>
+              <input
+                id="campoDataExpiracao"
+                type="date"
+                {...register('dataExpiracao')}
+                className={cn(inputClass, "mt-1")}
+              />
               <div className="flex items-center justify-between">
                 <label className={labelClass}>Anexos</label>
                 <span className={cn(counterClass)}>

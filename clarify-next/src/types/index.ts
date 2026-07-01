@@ -57,6 +57,7 @@ export interface Demanda {
   dataCriacao: string;
   dataAtualizacao: string;
   feedback: string;
+  dataExpiracao?: string;
   aluno?: { nome: string; matricula: string };
 }
 
